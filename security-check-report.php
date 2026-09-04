@@ -596,15 +596,6 @@ class CASCR_SecurityCheck {
 		];
 	}
 
-	private function add_test_result( &$results, &$total_score, &$test_count, $test_name, $test_data, &$critical_risks ) {
-		$results[ $test_name ] = $test_data;
-		$total_score += $test_data['score'];
-		$test_count++;
-		if ( $test_data['score'] >= 7 ) {
-			$critical_risks++;
-		}
-	}
-
 	private function check_wordpress_version() {
 		$wp_version = $this->get_cached_wordpress_version();
 		$latest_version = $this->get_latest_wordpress_version();
