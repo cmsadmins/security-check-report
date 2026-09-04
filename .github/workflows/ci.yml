@@ -76,6 +76,9 @@ jobs:
           wp core install --url=http://localhost:8080 --title=Test --admin_user=admin --admin_password=admin --admin_email=admin@example.com --skip-email --path=wp
           mkdir -p wp/wp-content/plugins
           cp -r security-check-report wp/wp-content/plugins/
+          # Strip dev-only files so the check sees what actually ships to wp.org (see .distignore)
+          cd wp/wp-content/plugins/security-check-report
+          rm -rf .git .github .wordpress-org .distignore .gitignore .gitattributes phpcs.xml.dist phpstan.neon composer.json composer.lock vendor README.md
       - name: Install Plugin Check
         run: wp plugin install plugin-check --activate --path=wp
       - name: Run Plugin Check
