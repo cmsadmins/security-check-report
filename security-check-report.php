@@ -25,109 +25,12 @@ class CASCR_SecurityCheck {
 	private $config;
 	private $accordion;
 
-	/**
-	 * Category weights for the weighted scoring system.
-	 * Critical issues have the highest impact on the final score.
-	 */
-	private const CATEGORY_WEIGHTS = [
-		'critical' => 3.0,
-		'high'     => 2.0,
-		'medium'   => 1.5,
-		'low'      => 1.0,
-	];
-
-	/**
-	 * Test categories for weighted scoring.
-	 * Tests are grouped by their security impact level.
-	 */
-	private const TEST_CATEGORIES = [
-		'critical' => [
-			'malware_check',
-			'php_execution',
-			'weak_password_users',
-			'two_factor',
-			'admin_username',
-			'database_user_privileges',
-			'wp_config',
-			'unallowed_files',
-		],
-		'high' => [
-			'wordpress_version',
-			'outdated_plugins',
-			'ssl',
-			'file_edit',
-			'brute_force',
-			'automatic_core_updates',
-			'php_version',
-			'php_version_support',
-			'security_keys_salts',
-			'core_file_integrity',
-		],
-		'medium' => [
-			'server_headers',
-			'directory_permissions',
-			'uploads_permissions',
-			'wp_debug',
-			'password_policy',
-			'login_attempts',
-			'user_enumeration',
-			'outdated_themes',
-			'outdated_libraries',
-			'debug_log_exposure',
-			'cors_configuration',
-			'wp_cron_security',
-		],
-		'low' => [
-			'db_prefix',
-			'xmlrpc',
-			'xmlrpc_methods',
-			'rest_api',
-			'legacy_meta_exposure',
-			'deactivated_plugins',
-			'htaccess',
-			'directory_indexing',
-			'unwanted_files_root',
-			'other_wp_installs',
-			'database_structure',
-			'backup',
-			'security_plugins',
-			'php_version_in_headers',
-			'application_passwords',
-		],
-	];
-
-	/**
-	 * Risk level grades based on weighted percentage.
-	 */
-	private const RISK_GRADES = [
-		'A' => [ 'max' => 10, 'label' => 'Excellent', 'description' => 'Very well protected' ],
-		'B' => [ 'max' => 25, 'label' => 'Good', 'description' => 'Good protection' ],
-		'C' => [ 'max' => 40, 'label' => 'Moderate', 'description' => 'Improvements recommended' ],
-		'D' => [ 'max' => 60, 'label' => 'Poor', 'description' => 'Significant risks present' ],
-		'F' => [ 'max' => 100, 'label' => 'Critical', 'description' => 'Immediate action required' ],
-	];
-
 	public function __construct() {
 		$this->config = include plugin_dir_path( __FILE__ ) . 'config/config.php';
 
-		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ] );
-		add_action( 'admin_menu', [ $this, 'register_admin_menu' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_admin_scripts' ] );
-		add_action( 'wp_ajax_run_security_check', [ $this, 'ajax_run_security_check' ] );
-		add_action( 'wp_ajax_final_security_report', [ $this, 'ajax_final_security_report' ] );
-	}
-
-	/**
-	 * Load plugin textdomain.
-	 *
-	 * Note: Since WordPress 4.6, plugins hosted on WordPress.org have their
-	 * translations loaded automatically. This method is kept for compatibility
-	 * with plugins not hosted on WordPress.org.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain() {
-		// Intentionally left empty - WordPress 4.6+ loads translations automatically.
+		add_action( 'admin_menu', array( $this, 'register_admin_menu' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
+		add_action( 'wp_ajax_run_security_check', array( $this, 'ajax_run_security_check' ) );
 	}
 
 	/**
@@ -147,7 +50,7 @@ class CASCR_SecurityCheck {
 			__( 'Security Check Report', 'security-check-report' ),
 			'manage_options',
 			'security-check-report',
-			[ $this, 'display_security_check_results' ],
+			array( $this, 'display_security_check_results' ),
 			'dashicons-shield',
 			100
 		);
@@ -264,15 +167,11 @@ class CASCR_SecurityCheck {
 	public function enqueue_admin_scripts() {
 		$screen = get_current_screen();
 		if ( $screen && $screen->id === 'toplevel_page_security-check-report' ) {
-			// Modern assets (no jQuery dependency)
-			wp_enqueue_script( 'cascr-admin', plugins_url( '/assets/js/admin.js', __FILE__ ), [], '2.2.0', true );
-			wp_enqueue_style( 'cascr-admin', plugins_url( '/assets/css/admin.css', __FILE__ ), [], '2.1.0' );
+			wp_enqueue_script( 'cascr-admin', plugins_url( '/assets/js/admin.js', __FILE__ ), array(), CASCR_VERSION, true );
+			wp_enqueue_style( 'cascr-admin', plugins_url( '/assets/css/admin.css', __FILE__ ), array(), CASCR_VERSION );
 
-			// Legacy assets for backwards compatibility
-			wp_enqueue_style( 'cmsadmins-backend', plugins_url( '/assets/css/backend.css', __FILE__ ), [], '2.1.0' );
-
-			$tests = array_keys( $this->get_security_tests() );
-			$test_names = [
+			$tests      = array_keys( $this->get_security_tests() );
+			$test_names = array(
 				'wordpress_version'        => esc_html__( 'WordPress Version', 'security-check-report' ),
 				'php_version'              => esc_html__( 'PHP Version Check', 'security-check-report' ),
 				'wp_config'                => esc_html__( 'wp-config.php Permissions', 'security-check-report' ),
@@ -319,36 +218,26 @@ class CASCR_SecurityCheck {
 				'debug_log_exposure'       => esc_html__( 'Debug Log Exposure', 'security-check-report' ),
 				'cors_configuration'       => esc_html__( 'CORS Configuration', 'security-check-report' ),
 				'core_file_integrity'      => esc_html__( 'Core File Integrity', 'security-check-report' ),
-			];
+			);
 
-			// Modern script data
-			wp_localize_script( 'cascr-admin', 'cascr', [
-				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
-				'nonce'         => wp_create_nonce( 'cascr_security_nonce' ),
-				'i18n'          => [
-					'runningCheck' => esc_html__( 'Running security check', 'security-check-report' ),
-					'errorMessage' => esc_html__( 'An error occurred while running the test.', 'security-check-report' ),
-					'copySuccess'  => esc_html__( 'Report copied to clipboard!', 'security-check-report' ),
-					'copyError'    => esc_html__( 'Failed to copy to clipboard.', 'security-check-report' ),
-				],
-				'tests'         => [
-					'list'  => $tests,
-					'names' => $test_names,
-				],
-			] );
-
-			// Legacy script data for backwards compatibility
-			wp_localize_script( 'cascr-admin', 'cmsadmins_ajax', [
-				'ajax_url'         => admin_url( 'admin-ajax.php' ),
-				'security_nonce'   => wp_create_nonce( 'cascr_security_nonce' ),
-				'running_check'    => esc_html__( 'Running security check', 'security-check-report' ),
-				'error_message'    => esc_html__( 'An error occurred while running the test.', 'security-check-report' ),
-				'copy_report_text' => esc_html__( 'Report copied to clipboard!', 'security-check-report' ),
-				'tests'            => [
-					'list'  => $tests,
-					'names' => $test_names,
-				],
-			] );
+			wp_localize_script(
+				'cascr-admin',
+				'cascr',
+				array(
+					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+					'nonce'   => wp_create_nonce( 'cascr_security_nonce' ),
+					'i18n'    => array(
+						'runningCheck' => esc_html__( 'Running security check', 'security-check-report' ),
+						'errorMessage' => esc_html__( 'An error occurred while running the test.', 'security-check-report' ),
+						'copySuccess'  => esc_html__( 'Report copied to clipboard!', 'security-check-report' ),
+						'copyError'    => esc_html__( 'Failed to copy to clipboard.', 'security-check-report' ),
+					),
+					'tests'   => array(
+						'list'  => $tests,
+						'names' => $test_names,
+					),
+				)
+			);
 		}
 	}
 
@@ -356,7 +245,7 @@ class CASCR_SecurityCheck {
 		check_ajax_referer( 'cascr_security_nonce', 'security_nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Unauthorized access.', 'security-check-report' ) ], 403 );
+			wp_send_json_error( array( 'message' => __( 'Unauthorized access.', 'security-check-report' ) ), 403 );
 		}
 
 		$test_name = isset( $_REQUEST['test_name'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['test_name'] ) ) : '';
@@ -365,164 +254,8 @@ class CASCR_SecurityCheck {
 			$result = call_user_func( $tests[ $test_name ] );
 			wp_send_json_success( $result );
 		} else {
-			wp_send_json_error( [ 'result' => __( 'Invalid test name.', 'security-check-report' ) ] );
+			wp_send_json_error( array( 'result' => __( 'Invalid test name.', 'security-check-report' ) ) );
 		}
-	}
-
-	public function ajax_final_security_report() {
-		check_ajax_referer( 'cascr_security_nonce', 'security_nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Unauthorized access.', 'security-check-report' ) ], 403 );
-		}
-
-		$final_results = $this->run_security_checks();
-		wp_send_json_success( $final_results );
-	}
-
-	/**
-	 * Get the category for a test.
-	 *
-	 * @param string $test_name The test identifier.
-	 * @return string The category (critical, high, medium, low).
-	 */
-	private function get_test_category( $test_name ) {
-		foreach ( self::TEST_CATEGORIES as $category => $tests ) {
-			if ( in_array( $test_name, $tests, true ) ) {
-				return $category;
-			}
-		}
-		return 'low'; // Default to low if not categorized
-	}
-
-	/**
-	 * Calculate the risk grade based on weighted percentage.
-	 *
-	 * @param float $percentage The weighted risk percentage.
-	 * @return array Grade information with letter, label, and description.
-	 */
-	private function get_risk_grade( $percentage ) {
-		foreach ( self::RISK_GRADES as $letter => $grade ) {
-			if ( $percentage <= $grade['max'] ) {
-				return [
-					'grade'       => $letter,
-					'label'       => $grade['label'],
-					'description' => $grade['description'],
-				];
-			}
-		}
-		return [
-			'grade'       => 'F',
-			'label'       => self::RISK_GRADES['F']['label'],
-			'description' => self::RISK_GRADES['F']['description'],
-		];
-	}
-
-	/**
-	 * Runs all tests, aggregates the scores and returns a final report with weighted scoring.
-	 *
-	 * The weighted scoring system:
-	 * - Tests are categorized by security impact (critical, high, medium, low)
-	 * - Each category has a weight multiplier (3.0, 2.0, 1.5, 1.0)
-	 * - Final percentage is calculated from weighted scores
-	 * - A critical failure (score >= 8 in critical category) forces at least grade D
-	 * - Grades range from A (Excellent) to F (Critical)
-	 */
-	private function run_security_checks() {
-		$results = [];
-		$tests = $this->get_security_tests();
-
-		// Run all tests
-		foreach ( $tests as $test_name => $test_callback ) {
-			$test_result = call_user_func( $test_callback );
-			$results[ $test_name ] = $test_result;
-		}
-
-		// Calculate weighted score
-		$weighted_score = 0;
-		$total_weight = 0;
-		$has_critical_failure = false;
-		$critical_failures = [];
-		$category_scores = [
-			'critical' => [ 'score' => 0, 'max' => 0, 'count' => 0 ],
-			'high'     => [ 'score' => 0, 'max' => 0, 'count' => 0 ],
-			'medium'   => [ 'score' => 0, 'max' => 0, 'count' => 0 ],
-			'low'      => [ 'score' => 0, 'max' => 0, 'count' => 0 ],
-		];
-
-		foreach ( $results as $test_name => $data ) {
-			if ( $test_name === 'final_report' ) {
-				continue;
-			}
-
-			$category = $this->get_test_category( $test_name );
-			$weight = self::CATEGORY_WEIGHTS[ $category ];
-			$score = $data['score'];
-
-			$weighted_score += $score * $weight;
-			$total_weight += 10 * $weight; // Max score per test is 10
-
-			// Track category scores
-			$category_scores[ $category ]['score'] += $score;
-			$category_scores[ $category ]['max'] += 10;
-			$category_scores[ $category ]['count']++;
-
-			// Check for critical failures (score >= 8 in critical category)
-			if ( $category === 'critical' && $score >= 8 ) {
-				$has_critical_failure = true;
-				$critical_failures[] = $test_name;
-			}
-		}
-
-		// Calculate percentage (0-100)
-		$percentage = $total_weight > 0 ? ( $weighted_score / $total_weight ) * 100 : 0;
-
-		// Apply critical failure penalty: force at least grade D
-		if ( $has_critical_failure && $percentage < 41 ) {
-			$percentage = 41; // Forces grade D minimum
-		}
-
-		// Get grade
-		$grade_info = $this->get_risk_grade( $percentage );
-
-		// Build legacy risk string for backwards compatibility
-		$risk_map = [
-			'A' => __( 'Low Risk', 'security-check-report' ),
-			'B' => __( 'Low Risk', 'security-check-report' ),
-			'C' => __( 'Moderate Risk', 'security-check-report' ),
-			'D' => __( 'High Risk', 'security-check-report' ),
-			'F' => __( 'Critical Risk', 'security-check-report' ),
-		];
-		$risk = $risk_map[ $grade_info['grade'] ];
-
-		// Calculate simple average for backwards compatibility
-		$test_count = count( $results );
-		$total_score = array_sum( array_column( $results, 'score' ) );
-		$average = $test_count > 0 ? $total_score / $test_count : 0;
-
-		$results['final_report'] = [
-			'average_score'      => number_format( $average, 2 ),
-			'total_score'        => $total_score,
-			'test_count'         => $test_count,
-			'risk_evaluation'    => $risk,
-			'grade'              => $grade_info['grade'],
-			'grade_label'        => $grade_info['label'],
-			'grade_description'  => $grade_info['description'],
-			'weighted_percentage' => number_format( $percentage, 1 ),
-			'has_critical_failure' => $has_critical_failure,
-			'critical_failures'  => $critical_failures,
-			'category_scores'    => $category_scores,
-				'summary'            => sprintf(
-				/* translators: %1$s: grade letter (e.g. "B"), %2$s: grade label (e.g. "Good"), %3$s: percentage (e.g. "23.5"), %4$s: risk level (e.g. "Low Risk") */
-				__( 'Grade: %1$s (%2$s) — Risk Score: %3$s%% — %4$s', 'security-check-report' ),
-				$grade_info['grade'],
-				$grade_info['label'],
-				number_format( $percentage, 1 ),
-				$risk
-			),
-		];
-
-		return $results;
 	}
 
 	private function display_accordion_section( $title, $description ) {
@@ -546,140 +279,146 @@ class CASCR_SecurityCheck {
 	 * @return array<string, callable> Test ID => callback pairs
 	 */
 	private function get_security_tests() {
-		return [
-			'wordpress_version'        => [ $this, 'check_wordpress_version' ],
-			'php_version'              => [ $this, 'check_php_version' ],
-			'wp_config'                => [ $this, 'check_wp_config' ],
-			'uploads_permissions'      => [ $this, 'check_uploads_permissions' ],
-			'wp_debug'                 => [ $this, 'check_wp_debug' ],
-			'weak_password_users'      => [ $this, 'check_weak_password_users' ],
-			'password_policy'          => [ $this, 'check_password_policy' ],
-			'two_factor'               => [ $this, 'check_two_factor' ],
-			'admin_username'           => [ $this, 'check_admin_username' ],
-			'outdated_plugins'         => [ $this, 'check_outdated_plugins' ],
-			'deactivated_plugins'      => [ $this, 'check_deactivated_plugins' ],
-			'outdated_themes'          => [ $this, 'check_outdated_themes' ],
-			'htaccess'                 => [ $this, 'check_htaccess' ],
-			'xmlrpc'                   => [ $this, 'check_xmlrpc' ],
-			'xmlrpc_methods'           => [ $this, 'check_xmlrpc_methods' ],
-			'rest_api'                 => [ $this, 'check_rest_api' ],
-			'file_edit'                => [ $this, 'check_file_edit' ],
-			'directory_indexing'       => [ $this, 'check_directory_indexing' ],
-			'ssl'                      => [ $this, 'check_ssl' ],
-			'server_headers'           => [ $this, 'check_server_headers' ],
-			'php_version_in_headers'   => [ $this, 'check_php_version_in_headers' ],
-			'legacy_meta_exposure'     => [ $this, 'check_legacy_meta_exposure' ],
-			'unallowed_files'          => [ $this, 'check_unallowed_files' ],
-			'backup'                   => [ $this, 'check_backup' ],
-			'security_plugins'         => [ $this, 'check_security_plugins' ],
-			'db_prefix'                => [ $this, 'check_db_prefix' ],
-			'brute_force'              => [ $this, 'check_brute_force' ],
-			'login_attempts'           => [ $this, 'check_login_attempts' ],
-			'php_execution'            => [ $this, 'check_php_execution' ],
-			'malware_check'            => [ $this, 'check_for_malware' ],
-			'other_wp_installs'        => [ $this, 'check_other_wp_installs' ],
-			'automatic_core_updates'   => [ $this, 'check_automatic_core_updates' ],
-			'security_keys_salts'      => [ $this, 'check_security_keys_salts' ],
-			'unwanted_files_root'      => [ $this, 'check_unwanted_files_root' ],
-			'directory_permissions'    => [ $this, 'check_directory_permissions' ],
-			'php_version_support'      => [ $this, 'check_php_version_support' ],
-			'database_user_privileges' => [ $this, 'check_database_user_privileges' ],
-			'database_structure'       => [ $this, 'check_database_structure' ],
-			'outdated_libraries'       => [ $this, 'check_outdated_libraries' ],
+		return array(
+			'wordpress_version'        => array( $this, 'check_wordpress_version' ),
+			'php_version'              => array( $this, 'check_php_version' ),
+			'wp_config'                => array( $this, 'check_wp_config' ),
+			'uploads_permissions'      => array( $this, 'check_uploads_permissions' ),
+			'wp_debug'                 => array( $this, 'check_wp_debug' ),
+			'weak_password_users'      => array( $this, 'check_weak_password_users' ),
+			'password_policy'          => array( $this, 'check_password_policy' ),
+			'two_factor'               => array( $this, 'check_two_factor' ),
+			'admin_username'           => array( $this, 'check_admin_username' ),
+			'outdated_plugins'         => array( $this, 'check_outdated_plugins' ),
+			'deactivated_plugins'      => array( $this, 'check_deactivated_plugins' ),
+			'outdated_themes'          => array( $this, 'check_outdated_themes' ),
+			'htaccess'                 => array( $this, 'check_htaccess' ),
+			'xmlrpc'                   => array( $this, 'check_xmlrpc' ),
+			'xmlrpc_methods'           => array( $this, 'check_xmlrpc_methods' ),
+			'rest_api'                 => array( $this, 'check_rest_api' ),
+			'file_edit'                => array( $this, 'check_file_edit' ),
+			'directory_indexing'       => array( $this, 'check_directory_indexing' ),
+			'ssl'                      => array( $this, 'check_ssl' ),
+			'server_headers'           => array( $this, 'check_server_headers' ),
+			'php_version_in_headers'   => array( $this, 'check_php_version_in_headers' ),
+			'legacy_meta_exposure'     => array( $this, 'check_legacy_meta_exposure' ),
+			'unallowed_files'          => array( $this, 'check_unallowed_files' ),
+			'backup'                   => array( $this, 'check_backup' ),
+			'security_plugins'         => array( $this, 'check_security_plugins' ),
+			'db_prefix'                => array( $this, 'check_db_prefix' ),
+			'brute_force'              => array( $this, 'check_brute_force' ),
+			'login_attempts'           => array( $this, 'check_login_attempts' ),
+			'php_execution'            => array( $this, 'check_php_execution' ),
+			'malware_check'            => array( $this, 'check_for_malware' ),
+			'other_wp_installs'        => array( $this, 'check_other_wp_installs' ),
+			'automatic_core_updates'   => array( $this, 'check_automatic_core_updates' ),
+			'security_keys_salts'      => array( $this, 'check_security_keys_salts' ),
+			'unwanted_files_root'      => array( $this, 'check_unwanted_files_root' ),
+			'directory_permissions'    => array( $this, 'check_directory_permissions' ),
+			'php_version_support'      => array( $this, 'check_php_version_support' ),
+			'database_user_privileges' => array( $this, 'check_database_user_privileges' ),
+			'database_structure'       => array( $this, 'check_database_structure' ),
+			'outdated_libraries'       => array( $this, 'check_outdated_libraries' ),
 			// New tests added in v2.1
-			'application_passwords'    => [ $this, 'check_application_passwords' ],
-			'wp_cron_security'         => [ $this, 'check_wp_cron_security' ],
-			'debug_log_exposure'       => [ $this, 'check_debug_log_exposure' ],
-			'cors_configuration'       => [ $this, 'check_cors_configuration' ],
-			'core_file_integrity'      => [ $this, 'check_core_file_integrity' ],
-			'user_enumeration'         => [ $this, 'check_user_enumeration' ]
-		];
+			'application_passwords'    => array( $this, 'check_application_passwords' ),
+			'wp_cron_security'         => array( $this, 'check_wp_cron_security' ),
+			'debug_log_exposure'       => array( $this, 'check_debug_log_exposure' ),
+			'cors_configuration'       => array( $this, 'check_cors_configuration' ),
+			'core_file_integrity'      => array( $this, 'check_core_file_integrity' ),
+			'user_enumeration'         => array( $this, 'check_user_enumeration' ),
+		);
 	}
 
 	private function check_wordpress_version() {
-		$wp_version = $this->get_cached_wordpress_version();
+		global $wp_version;
 		$latest_version = $this->get_latest_wordpress_version();
 		if ( is_wp_error( $latest_version ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not fetch the latest WordPress version.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 		if ( version_compare( $wp_version, $latest_version, '<' ) ) {
-			return [
+			return array(
 				/* translators: %1$s: current WordPress version, %2$s: latest WordPress version */
 				'result' => sprintf( __( 'WordPress is outdated. Current: %1$s. Latest: %2$s.', 'security-check-report' ), $wp_version, $latest_version ),
-				'score'  => 10
-			];
+				'score'  => 10,
+			);
 		} else {
-			return [
+			return array(
 				'result' => __( 'WordPress is up to date.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 	}
 
 	private function check_php_version() {
-		$current = phpversion();
+		$current     = phpversion();
 		$recommended = '8.2';
-		$minimum = '7.4';
+		$minimum     = '7.4';
 
 		if ( version_compare( $current, $recommended, '>=' ) ) {
-			return [
+			return array(
 				/* translators: %s: PHP version number */
 				'result' => sprintf( __( 'PHP version %s is current and recommended.', 'security-check-report' ), $current ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
 		if ( version_compare( $current, $minimum, '>=' ) ) {
-			return [
+			return array(
 				/* translators: %1$s: current PHP version, %2$s: recommended PHP version */
 				'result' => sprintf( __( 'PHP version %1$s is acceptable but upgrading to %2$s is recommended.', 'security-check-report' ), $current, $recommended ),
-				'score'  => 4
-			];
+				'score'  => 4,
+			);
 		}
 
-		return [
+		return array(
 			/* translators: %1$s: current PHP version, %2$s: minimum required PHP version */
 			'result' => sprintf( __( 'PHP version %1$s is outdated and insecure. Upgrade to at least %2$s.', 'security-check-report' ), $current, $minimum ),
-			'score'  => 9
-		];
+			'score'  => 9,
+		);
 	}
 
 	private function check_wp_config() {
-		$file = ABSPATH . 'wp-config.php';
+		$file        = ABSPATH . 'wp-config.php';
 		$is_writable = wp_is_writable( $file );
-		$score = $is_writable ? 10 : 0;
-		$result = $is_writable
+		$score       = $is_writable ? 10 : 0;
+		$result      = $is_writable
 			? __( 'wp-config.php is writable. This is a security risk!', 'security-check-report' )
 			: __( 'wp-config.php permissions are secure.', 'security-check-report' );
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_uploads_permissions() {
-		$dir = wp_upload_dir()['basedir'];
-		$perm = substr( sprintf( '%o', fileperms( $dir ) ), -4 );
-		$score = ( $perm !== '0755' ) ? 7 : 0;
+		$dir    = wp_upload_dir()['basedir'];
+		$perm   = substr( sprintf( '%o', fileperms( $dir ) ), -4 );
+		$score  = ( $perm !== '0755' ) ? 7 : 0;
 		$result = ( $perm !== '0755' )
 			? __( 'Uploads directory has insecure permissions.', 'security-check-report' )
 			: __( 'Uploads directory permissions are secure.', 'security-check-report' );
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_wp_debug() {
 		$enabled = defined( 'WP_DEBUG' ) && WP_DEBUG;
-		return [
+		return array(
 			'result' => $enabled
 				? __( 'WP_DEBUG is enabled. This may expose sensitive information.', 'security-check-report' )
 				: __( 'WP_DEBUG is disabled.', 'security-check-report' ),
-			'score'  => $enabled ? 7 : 0
-		];
+			'score'  => $enabled ? 7 : 0,
+		);
 	}
 
 	private function check_weak_password_users() {
 		// Common weak passwords to check
-		$weak_passwords = [
+		$weak_passwords = array(
 			'password',
 			'123456',
 			'12345678',
@@ -705,10 +444,10 @@ class CASCR_SecurityCheck {
 			'111111',
 			'iloveyou',
 			'dragon',
-		];
+		);
 
-		$users = get_users( [ 'fields' => [ 'ID', 'user_login', 'user_pass' ] ] );
-		$weak = [];
+		$users = get_users( array( 'fields' => array( 'ID', 'user_login', 'user_pass' ) ) );
+		$weak  = array();
 
 		foreach ( $users as $user ) {
 			$found_weak = false;
@@ -716,7 +455,7 @@ class CASCR_SecurityCheck {
 			// Check against common weak passwords
 			foreach ( $weak_passwords as $pwd ) {
 				if ( wp_check_password( $pwd, $user->user_pass, $user->ID ) ) {
-					$weak[] = $user->user_login;
+					$weak[]     = $user->user_login;
 					$found_weak = true;
 					break;
 				}
@@ -724,18 +463,18 @@ class CASCR_SecurityCheck {
 
 			// Also check if password equals username (very common weak pattern)
 			if ( ! $found_weak && wp_check_password( $user->user_login, $user->user_pass, $user->ID ) ) {
-				$weak[] = $user->user_login;
+				$weak[]     = $user->user_login;
 				$found_weak = true;
 			}
 
 			// Check if password equals username with common suffixes
 			if ( ! $found_weak ) {
-				$username_variants = [
+				$username_variants = array(
 					$user->user_login . '123',
 					$user->user_login . '1',
 					$user->user_login . '!',
 					$user->user_login . '@123',
-				];
+				);
 				foreach ( $username_variants as $variant ) {
 					if ( wp_check_password( $variant, $user->user_pass, $user->ID ) ) {
 						$weak[] = $user->user_login;
@@ -759,8 +498,8 @@ class CASCR_SecurityCheck {
 
 		if ( ! empty( $weak ) ) {
 			$display_users = array_slice( $weak, 0, 5 );
-			$more_count = $count - 5;
-			$result = sprintf(
+			$more_count    = $count - 5;
+			$result        = sprintf(
 				/* translators: %1$d: number of users with weak passwords, %2$s: list of usernames */
 				__( 'Users with weak passwords (%1$d found): %2$s', 'security-check-report' ),
 				$count,
@@ -770,46 +509,49 @@ class CASCR_SecurityCheck {
 			$result = __( 'No users with common weak passwords found.', 'security-check-report' );
 		}
 
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_password_policy() {
 		$enforced = $this->is_strong_passwords_enforced();
-		return [
+		return array(
 			'result' => $enforced
 				? __( 'Strong password policies are enforced.', 'security-check-report' )
 				: __( 'Strong password policies are not enforced. This is a security risk.', 'security-check-report' ),
-			'score'  => $enforced ? 0 : 8
-		];
+			'score'  => $enforced ? 0 : 8,
+		);
 	}
 
 	private function check_two_factor() {
 		$enabled = $this->is_two_factor_enabled();
-		return [
+		return array(
 			'result' => $enabled
 				? __( 'Two-factor authentication is enabled.', 'security-check-report' )
 				: __( 'Two-factor authentication is not enabled. This is a security risk.', 'security-check-report' ),
-			'score'  => $enabled ? 0 : 9
-		];
+			'score'  => $enabled ? 0 : 9,
+		);
 	}
 
 	private function check_admin_username() {
 		$admin = get_user_by( 'login', 'admin' );
 		$score = $admin ? 9 : 0;
-		return [
+		return array(
 			'result' => $admin
 				? sprintf( __( 'User "admin" exists. This is a common target.', 'security-check-report' ), 'admin' )
 				: __( 'No user "admin" found.', 'security-check-report' ),
-			'score'  => $score
-		];
+			'score'  => $score,
+		);
 	}
 
 	private function check_outdated_plugins() {
 		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		$plugins = get_plugins();
-		$outdated = [];
+		$plugins  = get_plugins();
+		$outdated = array();
 		foreach ( $plugins as $plugin_file => $plugin_data ) {
 			if ( is_plugin_active( $plugin_file ) ) {
 				$path = WP_PLUGIN_DIR . '/' . $plugin_file;
@@ -818,74 +560,83 @@ class CASCR_SecurityCheck {
 				}
 			}
 		}
-		$score = ! empty( $outdated ) ? 8 : 0;
+		$score  = ! empty( $outdated ) ? 8 : 0;
 		$result = ! empty( $outdated )
 			? __( 'Outdated plugins: ', 'security-check-report' ) . implode( ', ', $outdated )
 			: __( 'All plugins are up to date.', 'security-check-report' );
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_deactivated_plugins() {
 		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
-		$plugins = get_plugins();
-		$deactivated = [];
+		$plugins     = get_plugins();
+		$deactivated = array();
 		foreach ( $plugins as $plugin_file => $plugin_data ) {
 			if ( ! is_plugin_active( $plugin_file ) ) {
 				$deactivated[] = $plugin_data['Name'];
 			}
 		}
-		$score = ! empty( $deactivated ) ? 5 : 0;
+		$score  = ! empty( $deactivated ) ? 5 : 0;
 		$result = ! empty( $deactivated )
 			? __( 'Deactivated plugins: ', 'security-check-report' ) . implode( ', ', $deactivated )
 			: __( 'No deactivated plugins found.', 'security-check-report' );
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_outdated_themes() {
-		$themes = wp_get_themes();
-		$outdated = [];
+		$themes   = wp_get_themes();
+		$outdated = array();
 		foreach ( $themes as $theme_name => $theme_data ) {
 			$path = get_theme_root() . '/' . $theme_data->get_stylesheet();
 			if ( ! $this->is_theme_up_to_date( $theme_data ) || $this->is_file_outdated( $path ) ) {
 				$outdated[] = $theme_name;
 			}
 		}
-		$score = ! empty( $outdated ) ? 7 : 0;
+		$score  = ! empty( $outdated ) ? 7 : 0;
 		$result = ! empty( $outdated )
 			? __( 'Outdated themes: ', 'security-check-report' ) . implode( ', ', $outdated )
 			: __( 'All themes are up to date.', 'security-check-report' );
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_htaccess() {
 		$server = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
 		if ( strpos( strtolower( $server ), 'nginx' ) !== false ) {
-			$response = wp_remote_get( site_url( '/wp-admin/' ), [ 'timeout' => 10 ] );
+			$response = wp_remote_get( site_url( '/wp-admin/' ), array( 'timeout' => 10 ) );
 			if ( is_wp_error( $response ) ) {
-				return [
+				return array(
 					'result' => __( 'Could not verify Nginx configuration.', 'security-check-report' ),
-					'score'  => 0
-				];
+					'score'  => 0,
+				);
 			}
-			$body = wp_remote_retrieve_body( $response );
+			$body       = wp_remote_retrieve_body( $response );
 			$vulnerable = strpos( $body, 'Index of /wp-admin' ) !== false;
-			return [
+			return array(
 				'result' => $vulnerable
 					? __( 'Nginx security rules may be missing.', 'security-check-report' )
 					: __( 'Nginx security rules are properly configured.', 'security-check-report' ),
-				'score'  => $vulnerable ? 5 : 0
-			];
+				'score'  => $vulnerable ? 5 : 0,
+			);
 		} else {
-			$file = ABSPATH . '.htaccess';
+			$file       = ABSPATH . '.htaccess';
 			$vulnerable = ! file_exists( $file );
-			return [
+			return array(
 				'result' => $vulnerable
 					? __( '.htaccess file is missing.', 'security-check-report' )
 					: __( '.htaccess file is present.', 'security-check-report' ),
-				'score'  => $vulnerable ? 5 : 0
-			];
+				'score'  => $vulnerable ? 5 : 0,
+			);
 		}
 	}
 
@@ -893,18 +644,18 @@ class CASCR_SecurityCheck {
 		// Make an actual request to test if XML-RPC is responding
 		$response = wp_remote_post(
 			site_url( '/xmlrpc.php' ),
-			[
+			array(
 				'timeout' => 10,
 				'body'    => '<?xml version="1.0"?><methodCall><methodName>system.listMethods</methodName></methodCall>',
-				'headers' => [ 'Content-Type' => 'text/xml' ],
-			]
+				'headers' => array( 'Content-Type' => 'text/xml' ),
+			)
 		);
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'XML-RPC endpoint not accessible.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
@@ -914,47 +665,47 @@ class CASCR_SecurityCheck {
 		// 403 = Forbidden (blocked)
 		// 200 with methodResponse = active and responding
 		if ( $code === 405 || $code === 403 ) {
-			return [
+			return array(
 				'result' => __( 'XML-RPC is blocked by server configuration.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		$enabled = $code === 200 && strpos( $body, 'methodResponse' ) !== false;
 
-		return [
+		return array(
 			'result' => $enabled
 				? __( 'XML-RPC is enabled and responding to requests. Consider disabling if not needed.', 'security-check-report' )
 				: __( 'XML-RPC is disabled or not responding.', 'security-check-report' ),
 			'score'  => $enabled ? 5 : 0,
-		];
+		);
 	}
 
 	private function check_xmlrpc_methods() {
 		$enabled = $this->is_xmlrpc_methods_enabled();
-		return [
+		return array(
 			'result' => $enabled
 				? __( 'XML-RPC methods are enabled. This may be a security risk.', 'security-check-report' )
 				: __( 'XML-RPC methods are disabled.', 'security-check-report' ),
-			'score'  => $enabled ? 6 : 0
-		];
+			'score'  => $enabled ? 6 : 0,
+		);
 	}
 
 	private function check_rest_api() {
 		// Check if REST API exposes user information publicly
 		$response = wp_remote_get(
 			rest_url( 'wp/v2/users' ),
-			[
+			array(
 				'timeout' => 10,
-				'headers' => [ 'Accept' => 'application/json' ],
-			]
+				'headers' => array( 'Accept' => 'application/json' ),
+			)
 		);
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not check REST API status.', 'security-check-report' ),
 				'score'  => 2,
-			];
+			);
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
@@ -965,131 +716,131 @@ class CASCR_SecurityCheck {
 			$users = json_decode( $body, true );
 			if ( is_array( $users ) && ! empty( $users ) ) {
 				$user_count = count( $users );
-				return [
+				return array(
 					'result' => sprintf(
 						/* translators: %d: number of users exposed */
 						__( 'REST API exposes user information publicly (%d users visible). This allows user enumeration.', 'security-check-report' ),
 						$user_count
 					),
 					'score'  => 6,
-				];
+				);
 			}
 		}
 
 		// 401/403 means protected
 		if ( $code === 401 || $code === 403 ) {
-			return [
+			return array(
 				'result' => __( 'REST API is active but user endpoint is properly protected.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// 404 or other - REST API might be disabled
 		if ( $code === 404 ) {
-			return [
+			return array(
 				'result' => __( 'REST API appears to be disabled or restricted.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'REST API is active. Ensure sensitive endpoints are properly protected.', 'security-check-report' ),
 			'score'  => 2,
-		];
+		);
 	}
 
 	private function check_file_edit() {
 		$disabled = defined( 'DISALLOW_FILE_EDIT' ) && DISALLOW_FILE_EDIT;
-		return [
+		return array(
 			'result' => $disabled
 				? __( 'File editing in admin is disabled.', 'security-check-report' )
 				: __( 'File editing in admin is enabled. This is a security risk.', 'security-check-report' ),
-			'score'  => $disabled ? 0 : 8
-		];
+			'score'  => $disabled ? 0 : 8,
+		);
 	}
 
 	private function check_directory_indexing() {
-		$url = site_url( '/wp-content/' );
-		$response = wp_remote_get( $url, [ 'timeout' => 10 ] );
+		$url      = site_url( '/wp-content/' );
+		$response = wp_remote_get( $url, array( 'timeout' => 10 ) );
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not check directory indexing.', 'security-check-report' ),
-				'score'  => 4
-			];
+				'score'  => 4,
+			);
 		}
-		$body = wp_remote_retrieve_body( $response );
+		$body     = wp_remote_retrieve_body( $response );
 		$disabled = strpos( $body, 'Index of /wp-content/' ) === false;
-		return [
+		return array(
 			'result' => $disabled
 				? __( 'Directory indexing is disabled.', 'security-check-report' )
 				: __( 'Directory indexing is enabled.', 'security-check-report' ),
-			'score'  => $disabled ? 0 : 4
-		];
+			'score'  => $disabled ? 0 : 4,
+		);
 	}
 
 	private function check_ssl() {
 		$enabled = is_ssl();
-		return [
+		return array(
 			'result' => $enabled
 				? __( 'SSL is enabled.', 'security-check-report' )
 				: __( 'SSL is not enabled. This is a security risk.', 'security-check-report' ),
-			'score'  => $enabled ? 0 : 8
-		];
+			'score'  => $enabled ? 0 : 8,
+		);
 	}
 
 	private function check_server_headers() {
 		$response = wp_remote_get( home_url() );
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not retrieve server headers.', 'security-check-report' ),
-				'score'  => 9
-			];
+				'score'  => 9,
+			);
 		}
 		$headers = wp_remote_retrieve_headers( $response );
-		$missing = [];
+		$missing = array();
 		foreach ( $this->config['security_headers'] as $header ) {
 			if ( empty( $headers[ $header ] ) ) {
 				$missing[] = $header;
 			}
 		}
-		return [
+		return array(
 			'result' => ! empty( $missing )
 				? __( 'Missing security headers: ', 'security-check-report' ) . implode( ', ', $missing )
 				: __( 'All critical security headers are present.', 'security-check-report' ),
-			'score'  => ! empty( $missing ) ? 7 : 0
-		];
+			'score'  => ! empty( $missing ) ? 7 : 0,
+		);
 	}
 
 	private function check_php_version_in_headers() {
 		$response = wp_remote_get( home_url() );
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not retrieve response headers.', 'security-check-report' ),
-				'score'  => 3
-			];
+				'score'  => 3,
+			);
 		}
 		$headers = wp_remote_retrieve_headers( $response );
 		$exposes = ! empty( $headers['x-powered-by'] ) && stripos( $headers['x-powered-by'], 'php' ) !== false;
-		return [
+		return array(
 			'result' => $exposes
 				? __( 'Response headers expose PHP version details. This is a security risk.', 'security-check-report' )
 				: __( 'Response headers do not expose PHP version information.', 'security-check-report' ),
-			'score'  => $exposes ? 8 : 0
-		];
+			'score'  => $exposes ? 8 : 0,
+		);
 	}
 
 	private function check_legacy_meta_exposure() {
-		$response = wp_remote_get( home_url(), [ 'timeout' => 10 ] );
+		$response = wp_remote_get( home_url(), array( 'timeout' => 10 ) );
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not fetch homepage to check meta information.', 'security-check-report' ),
 				'score'  => 2,
-			];
+			);
 		}
 
-		$body = wp_remote_retrieve_body( $response );
-		$exposed = [];
+		$body    = wp_remote_retrieve_body( $response );
+		$exposed = array();
 
 		// Check for Windows Live Writer manifest link
 		if ( strpos( $body, 'wlwmanifest' ) !== false ) {
@@ -1103,7 +854,7 @@ class CASCR_SecurityCheck {
 
 		// Check for WordPress Generator meta tag
 		if ( preg_match( '/<meta[^>]+name=["\']generator["\'][^>]+WordPress/i', $body ) ||
-			 preg_match( '/<meta[^>]+content=["\']WordPress[^"\']*["\'][^>]+name=["\']generator["\']/i', $body ) ) {
+			preg_match( '/<meta[^>]+content=["\']WordPress[^"\']*["\'][^>]+name=["\']generator["\']/i', $body ) ) {
 			$exposed[] = __( 'WordPress Generator Tag', 'security-check-report' );
 		}
 
@@ -1118,45 +869,40 @@ class CASCR_SecurityCheck {
 		}
 
 		if ( empty( $exposed ) ) {
-			return [
+			return array(
 				'result' => __( 'No legacy meta information exposed. Site fingerprinting is minimized.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// Score based on number of exposed items (max 5)
 		$score = min( count( $exposed ) * 1, 5 );
 
-		return [
+		return array(
 			'result' => sprintf(
 				/* translators: %s: list of exposed meta information */
 				__( 'Exposed meta information: %s. This reveals WordPress installation details.', 'security-check-report' ),
 				implode( ', ', $exposed )
 			),
 			'score'  => $score,
-		];
+		);
 	}
 
 	private function check_unallowed_files() {
 		$upload_dir = wp_upload_dir();
-		$basedir = $upload_dir['basedir'];
+		$basedir    = $upload_dir['basedir'];
 
 		if ( ! is_dir( $basedir ) || ! is_readable( $basedir ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not access uploads directory.', 'security-check-report' ),
-				'score'  => 5
-			];
+				'score'  => 5,
+			);
 		}
 
-		$allowed_types = $this->config['allowed_file_types'] ?? [
-			'jpg', 'jpeg', 'png', 'gif', 'webp', 'pdf', 'doc', 'docx',
-			'xls', 'xlsx', 'ppt', 'pptx', 'css', 'zip', 'txt'
-		];
-
-		$dangerous_extensions = [ 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phar', 'htaccess', 'sh', 'cgi', 'pl' ];
-		$found = [];
-		$max_files = 500;
-		$checked = 0;
+		$dangerous_extensions = array( 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'phar', 'htaccess', 'sh', 'cgi', 'pl' );
+		$found                = array();
+		$max_files            = 500;
+		$checked              = 0;
 
 		try {
 			$iterator = new RecursiveIteratorIterator(
@@ -1174,34 +920,34 @@ class CASCR_SecurityCheck {
 					if ( in_array( $extension, $dangerous_extensions, true ) ) {
 						$found[] = str_replace( $basedir . '/', '', $file->getPathname() );
 					}
-					$checked++;
+					++$checked;
 				}
 			}
 		} catch ( Exception $e ) {
-			return [
+			return array(
 				'result' => __( 'Could not complete uploads directory scan.', 'security-check-report' ),
-				'score'  => 3
-			];
+				'score'  => 3,
+			);
 		}
 
 		if ( ! empty( $found ) ) {
 			/* translators: %d: number of additional files */
 			$more_text = count( $found ) > 5 ? sprintf( __( ' and %d more', 'security-check-report' ), count( $found ) - 5 ) : '';
-			$message = sprintf(
+			$message   = sprintf(
 				/* translators: %s: list of file names */
 				__( 'Potentially dangerous files found in uploads: %s', 'security-check-report' ),
 				implode( ', ', array_slice( $found, 0, 5 ) ) . $more_text
 			);
-			return [
+			return array(
 				'result' => $message,
-				'score'  => 9
-			];
+				'score'  => 9,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No dangerous files found in uploads directory.', 'security-check-report' ),
-			'score'  => 0
-		];
+			'score'  => 0,
+		);
 	}
 
 	private function check_backup() {
@@ -1209,28 +955,28 @@ class CASCR_SecurityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$backup_plugins = $this->config['backup_plugins'] ?? [];
-		$active_backup = [];
+		$backup_plugins = $this->config['backup_plugins'] ?? array();
+		$active_backup  = array();
 
 		foreach ( $backup_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+				$plugin_data     = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 				$active_backup[] = $plugin_data['Name'] ?? basename( $plugin );
 			}
 		}
 
 		if ( ! empty( $active_backup ) ) {
-			return [
+			return array(
 				/* translators: %s: name(s) of active backup plugin(s) */
 				'result' => sprintf( __( 'Backup plugin active: %s', 'security-check-report' ), implode( ', ', $active_backup ) ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No backup plugin detected. Regular backups are essential for recovery.', 'security-check-report' ),
-			'score'  => 7
-		];
+			'score'  => 7,
+		);
 	}
 
 	private function check_security_plugins() {
@@ -1238,28 +984,28 @@ class CASCR_SecurityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$security_plugins = $this->config['security_plugins'] ?? [];
-		$active_security = [];
+		$security_plugins = $this->config['security_plugins'] ?? array();
+		$active_security  = array();
 
 		foreach ( $security_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+				$plugin_data       = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 				$active_security[] = $plugin_data['Name'] ?? basename( $plugin );
 			}
 		}
 
 		if ( ! empty( $active_security ) ) {
-			return [
+			return array(
 				/* translators: %s: name(s) of active security plugin(s) */
 				'result' => sprintf( __( 'Security plugin active: %s', 'security-check-report' ), implode( ', ', $active_security ) ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No security plugin detected. Consider installing a security plugin.', 'security-check-report' ),
-			'score'  => 6
-		];
+			'score'  => 6,
+		);
 	}
 
 	private function check_db_prefix() {
@@ -1267,17 +1013,17 @@ class CASCR_SecurityCheck {
 		$prefix = $wpdb->prefix;
 
 		if ( $prefix === 'wp_' ) {
-			return [
+			return array(
 				'result' => __( 'Default database prefix "wp_" is in use. Consider using a custom prefix for better security.', 'security-check-report' ),
-				'score'  => 5
-			];
+				'score'  => 5,
+			);
 		}
 
-		return [
+		return array(
 			/* translators: %s: database table prefix */
 			'result' => sprintf( __( 'Custom database prefix "%s" is in use.', 'security-check-report' ), esc_html( $prefix ) ),
-			'score'  => 0
-		];
+			'score'  => 0,
+		);
 	}
 
 	private function check_brute_force() {
@@ -1285,28 +1031,28 @@ class CASCR_SecurityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$brute_force_plugins = $this->config['brute_force_plugins'] ?? [];
-		$active_protection = [];
+		$brute_force_plugins = $this->config['brute_force_plugins'] ?? array();
+		$active_protection   = array();
 
 		foreach ( $brute_force_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+				$plugin_data         = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 				$active_protection[] = $plugin_data['Name'] ?? basename( $plugin );
 			}
 		}
 
 		if ( ! empty( $active_protection ) ) {
-			return [
+			return array(
 				/* translators: %s: name(s) of active brute-force protection plugin(s) */
 				'result' => sprintf( __( 'Brute-force protection active via: %s', 'security-check-report' ), implode( ', ', array_slice( $active_protection, 0, 2 ) ) ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No brute-force protection detected. Consider implementing login protection.', 'security-check-report' ),
-			'score'  => 8
-		];
+			'score'  => 8,
+		);
 	}
 
 	private function check_login_attempts() {
@@ -1314,55 +1060,58 @@ class CASCR_SecurityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$login_plugins = $this->config['login_protection_plugins'] ?? [];
-		$active_protection = [];
+		$login_plugins     = $this->config['login_protection_plugins'] ?? array();
+		$active_protection = array();
 
 		foreach ( $login_plugins as $plugin ) {
 			if ( is_plugin_active( $plugin ) ) {
-				$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+				$plugin_data         = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 				$active_protection[] = $plugin_data['Name'] ?? basename( $plugin );
 			}
 		}
 
 		if ( ! empty( $active_protection ) ) {
-			return [
+			return array(
 				/* translators: %s: name(s) of active login protection plugin(s) */
 				'result' => sprintf( __( 'Login attempt limiting active via: %s', 'security-check-report' ), implode( ', ', array_slice( $active_protection, 0, 2 ) ) ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No login attempt limiting detected. Consider limiting failed login attempts.', 'security-check-report' ),
-			'score'  => 7
-		];
+			'score'  => 7,
+		);
 	}
 
 	private function check_for_malware() {
 		$wp_filesystem = $this->get_wp_filesystem();
 		if ( ! $wp_filesystem ) {
-			return [
+			return array(
 				'result' => __( 'Could not initialize filesystem for malware scan.', 'security-check-report' ),
-				'score'  => 5
-			];
+				'score'  => 5,
+			);
 		}
 
 		$signatures = $this->config['malware_signatures'];
-		$core_files = array_map( function ( $file ) {
-			return realpath( ABSPATH . $file );
-		}, $this->config['ignore_wp_core_files'] );
+		$core_files = array_map(
+			function ( $file ) {
+				return realpath( ABSPATH . $file );
+			},
+			$this->config['ignore_wp_core_files']
+		);
 		$core_files = array_filter( $core_files );
 
-		$paths = [
+		$paths = array(
 			ABSPATH . 'index.php',
 			ABSPATH . 'wp-config.php',
 			ABSPATH . 'wp-includes/',
-			ABSPATH . 'wp-admin/'
-		];
+			ABSPATH . 'wp-admin/',
+		);
 
-		$found = [];
+		$found     = array();
 		$max_files = 1000;
-		$scanned = 0;
+		$scanned   = 0;
 
 		foreach ( $paths as $path ) {
 			if ( $scanned >= $max_files ) {
@@ -1392,7 +1141,7 @@ class CASCR_SecurityCheck {
 									}
 								}
 							}
-							$scanned++;
+							++$scanned;
 						}
 					}
 				} catch ( Exception $e ) {
@@ -1410,7 +1159,7 @@ class CASCR_SecurityCheck {
 							}
 						}
 					}
-					$scanned++;
+					++$scanned;
 				}
 			}
 		}
@@ -1422,16 +1171,16 @@ class CASCR_SecurityCheck {
 				: '';
 			$message = __( 'Potential malware signatures found in: ', 'security-check-report' )
 				. implode( ', ', array_slice( $found, 0, 10 ) ) . $more_text;
-			return [
+			return array(
 				'result' => $message,
-				'score'  => 9
-			];
+				'score'  => 9,
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No malware signatures found.', 'security-check-report' ),
-			'score'  => 0
-		];
+			'score'  => 0,
+		);
 	}
 
 	private function get_wp_filesystem() {
@@ -1449,15 +1198,15 @@ class CASCR_SecurityCheck {
 	}
 
 	private function check_other_wp_installs() {
-		$parent_dir = dirname( ABSPATH );
+		$parent_dir      = dirname( ABSPATH );
 		$current_abspath = realpath( ABSPATH );
-		$installs = [];
+		$installs        = array();
 
 		if ( ! is_dir( $parent_dir ) || ! is_readable( $parent_dir ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not scan for other WordPress installations.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
 		try {
@@ -1476,10 +1225,10 @@ class CASCR_SecurityCheck {
 				}
 			}
 		} catch ( Exception $e ) {
-			return [
+			return array(
 				'result' => __( 'Could not complete scan for other WordPress installations.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
 		$count = count( $installs );
@@ -1494,33 +1243,33 @@ class CASCR_SecurityCheck {
 				),
 				$count
 			);
-			return [
+			return array(
 				'result' => $message,
-				'score'  => min( $count * 2, 6 )
-			];
+				'score'  => min( $count * 2, 6 ),
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'No other WordPress installations found.', 'security-check-report' ),
-			'score'  => 0
-		];
+			'score'  => 0,
+		);
 	}
 
 	private function check_automatic_core_updates() {
 		$update = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : 'minor';
-		return [
+		return array(
 			'result' => $update === 'minor'
 				? __( 'Automatic core updates are enabled.', 'security-check-report' )
 				: __( 'Automatic core updates are not enabled. This is a security risk.', 'security-check-report' ),
-			'score'  => $update === 'minor' ? 0 : 8
-		];
+			'score'  => $update === 'minor' ? 0 : 8,
+		);
 	}
 
 	private function check_security_keys_salts() {
 		$wp_filesystem = $this->get_wp_filesystem();
-		$file = ABSPATH . 'wp-config.php';
+		$file          = ABSPATH . 'wp-config.php';
 
-		$keys = [
+		$keys = array(
 			'AUTH_KEY',
 			'SECURE_AUTH_KEY',
 			'LOGGED_IN_KEY',
@@ -1528,29 +1277,29 @@ class CASCR_SecurityCheck {
 			'AUTH_SALT',
 			'SECURE_AUTH_SALT',
 			'LOGGED_IN_SALT',
-			'NONCE_SALT'
-		];
+			'NONCE_SALT',
+		);
 
 		$pattern = "/define\(\s*['\"](%s)['\"]\s*,\s*['\"](.+)['\"]\s*\)/";
-		$values = [];
+		$values  = array();
 
 		foreach ( $keys as $key ) {
 			$values[ $key ] = '';
 		}
 
 		if ( ! file_exists( $file ) ) {
-			return [
+			return array(
 				'result' => __( 'wp-config.php not found.', 'security-check-report' ),
-				'score'  => 10
-			];
+				'score'  => 10,
+			);
 		}
 
 		$contents = $wp_filesystem ? $wp_filesystem->get_contents( $file ) : false;
 		if ( $contents === false ) {
-			return [
+			return array(
 				'result' => __( 'Could not read wp-config.php for security keys check.', 'security-check-report' ),
-				'score'  => 5
-			];
+				'score'  => 5,
+			);
 		}
 
 		foreach ( $keys as $key ) {
@@ -1559,12 +1308,12 @@ class CASCR_SecurityCheck {
 			}
 		}
 
-		$weak_patterns = [
+		$weak_patterns = array(
 			'put your unique phrase here',
 			'',
-		];
+		);
 
-		$incorrect = [];
+		$incorrect = array();
 		foreach ( $keys as $key ) {
 			$value = $values[ $key ];
 			if ( empty( $value ) || strlen( $value ) < 32 ) {
@@ -1580,9 +1329,9 @@ class CASCR_SecurityCheck {
 		}
 
 		$modified = filemtime( $file );
-		$age = time() - $modified;
-		$max_age = 6 * 30 * 24 * 60 * 60;
-		$score = ! empty( $incorrect ) ? 8 : 0;
+		$age      = time() - $modified;
+		$max_age  = 6 * 30 * 24 * 60 * 60;
+		$score    = ! empty( $incorrect ) ? 8 : 0;
 
 		if ( $age > $max_age ) {
 			$score = max( $score, 5 );
@@ -1596,69 +1345,72 @@ class CASCR_SecurityCheck {
 			? ' ' . __( 'Keys have not been updated in over 6 months.', 'security-check-report' )
 			: ' ' . __( 'Keys have been updated recently.', 'security-check-report' );
 
-		return [ 'result' => $result, 'score' => $score ];
+		return array(
+			'result' => $result,
+			'score'  => $score,
+		);
 	}
 
 	private function check_unwanted_files_root() {
 		$files = $this->config['unwanted_files'];
-		$found = [];
+		$found = array();
 		foreach ( $files as $file ) {
 			if ( file_exists( ABSPATH . $file ) ) {
 				$found[] = $file;
 			}
 		}
-		return [
+		return array(
 			'result' => ! empty( $found )
 				? __( 'Unwanted files in root: ', 'security-check-report' ) . implode( ', ', $found )
 				: __( 'No unwanted files found in root.', 'security-check-report' ),
-			'score'  => ! empty( $found ) ? 3 : 0
-		];
+			'score'  => ! empty( $found ) ? 3 : 0,
+		);
 	}
 
 	private function check_directory_permissions() {
-		$dirs = [ 'wp-content', 'wp-includes', 'wp-admin' ];
-		$insecure = [];
+		$dirs     = array( 'wp-content', 'wp-includes', 'wp-admin' );
+		$insecure = array();
 		foreach ( $dirs as $dir ) {
 			$path = ABSPATH . $dir;
 			if ( is_dir( $path ) && substr( sprintf( '%o', fileperms( $path ) ), -4 ) !== '0755' ) {
 				$insecure[] = $dir;
 			}
 		}
-		return [
+		return array(
 			'result' => ! empty( $insecure )
 				? __( 'Insecure permissions for: ', 'security-check-report' ) . implode( ', ', $insecure )
 				: __( 'All critical directories have secure permissions.', 'security-check-report' ),
-			'score'  => ! empty( $insecure ) ? 7 : 0
-		];
+			'score'  => ! empty( $insecure ) ? 7 : 0,
+		);
 	}
 
 	private function check_php_version_support() {
-		$current = phpversion();
+		$current   = phpversion();
 		$supported = version_compare( $current, '8.2', '>=' );
 
 		if ( $supported ) {
-			return [
+			return array(
 				'result' => __( 'PHP version is supported.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		return [
+		return array(
 			/* translators: %s: current PHP version */
 			'result' => sprintf( __( 'PHP version %s is not supported. Upgrade to at least 8.2.', 'security-check-report' ), $current ),
-			'score'  => 8
-		];
+			'score'  => 8,
+		);
 	}
 
 	private function check_database_user_privileges() {
 		global $wpdb;
 
 		$cache_key = 'cascr_db_grants';
-		$grants = wp_cache_get( $cache_key );
+		$grants    = wp_cache_get( $cache_key );
 
 		if ( false === $grants ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Necessary for checking user privileges
-			$grants = $wpdb->get_results( "SHOW GRANTS FOR CURRENT_USER", ARRAY_A );
+			$grants = $wpdb->get_results( 'SHOW GRANTS FOR CURRENT_USER', ARRAY_A );
 			wp_cache_set( $cache_key, $grants, '', 300 );
 		}
 
@@ -1671,75 +1423,75 @@ class CASCR_SecurityCheck {
 				}
 			}
 		}
-		return [
+		return array(
 			'result' => $insecure
 				? __( 'Database user has excessive privileges.', 'security-check-report' )
 				: __( 'Database user privileges are secure.', 'security-check-report' ),
-			'score'  => $insecure ? 9 : 0
-		];
+			'score'  => $insecure ? 9 : 0,
+		);
 	}
 
 	private function check_database_structure() {
 		global $wpdb;
 
 		$cache_key = 'cascr_table_status';
-		$tables = wp_cache_get( $cache_key );
+		$tables    = wp_cache_get( $cache_key );
 
 		if ( false === $tables ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Necessary for checking table engines
-			$tables = $wpdb->get_results( "SHOW TABLE STATUS", ARRAY_A );
+			$tables = $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
 			wp_cache_set( $cache_key, $tables, '', 300 );
 		}
 
-		$insecure = [];
+		$insecure = array();
 		foreach ( $tables as $table ) {
 			if ( $table['Engine'] !== 'InnoDB' ) {
 				$insecure[] = $table['Name'];
 			}
 		}
-		return [
+		return array(
 			'result' => ! empty( $insecure )
 				? __( 'Tables not using InnoDB: ', 'security-check-report' ) . implode( ', ', $insecure )
 				: __( 'All tables use InnoDB.', 'security-check-report' ),
-			'score'  => ! empty( $insecure ) ? 6 : 0
-		];
+			'score'  => ! empty( $insecure ) ? 6 : 0,
+		);
 	}
 
 	private function check_outdated_libraries() {
 		global $wp_scripts;
 		$jquery_version = isset( $wp_scripts->registered['jquery']->ver ) ? $wp_scripts->registered['jquery']->ver : 'unknown';
-		$outdated = [];
+		$outdated       = array();
 		if ( version_compare( $jquery_version, '3.5.1', '<' ) ) {
 			$outdated[] = 'jQuery';
 		}
-		return [
+		return array(
 			'result' => ! empty( $outdated )
 				? __( 'Outdated libraries: ', 'security-check-report' ) . implode( ', ', $outdated )
 				: __( 'All libraries are up to date.', 'security-check-report' ),
-			'score'  => ! empty( $outdated ) ? 7 : 0
-		];
+			'score'  => ! empty( $outdated ) ? 7 : 0,
+		);
 	}
 
 	private function check_user_enumeration() {
-		$methods = [];
+		$methods    = array();
 		$vulnerable = false;
 
 		// Method 1: ?author=1 Redirect check
 		$response = wp_remote_get(
 			home_url( '?author=1' ),
-			[
+			array(
 				'timeout'     => 10,
 				'redirection' => 0, // Don't follow redirects
-			]
+			)
 		);
 
 		if ( ! is_wp_error( $response ) ) {
-			$code = wp_remote_retrieve_response_code( $response );
+			$code     = wp_remote_retrieve_response_code( $response );
 			$location = wp_remote_retrieve_header( $response, 'location' );
 
 			// 301/302 redirect to /author/username = enumeration possible
 			if ( ( $code === 301 || $code === 302 ) && ! empty( $location ) && strpos( $location, '/author/' ) !== false ) {
-				$methods[] = __( '?author=N parameter', 'security-check-report' );
+				$methods[]  = __( '?author=N parameter', 'security-check-report' );
 				$vulnerable = true;
 			}
 		}
@@ -1747,19 +1499,19 @@ class CASCR_SecurityCheck {
 		// Method 2: REST API /wp/v2/users endpoint
 		$response = wp_remote_get(
 			rest_url( 'wp/v2/users' ),
-			[
+			array(
 				'timeout' => 10,
-				'headers' => [ 'Accept' => 'application/json' ],
-			]
+				'headers' => array( 'Accept' => 'application/json' ),
+			)
 		);
 
 		if ( ! is_wp_error( $response ) ) {
 			$code = wp_remote_retrieve_response_code( $response );
 			if ( $code === 200 ) {
-				$body = wp_remote_retrieve_body( $response );
+				$body  = wp_remote_retrieve_body( $response );
 				$users = json_decode( $body, true );
 				if ( is_array( $users ) && ! empty( $users ) ) {
-					$methods[] = __( 'REST API /users endpoint', 'security-check-report' );
+					$methods[]  = __( 'REST API /users endpoint', 'security-check-report' );
 					$vulnerable = true;
 				}
 			}
@@ -1768,7 +1520,7 @@ class CASCR_SecurityCheck {
 		// Method 3: oEmbed endpoint
 		$response = wp_remote_get(
 			home_url( '?rest_route=/oembed/1.0/embed&url=' . rawurlencode( home_url() ) ),
-			[ 'timeout' => 10 ]
+			array( 'timeout' => 10 )
 		);
 
 		if ( ! is_wp_error( $response ) ) {
@@ -1776,7 +1528,7 @@ class CASCR_SecurityCheck {
 			if ( $code === 200 ) {
 				$body = wp_remote_retrieve_body( $response );
 				if ( strpos( $body, 'author_name' ) !== false || strpos( $body, 'author_url' ) !== false ) {
-					$methods[] = __( 'oEmbed endpoint', 'security-check-report' );
+					$methods[]  = __( 'oEmbed endpoint', 'security-check-report' );
 					$vulnerable = true;
 				}
 			}
@@ -1784,28 +1536,23 @@ class CASCR_SecurityCheck {
 
 		// Calculate score based on number of enumeration methods available
 		if ( ! $vulnerable ) {
-			return [
+			return array(
 				'result' => __( 'User enumeration is protected. No common enumeration methods are available.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		$method_count = count( $methods );
-		$score = $method_count >= 3 ? 8 : ( $method_count >= 2 ? 7 : 6 );
+		$score        = $method_count >= 3 ? 8 : ( $method_count >= 2 ? 7 : 6 );
 
-		return [
+		return array(
 			'result' => sprintf(
 				/* translators: %s: list of enumeration methods */
 				__( 'User enumeration possible via: %s. Attackers can discover valid usernames.', 'security-check-report' ),
 				implode( ', ', $methods )
 			),
 			'score'  => $score,
-		];
-	}
-
-	private function get_cached_wordpress_version() {
-		global $wp_version;
-		return $wp_version;
+		);
 	}
 
 	private function get_latest_wordpress_version() {
@@ -1819,15 +1566,15 @@ class CASCR_SecurityCheck {
 	}
 
 	private function is_plugin_up_to_date( $plugin_file ) {
-		$data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_file );
+		$data    = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_file );
 		$current = $data['Version'];
-		$latest = $this->get_latest_plugin_version( $data['TextDomain'] );
+		$latest  = $this->get_latest_plugin_version( $data['TextDomain'] );
 		return version_compare( $current, $latest, '>=' );
 	}
 
 	private function is_theme_up_to_date( $theme_data ) {
 		$current = $theme_data->get( 'Version' );
-		$latest = $this->get_latest_theme_version( $theme_data->get( 'TextDomain' ) );
+		$latest  = $this->get_latest_theme_version( $theme_data->get( 'TextDomain' ) );
 		return version_compare( $current, $latest, '>=' );
 	}
 
@@ -1852,7 +1599,7 @@ class CASCR_SecurityCheck {
 	}
 
 	private function is_file_outdated( $file, $months = 6 ) {
-		$modified = filemtime( $file );
+		$modified  = filemtime( $file );
 		$threshold = $months * 30 * 24 * 60 * 60;
 		return ( time() - $modified ) > $threshold;
 	}
@@ -1860,59 +1607,62 @@ class CASCR_SecurityCheck {
 	private function check_php_execution() {
 		$wp_filesystem = $this->get_wp_filesystem();
 		if ( ! $wp_filesystem ) {
-			return [
+			return array(
 				'result' => __( 'Could not initialize filesystem for PHP execution check.', 'security-check-report' ),
-				'score'  => 5
-			];
+				'score'  => 5,
+			);
 		}
 
 		$upload_dir = wp_upload_dir();
-		$dir = $upload_dir['basedir'];
-		$url = $upload_dir['baseurl'];
+		$dir        = $upload_dir['basedir'];
+		$url        = $upload_dir['baseurl'];
 
-		$unique_id = wp_generate_password( 12, false );
-		$test_php = $dir . '/cascr-test-' . $unique_id . '.php';
+		$unique_id    = wp_generate_password( 12, false );
+		$test_php     = $dir . '/cascr-test-' . $unique_id . '.php';
 		$test_php_url = $url . '/cascr-test-' . $unique_id . '.php';
-		$php_content = '<?php echo "CASCR_PHP_EXEC_TEST"; ?>';
+		$php_content  = '<?php echo "CASCR_PHP_EXEC_TEST"; ?>';
 
 		$created = $wp_filesystem->put_contents( $test_php, $php_content, FS_CHMOD_FILE );
 		if ( ! $created ) {
-			return [
+			return array(
 				'result' => __( 'Could not create test file for PHP execution check.', 'security-check-report' ),
-				'score'  => 3
-			];
+				'score'  => 3,
+			);
 		}
 
-		$php_response = wp_remote_get( $test_php_url, [
-			'timeout' => 10,
-		] );
+		$php_response = wp_remote_get(
+			$test_php_url,
+			array(
+				'timeout' => 10,
+			)
+		);
 
 		$wp_filesystem->delete( $test_php );
 
 		if ( is_wp_error( $php_response ) ) {
-			return [
+			return array(
 				'result' => __( 'PHP execution in uploads is blocked (file not accessible).', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
 		$status_code = wp_remote_retrieve_response_code( $php_response );
 		if ( $status_code === 403 || $status_code === 404 ) {
-			return [
+			return array(
 				'result' => __( 'PHP execution in uploads is blocked.', 'security-check-report' ),
-				'score'  => 0
-			];
+				'score'  => 0,
+			);
 		}
 
-		$body = wp_remote_retrieve_body( $php_response );
+		$body         = wp_remote_retrieve_body( $php_response );
 		$php_executed = strpos( $body, 'CASCR_PHP_EXEC_TEST' ) !== false;
 
-		return [
+		return array(
 			'result' => $php_executed
 				? __( 'PHP execution is allowed in uploads directory. This is a security risk!', 'security-check-report' )
 				: __( 'PHP execution in uploads is blocked.', 'security-check-report' ),
-			'score'  => $php_executed ? 9 : 0
-		];
+			'score'  => $php_executed ? 9 : 0,
+		);
 	}
 
 	private function is_xmlrpc_methods_enabled() {
@@ -1952,22 +1702,22 @@ class CASCR_SecurityCheck {
 	private function check_application_passwords() {
 		// Check if Application Passwords feature is available (WP 5.6+)
 		if ( ! function_exists( 'wp_is_application_passwords_available' ) ) {
-			return [
+			return array(
 				'result' => __( 'Application Passwords feature not available (requires WordPress 5.6+).', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		if ( ! wp_is_application_passwords_available() ) {
-			return [
+			return array(
 				'result' => __( 'Application Passwords are disabled on this site.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// Check for users with Application Passwords (admins and editors)
-		$users = get_users( [ 'role__in' => [ 'administrator', 'editor' ] ] );
-		$with_app_passwords = [];
+		$users              = get_users( array( 'role__in' => array( 'administrator', 'editor' ) ) );
+		$with_app_passwords = array();
 
 		foreach ( $users as $user ) {
 			if ( class_exists( 'WP_Application_Passwords' ) ) {
@@ -1979,20 +1729,20 @@ class CASCR_SecurityCheck {
 		}
 
 		if ( empty( $with_app_passwords ) ) {
-			return [
+			return array(
 				'result' => __( 'No Application Passwords in use by administrators or editors.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
-		return [
+		return array(
 			'result' => sprintf(
 				/* translators: %s: list of users with Application Passwords and count */
 				__( 'Users with Application Passwords: %s. Monitor these for security.', 'security-check-report' ),
 				implode( ', ', array_slice( $with_app_passwords, 0, 5 ) )
 			),
 			'score'  => 4, // Informational - not critical but should be monitored
-		];
+		);
 	}
 
 	/**
@@ -2001,7 +1751,7 @@ class CASCR_SecurityCheck {
 	 * Examines whether WP-Cron is properly configured and looks for suspicious cron jobs.
 	 */
 	private function check_wp_cron_security() {
-		$issues = [];
+		$issues = array();
 
 		// Check if DISABLE_WP_CRON is set (recommended for production with server cron)
 		if ( ! defined( 'DISABLE_WP_CRON' ) || ! DISABLE_WP_CRON ) {
@@ -2009,8 +1759,8 @@ class CASCR_SecurityCheck {
 		}
 
 		// Check for suspicious cron jobs
-		$crons = _get_cron_array();
-		$suspicious_hooks = [];
+		$crons            = _get_cron_array();
+		$suspicious_hooks = array();
 
 		if ( is_array( $crons ) ) {
 			foreach ( $crons as $timestamp => $hooks ) {
@@ -2039,10 +1789,10 @@ class CASCR_SecurityCheck {
 		}
 
 		if ( empty( $issues ) ) {
-			return [
+			return array(
 				'result' => __( 'WP-Cron configuration is secure. No suspicious scheduled tasks found.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// Calculate score based on issues
@@ -2051,10 +1801,10 @@ class CASCR_SecurityCheck {
 			$score = max( $score, 8 ); // Suspicious cron jobs are more serious
 		}
 
-		return [
+		return array(
 			'result' => implode( '; ', $issues ),
 			'score'  => $score,
-		];
+		);
 	}
 
 	/**
@@ -2064,24 +1814,24 @@ class CASCR_SecurityCheck {
 	 */
 	private function check_debug_log_exposure() {
 		$log_file = WP_CONTENT_DIR . '/debug.log';
-		$log_url = content_url( '/debug.log' );
+		$log_url  = content_url( '/debug.log' );
 
 		// Check if the file exists
 		if ( ! file_exists( $log_file ) ) {
-			return [
+			return array(
 				'result' => __( 'No debug.log file found. This is the recommended state for production.', 'security-check-report' ),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// Check if file is publicly accessible
-		$response = wp_remote_head( $log_url, [ 'timeout' => 5 ] );
+		$response = wp_remote_head( $log_url, array( 'timeout' => 5 ) );
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'debug.log exists but accessibility could not be verified.', 'security-check-report' ),
 				'score'  => 3,
-			];
+			);
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
@@ -2093,27 +1843,27 @@ class CASCR_SecurityCheck {
 				? sprintf( '%.1f MB', $file_size / 1048576 )
 				: sprintf( '%.1f KB', $file_size / 1024 );
 
-			return [
+			return array(
 				'result' => sprintf(
 					/* translators: %s: file size */
 					__( 'CRITICAL: debug.log (%s) is publicly accessible! This exposes sensitive error information, file paths, and potentially credentials.', 'security-check-report' ),
 					$size_text
 				),
 				'score'  => 9,
-			];
+			);
 		}
 
 		if ( $code === 403 || $code === 404 ) {
-			return [
+			return array(
 				'result' => __( 'debug.log exists but is properly protected from public access. Consider deleting it periodically.', 'security-check-report' ),
 				'score'  => 2,
-			];
+			);
 		}
 
-		return [
+		return array(
 			'result' => __( 'debug.log exists. Ensure it is not publicly accessible and delete regularly.', 'security-check-report' ),
 			'score'  => 3,
-		];
+		);
 	}
 
 	/**
@@ -2122,52 +1872,52 @@ class CASCR_SecurityCheck {
 	 * Overly permissive CORS settings can be a security risk.
 	 */
 	private function check_cors_configuration() {
-		$response = wp_remote_get( home_url(), [ 'timeout' => 10 ] );
+		$response = wp_remote_get( home_url(), array( 'timeout' => 10 ) );
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not check CORS configuration.', 'security-check-report' ),
 				'score'  => 2,
-			];
+			);
 		}
 
 		$headers = wp_remote_retrieve_headers( $response );
-		$acao = isset( $headers['access-control-allow-origin'] ) ? $headers['access-control-allow-origin'] : '';
-		$acac = isset( $headers['access-control-allow-credentials'] ) ? $headers['access-control-allow-credentials'] : '';
+		$acao    = isset( $headers['access-control-allow-origin'] ) ? $headers['access-control-allow-origin'] : '';
+		$acac    = isset( $headers['access-control-allow-credentials'] ) ? $headers['access-control-allow-credentials'] : '';
 
 		// Wildcard origin with credentials is the most dangerous
 		if ( $acao === '*' && strtolower( $acac ) === 'true' ) {
-			return [
+			return array(
 				'result' => __( 'CRITICAL: CORS allows all origins (*) with credentials. This is a severe security misconfiguration.', 'security-check-report' ),
 				'score'  => 9,
-			];
+			);
 		}
 
 		// Wildcard origin without credentials is still risky
 		if ( $acao === '*' ) {
-			return [
+			return array(
 				'result' => __( 'CORS allows all origins (*). This may expose your site to cross-origin attacks.', 'security-check-report' ),
 				'score'  => 6,
-			];
+			);
 		}
 
 		// Specific origin configured
 		if ( ! empty( $acao ) ) {
-			return [
+			return array(
 				'result' => sprintf(
 					/* translators: %s: allowed origin domain */
 					__( 'CORS is configured for specific origin: %s', 'security-check-report' ),
 					esc_html( $acao )
 				),
 				'score'  => 0,
-			];
+			);
 		}
 
 		// No CORS headers - this is fine for most sites
-		return [
+		return array(
 			'result' => __( 'No CORS headers configured. This is secure for most use cases.', 'security-check-report' ),
 			'score'  => 0,
-		];
+		);
 	}
 
 	/**
@@ -2187,14 +1937,14 @@ class CASCR_SecurityCheck {
 				$wp_version,
 				$locale
 			),
-			[ 'timeout' => 15 ]
+			array( 'timeout' => 15 )
 		);
 
 		if ( is_wp_error( $response ) ) {
-			return [
+			return array(
 				'result' => __( 'Could not connect to WordPress.org to verify file integrity.', 'security-check-report' ),
 				'score'  => 3,
-			];
+			);
 		}
 
 		$body = wp_remote_retrieve_body( $response );
@@ -2204,30 +1954,30 @@ class CASCR_SecurityCheck {
 			// Try without locale (fallback to en_US)
 			$response = wp_remote_get(
 				sprintf( 'https://api.wordpress.org/core/checksums/1.0/?version=%s', $wp_version ),
-				[ 'timeout' => 15 ]
+				array( 'timeout' => 15 )
 			);
 
 			if ( is_wp_error( $response ) ) {
-				return [
+				return array(
 					'result' => __( 'Could not retrieve checksums for this WordPress version.', 'security-check-report' ),
 					'score'  => 3,
-				];
+				);
 			}
 
 			$body = wp_remote_retrieve_body( $response );
 			$data = json_decode( $body, true );
 
 			if ( empty( $data['checksums'] ) ) {
-				return [
+				return array(
 					'result' => __( 'No checksums available for this WordPress version.', 'security-check-report' ),
 					'score'  => 2,
-				];
+				);
 			}
 		}
 
-		$modified = [];
-		$missing = [];
-		$checked = 0;
+		$modified  = array();
+		$missing   = array();
+		$checked   = 0;
 		$max_check = 500; // Limit to prevent timeout
 
 		foreach ( $data['checksums'] as $file => $checksum ) {
@@ -2255,28 +2005,28 @@ class CASCR_SecurityCheck {
 				$modified[] = $file;
 			}
 
-			$checked++;
+			++$checked;
 		}
 
 		$total_issues = count( $modified ) + count( $missing );
 
 		if ( $total_issues === 0 ) {
-			return [
+			return array(
 				'result' => sprintf(
 					/* translators: %d: number of files checked */
 					__( 'WordPress core file integrity verified. %d files checked against official checksums.', 'security-check-report' ),
 					$checked
 				),
 				'score'  => 0,
-			];
+			);
 		}
 
-		$issues = [];
+		$issues = array();
 
 		if ( ! empty( $modified ) ) {
 			$display_files = array_slice( $modified, 0, 5 );
-			$more_count = count( $modified ) - 5;
-			$issues[] = sprintf(
+			$more_count    = count( $modified ) - 5;
+			$issues[]      = sprintf(
 				/* translators: %1$d: number of modified files, %2$s: list of files */
 				__( '%1$d modified: %2$s', 'security-check-report' ),
 				count( $modified ),
@@ -2286,7 +2036,7 @@ class CASCR_SecurityCheck {
 
 		if ( ! empty( $missing ) ) {
 			$display_files = array_slice( $missing, 0, 3 );
-			$issues[] = sprintf(
+			$issues[]      = sprintf(
 				/* translators: %1$d: number of missing files, %2$s: list of files */
 				__( '%1$d missing: %2$s', 'security-check-report' ),
 				count( $missing ),
@@ -2300,14 +2050,14 @@ class CASCR_SecurityCheck {
 			$score = 9; // Many modified files is very concerning
 		}
 
-		return [
+		return array(
 			'result' => sprintf(
 				/* translators: %s: list of integrity issues */
 				__( 'Core file integrity issues detected: %s. This may indicate tampering or incomplete updates.', 'security-check-report' ),
 				implode( '; ', $issues )
 			),
 			'score'  => $score,
-		];
+		);
 	}
 }
 

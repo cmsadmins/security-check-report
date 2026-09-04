@@ -11,3 +11,4 @@ Thumbs.db
 *.tar.gz
 build/
 dist/
+composer.lock

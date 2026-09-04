@@ -2,52 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
-return [
-	'allowed_file_types' => [
-		// Images
-		'jpg',
-		'jpeg',
-		'png',
-		'gif',
-		'webp',
-		'avif',
-		'svg',
-		'ico',
-		'bmp',
-		// Documents
-		'pdf',
-		'doc',
-		'docx',
-		'xls',
-		'xlsx',
-		'ppt',
-		'pptx',
-		'odt',
-		'ods',
-		'odp',
-		// Audio/Video
-		'mp3',
-		'mp4',
-		'wav',
-		'ogg',
-		'webm',
-		'mov',
-		'avi',
-		// Archives
-		'zip',
-		'rar',
-		'7z',
-		'tar',
-		'gz',
-		// Other
-		'txt',
-		'css',
-		'js',
-		'json',
-		'xml',
-		'csv',
-	],
-	'security_plugins' => [
+return array(
+	'security_plugins'         => array(
 		'wordfence/wordfence.php',
 		'sucuri-scanner/sucuri.php',
 		'ithemes-security-pro/ithemes-security-pro.php',
@@ -65,9 +21,9 @@ return [
 		'blackhole-for-bad-bots/blackhole-for-bad-bots.php',
 		'clean-talk-spam-protect/cleantalk.php',
 		'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
-		'loginizer/loginizer.php'
-	],
-	'brute_force_plugins' => [
+		'loginizer/loginizer.php',
+	),
+	'brute_force_plugins'      => array(
 		'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
 		'wordfence/wordfence.php',
 		'sucuri-scanner/sucuri.php',
@@ -97,9 +53,9 @@ return [
 		'safe-login/safe-login.php',
 		'wp-login-security/wp-login-security.php',
 		'forcefield/forcefield.php',
-		'fail2ban-wp-security/fail2ban-wp-security.php'
-	],
-	'login_protection_plugins' => [
+		'fail2ban-wp-security/fail2ban-wp-security.php',
+	),
+	'login_protection_plugins' => array(
 		'limit-login-attempts-reloaded/limit-login-attempts-reloaded.php',
 		'wordfence/wordfence.php',
 		'sucuri-scanner/sucuri.php',
@@ -116,9 +72,9 @@ return [
 		'brute-force-login-protection/brute-force-login-protection.php',
 		'wp-simple-firewall/wp-simple-firewall.php',
 		'captcha-on-login/captcha-on-login.php',
-		'two-factor-authentication/two-factor-authentication.php'
-	],
-	'security_headers' => [
+		'two-factor-authentication/two-factor-authentication.php',
+	),
+	'security_headers'         => array(
 		'Strict-Transport-Security',      // HSTS
 		'Content-Security-Policy',        // CSP
 		'X-Content-Type-Options',         // nosniff
@@ -129,12 +85,12 @@ return [
 		'Cross-Origin-Opener-Policy',     // COOP
 		'Cross-Origin-Embedder-Policy',   // COEP
 		'Cross-Origin-Resource-Policy',   // CORP
-	],
+	),
 	// Malware signatures organized by risk level
 	// High: Almost always malicious in WordPress context
 	// Medium: Requires context to determine if malicious
 	// Low: Only suspicious when combined with other indicators
-	'malware_signatures' => [
+	'malware_signatures'       => array(
 		// High risk - almost always malicious
 		'eval(base64_decode(',
 		'eval(gzinflate(',
@@ -160,33 +116,8 @@ return [
 		'chr(ord(',
 		'\\x[0-9a-fA-F]',
 		'base64_decode(str_rot13(',
-	],
-	// Structured malware signatures for more precise detection
-	'malware_patterns' => [
-		'high' => [
-			'eval\\s*\\(\\s*base64_decode',
-			'eval\\s*\\(\\s*gzinflate',
-			'eval\\s*\\(\\s*gzuncompress',
-			'assert\\s*\\(\\s*\\$_',
-			'preg_replace\\s*\\([^,]+\\/e[^,]*,',
-			'\\$_(GET|POST|REQUEST|COOKIE)\\s*\\[[\'"][^\'"]+[\'"]\\s*\\]\\s*\\(',
-		],
-		'medium' => [
-			'eval\\s*\\(',
-			'create_function\\s*\\(',
-			'exec\\s*\\(',
-			'system\\s*\\(',
-			'shell_exec\\s*\\(',
-			'passthru\\s*\\(',
-			'popen\\s*\\(',
-		],
-		'low' => [
-			'base64_decode\\s*\\(',
-			'gzinflate\\s*\\(',
-			'str_rot13\\s*\\(',
-		],
-	],
-	'ignore_wp_core_files'=> [
+	),
+	'ignore_wp_core_files'     => array(
 		'wp-includes/fonts/class-wp-font-utils.php',
 		'wp-includes/option.php',
 		'wp-includes/class-wp-query.php',
@@ -358,9 +289,9 @@ return [
 		'wp-includes/js/dist/vendor/wp-polyfill.js',
 		'wp-includes/js/dist/vendor/moment.min.js',
 		'wp-includes/js/dist/vendor/wp-polyfill-url.js',
-		'wp-includes/js/dist/editor.min.js'
-	],
-	'backup_plugins' => [
+		'wp-includes/js/dist/editor.min.js',
+	),
+	'backup_plugins'           => array(
 		'updraftplus/updraftplus.php',
 		'backwpup/backwpup.php',
 		'backupwordpress/backupwordpress.php',
@@ -399,9 +330,9 @@ return [
 		'mainwp-child/mainwp-child.php',
 		'managewp-worker/managewp-worker.php',
 		'cyberpanel-backup/cyberpanel-backup.php',
-		'draftpress-backup/draftpress-backup.php'
-	],
-	'password_plugins' => [
+		'draftpress-backup/draftpress-backup.php',
+	),
+	'password_plugins'         => array(
 		'force-strong-passwords/force-strong-passwords.php',
 		'wp-force-strong-passwords/wp-force-strong-passwords.php',
 		'itthinx-strong-passwords/itthinx-strong-passwords.php',
@@ -426,9 +357,9 @@ return [
 		'strong-password-protection/strong-password-protection.php',
 		'enforce-strong-passwords/enforce-strong-passwords.php',
 		'passwords-policy/passwords-policy.php',
-		'ithemes-security-pro/ithemes-security-pro.php'
-	],
-	'two_factor_plugins' => [
+		'ithemes-security-pro/ithemes-security-pro.php',
+	),
+	'two_factor_plugins'       => array(
 		'two-factor-authentication/two-factor-authentication.php',
 		'google-authenticator/google-authenticator.php',
 		'duo-wordpress/duo.php',
@@ -454,9 +385,9 @@ return [
 		'keycloak-integration/keycloak-integration.php',
 		'wp-auth0/wp-auth0.php',
 		'two-factor-sms/two-factor-sms.php',
-		'duo-wordpress/duo.php'
-	],
-	'unwanted_files' => [
+		'duo-wordpress/duo.php',
+	),
+	'unwanted_files'           => array(
 		'readme.html',
 		'license.txt',
 		'wp-config-sample.php',
@@ -488,17 +419,5 @@ return [
 		'.env.test',
 		'.ftpquota',
 		'dump.sql',
-		'*.sql',
-		'*.tar',
-		'*.tar.gz',
-		'*.zip',
-		'*.rar',
-		'*.log',
-		'*.bak',
-		'*.old',
-		'*.orig',
-		'*.swp',
-		'*.tmp',
-		'*.temp'
-	]
-];
+	),
+);

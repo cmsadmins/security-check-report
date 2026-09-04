@@ -6,7 +6,7 @@
 (() => {
     'use strict';
 
-    const config = window.cascr || window.cmsadmins_ajax || {};
+    const config = window.cascr || {};
 
     /**
      * Test Runner Module
@@ -85,9 +85,9 @@
             const formData = new FormData();
             formData.append('action', 'run_security_check');
             formData.append('test_name', testId);
-            formData.append('security_nonce', config.nonce || config.security_nonce);
+            formData.append('security_nonce', config.nonce);
 
-            const response = await fetch(config.ajaxUrl || config.ajax_url, {
+            const response = await fetch(config.ajaxUrl, {
                 method: 'POST',
                 body: formData,
                 signal: this.#abortController?.signal,
@@ -109,114 +109,6 @@
 
         abort() {
             this.#abortController?.abort();
-        }
-    }
-
-    /**
-     * Results Renderer Module
-     */
-    class ResultsRenderer {
-        #container;
-        #tbody;
-
-        constructor(tableId) {
-            this.#container = document.getElementById(tableId);
-            this.#tbody = document.getElementById(`${tableId.replace('-table', '')}-body`) ||
-                          this.#container?.querySelector('tbody');
-        }
-
-        clear() {
-            if (this.#tbody) {
-                this.#tbody.innerHTML = '';
-            }
-        }
-
-        addRow(testName, result, score) {
-            if (!this.#tbody) return;
-
-            const row = document.createElement('tr');
-            row.className = this.#getRowClass(score);
-
-            row.innerHTML = `
-                <td class="cascr-table__cell cascr-table__cell--name">${this.#escapeHtml(testName)}</td>
-                <td class="cascr-table__cell cascr-table__cell--result">${this.#escapeHtml(result)}</td>
-                <td class="cascr-table__cell cascr-table__cell--score">${score}/10</td>
-                <td class="cascr-table__cell cascr-table__cell--status">
-                    <span class="cascr-status cascr-status--${this.#getStatusClass(score)}">${this.#getStatusLabel(score)}</span>
-                </td>
-            `;
-
-            this.#tbody.appendChild(row);
-        }
-
-        #getRowClass(score) {
-            if (score >= 7) return 'cascr-table__row cascr-table__row--critical';
-            if (score >= 4) return 'cascr-table__row cascr-table__row--warning';
-            return 'cascr-table__row cascr-table__row--success';
-        }
-
-        #getStatusClass(score) {
-            if (score >= 7) return 'critical';
-            if (score >= 4) return 'warning';
-            return 'success';
-        }
-
-        #getStatusLabel(score) {
-            if (score >= 7) return 'Critical';
-            if (score >= 4) return 'Warning';
-            return 'Passed';
-        }
-
-        #escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-    }
-
-    /**
-     * Progress Bar Module
-     */
-    class ProgressBar {
-        #container;
-        #fill;
-        #text;
-
-        constructor(containerId) {
-            this.#container = document.getElementById(containerId);
-            this.#fill = document.getElementById(`${containerId}-fill`);
-            this.#text = document.getElementById(`${containerId}-text`);
-        }
-
-        show() {
-            this.#container?.removeAttribute('hidden');
-        }
-
-        hide() {
-            this.#container?.setAttribute('hidden', '');
-        }
-
-        update(current, total, testName = '') {
-            const percentage = total > 0 ? Math.round((current / total) * 100) : 0;
-
-            if (this.#fill) {
-                this.#fill.style.width = `${percentage}%`;
-            }
-
-            if (this.#container) {
-                const progressbar = this.#container.querySelector('[role="progressbar"]');
-                progressbar?.setAttribute('aria-valuenow', percentage.toString());
-            }
-
-            if (this.#text && testName) {
-                const i18n = config.i18n || config;
-                const label = i18n.runningCheck || i18n.running_check || 'Running';
-                this.#text.innerHTML = `${label}<br><strong>${testName}</strong> (${current + 1}/${total})`;
-            }
-        }
-
-        reset() {
-            this.update(0, 1, '');
         }
     }
 
@@ -655,8 +547,6 @@
      */
     class SecurityCheckApp {
         #testRunner;
-        #renderer;
-        #progressBar;
         #reportGenerator;
         #accordionSearch;
         #elements = {};
@@ -666,8 +556,6 @@
             const testNames = config.tests?.names || {};
 
             this.#testRunner = new TestRunner(tests, testNames);
-            this.#renderer = new ResultsRenderer('cascr-results-table');
-            this.#progressBar = new ProgressBar('cascr-progress');
             this.#reportGenerator = new ReportGenerator();
             this.#accordionSearch = new AccordionSearch('cascr-accordion');
 
@@ -677,97 +565,61 @@
 
         #cacheElements() {
             this.#elements = {
-                controls: document.getElementById('cascr-controls'),
-                results: document.getElementById('cascr-results'),
-                report: document.getElementById('cascr-report'),
-                disclaimer: document.getElementById('cascr-disclaimer-checkbox'),
-                startButton: document.getElementById('cascr-start-tests'),
-                copyButton: document.getElementById('cascr-copy-report'),
-                reportText: document.getElementById('cascr-report-text'),
-                summary: document.getElementById('cascr-summary'),
-                // Legacy element IDs for backwards compatibility
-                legacyCheckbox: document.getElementById('disclaimer-checkbox'),
-                legacyStart: document.getElementById('start-tests'),
-                legacyCopy: document.getElementById('copy-report'),
-                legacyReport: document.getElementById('final-report'),
-                legacySummary: document.getElementById('final-summary'),
-                legacyResults: document.getElementById('security-check-results'),
-                legacyResultsBody: document.getElementById('results-body'),
-                legacyLoader: document.getElementById('security-check-loader'),
-                legacyWrap: document.getElementById('security-check-wrap'),
-                legacyReportContainer: document.getElementById('final-report-container'),
+                checkbox: document.getElementById('disclaimer-checkbox'),
+                startButton: document.getElementById('start-tests'),
+                copyButton: document.getElementById('copy-report'),
+                report: document.getElementById('final-report'),
+                summary: document.getElementById('final-summary'),
+                results: document.getElementById('security-check-results'),
+                resultsBody: document.getElementById('results-body'),
+                loader: document.getElementById('security-check-loader'),
+                loaderText: document.getElementById('loader-text'),
+                progress: document.getElementById('progress'),
+                wrap: document.getElementById('security-check-wrap'),
+                reportContainer: document.getElementById('final-report-container'),
             };
         }
 
         #bindEvents() {
-            const checkbox = this.#elements.disclaimer || this.#elements.legacyCheckbox;
-            const startBtn = this.#elements.startButton || this.#elements.legacyStart;
-            const copyBtn = this.#elements.copyButton || this.#elements.legacyCopy;
+            const { checkbox, startButton, copyButton } = this.#elements;
 
             checkbox?.addEventListener('change', (e) => {
-                if (startBtn) startBtn.disabled = !e.target.checked;
+                if (startButton) startButton.disabled = !e.target.checked;
             });
 
-            startBtn?.addEventListener('click', () => this.#startTests());
-            copyBtn?.addEventListener('click', () => this.#copyReport());
+            startButton?.addEventListener('click', () => this.#startTests());
+            copyButton?.addEventListener('click', () => this.#copyReport());
         }
 
         async #startTests() {
-            const startBtn = this.#elements.startButton || this.#elements.legacyStart;
-            if (startBtn) startBtn.disabled = true;
-
-            this.#showProgress();
-            this.#renderer.clear();
-
-            // Also clear legacy results
-            if (this.#elements.legacyResultsBody) {
-                this.#elements.legacyResultsBody.innerHTML = '';
-            }
+            const { startButton, loader, resultsBody } = this.#elements;
+            if (startButton) startButton.disabled = true;
+            if (loader) loader.style.display = 'block';
+            if (resultsBody) resultsBody.innerHTML = '';
 
             await this.#testRunner.runAll({
-                onProgress: (current, total, testName) => {
-                    this.#progressBar.update(current, total, testName);
-                    this.#updateLegacyProgress(current, total, testName);
-                },
-                onResult: (id, name, result) => {
-                    this.#renderer.addRow(name, result.result, result.score);
-                    this.#addLegacyRow(name, result.result, result.score);
-                },
-                onError: (id, name) => {
-                    const errorMsg = config.i18n?.errorMessage || config.error_message || 'Error';
-                    this.#renderer.addRow(name, errorMsg, 0);
-                    this.#addLegacyRow(name, errorMsg, 0);
-                },
+                onProgress: (current, total, testName) => this.#updateProgress(current, total, testName),
+                onResult: (id, name, result) => this.#addRow(name, result.result, result.score),
+                onError: (id, name) => this.#addRow(name, config.i18n?.errorMessage || 'Error', 0),
                 onComplete: (results) => this.#onTestsComplete(results),
             });
         }
 
-        #showProgress() {
-            this.#progressBar.show();
-
-            // Legacy support
-            if (this.#elements.legacyLoader) {
-                this.#elements.legacyLoader.style.display = 'block';
-            }
-        }
-
-        #updateLegacyProgress(current, total, testName) {
-            const loaderText = document.getElementById('loader-text');
-            const progress = document.getElementById('progress');
+        #updateProgress(current, total, testName) {
+            const { loaderText, progress } = this.#elements;
 
             if (loaderText) {
-                const label = config.running_check || config.i18n?.runningCheck || 'Running security check';
+                const label = config.i18n?.runningCheck || 'Running security check';
                 loaderText.innerHTML = `${label}<strong>${testName} (${current + 1}/${total})</strong>`;
             }
 
             if (progress) {
-                const percentage = ((current / total) * 100).toFixed(2);
-                progress.style.width = `${percentage}%`;
+                progress.style.width = `${((current / total) * 100).toFixed(2)}%`;
             }
         }
 
-        #addLegacyRow(testName, result, score) {
-            const tbody = this.#elements.legacyResultsBody;
+        #addRow(testName, result, score) {
+            const tbody = this.#elements.resultsBody;
             if (!tbody) return;
 
             const statusClass = score >= 7 ? 'critical' : score >= 4 ? 'warning' : 'success';
@@ -798,61 +650,26 @@
         }
 
         #onTestsComplete(results) {
-            this.#progressBar.hide();
             this.#reportGenerator.setResults(results);
-
             const report = this.#reportGenerator.generate();
+            const { summary, wrap, loader, results: resultsTable, reportContainer, report: reportField, startButton } = this.#elements;
 
-            // Modern UI
-            if (this.#elements.results) {
-                this.#elements.results.removeAttribute('hidden');
-            }
-            if (this.#elements.report) {
-                this.#elements.report.removeAttribute('hidden');
-            }
-            if (this.#elements.reportText) {
-                this.#elements.reportText.value = report;
-            }
-            if (this.#elements.summary) {
-                this.#elements.summary.innerHTML = this.#reportGenerator.getSummaryHtml();
-            }
-            if (this.#elements.controls) {
-                this.#elements.controls.setAttribute('hidden', '');
-            }
-
-            // Legacy UI - Set summary HTML on legacy element as well
-            if (this.#elements.legacySummary) {
-                this.#elements.legacySummary.innerHTML = this.#reportGenerator.getSummaryHtml();
-            }
-            if (this.#elements.legacyWrap) {
-                this.#elements.legacyWrap.style.display = 'none';
-            }
-            if (this.#elements.legacyLoader) {
-                this.#elements.legacyLoader.style.display = 'none';
-            }
-            if (this.#elements.legacyResults) {
-                this.#elements.legacyResults.style.display = 'table';
-            }
-            if (this.#elements.legacyReportContainer) {
-                this.#elements.legacyReportContainer.style.display = 'block';
-            }
-            if (this.#elements.legacyReport) {
-                this.#elements.legacyReport.value = report;
-            }
-
-            const startBtn = this.#elements.startButton || this.#elements.legacyStart;
-            if (startBtn) {
-                startBtn.style.display = 'none';
-            }
+            if (summary) summary.innerHTML = this.#reportGenerator.getSummaryHtml();
+            if (wrap) wrap.style.display = 'none';
+            if (loader) loader.style.display = 'none';
+            if (resultsTable) resultsTable.style.display = 'table';
+            if (reportContainer) reportContainer.style.display = 'block';
+            if (reportField) reportField.value = report;
+            if (startButton) startButton.style.display = 'none';
         }
 
         async #copyReport() {
-            const textarea = this.#elements.reportText || this.#elements.legacyReport;
+            const textarea = this.#elements.report;
             if (!textarea) return;
 
             const success = await ClipboardManager.copy(textarea.value);
             const message = success
-                ? (config.i18n?.copySuccess || config.copy_report_text || 'Copied!')
+                ? (config.i18n?.copySuccess || 'Copied!')
                 : (config.i18n?.copyError || 'Failed to copy');
 
             this.#showNotification(message, success ? 'success' : 'error');
