@@ -3,6 +3,7 @@ includes:
 
 parameters:
     level: 5
+    phpVersion: 70400
     paths:
         - security-check-report.php
         - config

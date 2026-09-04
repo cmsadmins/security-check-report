@@ -2,10 +2,10 @@
 Contributors: contexlabs
 Donate link: https://www.cms-admins.de/
 Tags: security, audit, vulnerability, malware, scanner
-Requires at least: 6.4
+Requires at least: 7.0
 Tested up to: 7.1
-Requires PHP: 8.2
-Stable tag: 2.2.1
+Requires PHP: 7.4
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,14 @@ Follow the plugin's recommendations to mitigate the security risk. Each test inc
 3. **Documentation:** Searchable accordion with test explanations
 
 == Changelog ==
+
+= 2.2.2 =
+* Broadened PHP compatibility: the plugin now runs on PHP 7.4 through 8.5
+* Requires WordPress 7.0 or newer
+* Added an automated PHPUnit test suite covering all 45 security checks and the AJAX permission and nonce gates
+* Continuous integration now lints on seven PHP versions and runs the test suite against WordPress 7.0 and latest before every release
+* Fixed a PHP warning in the outdated themes and plugins check when a theme or plugin path no longer exists
+* Removed unused legacy code paths and achieved full WordPress Coding Standards compliance
 
 = 2.2.1 =
 * First release on the WordPress.org plugin directory

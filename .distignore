@@ -14,7 +14,9 @@ Dockerfile
 run.sh
 Makefile
 scripts
+bin
 tests
+phpunit.xml.dist
 phpcs.xml.dist
 phpstan.neon
 phpstan-bootstrap.php

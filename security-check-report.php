@@ -3,9 +3,9 @@
 Plugin Name: CMS ADMINS Security Check Report
 Plugin URI: https://wordpress.org/plugins/security-check-report
 Description: Performs a comprehensive series of security tests on your WordPress installation and provides an overall risk evaluation.
-Version: 2.2.1
-Requires at least: 6.4
-Requires PHP: 8.2
+Version: 2.2.2
+Requires at least: 7.0
+Requires PHP: 7.4
 Author: Patrick Schlesinger
 Author URI: https://www.cms-admins.de/
 License: GPLv2 or later
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-define( 'CASCR_VERSION', '2.2.1' );
+define( 'CASCR_VERSION', '2.2.2' );
 
 class CASCR_SecurityCheck {
 
@@ -1599,7 +1599,10 @@ class CASCR_SecurityCheck {
 	}
 
 	private function is_file_outdated( $file, $months = 6 ) {
-		$modified  = filemtime( $file );
+		$modified = file_exists( $file ) ? filemtime( $file ) : false;
+		if ( false === $modified ) {
+			return false;
+		}
 		$threshold = $months * 30 * 24 * 60 * 60;
 		return ( time() - $modified ) > $threshold;
 	}

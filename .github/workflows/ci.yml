@@ -8,17 +8,52 @@ on:
 
 jobs:
   phplint:
-    name: PHP Lint
+    name: PHP Lint (${{ matrix.php }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["7.4", "8.0", "8.1", "8.2", "8.3", "8.4", "8.5"]
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.2"
+          php-version: "${{ matrix.php }}"
           coverage: none
           tools: composer
       - run: composer install --no-progress --prefer-dist
       - run: vendor/bin/parallel-lint --exclude vendor --exclude node_modules .
+
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }} / WP ${{ matrix.wp }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: "7.4", wp: "7.0" }
+          - { php: "8.2", wp: "latest" }
+          - { php: "8.5", wp: "latest" }
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: wordpress_test
+        ports: ["3306:3306"]
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "${{ matrix.php }}"
+          extensions: mysqli
+          coverage: none
+          tools: composer
+      - run: sudo apt-get update && sudo apt-get install -y subversion
+      - run: composer install --no-progress --prefer-dist
+      - run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wp }} true
+      - run: vendor/bin/phpunit
 
   phpcs:
     name: WordPress Coding Standards
@@ -76,7 +111,7 @@ jobs:
           cp -r security-check-report wp/wp-content/plugins/
           # Strip dev-only files so the check sees what actually ships to wp.org (see .distignore)
           cd wp/wp-content/plugins/security-check-report
-          rm -rf .git .github .wordpress-org .distignore .gitignore .gitattributes phpcs.xml.dist phpstan.neon composer.json composer.lock vendor README.md
+          rm -rf .git .github .wordpress-org .distignore .gitignore .gitattributes bin tests phpunit.xml.dist phpcs.xml.dist phpstan.neon composer.json composer.lock vendor README.md
       - name: Install Plugin Check
         run: wp plugin install plugin-check --activate --path=wp
       - name: Run Plugin Check
