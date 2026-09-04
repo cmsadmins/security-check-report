@@ -1,0 +1,27 @@
+/**
+ * CMS ADMINS Security Check Report
+ * Legacy CSS - Kept for backwards compatibility
+ * Primary styles are in admin.css
+ */
+
+/* Legacy table row colors - kept for backwards compatibility */
+#cmsadmins-security-check-admin #security-check-results .status-green,
+#cmsadmins-security-check-admin #security-check-results .status-yellow,
+#cmsadmins-security-check-admin #security-check-results .status-red {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+
+#cmsadmins-security-check-admin #security-check-results .status-green {
+    background-color: green;
+}
+
+#cmsadmins-security-check-admin #security-check-results .status-yellow {
+    background-color: yellow;
+}
+
+#cmsadmins-security-check-admin #security-check-results .status-red {
+    background-color: red;
+}
