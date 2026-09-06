@@ -1,690 +1,821 @@
 /**
  * CMS ADMINS Security Check Report
- * Modern Vanilla JavaScript ES2022+
+ *
+ * The browser runs the checks and draws the result. It does not decide what
+ * anything means: the status, the score, the grade and the ordering all come
+ * from PHP, so a report generated over WP-CLI says exactly the same thing.
  */
-
 (() => {
     'use strict';
 
     const config = window.cascr || {};
+    const i18n = config.i18n || {};
+    const tests = config.tests || {};
+    const categories = config.categories || {};
+
+    const STATUS = {
+        pass: 'pass',
+        warn: 'warn',
+        fail: 'fail',
+        inconclusive: 'inconclusive',
+    };
+
+    const statusLabel = (status) => ({
+        pass: i18n.statusPass,
+        warn: i18n.statusWarn,
+        fail: i18n.statusFail,
+        inconclusive: i18n.statusUnknown,
+    }[status] || status);
+
+    const announce = (message) => {
+        if (window.wp && window.wp.a11y && typeof window.wp.a11y.speak === 'function') {
+            window.wp.a11y.speak(message);
+        }
+    };
+
+    const el = (tag, className, text) => {
+        const node = document.createElement(tag);
+        if (className) {
+            node.className = className;
+        }
+        if (text !== undefined && text !== null) {
+            node.textContent = String(text);
+        }
+        return node;
+    };
+
+    const sprintf = (template, ...values) => {
+        let index = 0;
+        return String(template || '')
+            .replace(/%(\d+)\$[ds]/g, (match, position) => values[Number(position) - 1])
+            .replace(/%[ds]/g, () => values[index++]);
+    };
 
     /**
-     * Test Runner Module
+     * Talks to the cascr/v1 routes.
      */
-    class TestRunner {
-        #tests = [];
-        #testNames = {};
-        #currentIndex = 0;
-        #results = [];
-        #isRunning = false;
-        #abortController = null;
-
-        constructor(tests, testNames) {
-            this.#tests = tests || [];
-            this.#testNames = testNames || {};
-        }
-
-        get totalTests() {
-            return this.#tests.length;
-        }
-
-        get currentTest() {
-            return this.#currentIndex;
-        }
-
-        get progress() {
-            return this.totalTests > 0 ? (this.#currentIndex / this.totalTests) * 100 : 0;
-        }
-
-        get isRunning() {
-            return this.#isRunning;
-        }
-
-        get results() {
-            return [...this.#results];
-        }
-
-        async runAll(callbacks = {}) {
-            if (this.#isRunning) return;
-
-            this.#isRunning = true;
-            this.#currentIndex = 0;
-            this.#results = [];
-            this.#abortController = new AbortController();
-
-            const { onProgress, onResult, onComplete, onError } = callbacks;
-
-            try {
-                for (const testId of this.#tests) {
-                    if (this.#abortController.signal.aborted) break;
-
-                    const testName = this.#testNames[testId] || testId;
-                    onProgress?.(this.#currentIndex, this.totalTests, testName);
-
-                    try {
-                        const result = await this.#runSingleTest(testId);
-                        this.#results.push({ id: testId, name: testName, ...result });
-                        onResult?.(testId, testName, result);
-                    } catch (error) {
-                        const errorResult = { result: config.i18n?.errorMessage || 'Error', score: 0 };
-                        this.#results.push({ id: testId, name: testName, ...errorResult });
-                        onError?.(testId, testName, error);
-                    }
-
-                    this.#currentIndex++;
-                }
-
-                onComplete?.(this.#results);
-            } finally {
-                this.#isRunning = false;
-                this.#abortController = null;
-            }
-        }
-
-        async #runSingleTest(testId) {
-            const formData = new FormData();
-            formData.append('action', 'run_security_check');
-            formData.append('test_name', testId);
-            formData.append('security_nonce', config.nonce);
-
-            const response = await fetch(config.ajaxUrl, {
-                method: 'POST',
-                body: formData,
-                signal: this.#abortController?.signal,
+    class Api {
+        static async request(path, options = {}) {
+            const response = await fetch(`${config.root}${path}`, {
                 credentials: 'same-origin',
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-WP-Nonce': config.nonce,
+                    ...(options.headers || {}),
+                },
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                const body = await response.json().catch(() => ({}));
+                throw new Error(body.message || `HTTP ${response.status}`);
             }
 
-            const data = await response.json();
+            return response.json();
+        }
 
-            if (!data.success) {
-                throw new Error(data.data?.message || 'Test failed');
-            }
+        static runTest(id, signal) {
+            return Api.request(`/run/${encodeURIComponent(id)}`, { method: 'POST', signal });
+        }
 
-            return data.data;
+        static saveReport(results) {
+            return Api.request('/report', {
+                method: 'POST',
+                body: JSON.stringify({ results }),
+            });
+        }
+
+        static setIgnore(id, ignore) {
+            return Api.request('/ignore', {
+                method: 'POST',
+                body: JSON.stringify({ id, ignore }),
+            });
+        }
+    }
+
+    /**
+     * Runs the checks, a few at a time.
+     *
+     * Strictly sequential requests made a full run take as long as the slowest
+     * chain of them. A small concurrency limit keeps the progress readable
+     * without hammering the site the checks are inspecting.
+     */
+    class TestRunner {
+        #ids;
+        #limit;
+        #controller = null;
+
+        constructor(ids, limit) {
+            this.#ids = ids;
+            this.#limit = Math.max(1, Number(limit) || 1);
+        }
+
+        async run({ onProgress, onResult }) {
+            this.#controller = new AbortController();
+
+            const results = {};
+            const queue = [...this.#ids];
+            const total = queue.length;
+            let done = 0;
+
+            const worker = async () => {
+                while (queue.length) {
+                    if (this.#controller.signal.aborted) {
+                        return;
+                    }
+
+                    const id = queue.shift();
+
+                    let result;
+                    try {
+                        result = await Api.runTest(id, this.#controller.signal);
+                    } catch (error) {
+                        result = {
+                            id,
+                            status: STATUS.inconclusive,
+                            score: 0,
+                            summary: i18n.error,
+                            items: [],
+                            fix: '',
+                            ignored: false,
+                        };
+                    }
+
+                    results[id] = result;
+                    done += 1;
+
+                    onProgress(done, total, id);
+                    onResult(id, result);
+                }
+            };
+
+            await Promise.all(
+                Array.from({ length: Math.min(this.#limit, total) }, () => worker())
+            );
+
+            this.#controller = null;
+
+            return results;
         }
 
         abort() {
-            this.#abortController?.abort();
-        }
-    }
-
-    /**
-     * Clipboard Manager Module
-     */
-    class ClipboardManager {
-        static async copy(text) {
-            try {
-                if (navigator.clipboard && window.isSecureContext) {
-                    await navigator.clipboard.writeText(text);
-                    return true;
-                }
-                return ClipboardManager.#fallbackCopy(text);
-            } catch {
-                return ClipboardManager.#fallbackCopy(text);
-            }
-        }
-
-        static #fallbackCopy(text) {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            textarea.style.cssText = 'position:fixed;left:-9999px;top:-9999px';
-            document.body.appendChild(textarea);
-            textarea.focus();
-            textarea.select();
-
-            try {
-                document.execCommand('copy');
-                return true;
-            } catch {
-                return false;
-            } finally {
-                document.body.removeChild(textarea);
+            if (this.#controller) {
+                this.#controller.abort();
             }
         }
     }
 
     /**
-     * Accordion Search Module
+     * Turns a finished run into text, JSON and CSV.
      */
-    class AccordionSearch {
-        #container;
-        #searchInput;
-        #clearButton;
-        #countDisplay;
-        #noResults;
-        #items = [];
-        #totalCount = 0;
-        #debounceTimer = null;
-
-        constructor(containerId = 'cascr-accordion') {
-            this.#container = document.getElementById(containerId);
-            this.#searchInput = document.getElementById('cascr-accordion-search');
-            this.#clearButton = document.getElementById('cascr-search-clear');
-            this.#countDisplay = document.getElementById('cascr-search-count');
-            this.#noResults = document.getElementById('cascr-no-results');
-
-            if (!this.#container || !this.#searchInput) return;
-
-            this.#items = Array.from(this.#container.querySelectorAll('.cascr-accordion__item'));
-            this.#totalCount = this.#items.length;
-
-            this.#bindEvents();
+    class Exporter {
+        constructor(results, summary) {
+            this.results = results;
+            this.summary = summary;
         }
 
-        #bindEvents() {
-            // Search input with debounce
-            this.#searchInput?.addEventListener('input', () => {
-                clearTimeout(this.#debounceTimer);
-                this.#debounceTimer = setTimeout(() => this.#performSearch(), 150);
-                this.#updateClearButton();
-            });
+        get filename() {
+            const date = new Date().toISOString().slice(0, 10);
+            return `security-check-${date}`;
+        }
 
-            // Clear button
-            this.#clearButton?.addEventListener('click', () => {
-                this.#searchInput.value = '';
-                this.#performSearch();
-                this.#updateClearButton();
-                this.#searchInput.focus();
-            });
+        text() {
+            const grade = this.summary.grade;
+            const counts = this.summary.counts;
+            const lines = [];
 
-            // Keyboard shortcut: Escape to clear
-            this.#searchInput?.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    this.#searchInput.value = '';
-                    this.#performSearch();
-                    this.#updateClearButton();
+            lines.push(i18n.reportTitle);
+            lines.push('='.repeat(i18n.reportTitle.length));
+            lines.push('');
+            lines.push(`${config.siteName} (${config.siteUrl})`);
+            lines.push(`${i18n.generatedOn}: ${new Date().toLocaleString()}`);
+            lines.push('');
+            lines.push(`${i18n.grade}: ${grade} (${(config.grades || {})[grade] || ''})`);
+            lines.push(`${i18n.riskScore}: ${this.summary.risk}%`);
+            lines.push(
+                `${i18n.summary}: ${counts.pass} ${i18n.statusPass}, ` +
+                `${counts.warn} ${i18n.statusWarn}, ${counts.fail} ${i18n.statusFail}, ` +
+                `${counts.inconclusive} ${i18n.statusUnknown}`
+            );
+            lines.push('');
+
+            if (this.summary.priorities && this.summary.priorities.length) {
+                lines.push(i18n.nextActions);
+                lines.push('-'.repeat(i18n.nextActions.length));
+                this.summary.priorities.forEach((item, index) => {
+                    lines.push(`${index + 1}. ${item.label}: ${item.summary}`);
+                    if (item.fix) {
+                        lines.push(`   ${item.fix}`);
+                    }
+                });
+                lines.push('');
+            }
+
+            lines.push(i18n.checks);
+            lines.push('-'.repeat(i18n.checks.length));
+
+            Object.keys(this.results).forEach((id) => {
+                const result = this.results[id];
+                const label = (tests[id] || {}).label || id;
+                lines.push(`[${statusLabel(result.status)}] ${label}`);
+                lines.push(`  ${result.summary}`);
+                (result.items || []).forEach((item) => lines.push(`  - ${item}`));
+                if (result.fix) {
+                    lines.push(`  ${i18n.recommendation}: ${result.fix}`);
                 }
-            });
-        }
-
-        #performSearch() {
-            const query = this.#searchInput.value.toLowerCase().trim();
-            let visibleCount = 0;
-
-            this.#items.forEach(item => {
-                const searchText = item.dataset.searchText || '';
-                const titleElement = item.querySelector('.cascr-accordion__title');
-                const originalTitle = titleElement?.textContent || '';
-
-                if (!query) {
-                    // No search query - show all items
-                    item.hidden = false;
-                    visibleCount++;
-                    // Remove highlight
-                    if (titleElement) {
-                        titleElement.innerHTML = this.#escapeHtml(originalTitle);
-                    }
-                } else if (searchText.includes(query)) {
-                    // Match found
-                    item.hidden = false;
-                    visibleCount++;
-                    // Highlight matching text in title
-                    if (titleElement) {
-                        titleElement.innerHTML = this.#highlightText(originalTitle, query);
-                    }
-                } else {
-                    // No match
-                    item.hidden = true;
-                    // Remove highlight
-                    if (titleElement) {
-                        titleElement.innerHTML = this.#escapeHtml(originalTitle);
-                    }
-                }
+                lines.push('');
             });
 
-            // Update count display
-            if (this.#countDisplay) {
-                this.#countDisplay.textContent = visibleCount;
-            }
-
-            // Show/hide no results message
-            if (this.#noResults) {
-                this.#noResults.hidden = visibleCount > 0 || !query;
-            }
-
-            // Hide accordion border when no results
-            if (this.#container) {
-                this.#container.style.display = (visibleCount === 0 && query) ? 'none' : '';
-            }
+            return lines.join('\n');
         }
 
-        #updateClearButton() {
-            if (this.#clearButton) {
-                this.#clearButton.hidden = !this.#searchInput.value;
-            }
+        json() {
+            return JSON.stringify(
+                {
+                    site: { name: config.siteName, url: config.siteUrl },
+                    generated: new Date().toISOString(),
+                    summary: this.summary,
+                    results: this.results,
+                },
+                null,
+                2
+            );
         }
 
-        #highlightText(text, query) {
-            const escaped = this.#escapeHtml(text);
-            const regex = new RegExp(`(${this.#escapeRegex(query)})`, 'gi');
-            return escaped.replace(regex, '<mark>$1</mark>');
+        csv() {
+            const escape = (value) => `"${String(value).replace(/"/g, '""')}"`;
+            const rows = [(i18n.csvColumns || []).map(escape).join(',')];
+
+            Object.keys(this.results).forEach((id) => {
+                const result = this.results[id];
+                const test = tests[id] || {};
+                const detail = [result.summary, ...(result.items || [])].join(' | ');
+
+                rows.push([
+                    escape(test.label || id),
+                    escape(categories[test.category] || test.category || ''),
+                    escape(test.severity || ''),
+                    escape(statusLabel(result.status)),
+                    result.score,
+                    escape(detail),
+                ].join(','));
+            });
+
+            return rows.join('\n');
         }
 
-        #escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        static download(content, filename, type) {
+            const blob = new Blob([content], { type: `${type};charset=utf-8` });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
 
-        #escapeRegex(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            URL.revokeObjectURL(url);
         }
     }
 
     /**
-     * Report Generator Module
+     * Draws the report.
      */
-    class ReportGenerator {
-        #results = [];
+    class ReportView {
+        #results = {};
+        #summary = null;
+        #filter = 'all';
 
-        // Category weights for weighted scoring
-        static CATEGORY_WEIGHTS = {
-            critical: 3.0,
-            high: 2.0,
-            medium: 1.5,
-            low: 1.0
-        };
+        constructor(nodes) {
+            this.nodes = nodes;
+        }
 
-        // Test categories
-        static TEST_CATEGORIES = {
-            critical: [
-                'malware_check', 'php_execution', 'weak_password_users', 'two_factor',
-                'admin_username', 'database_user_privileges',
-                'wp_config', 'unallowed_files'
-            ],
-            high: [
-                'wordpress_version', 'outdated_plugins', 'ssl', 'file_edit',
-                'brute_force', 'automatic_core_updates', 'php_version',
-                'php_version_support', 'security_keys_salts', 'core_file_integrity'
-            ],
-            medium: [
-                'server_headers', 'directory_permissions', 'uploads_permissions',
-                'wp_debug', 'password_policy', 'login_attempts', 'user_enumeration',
-                'outdated_themes', 'outdated_libraries', 'debug_log_exposure',
-                'cors_configuration', 'wp_cron_security'
-            ],
-            low: [
-                'db_prefix', 'xmlrpc', 'xmlrpc_methods', 'rest_api', 'legacy_meta_exposure',
-                'deactivated_plugins', 'htaccess', 'directory_indexing', 'unwanted_files_root',
-                'other_wp_installs', 'database_structure', 'backup', 'security_plugins',
-                'php_version_in_headers', 'application_passwords'
-            ]
-        };
-
-        // Risk grades
-        static RISK_GRADES = {
-            A: { max: 10, label: 'Excellent', color: '#22c55e' },
-            B: { max: 25, label: 'Good', color: '#84cc16' },
-            C: { max: 40, label: 'Moderate', color: '#eab308' },
-            D: { max: 60, label: 'Poor', color: '#f97316' },
-            F: { max: 100, label: 'Critical', color: '#ef4444' }
-        };
-
-        setResults(results) {
+        setData(results, summary) {
             this.#results = results;
+            this.#summary = summary;
         }
 
-        #getTestCategory(testId) {
-            for (const [category, tests] of Object.entries(ReportGenerator.TEST_CATEGORIES)) {
-                if (tests.includes(testId)) return category;
+        render() {
+            this.#renderScore();
+            this.#renderPriorities();
+            this.#renderDiff();
+            this.#renderResults();
+            this.#renderExport();
+        }
+
+        #renderScore() {
+            const target = this.nodes.score;
+            target.textContent = '';
+
+            if (!this.#summary) {
+                return;
             }
-            return 'low';
-        }
 
-        #calculateWeightedScore() {
-            let weightedScore = 0;
-            let totalWeight = 0;
-            let hasCriticalFailure = false;
-            const criticalFailures = [];
-            const categoryStats = {
-                critical: { score: 0, max: 0, count: 0, issues: [] },
-                high: { score: 0, max: 0, count: 0, issues: [] },
-                medium: { score: 0, max: 0, count: 0, issues: [] },
-                low: { score: 0, max: 0, count: 0, issues: [] }
-            };
+            const grade = this.#summary.grade;
+            const counts = this.#summary.counts;
 
-            for (const result of this.#results) {
-                const category = this.#getTestCategory(result.id);
-                const weight = ReportGenerator.CATEGORY_WEIGHTS[category];
-                const score = result.score || 0;
+            const card = el('div', `cascr-score__card cascr-score__card--${grade.toLowerCase()}`);
 
-                weightedScore += score * weight;
-                totalWeight += 10 * weight;
+            const badge = el('div', 'cascr-score__grade');
+            badge.appendChild(el('span', 'cascr-score__letter', grade));
+            badge.appendChild(el('span', 'cascr-score__label', (config.grades || {})[grade] || ''));
+            card.appendChild(badge);
 
-                categoryStats[category].score += score;
-                categoryStats[category].max += 10;
-                categoryStats[category].count++;
+            const meta = el('div', 'cascr-score__meta');
 
-                if (score >= 4) {
-                    categoryStats[category].issues.push({
-                        name: result.name,
-                        result: result.result,
-                        score: score
-                    });
+            const risk = el('div', 'cascr-score__risk');
+            risk.appendChild(el('span', 'cascr-score__risk-value', `${this.#summary.risk}%`));
+            risk.appendChild(el('span', 'cascr-score__risk-label', i18n.riskScore));
+            meta.appendChild(risk);
+
+            const stats = el('div', 'cascr-score__stats');
+            [
+                ['fail', counts.fail, i18n.statusFail],
+                ['warn', counts.warn, i18n.statusWarn],
+                ['pass', counts.pass, i18n.statusPass],
+                ['inconclusive', counts.inconclusive, i18n.statusUnknown],
+                ['ignored', counts.ignored, i18n.statusIgnored],
+            ].forEach(([key, value, label]) => {
+                if (!value) {
+                    return;
                 }
-
-                if (category === 'critical' && score >= 8) {
-                    hasCriticalFailure = true;
-                    criticalFailures.push(result.name);
-                }
-            }
-
-            let percentage = totalWeight > 0 ? (weightedScore / totalWeight) * 100 : 0;
-
-            // Critical failure penalty
-            if (hasCriticalFailure && percentage < 41) {
-                percentage = 41;
-            }
-
-            return { percentage, hasCriticalFailure, criticalFailures, categoryStats };
-        }
-
-        #getRiskGrade(percentage) {
-            for (const [letter, grade] of Object.entries(ReportGenerator.RISK_GRADES)) {
-                if (percentage <= grade.max) {
-                    return { grade: letter, ...grade };
-                }
-            }
-            return { grade: 'F', ...ReportGenerator.RISK_GRADES.F };
-        }
-
-        generate() {
-            const weighted = this.#calculateWeightedScore();
-            const gradeInfo = this.#getRiskGrade(weighted.percentage);
-
-            let report = '╔══════════════════════════════════════════════════════════════╗\n';
-            report += '║       CMS ADMINS Security Check Report                       ║\n';
-            report += '╚══════════════════════════════════════════════════════════════╝\n\n';
-            report += `Generated: ${new Date().toLocaleString()}\n\n`;
-
-            report += '┌──────────────────────────────────────────────────────────────┐\n';
-            report += `│  SECURITY GRADE: ${gradeInfo.grade} (${gradeInfo.label})`.padEnd(63) + '│\n';
-            report += `│  Risk Score: ${weighted.percentage.toFixed(1)}%`.padEnd(63) + '│\n';
-            report += '└──────────────────────────────────────────────────────────────┘\n\n';
-
-            report += '═══ TEST RESULTS ═══\n\n';
-
-            for (const { name, result, score } of this.#results) {
-                const status = score >= 7 ? '❌ CRITICAL' : score >= 4 ? '⚠️ WARNING' : '✅ PASSED';
-                report += `${status} | ${name}\n`;
-                report += `   Result: ${result}\n`;
-                report += `   Score: ${score}/10\n\n`;
-            }
-
-            const summary = this.#calculateSummary();
-            report += '═══ SUMMARY ═══\n';
-            report += `Security Grade: ${gradeInfo.grade} (${gradeInfo.label})\n`;
-            report += `Risk Score: ${weighted.percentage.toFixed(1)}%\n`;
-            report += `Tests Passed: ${summary.passing}/${summary.total}\n`;
-            report += `Critical Issues: ${summary.critical}\n`;
-            report += `Warnings: ${summary.warnings}\n`;
-
-            return report;
-        }
-
-        #calculateSummary() {
-            const total = this.#results.length;
-            const scores = this.#results.map(r => r.score || 0);
-            const sum = scores.reduce((a, b) => a + b, 0);
-            const average = total > 0 ? sum / total : 0;
-            const passing = this.#results.filter(r => (r.score || 0) < 4).length;
-            const warnings = this.#results.filter(r => (r.score || 0) >= 4 && (r.score || 0) < 7).length;
-            const critical = this.#results.filter(r => (r.score || 0) >= 7).length;
-
-            return { total, average, passing, warnings, critical };
-        }
-
-        getSummaryHtml() {
-            const weighted = this.#calculateWeightedScore();
-            const gradeInfo = this.#getRiskGrade(weighted.percentage);
-            const summary = this.#calculateSummary();
-
-            // Collect issues by severity
-            const criticalIssues = this.#results.filter(r => (r.score || 0) >= 7);
-            const warningIssues = this.#results.filter(r => (r.score || 0) >= 4 && (r.score || 0) < 7);
-
-            return `
-                <div class="cascr-final-evaluation">
-                    <div class="cascr-grade-display" style="--grade-color: ${gradeInfo.color}">
-                        <div class="cascr-grade-circle">
-                            <span class="cascr-grade-letter">${gradeInfo.grade}</span>
-                            <span class="cascr-grade-label">${gradeInfo.label}</span>
-                        </div>
-                        <div class="cascr-grade-details">
-                            <div class="cascr-risk-score">
-                                <span class="cascr-risk-value">${weighted.percentage.toFixed(1)}%</span>
-                                <span class="cascr-risk-label">Risk Score</span>
-                            </div>
-                            <div class="cascr-test-stats">
-                                <span class="cascr-stat cascr-stat--passed">${summary.passing} Passed</span>
-                                <span class="cascr-stat cascr-stat--warning">${summary.warnings} Warnings</span>
-                                <span class="cascr-stat cascr-stat--critical">${summary.critical} Critical</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="cascr-evaluation-text">
-                        <h3>Security Assessment Summary</h3>
-                        ${this.#generateEvaluationText(gradeInfo, weighted, summary, criticalIssues, warningIssues)}
-                    </div>
-
-                    ${criticalIssues.length > 0 ? `
-                    <div class="cascr-issues-section cascr-issues--critical">
-                        <h4>🚨 Critical Issues Requiring Immediate Attention</h4>
-                        <ul>
-                            ${criticalIssues.map(i => `<li><strong>${i.name}:</strong> ${i.result}</li>`).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-
-                    ${warningIssues.length > 0 ? `
-                    <div class="cascr-issues-section cascr-issues--warning">
-                        <h4>⚠️ Warnings - Recommended Improvements</h4>
-                        <ul>
-                            ${warningIssues.map(i => `<li><strong>${i.name}:</strong> ${i.result}</li>`).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        #generateEvaluationText(gradeInfo, weighted, summary, criticalIssues, warningIssues) {
-            const date = new Date().toLocaleDateString('de-DE', {
-                year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+                const stat = el('span', `cascr-stat cascr-stat--${key}`);
+                stat.appendChild(el('strong', null, value));
+                stat.appendChild(el('span', null, ` ${label}`));
+                stats.appendChild(stat);
             });
 
-            let text = `<p>This security audit was conducted on <strong>${date}</strong> and evaluated <strong>${summary.total} security aspects</strong> of your WordPress installation.</p>`;
+            meta.appendChild(stats);
+            card.appendChild(meta);
+            target.appendChild(card);
+        }
 
-            // Grade-specific assessment
-            switch(gradeInfo.grade) {
-                case 'A':
-                    text += `<p class="cascr-assessment cascr-assessment--excellent">Your WordPress installation demonstrates <strong>excellent security practices</strong>. All critical security measures are properly implemented and maintained. Continue monitoring and keep all components updated.</p>`;
-                    break;
-                case 'B':
-                    text += `<p class="cascr-assessment cascr-assessment--good">Your WordPress installation has <strong>good security</strong> overall. Minor improvements are recommended to achieve optimal protection. Address the identified warnings when convenient.</p>`;
-                    break;
-                case 'C':
-                    text += `<p class="cascr-assessment cascr-assessment--moderate">Your WordPress installation has <strong>moderate security</strong>. Several improvements are recommended to better protect your site. Review the warnings and plan to address them in the near future.</p>`;
-                    break;
-                case 'D':
-                    text += `<p class="cascr-assessment cascr-assessment--poor">Your WordPress installation has <strong>significant security vulnerabilities</strong>. Immediate action is required to address critical issues. Your site may be at risk of compromise.</p>`;
-                    break;
-                case 'F':
-                    text += `<p class="cascr-assessment cascr-assessment--critical"><strong>⚠️ URGENT:</strong> Your WordPress installation has <strong>critical security vulnerabilities</strong>. Immediate action is required. Your site is at high risk of being compromised. Address all critical issues as soon as possible.</p>`;
-                    break;
+        #renderPriorities() {
+            const target = this.nodes.priorities;
+            target.textContent = '';
+
+            if (!this.#summary) {
+                return;
             }
 
-            // Statistics
-            text += `<p class="cascr-stats-summary">`;
-            text += `<strong>Test Results:</strong> ${summary.passing} tests passed successfully, `;
-            if (summary.critical > 0) {
-                text += `<span class="cascr-highlight--critical">${summary.critical} critical issue${summary.critical > 1 ? 's' : ''}</span> detected`;
-            }
-            if (summary.warnings > 0) {
-                text += `${summary.critical > 0 ? ' and ' : ''}<span class="cascr-highlight--warning">${summary.warnings} warning${summary.warnings > 1 ? 's' : ''}</span> identified`;
-            }
-            if (summary.critical === 0 && summary.warnings === 0) {
-                text += `no issues detected`;
-            }
-            text += `.</p>`;
+            const priorities = this.#summary.priorities || [];
 
-            // Critical failure notice
-            if (weighted.hasCriticalFailure) {
-                text += `<p class="cascr-critical-notice"><strong>Note:</strong> Due to critical security failures in essential areas, the minimum grade has been adjusted. Address these issues immediately to improve your security rating.</p>`;
+            target.appendChild(el('h2', 'cascr-section__title', i18n.nextActions));
+
+            if (!priorities.length) {
+                target.appendChild(el('p', 'cascr-empty', i18n.nothingToDo));
+                return;
             }
 
-            return text;
+            const list = el('ol', 'cascr-priorities__list');
+
+            priorities.forEach((item) => {
+                const entry = el('li', `cascr-priority cascr-priority--${item.severity}`);
+
+                const head = el('div', 'cascr-priority__head');
+                head.appendChild(el('span', 'cascr-priority__label', item.label));
+                head.appendChild(el('span', `cascr-badge cascr-badge--${item.severity}`, statusLabel(item.status)));
+                entry.appendChild(head);
+
+                entry.appendChild(el('p', 'cascr-priority__summary', item.summary));
+
+                if (item.fix) {
+                    entry.appendChild(el('p', 'cascr-priority__fix', item.fix));
+                }
+
+                const link = el('a', 'cascr-priority__link', i18n.documentation);
+                link.href = `#cascr-doc-${item.id}`;
+                link.addEventListener('click', () => openDoc(item.id));
+                entry.appendChild(link);
+
+                list.appendChild(entry);
+            });
+
+            target.appendChild(list);
+        }
+
+        #renderDiff() {
+            const target = this.nodes.diff;
+            target.textContent = '';
+
+            const diff = this.#summary && this.#summary.diff;
+
+            if (!diff) {
+                return;
+            }
+
+            target.appendChild(el('h2', 'cascr-section__title', i18n.sinceLastRun));
+
+            const groups = [
+                ['broken', diff.broken, i18n.newIssues],
+                ['fixed', diff.fixed, i18n.fixedIssues],
+                ['changed', diff.changed, i18n.changedIssues],
+            ].filter(([, ids]) => ids && ids.length);
+
+            if (!groups.length) {
+                target.appendChild(el('p', 'cascr-empty', i18n.noChange));
+                return;
+            }
+
+            const wrap = el('div', 'cascr-diff__groups');
+
+            groups.forEach(([key, ids, label]) => {
+                const group = el('div', `cascr-diff__group cascr-diff__group--${key}`);
+                group.appendChild(el('h3', 'cascr-diff__title', `${ids.length} ${label}`));
+
+                const list = el('ul', 'cascr-diff__list');
+                ids.forEach((id) => {
+                    list.appendChild(el('li', null, (tests[id] || {}).label || id));
+                });
+
+                group.appendChild(list);
+                wrap.appendChild(group);
+            });
+
+            target.appendChild(wrap);
+        }
+
+        #renderResults() {
+            const target = this.nodes.results;
+            target.textContent = '';
+
+            target.appendChild(el('h2', 'cascr-section__title', i18n.results));
+            target.appendChild(this.#buildFilters());
+
+            const list = el('div', 'cascr-results__list');
+
+            Object.keys(categories).forEach((category) => {
+                const ids = Object.keys(this.#results).filter((id) => {
+                    const test = tests[id] || {};
+                    return test.category === category && this.#matchesFilter(this.#results[id]);
+                });
+
+                if (!ids.length) {
+                    return;
+                }
+
+                const group = el('div', 'cascr-results__group');
+                group.appendChild(el('h3', 'cascr-results__group-title', categories[category]));
+
+                ids.forEach((id) => group.appendChild(this.#buildRow(id)));
+
+                list.appendChild(group);
+            });
+
+            if (!list.childNodes.length) {
+                list.appendChild(el('p', 'cascr-empty', i18n.nothingToDo));
+            }
+
+            target.appendChild(list);
+        }
+
+        #buildFilters() {
+            const bar = el('div', 'cascr-filters');
+
+            // Counted from what is on screen rather than from the stored run,
+            // so muting a finding updates the chips immediately.
+            const counts = { total: 0, pass: 0, warn: 0, fail: 0, inconclusive: 0, ignored: 0 };
+
+            Object.keys(this.#results).forEach((id) => {
+                const result = this.#results[id];
+                counts.total += 1;
+                if (result.ignored) {
+                    counts.ignored += 1;
+                } else {
+                    counts[result.status] += 1;
+                }
+            });
+
+            const options = [
+                ['all', i18n.filterAll, counts.total],
+                [STATUS.fail, i18n.statusFail, counts.fail],
+                [STATUS.warn, i18n.statusWarn, counts.warn],
+                [STATUS.pass, i18n.statusPass, counts.pass],
+                [STATUS.inconclusive, i18n.statusUnknown, counts.inconclusive],
+                ['ignored', i18n.statusIgnored, counts.ignored],
+            ];
+
+            options.forEach(([value, label, count]) => {
+                if (value !== 'all' && !count) {
+                    return;
+                }
+
+                const button = el('button', 'cascr-filter');
+                button.type = 'button';
+                button.textContent = `${label} (${count || 0})`;
+                button.setAttribute('aria-pressed', String(this.#filter === value));
+
+                if (this.#filter === value) {
+                    button.classList.add('is-active');
+                }
+
+                button.addEventListener('click', () => {
+                    this.#filter = value;
+                    this.#renderResults();
+                });
+
+                bar.appendChild(button);
+            });
+
+            return bar;
+        }
+
+        #matchesFilter(result) {
+            if (this.#filter === 'all') {
+                return true;
+            }
+            if (this.#filter === 'ignored') {
+                return Boolean(result.ignored);
+            }
+            return !result.ignored && result.status === this.#filter;
+        }
+
+        #buildRow(id) {
+            const result = this.#results[id];
+            const test = tests[id] || {};
+            const status = result.ignored ? 'ignored' : result.status;
+
+            const row = el('details', `cascr-result cascr-result--${status}`);
+            row.id = `cascr-result-${id}`;
+
+            const summary = el('summary', 'cascr-result__summary');
+            summary.appendChild(el('span', `cascr-status cascr-status--${status}`, statusLabel(result.status)));
+            summary.appendChild(el('span', 'cascr-result__label', test.label || id));
+            summary.appendChild(el('span', 'cascr-result__text', result.summary));
+            row.appendChild(summary);
+
+            const body = el('div', 'cascr-result__body');
+
+            if (result.items && result.items.length) {
+                body.appendChild(el('h4', 'cascr-result__heading', i18n.details));
+                const list = el('ul', 'cascr-result__items');
+                result.items.forEach((item) => list.appendChild(el('li', null, item)));
+                body.appendChild(list);
+            }
+
+            if (result.fix) {
+                body.appendChild(el('h4', 'cascr-result__heading', i18n.recommendation));
+                body.appendChild(el('p', 'cascr-result__fix', result.fix));
+            }
+
+            const actions = el('div', 'cascr-result__actions');
+
+            const docLink = el('a', 'cascr-result__link', i18n.documentation);
+            docLink.href = `#cascr-doc-${id}`;
+            docLink.addEventListener('click', () => openDoc(id));
+            actions.appendChild(docLink);
+
+            if (result.status === STATUS.fail || result.status === STATUS.warn || result.ignored) {
+                const mute = el('button', 'button button-link cascr-result__mute', result.ignored ? i18n.unmute : i18n.mute);
+                mute.type = 'button';
+                mute.addEventListener('click', async () => {
+                    mute.disabled = true;
+                    try {
+                        const response = await Api.setIgnore(id, !result.ignored);
+                        result.ignored = Boolean(response.ignored);
+                        this.#renderResults();
+                        announce(result.ignored ? i18n.muted : i18n.unmuted);
+                    } finally {
+                        mute.disabled = false;
+                    }
+                });
+                actions.appendChild(mute);
+            }
+
+            if (result.ignored) {
+                actions.appendChild(el('span', 'cascr-result__muted-note', i18n.muted));
+            }
+
+            body.appendChild(actions);
+            row.appendChild(body);
+
+            return row;
+        }
+
+        #renderExport() {
+            const target = this.nodes.export;
+            target.textContent = '';
+
+            if (!this.#summary) {
+                return;
+            }
+
+            const exporter = new Exporter(this.#results, this.#summary);
+
+            const buttons = [
+                [i18n.exportText, () => Exporter.download(exporter.text(), `${exporter.filename}.txt`, 'text/plain')],
+                [i18n.exportJson, () => Exporter.download(exporter.json(), `${exporter.filename}.json`, 'application/json')],
+                [i18n.exportCsv, () => Exporter.download(exporter.csv(), `${exporter.filename}.csv`, 'text/csv')],
+                [i18n.copyReport, async () => {
+                    const ok = await copyText(exporter.text());
+                    announce(ok ? i18n.copied : i18n.copyFailed);
+                    notify(ok ? i18n.copied : i18n.copyFailed, ok ? 'success' : 'error');
+                }],
+            ];
+
+            buttons.forEach(([label, handler]) => {
+                const button = el('button', 'button');
+                button.type = 'button';
+                button.textContent = label;
+                button.addEventListener('click', handler);
+                target.appendChild(button);
+            });
+        }
+    }
+
+    const openDoc = (id) => {
+        const doc = document.getElementById(`cascr-doc-${id}`);
+        if (doc) {
+            doc.open = true;
+        }
+    };
+
+    const copyText = async (text) => {
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return true;
+            } catch (error) {
+                // Fall through to the textarea approach below.
+            }
+        }
+
+        const area = document.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', 'readonly');
+        area.style.cssText = 'position:fixed;left:-9999px;top:0';
+        document.body.appendChild(area);
+        area.select();
+
+        let ok = false;
+        try {
+            ok = document.execCommand('copy');
+        } catch (error) {
+            ok = false;
+        } finally {
+            document.body.removeChild(area);
+        }
+
+        return ok;
+    };
+
+    const notify = (message, type) => {
+        const app = document.getElementById('cascr-app');
+        if (!app) {
+            return;
+        }
+
+        const existing = app.querySelector('.cascr-notice');
+        if (existing) {
+            existing.remove();
+        }
+
+        const notice = el('div', `notice notice-${type === 'error' ? 'error' : 'success'} is-dismissible cascr-notice`);
+        notice.appendChild(el('p', null, message));
+        app.insertBefore(notice, app.firstChild);
+
+        window.setTimeout(() => notice.remove(), 6000);
+    };
+
+    /**
+     * Filters the documentation list as you type.
+     */
+    class DocSearch {
+        constructor() {
+            this.input = document.getElementById('cascr-doc-search');
+            this.count = document.getElementById('cascr-doc-count');
+            this.empty = document.getElementById('cascr-doc-empty');
+            this.items = Array.from(document.querySelectorAll('.cascr-doc'));
+            this.groups = Array.from(document.querySelectorAll('.cascr-docs__group'));
+
+            if (!this.input) {
+                return;
+            }
+
+            let timer = null;
+            this.input.addEventListener('input', () => {
+                window.clearTimeout(timer);
+                timer = window.setTimeout(() => this.filter(), 150);
+            });
+
+            this.input.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    this.input.value = '';
+                    this.filter();
+                }
+            });
+        }
+
+        filter() {
+            const query = this.input.value.trim().toLowerCase();
+            let visible = 0;
+
+            this.items.forEach((item) => {
+                const match = !query || (item.dataset.search || '').includes(query);
+                item.hidden = !match;
+                if (match) {
+                    visible += 1;
+                }
+            });
+
+            this.groups.forEach((group) => {
+                group.hidden = !group.querySelector('.cascr-doc:not([hidden])');
+            });
+
+            if (this.count) {
+                this.count.textContent = String(visible);
+            }
+
+            if (this.empty) {
+                this.empty.hidden = visible > 0;
+            }
         }
     }
 
     /**
-     * Main Application
+     * Wires the page together.
      */
-    class SecurityCheckApp {
-        #testRunner;
-        #reportGenerator;
-        #accordionSearch;
-        #elements = {};
-
+    class App {
         constructor() {
-            const tests = config.tests?.list || [];
-            const testNames = config.tests?.names || {};
-
-            this.#testRunner = new TestRunner(tests, testNames);
-            this.#reportGenerator = new ReportGenerator();
-            this.#accordionSearch = new AccordionSearch('cascr-accordion');
-
-            this.#cacheElements();
-            this.#bindEvents();
-        }
-
-        #cacheElements() {
-            this.#elements = {
-                checkbox: document.getElementById('disclaimer-checkbox'),
-                startButton: document.getElementById('start-tests'),
-                copyButton: document.getElementById('copy-report'),
-                report: document.getElementById('final-report'),
-                summary: document.getElementById('final-summary'),
-                results: document.getElementById('security-check-results'),
-                resultsBody: document.getElementById('results-body'),
-                loader: document.getElementById('security-check-loader'),
-                loaderText: document.getElementById('loader-text'),
-                progress: document.getElementById('progress'),
-                wrap: document.getElementById('security-check-wrap'),
-                reportContainer: document.getElementById('final-report-container'),
+            this.nodes = {
+                consent: document.getElementById('cascr-consent'),
+                run: document.getElementById('cascr-run'),
+                start: document.getElementById('cascr-start'),
+                progress: document.getElementById('cascr-progress'),
+                progressBar: document.getElementById('cascr-progress-bar'),
+                progressLabel: document.getElementById('cascr-progress-label'),
+                report: document.getElementById('cascr-report'),
+                score: document.getElementById('cascr-score'),
+                priorities: document.getElementById('cascr-priorities'),
+                diff: document.getElementById('cascr-diff'),
+                results: document.getElementById('cascr-results'),
+                export: document.getElementById('cascr-export'),
             };
-        }
 
-        #bindEvents() {
-            const { checkbox, startButton, copyButton } = this.#elements;
-
-            checkbox?.addEventListener('change', (e) => {
-                if (startButton) startButton.disabled = !e.target.checked;
-            });
-
-            startButton?.addEventListener('click', () => this.#startTests());
-            copyButton?.addEventListener('click', () => this.#copyReport());
-        }
-
-        async #startTests() {
-            const { startButton, loader, resultsBody } = this.#elements;
-            if (startButton) startButton.disabled = true;
-            if (loader) loader.style.display = 'block';
-            if (resultsBody) resultsBody.innerHTML = '';
-
-            await this.#testRunner.runAll({
-                onProgress: (current, total, testName) => this.#updateProgress(current, total, testName),
-                onResult: (id, name, result) => this.#addRow(name, result.result, result.score),
-                onError: (id, name) => this.#addRow(name, config.i18n?.errorMessage || 'Error', 0),
-                onComplete: (results) => this.#onTestsComplete(results),
-            });
-        }
-
-        #updateProgress(current, total, testName) {
-            const { loaderText, progress } = this.#elements;
-
-            if (loaderText) {
-                const label = config.i18n?.runningCheck || 'Running security check';
-                loaderText.innerHTML = `${label}<strong>${testName} (${current + 1}/${total})</strong>`;
+            if (!this.nodes.run) {
+                return;
             }
 
-            if (progress) {
-                progress.style.width = `${((current / total) * 100).toFixed(2)}%`;
+            this.view = new ReportView(this.nodes);
+            new DocSearch();
+
+            this.nodes.consent.addEventListener('change', (event) => {
+                this.nodes.run.disabled = !event.target.checked;
+            });
+
+            this.nodes.run.addEventListener('click', () => this.start());
+        }
+
+        async start() {
+            const ids = Object.keys(tests);
+
+            this.nodes.run.disabled = true;
+            this.nodes.progress.hidden = false;
+            this.nodes.report.hidden = true;
+            this.setProgress(0, ids.length, '');
+
+            const runner = new TestRunner(ids, config.concurrency);
+
+            const results = await runner.run({
+                onProgress: (done, total, id) => this.setProgress(done, total, id),
+                onResult: () => {},
+            });
+
+            let summary = null;
+            try {
+                const saved = await Api.saveReport(results);
+                summary = saved.summary;
+            } catch (error) {
+                notify(i18n.error, 'error');
+            }
+
+            this.nodes.progress.hidden = true;
+            this.nodes.report.hidden = false;
+            this.nodes.run.disabled = false;
+            this.nodes.run.textContent = i18n.runAgain;
+
+            if (summary) {
+                this.view.setData(results, summary);
+                this.view.render();
+                announce(`${i18n.scanFinished} ${i18n.grade}: ${summary.grade}`);
             }
         }
 
-        #addRow(testName, result, score) {
-            const tbody = this.#elements.resultsBody;
-            if (!tbody) return;
+        setProgress(done, total, id) {
+            const percent = total ? Math.round((done / total) * 100) : 0;
+            this.nodes.progressBar.style.width = `${percent}%`;
 
-            const statusClass = score >= 7 ? 'critical' : score >= 4 ? 'warning' : 'success';
-            const statusLabel = score >= 7 ? 'Critical' : score >= 4 ? 'Warning' : 'Passed';
-            const row = document.createElement('tr');
-            row.className = `cascr-table__row cascr-table__row--${statusClass}`;
-
-            const nameCell = document.createElement('td');
-            nameCell.textContent = testName;
-            row.appendChild(nameCell);
-
-            const resultCell = document.createElement('td');
-            resultCell.textContent = result;
-            row.appendChild(resultCell);
-
-            const scoreCell = document.createElement('td');
-            scoreCell.textContent = `${score}/10`;
-            row.appendChild(scoreCell);
-
-            const statusCell = document.createElement('td');
-            const statusSpan = document.createElement('span');
-            statusSpan.className = `cascr-status cascr-status--${statusClass}`;
-            statusSpan.textContent = statusLabel;
-            statusCell.appendChild(statusSpan);
-            row.appendChild(statusCell);
-
-            tbody.appendChild(row);
-        }
-
-        #onTestsComplete(results) {
-            this.#reportGenerator.setResults(results);
-            const report = this.#reportGenerator.generate();
-            const { summary, wrap, loader, results: resultsTable, reportContainer, report: reportField, startButton } = this.#elements;
-
-            if (summary) summary.innerHTML = this.#reportGenerator.getSummaryHtml();
-            if (wrap) wrap.style.display = 'none';
-            if (loader) loader.style.display = 'none';
-            if (resultsTable) resultsTable.style.display = 'table';
-            if (reportContainer) reportContainer.style.display = 'block';
-            if (reportField) reportField.value = report;
-            if (startButton) startButton.style.display = 'none';
-        }
-
-        async #copyReport() {
-            const textarea = this.#elements.report;
-            if (!textarea) return;
-
-            const success = await ClipboardManager.copy(textarea.value);
-            const message = success
-                ? (config.i18n?.copySuccess || 'Copied!')
-                : (config.i18n?.copyError || 'Failed to copy');
-
-            this.#showNotification(message, success ? 'success' : 'error');
-        }
-
-        #showNotification(message, type = 'info') {
-            // Simple alert for now, can be enhanced with a toast notification
-            alert(message);
+            const label = id && tests[id] ? tests[id].label : '';
+            this.nodes.progressLabel.textContent = label
+                ? `${sprintf(i18n.progress, done, total)}: ${label}`
+                : sprintf(i18n.progress, done, total);
         }
     }
 
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new SecurityCheckApp());
+        document.addEventListener('DOMContentLoaded', () => new App());
     } else {
-        new SecurityCheckApp();
+        new App();
     }
 })();

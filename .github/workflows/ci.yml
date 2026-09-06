@@ -25,15 +25,18 @@ jobs:
       - run: vendor/bin/parallel-lint --exclude vendor --exclude node_modules .
 
   phpunit:
-    name: PHPUnit (PHP ${{ matrix.php }} / WP ${{ matrix.wp }})
+    name: PHPUnit (PHP ${{ matrix.php }} / WP ${{ matrix.wp }}${{ matrix.multisite == '1' && ' / multisite' || '' }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { php: "7.4", wp: "7.0" }
-          - { php: "8.2", wp: "latest" }
-          - { php: "8.5", wp: "latest" }
+          - { php: "7.4", wp: "7.0", multisite: "0" }
+          - { php: "8.2", wp: "latest", multisite: "0" }
+          - { php: "8.5", wp: "latest", multisite: "0" }
+          # Multisite resolves several settings through network options rather
+          # than per-site ones, so the account checks need their own run.
+          - { php: "8.2", wp: "latest", multisite: "1" }
     services:
       mysql:
         image: mysql:8.0
@@ -54,6 +57,8 @@ jobs:
       - run: composer install --no-progress --prefer-dist
       - run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1:3306 ${{ matrix.wp }} true
       - run: vendor/bin/phpunit
+        env:
+          WP_MULTISITE: ${{ matrix.multisite }}
 
   phpcs:
     name: WordPress Coding Standards
@@ -111,7 +116,7 @@ jobs:
           cp -r security-check-report wp/wp-content/plugins/
           # Strip dev-only files so the check sees what actually ships to wp.org (see .distignore)
           cd wp/wp-content/plugins/security-check-report
-          rm -rf .git .github .wordpress-org .distignore .gitignore .gitattributes bin tests phpunit.xml.dist phpcs.xml.dist phpstan.neon composer.json composer.lock vendor README.md
+          rm -rf .git .github .wordpress-org .distignore .gitignore .gitattributes .phpcs.cache .phpunit.result.cache bin tests phpunit.xml.dist phpcs.xml.dist phpstan.neon phpstan-bootstrap.php composer.json composer.lock vendor README.md
       - name: Install Plugin Check
         run: wp plugin install plugin-check --activate --path=wp
       - name: Run Plugin Check

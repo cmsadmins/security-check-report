@@ -1,315 +1,258 @@
 === CMS ADMINS Security Check Report ===
 Contributors: contexlabs
 Donate link: https://www.cms-admins.de/
-Tags: security, audit, vulnerability, malware, scanner
+Tags: security, audit, hardening, scanner, site-health
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.2.2
+Stable tag: 2.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Comprehensive security audit for your WordPress installation with 45 security tests and weighted A-F risk grading.
+Read-only security audit for WordPress: 60 checks, an A to F grade, and a short list of what to fix first.
 
 == Description ==
 
-The **CMS ADMINS Security Check Report** plugin performs a comprehensive series of security checks on your WordPress site. It evaluates different aspects of security using a weighted scoring system and provides clear recommendations for improvements.
+Security Check Report looks at 60 aspects of a WordPress installation and turns the findings into a graded report. It changes nothing. Every check reads state, and the only thing ever written is one temporary file in the uploads folder that is deleted again in the same request.
 
-**Key Features:**
+The report opens with the five things worth doing first, not with a table of 60 rows. Every finding says what was found, why it matters and what to do about it. From the second run onwards the report also says what changed since the last one, which is usually the part worth reading.
 
-* **45 Security Tests** covering all critical aspects of WordPress security
-* **Weighted A-F Risk Grading** - Critical issues have higher impact on your score
-* **Category-Based Scoring** - Tests grouped into Critical, High, Medium, and Low categories
-* **Real-Time Progress** - Watch tests run with live percentage updates
-* **Searchable Documentation** - Find specific test information instantly
-* **Dark Mode Support** - Automatic theme detection
-* **Fully Accessible** - WCAG 2.1 AA compliant with keyboard navigation
-* **Copy Report** - One-click export of results for sharing
+= What you get =
 
-**Security Tests Include:**
+* A weighted grade from A to F, where one failing critical check cannot be hidden by fifty passing minor ones
+* A priority list of at most five items, derived from urgency and score rather than from guesswork
+* A comparison with the previous run: newly failing, resolved, changed
+* Muting that remembers what a finding said, so an accepted finding comes back the moment it actually changes
+* "Not determined" as a real outcome, so a blocked request is never reported as a problem and never moves the grade
+* Exports as plain text, JSON and CSV
+* A WP-CLI command that produces the same grade as the screen
+* An explanation of every check, searchable, right on the page
 
-* WordPress and PHP version checks
-* wp-config.php file permissions and security keys
-* File and directory permissions audit
-* Debug mode and error logging detection
-* Weak password and admin username checks
-* Plugin and theme update status
-* XML-RPC and REST API exposure
-* SSL/HTTPS configuration
-* Server security headers analysis
-* Malware signature scanning
-* Database prefix and user privileges
-* Brute-force and login protection detection
-* User enumeration protection
-* And many more...
+= What it checks =
 
-**Risk Grading System:**
+**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other installations sharing the account.
 
-| Grade | Risk Level | Description |
-|-------|------------|-------------|
-| A | Excellent | Very well protected |
-| B | Good | Good protection with minor improvements possible |
-| C | Moderate | Several improvements recommended |
-| D | Poor | Significant security risks detected |
-| F | Critical | Immediate action required |
+**Configuration.** Debug mode, debug log exposure, the theme and plugin editor, installing code from the dashboard, authentication keys and salts, table prefix, database user privileges, whether the scheduler actually runs, autoloaded options size, injected content in the options table, backups, login protection, password policy.
 
-**Disclaimer:**
+**Files and permissions.** Permissions on wp-config.php, the uploads folder and the core directories, world-writable paths, executable files among the media, whether the server runs PHP from the uploads folder, configuration and backup files that the server hands out, readable .git, .svn and .hg folders, database dumps in the web root, leftovers from interrupted updates, directory listing.
 
-Please note that CMS ADMINS does not take any responsibility for any damages to the system/server and does not guarantee the accuracy of the results. Users are advised to take appropriate precautions and backup their site before making any changes based on the plugin's recommendations.
+**Accounts and access.** Guessable passwords, predictable administrator names, how many accounts hold administrator rights and which have gone dormant, roles below administrator holding capabilities they should not have, open registration and the role it hands out, two-factor coverage per administrator, the application password inventory including when each was last used and from where.
+
+**Network and transport.** HTTPS and the redirect from http, TLS certificate expiry and negotiated protocol, the security headers and their quality rather than their mere presence, cookie attributes, CORS, exposed software versions, legacy discovery tags, XML-RPC, user enumeration, REST routes that accept writes without checking permissions, and whether the client address can be faked through forwarded headers.
+
+= What it is not =
+
+* Not a firewall. It blocks nothing and intercepts no requests.
+* Not a malware scanner. It compares core files against the official checksums and looks for injected content in the options table, but it does not hunt for signatures in plugin or theme code, and it removes nothing.
+* Not a vulnerability database. It reports that a plugin is outdated, abandoned or delisted; it does not look up individual CVEs.
+* Not an auto-fixer. Every finding comes with instructions, and you carry them out.
+
+= Data and connections =
+
+The plugin talks to `api.wordpress.org` and to your own site. Nothing else, and there is no telemetry. See the questions below for exactly which endpoints and what is stored locally.
+
+= Who builds it =
+
+[CMS ADMINS](https://www.cms-admins.de/) maintains, hosts and secures WordPress and Drupal sites from Munich. This plugin is the checklist we run ourselves, packaged up. It is free, it stays free, and it works the same whether or not you ever talk to us.
+
+* [What we do about WordPress security](https://www.cms-admins.de/wordpress-sicherheit/)
+* [Documentation and guides](https://www.cms-admins.de/docs/)
+* [Source code and issues on GitHub](https://github.com/cmsadmins/security-check-report)
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/security-check-report` directory, or install the plugin through the WordPress plugins screen directly.
-2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Navigate to 'Tools' -> 'Security Check Report' to view the security check results.
+1. Install the plugin from the WordPress plugin directory, or upload the folder to `/wp-content/plugins/security-check-report`.
+2. Activate it on the Plugins screen.
+3. Open "Security Check" in the admin menu and start a run.
+
+The plugin needs PHP 7.4 or newer and WordPress 7.0 or newer. Running the checks requires the `manage_options` capability, so on a normal site that means an administrator.
 
 == Frequently Asked Questions ==
 
-= What security checks does this plugin perform? =
+= Does the plugin change anything on my site? =
 
-The plugin performs 45 security checks across four categories:
+No. Every check reads state and reports on it.
 
-**Critical Category:**
-1. Malware Check - Scans for malware signatures in WordPress files
-2. PHP Execution in Uploads - Checks if PHP can execute in uploads directory
-3. Weak Password Users - Detects users with common weak passwords
-4. Two-Factor Authentication - Checks for 2FA plugin presence
-5. Admin Username - Detects insecure "admin" username
-6. Database User Privileges - Analyzes database permissions
-7. wp-config.php - Validates configuration file security
-8. Unallowed Files - Scans uploads for dangerous file types
+There is one exception, and it is deliberate. To find out whether your server would execute a PHP file dropped into the uploads folder, the plugin has to try. It writes one file with a random name, requests it once over HTTP and deletes it in the same request. A shutdown handler removes the file even if PHP dies in between, and anything left behind by an earlier interrupted run is cleaned up before the next one starts.
 
-**High Category:**
-9. WordPress Version - Checks if WordPress is up to date
-10. Outdated Plugins - Identifies plugins needing updates
-11. SSL Enabled - Verifies HTTPS configuration
-12. File Editing - Checks if admin file editing is disabled
-13. Brute-Force Protection - Detects protection plugins
-14. Automatic Core Updates - Verifies auto-update settings
-15. PHP Version - Checks PHP version currency
-16. PHP Version Support - Verifies PHP is still supported
-17. Security Keys and Salts - Validates wp-config security keys
+= Does it send data anywhere? =
 
-**Medium Category:**
-18. Server Headers - Analyzes security headers
-19. Directory Permissions - Checks folder permissions
-20. Uploads Permissions - Verifies uploads directory security
-21. WP_DEBUG Mode - Detects debug mode status
-22. Password Policy - Checks for password policy plugins
-23. Login Attempts Limiting - Detects rate limiting
-24. User Enumeration - Tests for user enumeration protection
-25. Outdated Themes - Identifies themes needing updates
-26. Outdated Libraries - Checks for vulnerable libraries
+Only to `api.wordpress.org`, and only through the WordPress functions that already talk to it for update checks:
 
-**Low Category:**
-27. Database Prefix - Checks for custom table prefix
-28. XML-RPC Interface - Detects XML-RPC exposure
-29. REST API - Analyzes REST API configuration
-30. Windows Live Writer - Checks for legacy meta tags
-31. Deactivated Plugins - Lists inactive plugins
-32. .htaccess File - Verifies htaccess presence
-33. Directory Indexing - Tests for index exposure
-34. Unwanted Files in Root - Scans for leftover files
-35. Other WordPress Installations - Detects multiple installs
+* `https://api.wordpress.org/core/version-check/1.7/` to learn the current WordPress version
+* `https://api.wordpress.org/plugins/update-check/1.1/` and `https://api.wordpress.org/themes/update-check/1.1/` for pending updates
+* `https://api.wordpress.org/plugins/info/1.2/` to see whether a plugin listing is still open and when it was last released
+* `https://api.wordpress.org/core/checksums/1.0/` for the official core file hashes
 
-Plus additional tests for PHP version in headers, file change detection, configuration backups, and more.
+WordPress.org [privacy policy](https://wordpress.org/about/privacy/) and [terms of service](https://wordpress.org/about/terms-of-service/).
 
-Note: For SSL/TLS vulnerability testing (Heartbleed, POODLE, DROWN), we recommend using external tools like [SSL Labs](https://www.ssllabs.com/ssltest/).
+The remaining requests go to your own site, because several checks can only be answered from the outside: whether a file is served, whether a header is sent, whether a directory is listed. There is no telemetry and no reporting back to the plugin author.
 
-= How does the weighted scoring system work? =
+= What does the plugin store? =
 
-Tests are assigned to categories based on their security impact:
-- **Critical tests** (weight 3.0x): Authentication, malware, code execution
-- **High tests** (weight 2.0x): Updates, SSL, important configurations
-- **Medium tests** (weight 1.5x): Headers, permissions, policies
-- **Low tests** (weight 1.0x): Best practices, cosmetic issues
+Four options in your database, all removed when you delete the plugin:
 
-A single critical failure will significantly impact your grade, ensuring serious issues are never hidden by passing minor tests.
+* the last run and the one before it, so the report can show what changed
+* which findings you have muted, together with a fingerprint of what they said
+* a baseline recorded on the first run, holding plugin authors, role definitions and the list of must-use plugins and drop-ins, so later runs can spot changes
 
-= How often should I run the plugin? =
+It also records a login timestamp for each account, in user meta, because WordPress keeps no login history of its own and the administrator check would otherwise have nothing to say about dormant accounts. That is deleted on uninstall too.
 
-It is recommended to run the plugin regularly, especially after updates or changes to your site. Monthly scans are a good baseline, with additional scans after major changes.
+= Is this a malware scanner or a firewall? =
 
-= What should I do if the plugin reports a security risk? =
+Neither. It finds configuration weaknesses and exposure, which is what most WordPress sites are actually taken over through. It does not block traffic and it does not clean an infected site.
 
-Follow the plugin's recommendations to mitigate the security risk. Each test includes detailed documentation explaining what was checked, why it matters, and specific steps to resolve issues.
+It will notice several things that point at a compromise: core files that differ from the official release, executable files in the uploads folder, must-use plugins or drop-ins that appeared out of nowhere, roles that gained administrator capabilities, injected scripts in the options table. If any of those turn up, treat it as a starting point for an investigation, not as a verdict.
+
+= What do the grades mean? =
+
+* **A**, excellent: nothing of substance outstanding
+* **B**, good: minor improvements available
+* **C**, moderate: several things worth addressing
+* **D**, poor: significant weaknesses, act soon
+* **F**, critical: act now
+
+= How is the grade calculated? =
+
+Every check carries an urgency, and the urgency sets how much a finding weighs:
+
+* **Critical**, weight 3.0: authentication, code execution, exposed secrets
+* **High**, weight 2.0: updates, transport security, important configuration
+* **Medium**, weight 1.5: headers, permissions, policies
+* **Low**, weight 1.0: fingerprinting and good practice
+
+The score is the weighted risk as a percentage of the worst possible outcome. Checks that could not be determined are left out of both sides of that calculation, so a blocked outbound request never moves the grade in either direction. A failing critical check pulls the result down to at least a D, which is what stops one serious problem from being averaged away. A few checks are informational and carry no weight at all.
+
+= Why does a check say "Not determined"? =
+
+Because it could not get an answer, usually a blocked outbound request or a file it is not allowed to read. That is deliberately not treated as a finding. An unreachable endpoint says nothing about your site, and reporting it as a problem would teach you to ignore the report.
+
+= A finding does not apply to my setup. What now? =
+
+Mute it. The plugin hides the finding and stores a fingerprint of what it was reporting. As soon as the content changes, for instance one more affected file, it comes back on its own.
+
+That is the difference between accepting a known state and going blind to it, and it is why muting is offered instead of a permanent dismissal by default.
+
+= How often should I run it? =
+
+Monthly is a reasonable baseline, plus a run after any larger change: a migration, a new plugin, a server move. From the second run onwards the report opens with what changed since the previous one.
+
+= Can I run it from the command line? =
+
+Yes, and it produces the same grade as the screen because the scoring happens in PHP either way.
+
+`wp security-check run` for a table, `wp security-check run --format=json` for the full result, `wp security-check run --failed-only` for just what needs attention.
+
+= Does it work on multisite? =
+
+Yes. It runs per site: anyone with `manage_options` on a site can run it there and sees that site's accounts, plugins, themes and options.
+
+Several things work differently on a network, and the checks account for it. Registration is a network setting, so the sign-up check reads that instead of the per-site option. Network administrators hold every capability regardless of their role on the current site, so the account, password and two-factor checks include them. The table prefix check looks at the base prefix rather than the per-site one.
+
+The checks that look at files, permissions and server configuration necessarily report the same thing on every site in the network, because they describe one installation. There is no network-wide overview screen.
+
+= Can I add my own checks? =
+
+Yes. `cascr_registry` filters the list of checks, so you can add, remove or reweight one. `cascr_test_result` filters an individual result before it is scored. A check is a callable that returns one of the four outcomes built by `CASCR_Result`.
+
+= Which WordPress and PHP versions are supported? =
+
+WordPress 7.0 and newer, PHP 7.4 through 8.5. Every release is tested against WordPress 7.0 and the current version, on single site and on multisite, and linted on all seven PHP branches in between.
+
+= Who is behind this plugin, and where do I report a problem? =
+
+It is built and maintained by [CMS ADMINS](https://www.cms-admins.de/), a Munich agency that has been looking after WordPress and Drupal installations since 2012.
+
+* Bugs and feature requests: [GitHub issues](https://github.com/cmsadmins/security-check-report/issues)
+* Questions about a finding: the [WordPress.org support forum](https://wordpress.org/support/plugin/security-check-report/)
+* Background reading: our [documentation](https://www.cms-admins.de/docs/) and [what we do about WordPress security](https://www.cms-admins.de/wordpress-sicherheit/)
+
+If a check reports something you believe is wrong, a GitHub issue with the finding text is the fastest way to get it fixed. False positives are treated as bugs.
 
 == Screenshots ==
 
-1. **Dashboard:** Overview of security checks with A-F grade display
-2. **Results Table:** Detailed test results with color-coded scores
-3. **Documentation:** Searchable accordion with test explanations
+1. The report: grade, risk score and the five things to do first
+2. All checks, grouped by area and filterable by outcome, with one finding expanded
+3. The built-in documentation for every check, with a search
 
 == Changelog ==
 
+Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.3.0 =
+
+**Rebuilt**
+
+* One registry is now the single source of truth for a check: identifier, label, grouping, urgency, weight, callback and documentation used to live in four separate places that nothing kept in sync. A test now enforces that they match.
+* Grading moved out of the browser and into PHP, which makes the result reproducible, testable and available outside the dashboard.
+* The admin-ajax endpoint was replaced by REST routes under `cascr/v1`, running three checks at a time instead of strictly one after another.
+* Results are stored, so the report can compare a run with the one before it.
+
+**Added**
+
+* Twenty-five checks, among them publicly readable configuration files and repository folders, database dumps in the web root, must-use plugins and drop-ins, role and capability changes, the application password inventory with last use, two-factor coverage per administrator, unauthenticated REST write routes, TLS certificate expiry, HSTS and CSP quality, cookie attributes, client address spoofing and plugin ownership changes.
+* `wp security-check run` as a WP-CLI command.
+* A priority list of the five things worth doing first, at the top of the report.
+* A comparison with the previous run: newly failing, resolved, changed.
+* Muting with a content fingerprint, so an accepted finding reappears as soon as it actually changes.
+* "Not determined" as its own outcome, so a blocked request is no longer a finding and no longer affects the grade.
+* Exports as plain text, JSON and CSV.
+* The filters `cascr_registry` and `cascr_test_result`.
+
+**Fixed**
+
+* Multisite reported "registration is closed" on a network that let anyone sign up, because the check read the per-site option that multisite ignores. It now reads the network setting.
+* Network administrators were missing from the password, administrator, two-factor and application password checks. They hold every capability regardless of their role on a site, so a role query alone did not find them.
+* The table prefix check compared the per-site prefix on multisite, so every subsite looked like it had a custom one.
+* A stored cross-site scripting path: findings carrying site data such as plugin names or user names were written into the summary with innerHTML.
+* Permission checks compared against exactly 0755 and therefore reported 0750 and the widespread setgid 2755 as insecure.
+* `WP_AUTO_UPDATE_CORE` set to true was reported as a risk, although it enables more updates than the recommended setting.
+* "Not modified in six months" was treated as "outdated", which flagged well maintained plugins. Replaced by release date, tested-up-to version and directory status.
+* The malware signature scan searched wp-admin and wp-includes for strings such as `eval(` and `$_GET[`, and needed a hand-maintained list of 180 core files to stay quiet. Replaced by a comparison against the official WordPress file list.
+* Security headers were all or nothing. They are now scored per header, with the cross-origin isolation headers treated as optional.
+* The interface followed the operating system colour scheme and painted dark cards onto the light dashboard. It now follows the WordPress admin.
+
+**Changed**
+
+* One request to the homepage per run instead of four, and one update lookup instead of one request per installed plugin.
+* Duplicate checks merged (PHP version support, XML-RPC methods, login attempt limiting) and two dropped that could never fail (jQuery version, table storage engine).
+* Every string in the interface is translatable. The report was previously hardcoded English with a German date format.
+* Counts in the report use proper plural forms instead of assuming plural.
+* The JavaScript alert was replaced by an admin notice and a screen reader announcement.
+* The test suite now runs against multisite as well, as a blocking step before every release.
+
 = 2.2.2 =
-* Broadened PHP compatibility: the plugin now runs on PHP 7.4 through 8.5
+
+* Broadened PHP compatibility: the plugin runs on PHP 7.4 through 8.5
 * Requires WordPress 7.0 or newer
-* Added an automated PHPUnit test suite covering all 45 security checks and the AJAX permission and nonce gates
-* Continuous integration now lints on seven PHP versions and runs the test suite against WordPress 7.0 and latest before every release
-* Fixed a PHP warning in the outdated themes and plugins check when a theme or plugin path no longer exists
-* Removed unused legacy code paths and achieved full WordPress Coding Standards compliance
+* Added an automated test suite covering every check and the permission and nonce gates
+* Continuous integration lints on seven PHP versions and runs the tests against WordPress 7.0 and the current release
+* Fixed a PHP warning in the theme and plugin update checks when a path no longer exists
+* Removed unused legacy code paths and reached full WordPress Coding Standards compliance
 
 = 2.2.1 =
+
 * First release on the WordPress.org plugin directory
 * Renamed plugin folder, main file and text domain to security-check-report
-* Removed the Spamhaus IP blacklist test (sent the server IP to a third-party service without opt-in); the plugin now performs 45 tests
+* Removed the Spamhaus IP blacklist test, which sent the server address to a third party without asking
 * Removed unused legacy code and files
-* Fixed translation loading on WordPress 6.7+ (no more _load_textdomain_just_in_time notice)
-* Enabled SSL verification for the PHP execution test request
+* Fixed translation loading on WordPress 6.7 and newer
+* Enabled certificate verification for the PHP execution test request
 
 = 2.2.0 =
-* **UI/UX Overhaul:**
-  * Completely redesigned header with cleaner, professional appearance
-  * New accordion system with native HTML5 details/summary elements
-  * Added real-time search functionality for test documentation
-  * Unified color scheme across all components
-  * Improved progress indicator with spinner animation
-  * Added CMS ADMINS footer with copyright and support links
-* **CSS Improvements:**
-  * Fixed accordion overflow issues with box-shadow technique
-  * Removed conflicting legacy styles from backend.css
-  * Better visual consistency across all UI elements
-  * Improved checkbox and form styling
-* **Documentation:**
-  * Rewrote all 46 test descriptions with consistent format
-  * Each test now includes: What it checks, Why it matters, Recommendation
-  * Better organization and readability
 
-= 2.1.0 =
-* **New Weighted Scoring System:**
-  * Implemented category-based risk calculation (Critical, High, Medium, Low)
-  * Category weights: Critical 3.0x, High 2.0x, Medium 1.5x, Low 1.0x
-  * New A-F letter grade display (A=Excellent to F=Critical)
-  * Single critical failure properly impacts overall grade
-* **Test Improvements:**
-  * Fixed XML-RPC check to actually test endpoint accessibility
-  * Fixed REST API check to verify real exposure status
-  * Enhanced user enumeration check with multiple detection methods
-  * Improved weak password detection with expanded password list
-  * Better automatic core updates detection
-* **New Tests Added:**
-  * Application Passwords audit
-  * WP-Cron security check
-  * Debug log exposure detection
-  * CORS configuration analysis
-  * WordPress core file integrity verification
-* **Configuration Updates:**
-  * Updated security headers list (added COOP, COEP, CORP)
-  * Improved malware signature patterns with severity levels
-  * Expanded allowed file types list
-  * Better test categorization
-
-= 2.0.0 =
-* **Major Security Overhaul:**
-  * Added capability checks to all AJAX handlers
-  * Fixed XSS vulnerability in accordion descriptions
-  * Removed dangerous shell_exec tests (Shellshock, Heartbleed, POODLE, DROWN)
-  * Fixed SQL injection vulnerability in WordPress installations scanner
-  * Replaced file_get_contents with WP_Filesystem
-  * Fixed temp file race condition with unique filenames
-* **Architecture Improvements:**
-  * Modernized to PHP 8.2+ with PSR-4 autoloading (Composer)
-  * New class-based architecture with services, interfaces, and dependency injection
-  * Added ConfigProvider, CacheService, FileSystemService, DatabaseService
-  * Implemented TestRunner with RiskCalculator
-* **Frontend Modernization:**
-  * Vanilla JavaScript ES2022+ (no jQuery dependency)
-  * Modern ES modules with async/await and Fetch API
-  * Full WCAG 2.1 AA accessibility compliance
-  * Keyboard navigation support throughout
-  * Screen reader compatible with ARIA attributes
-* **CSS Improvements:**
-  * CSS Custom Properties for theming
-  * Dark Mode support via prefers-color-scheme
-  * Responsive design for all screen sizes
-  * prefers-reduced-motion support
-  * Improved focus states for accessibility
-* **New Features:**
-  * Added missing test methods (backup, security_plugins, db_prefix, brute_force, login_attempts)
-  * Better progress tracking with percentage display
-  * Modern clipboard API with fallback
-  * Improved risk calculation and reporting
-* **Removed Features:**
-  * Removed shell-based vulnerability tests (use SSL Labs for SSL/TLS testing)
-  * Recommendation: Use https://www.ssllabs.com/ssltest/ for comprehensive SSL/TLS checks
-
-= 1.1.5 =
-* Improved security by sanitizing and validating IP address before checking blacklist status
-
-= 1.1.4 =
-* Remove invalid files from the plugin folder
-* Added tested up to: WP 6.5.5
-* Added Infos for Third-Party Services in readme.txt and Plugin-Frontend
-* Security Enhancements:
-  * Added sanitization, validation, and escaping for all input and output data
-  * Sanitized and escaped server variables
-  * Validated IP addresses using filter_var
-  * Escaped shell commands to prevent command injection
-  * Properly escaped HTML output to prevent XSS attacks
-* Updated function, class, namespace, and option names to use unique prefix "CASC_"
-* Improved code readability and maintainability
-
-= 1.1.3 =
-* Added security checks for PHP version support
-* Added security checks for directory permissions
-* Added security checks for database user privileges
-* Added file change detection for important files
-* Added outdated libraries check
-* Optimized existing security checks for better performance
-
-= 1.1.2 =
-* Added check for PHP version in server response headers
-* Added check for unwanted files in the root directory
-* Added check for Windows Live Writer link in headers
-* Added check for security keys and salts in wp-config.php
-* Added check for automatic WordPress core updates
-* Added check for deactivated plugins
-
-= 1.1.1 =
-* Fix Text-Domain
-* Add Tests
-
-= 1.1 =
-* Added comprehensive security checks
-* Improved UI for displaying security check results
-* Enhanced performance and reliability
-
-= 1.0 =
-* Initial release
+* Redesigned interface with a native details and summary accordion
+* Added a live search across the check documentation
+* Rewrote every check description into a consistent format: what it checks, why it matters, what to do
+* Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
 
+= 2.3.0 =
+Fixes a cross-site scripting path in the report and several checks that reported healthy sites as insecure. Adds 25 checks, a priority list, a comparison with the previous run and a WP-CLI command.
+
+= 2.2.2 =
+Broader PHP support, from 7.4 through 8.5, plus an automated test suite behind every release.
+
 = 2.2.1 =
-First release on WordPress.org. The Spamhaus IP blacklist test has been removed, no data is sent to third parties other than the WordPress.org API anymore.
-
-= 2.2.0 =
-Major UI overhaul with redesigned interface, searchable documentation, and improved visual consistency. All test descriptions have been rewritten for clarity.
-
-= 2.1.0 =
-New weighted scoring system with A-F grades ensures critical issues properly impact your risk assessment. Several test methods have been fixed and new tests added.
-
-= 2.0.0 =
-Major security and architecture update. Important security fixes - please update immediately. Now requires PHP 8.2+.
-
-== License & Credits ==
-
-This plugin is free software and is released under the GPLv2 or later.
-
-Developed by Patrick Schlesinger / CMS ADMINS
-Website: https://www.cms-admins.de/
-
-### Third-Party Services
-
-This plugin uses the following third-party services:
-
-1. **WordPress.org API**
-   - **Purpose**: Used to fetch the latest version of WordPress, plugins, themes, security keys, and core file checksums.
-   - **Service URLs**:
-     - [WordPress Version Check](https://api.wordpress.org/core/version-check/1.7/)
-     - [Plugin Info](https://api.wordpress.org/plugins/info/1.0/)
-     - [Theme Info](https://api.wordpress.org/themes/info/1.0/)
-     - [Security Keys and Salts](https://api.wordpress.org/secret-key/1.1/salt/)
-     - [Core Checksums](https://api.wordpress.org/core/checksums/1.0/)
-   - **Privacy Policy**: [WordPress.org Privacy Policy](https://wordpress.org/about/privacy/)
-   - **Terms of Use**: [WordPress.org Terms of Service](https://wordpress.org/about/terms-of-service/)
+First release on WordPress.org. The Spamhaus test is gone; nothing is sent anywhere except the WordPress.org API.
