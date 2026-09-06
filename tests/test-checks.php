@@ -98,6 +98,63 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 		$this->assertSame( 0, CASCR_Result::warn( 'hmm', -5 )['score'], 'Scores are clamped to 0.' );
 	}
 
+	/**
+	 * A check hands the link to the interface, which turns it into an anchor.
+	 * An unvalidated value would end up in the document as a link target.
+	 */
+	public function test_only_well_formed_links_survive() {
+		$good = CASCR_Result::fail(
+			'bad',
+			8,
+			array(),
+			'fix',
+			array(
+				'url'   => 'https://example.com/help',
+				'label' => 'Help',
+			)
+		);
+		$this->assertSame( 'https://example.com/help', $good['link']['url'] );
+
+		foreach ( array(
+			array(
+				'url'   => 'javascript:alert(1)',
+				'label' => 'Bad',
+			),
+			array(
+				'url'   => 'data:text/html,<script>',
+				'label' => 'Bad',
+			),
+			array( 'url' => 'https://example.com' ),
+			array( 'label' => 'no url' ),
+			'not an array',
+		) as $candidate ) {
+			$result = CASCR_Result::fail( 'bad', 8, array(), 'fix', $candidate );
+			$this->assertSame( array(), $result['link'], 'A malformed link must be dropped.' );
+		}
+	}
+
+	public function test_every_result_carries_a_link_key() {
+		foreach ( CASCR_Registry::ids() as $id ) {
+			$this->assertArrayHasKey( 'link', CASCR_Runner::run( $id ), "Check '{$id}' has no link key." );
+		}
+	}
+
+	/**
+	 * The suggestion has to be a real second factor, otherwise the finding
+	 * points somewhere that does not solve it.
+	 */
+	public function test_the_two_factor_finding_suggests_something_when_nothing_is_installed() {
+		$result = CASCR_Checks_Accounts::two_factor_coverage();
+
+		if ( 'fail' !== $result['status'] || '' === $result['fix'] ) {
+			$this->markTestSkipped( 'A two-factor plugin is active in this environment.' );
+		}
+
+		$this->assertNotEmpty( $result['link'] );
+		$this->assertStringStartsWith( 'https://', $result['link']['url'] );
+		$this->assertStringContainsString( 'Two Factor', $result['fix'], 'The free option must be named first.' );
+	}
+
 	public function test_a_check_that_throws_is_reported_as_inconclusive() {
 		add_filter(
 			'cascr_registry',

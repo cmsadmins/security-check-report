@@ -176,6 +176,66 @@ class Test_CASCR_Scoring extends WP_UnitTestCase {
 		$this->assertSame( array(), $priorities );
 	}
 
+	/**
+	 * The grade says where you stand, the verdict says what to do with it.
+	 * Built in PHP so the plural forms are correct in every language.
+	 */
+	public function test_the_verdict_reads_as_a_sentence() {
+		$clean = CASCR_Scoring::summarize( $this->results() );
+		$this->assertSame( 'Nothing needs your attention right now.', $clean['verdict'] );
+
+		$one = CASCR_Scoring::summarize(
+			$this->results( array( 'wp_debug' => CASCR_Result::fail( 'bad', 9 ) ) )
+		);
+		$this->assertStringContainsString( '1 finding needs', $one['verdict'] );
+
+		$mixed = CASCR_Scoring::summarize(
+			$this->results(
+				array(
+					'wp_debug'  => CASCR_Result::fail( 'bad', 9 ),
+					'file_edit' => CASCR_Result::fail( 'bad', 9 ),
+					'db_prefix' => CASCR_Result::warn( 'meh', 5 ),
+				)
+			)
+		);
+		$this->assertStringContainsString( '2 findings need', $mixed['verdict'] );
+		$this->assertStringContainsString( '1 more is worth', $mixed['verdict'] );
+	}
+
+	public function test_the_verdict_mentions_checks_that_could_not_run() {
+		$summary = CASCR_Scoring::summarize(
+			$this->results( array( 'ssl' => CASCR_Result::inconclusive( 'no answer' ) ) )
+		);
+
+		$this->assertStringContainsString( 'could not be completed', $summary['verdict'] );
+	}
+
+	/**
+	 * The to-do list is the part people read, so a helper link on a finding has
+	 * to survive into it.
+	 */
+	public function test_priorities_carry_the_link_of_a_finding() {
+		$results = $this->results(
+			array(
+				'two_factor_coverage' => CASCR_Result::fail(
+					'no second factor',
+					9,
+					array(),
+					'install one',
+					array(
+						'url'   => 'https://example.com/2fa',
+						'label' => 'A second factor',
+					)
+				),
+			)
+		);
+
+		$priorities = CASCR_Scoring::priorities( $results );
+
+		$this->assertSame( 'two_factor_coverage', $priorities[0]['id'] );
+		$this->assertSame( 'https://example.com/2fa', $priorities[0]['link']['url'] );
+	}
+
 	public function test_grade_labels_exist_for_every_grade() {
 		foreach ( array( 'A', 'B', 'C', 'D', 'F' ) as $grade ) {
 			$this->assertNotEmpty( CASCR_Scoring::grade_label( $grade ) );

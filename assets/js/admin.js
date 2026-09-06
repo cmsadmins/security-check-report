@@ -349,6 +349,11 @@
             meta.appendChild(stats);
             card.appendChild(meta);
             target.appendChild(card);
+
+            if (this.#summary.verdict) {
+                const verdict = el('p', 'cascr-score__verdict', this.#summary.verdict);
+                target.appendChild(verdict);
+            }
         }
 
         #renderPriorities() {
@@ -368,6 +373,8 @@
                 return;
             }
 
+            target.appendChild(el('p', 'cascr-section__lead', i18n.todoIntro));
+
             const list = el('ol', 'cascr-priorities__list');
 
             priorities.forEach((item) => {
@@ -382,6 +389,14 @@
 
                 if (item.fix) {
                     entry.appendChild(el('p', 'cascr-priority__fix', item.fix));
+                }
+
+                if (item.link && item.link.url) {
+                    const helper = el('a', 'cascr-result__helper', item.link.label);
+                    helper.href = item.link.url;
+                    helper.target = '_blank';
+                    helper.rel = 'noopener noreferrer';
+                    entry.appendChild(helper);
                 }
 
                 const link = el('a', 'cascr-priority__link', i18n.documentation);
@@ -561,6 +576,14 @@
 
             const actions = el('div', 'cascr-result__actions');
 
+            if (result.link && result.link.url) {
+                const helper = el('a', 'cascr-result__helper', result.link.label);
+                helper.href = result.link.url;
+                helper.target = '_blank';
+                helper.rel = 'noopener noreferrer';
+                body.appendChild(helper);
+            }
+
             const docLink = el('a', 'cascr-result__link', i18n.documentation);
             docLink.href = `#cascr-doc-${id}`;
             docLink.addEventListener('click', () => openDoc(id));
@@ -601,7 +624,10 @@
                 return;
             }
 
+            target.appendChild(el('h2', 'cascr-section__title', i18n.exportTitle));
+
             const exporter = new Exporter(this.#results, this.#summary);
+            const row = el('div', 'cascr-export__row');
 
             const buttons = [
                 [i18n.exportText, () => Exporter.download(exporter.text(), `${exporter.filename}.txt`, 'text/plain')],
@@ -619,8 +645,10 @@
                 button.type = 'button';
                 button.textContent = label;
                 button.addEventListener('click', handler);
-                target.appendChild(button);
+                row.appendChild(button);
             });
+
+            target.appendChild(row);
         }
     }
 
@@ -736,16 +764,27 @@
     /**
      * Wires the page together.
      */
+    /**
+     * Wires the page together and keeps the three steps in sync.
+     */
     class App {
         constructor() {
             this.nodes = {
                 consent: document.getElementById('cascr-consent'),
                 run: document.getElementById('cascr-run'),
-                start: document.getElementById('cascr-start'),
+                launchHint: document.getElementById('cascr-launch-hint'),
                 progress: document.getElementById('cascr-progress'),
                 progressBar: document.getElementById('cascr-progress-bar'),
                 progressLabel: document.getElementById('cascr-progress-label'),
-                report: document.getElementById('cascr-report'),
+                resultPanel: document.getElementById('cascr-result-panel'),
+                findingsPanel: document.getElementById('cascr-findings-panel'),
+                waiting2: document.getElementById('cascr-waiting-2'),
+                waiting3: document.getElementById('cascr-waiting-3'),
+                steps: [
+                    document.getElementById('cascr-step-1'),
+                    document.getElementById('cascr-step-2'),
+                    document.getElementById('cascr-step-3'),
+                ],
                 score: document.getElementById('cascr-score'),
                 priorities: document.getElementById('cascr-priorities'),
                 diff: document.getElementById('cascr-diff'),
@@ -761,10 +800,26 @@
             new DocSearch();
 
             this.nodes.consent.addEventListener('change', (event) => {
-                this.nodes.run.disabled = !event.target.checked;
+                const ready = event.target.checked;
+                this.nodes.run.disabled = !ready;
+                if (this.nodes.launchHint) {
+                    this.nodes.launchHint.hidden = ready;
+                }
             });
 
             this.nodes.run.addEventListener('click', () => this.start());
+        }
+
+        /**
+         * Marks a step as upcoming, current or done.
+         */
+        #setStep(index, state) {
+            const step = this.nodes.steps[index];
+            if (!step) {
+                return;
+            }
+            step.classList.remove('is-upcoming', 'is-current', 'is-done');
+            step.classList.add(state);
         }
 
         async start() {
@@ -772,7 +827,9 @@
 
             this.nodes.run.disabled = true;
             this.nodes.progress.hidden = false;
-            this.nodes.report.hidden = true;
+            if (this.nodes.launchHint) {
+                this.nodes.launchHint.hidden = true;
+            }
             this.setProgress(0, ids.length, '');
 
             const runner = new TestRunner(ids, config.concurrency);
@@ -791,15 +848,42 @@
             }
 
             this.nodes.progress.hidden = true;
-            this.nodes.report.hidden = false;
             this.nodes.run.disabled = false;
             this.nodes.run.textContent = i18n.runAgain;
 
-            if (summary) {
-                this.view.setData(results, summary);
-                this.view.render();
-                announce(`${i18n.scanFinished} ${i18n.grade}: ${summary.grade}`);
+            if (!summary) {
+                return;
             }
+
+            this.view.setData(results, summary);
+            this.view.render();
+
+            this.#setStep(0, 'is-done');
+            this.#setStep(1, 'is-current');
+            this.#setStep(2, 'is-current');
+
+            [this.nodes.waiting2, this.nodes.waiting3].forEach((n) => {
+                if (n) {
+                    n.hidden = true;
+                }
+            });
+            [this.nodes.resultPanel, this.nodes.findingsPanel].forEach((n) => {
+                if (n) {
+                    n.hidden = false;
+                }
+            });
+
+            // The result sits below the fold on most screens, and a report you
+            // have to go looking for is a report that gets missed.
+            const target = this.nodes.steps[1];
+            if (target) {
+                target.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+                    block: 'start',
+                });
+            }
+
+            announce(`${i18n.scanFinished} ${i18n.grade}: ${summary.grade}. ${summary.verdict || ''}`);
         }
 
         setProgress(done, total, id) {

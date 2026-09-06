@@ -118,11 +118,71 @@ class CASCR_Scoring {
 			'generated'     => time(),
 			'risk'          => $percentage,
 			'grade'         => self::grade( $percentage ),
+			'verdict'       => self::verdict( $counts ),
 			'critical_fail' => $critical_fail,
 			'counts'        => $counts,
 			'categories'    => $by_category,
 			'priorities'    => self::priorities( $results ),
 		);
+	}
+
+	/**
+	 * The result in one plain sentence.
+	 *
+	 * A letter grade tells you where you stand but not what to do with it.
+	 * Built here rather than in the browser so the wording carries proper plural
+	 * forms and reads the same over WP-CLI.
+	 *
+	 * @param array $counts Status counts from summarize().
+	 * @return string
+	 */
+	public static function verdict( $counts ) {
+		$parts = array();
+
+		if ( $counts['fail'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d: number of failed checks. */
+				_n(
+					'%d finding needs your attention now.',
+					'%d findings need your attention now.',
+					$counts['fail'],
+					'security-check-report'
+				),
+				$counts['fail']
+			);
+		}
+
+		if ( $counts['warn'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d: number of warnings. */
+				_n(
+					'%d more is worth improving.',
+					'%d more are worth improving.',
+					$counts['warn'],
+					'security-check-report'
+				),
+				$counts['warn']
+			);
+		}
+
+		if ( empty( $parts ) ) {
+			$parts[] = __( 'Nothing needs your attention right now.', 'security-check-report' );
+		}
+
+		if ( $counts['inconclusive'] > 0 ) {
+			$parts[] = sprintf(
+				/* translators: %d: number of checks that could not be completed. */
+				_n(
+					'%d check could not be completed and is not counted.',
+					'%d checks could not be completed and are not counted.',
+					$counts['inconclusive'],
+					'security-check-report'
+				),
+				$counts['inconclusive']
+			);
+		}
+
+		return implode( ' ', $parts );
 	}
 
 	/**
@@ -194,6 +254,7 @@ class CASCR_Scoring {
 				'score'    => $result['score'],
 				'summary'  => $result['summary'],
 				'fix'      => $result['fix'],
+				'link'     => isset( $result['link'] ) ? $result['link'] : array(),
 				'rank'     => array(
 					CASCR_Result::STATUS_FAIL === $result['status'] ? 1 : 0,
 					CASCR_Registry::severity_rank( $test['severity'] ),

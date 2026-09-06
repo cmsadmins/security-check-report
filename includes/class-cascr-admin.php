@@ -95,7 +95,8 @@ class CASCR_Admin {
 				'statusIgnored'  => __( 'Muted', 'security-check-report' ),
 				'filterAll'      => __( 'All', 'security-check-report' ),
 				'riskScore'      => __( 'Risk score', 'security-check-report' ),
-				'nextActions'    => __( 'Do this first', 'security-check-report' ),
+				'nextActions'    => __( 'Your to-do list', 'security-check-report' ),
+				'todoIntro'      => __( 'Work through these in order. Everything else can wait.', 'security-check-report' ),
 				'nothingToDo'    => __( 'Nothing needs your attention right now.', 'security-check-report' ),
 				'sinceLastRun'   => __( 'Since the previous run', 'security-check-report' ),
 				'newIssues'      => __( 'newly failing', 'security-check-report' ),
@@ -103,6 +104,7 @@ class CASCR_Admin {
 				'changedIssues'  => __( 'changed', 'security-check-report' ),
 				'noChange'       => __( 'Nothing changed since the previous run.', 'security-check-report' ),
 				'results'        => __( 'All checks', 'security-check-report' ),
+				'exportTitle'    => __( 'Take the report with you', 'security-check-report' ),
 				'details'        => __( 'Details', 'security-check-report' ),
 				'recommendation' => __( 'What to do', 'security-check-report' ),
 				'documentation'  => __( 'Read more about this check', 'security-check-report' ),
@@ -158,63 +160,111 @@ class CASCR_Admin {
 				</p>
 			</header>
 
-			<div class="cascr-start" id="cascr-start">
-				<label class="cascr-start__consent">
-					<input type="checkbox" id="cascr-consent" />
-					<span><?php esc_html_e( 'I understand that these checks read the site, write one temporary file to the uploads folder and delete it again, and that the result is an assessment rather than a guarantee.', 'security-check-report' ); ?></span>
-				</label>
-				<div class="cascr-start__actions">
-					<button type="button" id="cascr-run" class="button button-primary button-hero" disabled>
-						<?php esc_html_e( 'Run the security check', 'security-check-report' ); ?>
-					</button>
-					<?php if ( ! empty( $last['generated'] ) ) : ?>
-						<p class="cascr-start__last">
-							<?php
-							printf(
-								/* translators: 1: relative time since the last run, 2: grade letter, 3: grade label. */
-								esc_html__( 'Last run %1$s ago: grade %2$s, %3$s.', 'security-check-report' ),
-								esc_html( human_time_diff( (int) $last['generated'], time() ) ),
-								esc_html( isset( $last['grade'] ) ? $last['grade'] : '?' ),
-								esc_html( CASCR_Scoring::grade_label( isset( $last['grade'] ) ? $last['grade'] : 'F' ) )
-							);
+			<ol class="cascr-steps">
 
-							if ( isset( $last['counts']['fail'], $last['counts']['warn'] ) ) {
-								echo ' ';
+				<li class="cascr-step is-current" id="cascr-step-1">
+					<div class="cascr-step__head">
+						<span class="cascr-step__num" aria-hidden="true">1</span>
+						<div>
+							<h2 class="cascr-step__title">
+								<span class="screen-reader-text"><?php esc_html_e( 'Step 1:', 'security-check-report' ); ?></span>
+								<?php esc_html_e( 'Start the check', 'security-check-report' ); ?>
+							</h2>
+							<p class="cascr-step__lead">
+								<?php
 								printf(
-									/* translators: %d: number of failed checks. */
-									esc_html( _n( '%d failed', '%d failed', (int) $last['counts']['fail'], 'security-check-report' ) ),
-									(int) $last['counts']['fail']
+									/* translators: %d: number of checks the plugin runs. */
+									esc_html__( '%d checks, about a minute. Nothing on your site is changed.', 'security-check-report' ),
+									count( CASCR_Registry::ids() )
 								);
-								echo ', ';
+								?>
+							</p>
+						</div>
+					</div>
+
+					<div class="cascr-step__body">
+						<label class="cascr-consent" for="cascr-consent">
+							<input type="checkbox" id="cascr-consent" />
+							<span><?php esc_html_e( 'I understand that these checks read the site, write one temporary file to the uploads folder and delete it again, and that the result is an assessment rather than a guarantee.', 'security-check-report' ); ?></span>
+						</label>
+
+						<div class="cascr-launch">
+							<button type="button" id="cascr-run" class="button button-primary button-hero cascr-launch__button" disabled>
+								<?php esc_html_e( 'Start the security check', 'security-check-report' ); ?>
+							</button>
+							<p class="cascr-launch__hint" id="cascr-launch-hint"><?php esc_html_e( 'Tick the box above to start.', 'security-check-report' ); ?></p>
+						</div>
+
+						<div class="cascr-progress" id="cascr-progress" hidden>
+							<div class="cascr-progress__row">
+								<span class="cascr-progress__spinner" aria-hidden="true"></span>
+								<span class="cascr-progress__label" id="cascr-progress-label"></span>
+							</div>
+							<div class="cascr-progress__track">
+								<div class="cascr-progress__bar" id="cascr-progress-bar"></div>
+							</div>
+						</div>
+
+						<?php if ( ! empty( $last['generated'] ) ) : ?>
+							<p class="cascr-laststamp">
+								<?php
 								printf(
-									/* translators: %d: number of warnings. */
-									esc_html( _n( '%d warning.', '%d warnings.', (int) $last['counts']['warn'], 'security-check-report' ) ),
-									(int) $last['counts']['warn']
+									/* translators: 1: relative time since the last run, 2: grade letter, 3: grade label. */
+									esc_html__( 'Last run %1$s ago: grade %2$s, %3$s.', 'security-check-report' ),
+									esc_html( human_time_diff( (int) $last['generated'], time() ) ),
+									esc_html( isset( $last['grade'] ) ? $last['grade'] : '?' ),
+									esc_html( CASCR_Scoring::grade_label( isset( $last['grade'] ) ? $last['grade'] : 'F' ) )
 								);
-							}
-							?>
-						</p>
-					<?php endif; ?>
-				</div>
-			</div>
+								?>
+							</p>
+						<?php endif; ?>
+					</div>
+				</li>
 
-			<div class="cascr-progress" id="cascr-progress" hidden>
-				<div class="cascr-progress__row">
-					<span class="cascr-progress__spinner" aria-hidden="true"></span>
-					<span class="cascr-progress__label" id="cascr-progress-label"></span>
-				</div>
-				<div class="cascr-progress__track">
-					<div class="cascr-progress__bar" id="cascr-progress-bar"></div>
-				</div>
-			</div>
+				<li class="cascr-step is-upcoming" id="cascr-step-2">
+					<div class="cascr-step__head">
+						<span class="cascr-step__num" aria-hidden="true">2</span>
+						<div>
+							<h2 class="cascr-step__title">
+								<span class="screen-reader-text"><?php esc_html_e( 'Step 2:', 'security-check-report' ); ?></span>
+								<?php esc_html_e( 'Your result', 'security-check-report' ); ?>
+							</h2>
+							<p class="cascr-step__lead"><?php esc_html_e( 'A grade, what it means, and the short list to work through.', 'security-check-report' ); ?></p>
+						</div>
+					</div>
 
-			<div class="cascr-report" id="cascr-report" hidden>
-				<section class="cascr-score" id="cascr-score" aria-live="polite"></section>
-				<section class="cascr-priorities" id="cascr-priorities"></section>
-				<section class="cascr-diff" id="cascr-diff"></section>
-				<section class="cascr-results" id="cascr-results"></section>
-				<section class="cascr-export" id="cascr-export"></section>
-			</div>
+					<div class="cascr-step__body">
+						<p class="cascr-waiting" id="cascr-waiting-2"><?php esc_html_e( 'Appears once the check has run.', 'security-check-report' ); ?></p>
+						<div id="cascr-result-panel" hidden>
+							<section class="cascr-score" id="cascr-score" aria-live="polite"></section>
+							<section class="cascr-diff" id="cascr-diff"></section>
+							<section class="cascr-priorities" id="cascr-priorities"></section>
+						</div>
+					</div>
+				</li>
+
+				<li class="cascr-step is-upcoming" id="cascr-step-3">
+					<div class="cascr-step__head">
+						<span class="cascr-step__num" aria-hidden="true">3</span>
+						<div>
+							<h2 class="cascr-step__title">
+								<span class="screen-reader-text"><?php esc_html_e( 'Step 3:', 'security-check-report' ); ?></span>
+								<?php esc_html_e( 'Go through everything else', 'security-check-report' ); ?>
+							</h2>
+							<p class="cascr-step__lead"><?php esc_html_e( 'Every check with its detail, filterable, and the report to take away.', 'security-check-report' ); ?></p>
+						</div>
+					</div>
+
+					<div class="cascr-step__body">
+						<p class="cascr-waiting" id="cascr-waiting-3"><?php esc_html_e( 'Appears once the check has run.', 'security-check-report' ); ?></p>
+						<div id="cascr-findings-panel" hidden>
+							<section class="cascr-results" id="cascr-results"></section>
+							<section class="cascr-export" id="cascr-export"></section>
+						</div>
+					</div>
+				</li>
+
+			</ol>
 
 			<section class="cascr-docs">
 				<div class="cascr-docs__header">

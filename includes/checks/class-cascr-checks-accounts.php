@@ -421,7 +421,8 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				__( 'No second factor is available, so a stolen password is enough to reach the dashboard.', 'security-check-report' ),
 				9,
 				array(),
-				__( 'Install a two-factor plugin and require it at least for administrators.', 'security-check-report' )
+				__( 'Install a two-factor plugin and require it at least for administrators. Two Factor, maintained by the WordPress core team, is a solid free choice. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys alongside its login protection.', 'security-check-report' ),
+				self::hive_link()
 			);
 		}
 
@@ -480,6 +481,21 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			8,
 			self::cap( $without ),
 			__( 'Set up the second factor for those accounts, or require it for the administrator role.', 'security-check-report' )
+		);
+	}
+
+	/**
+	 * Our own plugin, offered as one option among others.
+	 *
+	 * Named openly as ours in the remediation text above, so a reader can weigh
+	 * the recommendation for what it is. The free alternative is named first.
+	 *
+	 * @return array
+	 */
+	private static function hive_link() {
+		return array(
+			'url'   => 'https://reportedip.com/products/wordpress-plugin/',
+			'label' => __( 'ReportedIP Hive, our own plugin with TOTP, email and passkeys', 'security-check-report' ),
 		);
 	}
 

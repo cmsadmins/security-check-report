@@ -40,7 +40,7 @@ class CASCR_Result {
 	 * @return array
 	 */
 	public static function pass( $summary, $items = array() ) {
-		return self::build( self::STATUS_PASS, $summary, 0, $items, '' );
+		return self::build( self::STATUS_PASS, $summary, 0, $items, '', array() );
 	}
 
 	/**
@@ -50,10 +50,11 @@ class CASCR_Result {
 	 * @param int      $score   Risk contribution, 4 to 6.
 	 * @param string[] $items   Affected objects, raw and unescaped.
 	 * @param string   $fix     Optional concrete remediation step.
+	 * @param array    $link    Optional {url, label} pointing at further help.
 	 * @return array
 	 */
-	public static function warn( $summary, $score, $items = array(), $fix = '' ) {
-		return self::build( self::STATUS_WARN, $summary, $score, $items, $fix );
+	public static function warn( $summary, $score, $items = array(), $fix = '', $link = array() ) {
+		return self::build( self::STATUS_WARN, $summary, $score, $items, $fix, $link );
 	}
 
 	/**
@@ -63,10 +64,11 @@ class CASCR_Result {
 	 * @param int      $score   Risk contribution, 7 to 10.
 	 * @param string[] $items   Affected objects, raw and unescaped.
 	 * @param string   $fix     Optional concrete remediation step.
+	 * @param array    $link    Optional {url, label} pointing at further help.
 	 * @return array
 	 */
-	public static function fail( $summary, $score, $items = array(), $fix = '' ) {
-		return self::build( self::STATUS_FAIL, $summary, $score, $items, $fix );
+	public static function fail( $summary, $score, $items = array(), $fix = '', $link = array() ) {
+		return self::build( self::STATUS_FAIL, $summary, $score, $items, $fix, $link );
 	}
 
 	/**
@@ -81,7 +83,7 @@ class CASCR_Result {
 	 * @return array
 	 */
 	public static function inconclusive( $summary, $fix = '' ) {
-		return self::build( self::STATUS_INCONCLUSIVE, $summary, 0, array(), $fix );
+		return self::build( self::STATUS_INCONCLUSIVE, $summary, 0, array(), $fix, array() );
 	}
 
 	/**
@@ -95,7 +97,7 @@ class CASCR_Result {
 	 * @return array
 	 */
 	public static function info( $summary, $items = array() ) {
-		return self::build( self::STATUS_PASS, $summary, 0, $items, '' );
+		return self::build( self::STATUS_PASS, $summary, 0, $items, '', array() );
 	}
 
 	/**
@@ -114,7 +116,8 @@ class CASCR_Result {
 			$result['summary'],
 			isset( $result['score'] ) ? $result['score'] : 0,
 			isset( $result['items'] ) ? $result['items'] : array(),
-			isset( $result['fix'] ) ? $result['fix'] : ''
+			isset( $result['fix'] ) ? $result['fix'] : '',
+			isset( $result['link'] ) ? $result['link'] : array()
 		);
 	}
 
@@ -124,9 +127,10 @@ class CASCR_Result {
 	 * @param int    $score   Risk contribution, 0 to 10.
 	 * @param mixed  $items   Affected objects.
 	 * @param string $fix     Remediation step.
+	 * @param array  $link    Optional {url, label}.
 	 * @return array
 	 */
-	private static function build( $status, $summary, $score, $items, $fix ) {
+	private static function build( $status, $summary, $score, $items, $fix, $link = array() ) {
 		$allowed = array( self::STATUS_PASS, self::STATUS_WARN, self::STATUS_FAIL, self::STATUS_INCONCLUSIVE );
 		if ( ! in_array( $status, $allowed, true ) ) {
 			$status = self::STATUS_INCONCLUSIVE;
@@ -151,6 +155,33 @@ class CASCR_Result {
 			'summary' => (string) $summary,
 			'items'   => $items,
 			'fix'     => (string) $fix,
+			'link'    => self::sanitize_link( $link ),
+		);
+	}
+
+	/**
+	 * Keeps only a well formed http(s) link with a label.
+	 *
+	 * A check hands this to the interface, which turns it into an anchor, so an
+	 * unvalidated value would end up in the document as a link target.
+	 *
+	 * @param mixed $link Link candidate.
+	 * @return array Empty array when there is nothing usable.
+	 */
+	private static function sanitize_link( $link ) {
+		if ( ! is_array( $link ) || empty( $link['url'] ) || empty( $link['label'] ) ) {
+			return array();
+		}
+
+		$url = esc_url_raw( $link['url'], array( 'http', 'https' ) );
+
+		if ( '' === $url ) {
+			return array();
+		}
+
+		return array(
+			'url'   => $url,
+			'label' => (string) $link['label'],
 		);
 	}
 

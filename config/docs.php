@@ -270,7 +270,7 @@ return array(
 	'two_factor_coverage'            => $cascr_doc(
 		__( 'Whether a second factor is available at all, and which administrators actually have one set up.', 'security-check-report' ),
 		__( 'Whether the feature exists matters far less than who uses it. One administrator without a second factor is the account that will be targeted.', 'security-check-report' ),
-		__( 'Set it up for the accounts that are missing it, or require it for the administrator role. Coverage can only be read for the more common plugins; for others this check says so rather than guessing.', 'security-check-report' )
+		__( 'Set it up for the accounts that are missing it, or require it for the administrator role. Two Factor, from the WordPress core team, is a solid free option. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys next to its login protection; it is named here because it fits, not because you need it. Coverage can only be read for the more common plugins; for others this check says so rather than guessing.', 'security-check-report' )
 	),
 	'application_password_inventory' => $cascr_doc(
 		__( 'Which application passwords exist for privileged accounts, when they were created, when they were last used and from where.', 'security-check-report' ),

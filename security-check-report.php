@@ -3,7 +3,7 @@
 Plugin Name: CMS ADMINS Security Check Report
 Plugin URI: https://wordpress.org/plugins/security-check-report
 Description: Runs a series of read-only security checks against your WordPress installation and turns the findings into a graded report with a short list of what to fix first.
-Version: 2.3.0
+Version: 2.3.1
 Requires at least: 7.0
 Requires PHP: 7.4
 Author: Patrick Schlesinger
@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'CASCR_VERSION', '2.3.0' );
+define( 'CASCR_VERSION', '2.3.1' );
 define( 'CASCR_PATH', plugin_dir_path( __FILE__ ) );
 define( 'CASCR_URL', plugin_dir_url( __FILE__ ) );
 

@@ -5,7 +5,7 @@ Tags: security, audit, hardening, scanner, site-health
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.3.0
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -179,6 +179,16 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 
 Releases before 2.2.0 are listed in changelog.txt.
 
+= 2.3.1 =
+
+* The screen is now laid out as three steps: start the check, read the result, go through everything else. Steps two and three say what they will contain before the first run, so the page explains itself.
+* The start button says what it does and how long it takes, and the note about the temporary file sits directly above it.
+* The result opens with a plain sentence, not just a letter: how many findings need attention now, how many are worth improving, and how many checks could not be completed.
+* The page scrolls to the result when a run finishes, instead of leaving it below the fold.
+* The priority list is now called what it is, a to-do list, and says to work through it in order.
+* A finding can carry a link to further help. The two-factor finding uses it to point at the Two Factor plugin from the WordPress core team and at ReportedIP Hive, which we build ourselves and name as ours.
+* Removed three interface strings and two stylesheet rules left behind by the rebuild.
+
 = 2.3.0 =
 
 **Rebuilt**
@@ -247,6 +257,9 @@ Releases before 2.2.0 are listed in changelog.txt.
 * Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
+
+= 2.3.1 =
+The screen now walks you through three steps and the result is stated in plain language, not just as a letter grade.
 
 = 2.3.0 =
 Fixes a cross-site scripting path in the report and several checks that reported healthy sites as insecure. Adds 25 checks, a priority list, a comparison with the previous run and a WP-CLI command.
