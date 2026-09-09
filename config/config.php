@@ -105,27 +105,41 @@ return array(
 	),
 
 	/*
-	 * Plugins that add a second authentication factor.
+	 * Plugins that add a second authentication factor, each with the user meta
+	 * it writes once an account has actually set the factor up.
+	 *
+	 * The meta matters as much as the plugin file. Without it the check cannot
+	 * tell an account that skipped the setup from one it simply cannot read,
+	 * and reports the reassuring answer to both. An empty list means the
+	 * storage is unknown, which is the one case where saying nothing is right.
+	 *
+	 * iThemes Security became Solid Security and then Kadence Security. All
+	 * three ship under the folder names below and keep the same user meta.
 	 */
 	'two_factor_plugins'       => array(
-		'two-factor/two-factor.php',
-		'two-factor-provider-webauthn/two-factor-provider-webauthn.php',
-		'wp-2fa/wp-2fa.php',
-		'wordfence-login-security/wordfence-login-security.php',
-		'miniorange-2-factor-authentication/miniorange_2_factor_settings.php',
-		'miniOrange-2-factor-authentication/miniorange-2-factor.php',
-		'duo-wordpress/duo.php',
-		'rublon/rublon.php',
-		'keyy-two-factor-authentication/keyy.php',
-		'google-authenticator/google-authenticator.php',
-		'wp-google-authenticator/wp-google-authenticator.php',
-		'two-factor-authentication/two-factor-authentication.php',
-		'better-wp-security/better-wp-security.php',
-		'ithemes-security-pro/ithemes-security-pro.php',
-		'shield-security/shield-security.php',
-		'wp-simple-firewall/wp-simple-firewall.php',
-		'defender-security/wp-defender.php',
-		'jetpack/jetpack.php',
+		'two-factor/two-factor.php'                     => array( '_two_factor_enabled_providers' ),
+		'two-factor-provider-webauthn/two-factor-provider-webauthn.php' => array( '_two_factor_enabled_providers' ),
+		'wp-2fa/wp-2fa.php'                             => array( 'wp_2fa_enabled_methods', 'wp_2fa_totp_key' ),
+		'wordfence-login-security/wordfence-login-security.php' => array(),
+		'miniorange-2-factor-authentication/miniorange_2_factor_settings.php' => array(),
+		'miniOrange-2-factor-authentication/miniorange-2-factor.php' => array(),
+		'duo-wordpress/duo.php'                         => array(),
+		'rublon/rublon.php'                             => array(),
+		'keyy-two-factor-authentication/keyy.php'       => array(),
+		'google-authenticator/google-authenticator.php' => array( 'googleauthenticator_enabled' ),
+		'wp-google-authenticator/wp-google-authenticator.php' => array( 'wpga_active' ),
+		'two-factor-authentication/two-factor-authentication.php' => array(),
+		'better-wp-security/better-wp-security.php'     => array( 'itsec_two_factor_enabled_providers' ),
+		'ithemes-security-pro/ithemes-security-pro.php' => array( 'itsec_two_factor_enabled_providers' ),
+		'solid-security/solid-security.php'             => array( 'itsec_two_factor_enabled_providers' ),
+		'solid-security-pro/solid-security-pro.php'     => array( 'itsec_two_factor_enabled_providers' ),
+		'kadence-security/kadence-security.php'         => array( 'itsec_two_factor_enabled_providers' ),
+		'kadence-security-pro/kadence-security-pro.php' => array( 'itsec_two_factor_enabled_providers' ),
+		'reportedip-hive/reportedip-hive.php'           => array( 'reportedip_hive_2fa_enabled' ),
+		'shield-security/shield-security.php'           => array(),
+		'wp-simple-firewall/wp-simple-firewall.php'     => array(),
+		'defender-security/wp-defender.php'             => array( '_wpdef_two_fa_enabled' ),
+		'jetpack/jetpack.php'                           => array(),
 	),
 
 	/*

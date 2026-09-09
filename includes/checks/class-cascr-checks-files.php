@@ -256,9 +256,34 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 					continue;
 				}
 
-				if ( in_array( strtolower( $file->getExtension() ), $dangerous, true ) ) {
-					$found[] = self::relative( $file->getPathname() );
+				if ( ! in_array( strtolower( $file->getExtension() ), $dangerous, true ) ) {
+					continue;
 				}
+
+				$reason = null;
+
+				if ( 'index.php' === strtolower( $file->getFilename() ) ) {
+					$reason = self::guard_verdict( $file->getPathname() );
+
+					if ( null === $reason ) {
+						continue;
+					}
+				}
+
+				// Size is the cheapest hint at what a file is, and for an
+				// index.php that did not pass as a guard the reason says which
+				// line of it to look at first.
+				$found[] = sprintf(
+					/* translators: 1: file path, 2: file size, already formatted, 3: why the file was reported, or an empty string. */
+					__( '%1$s (%2$s)%3$s', 'security-check-report' ),
+					self::relative( $file->getPathname() ),
+					size_format( (int) $file->getSize() ),
+					null === $reason ? '' : sprintf(
+						/* translators: %s: reason the file was reported, for example "it reads $_SERVER". */
+						__( ', reported because %s', 'security-check-report' ),
+						$reason
+					)
+				);
 			}
 		} catch ( Exception $e ) {
 			return CASCR_Result::inconclusive( __( 'The uploads directory could not be scanned completely.', 'security-check-report' ) );
@@ -283,6 +308,164 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			self::cap( $found ),
 			__( 'Media uploads never need to be executable. Inspect each file before deleting it.', 'security-check-report' )
 		);
+	}
+
+	/**
+	 * Why is this small file worth reporting, if it is?
+	 *
+	 * Every upload folder collects the same handful of files: an index.php with
+	 * nothing but a comment, or one that exits or answers 403 so the folder
+	 * cannot be listed. Reporting those buries the real findings and, since this
+	 * check counts as critical, drags the grade of an otherwise clean site down.
+	 *
+	 * The name alone decides nothing: only index.php is ever considered, and it
+	 * still has to pass here. A file is waved through when it stays under a few
+	 * kilobytes and reads no request data, runs no other file and reaches none of
+	 * the functions a dropped shell needs. Anything else stays a finding.
+	 *
+	 * @param string $path Absolute path.
+	 * @return string|null Null when the file is a guard, otherwise why it is not.
+	 */
+	private static function guard_verdict( $path ) {
+		if ( ! function_exists( 'token_get_all' ) ) {
+			return 'the tokeniser is unavailable';
+		}
+
+		$size = @filesize( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- An unreadable file stays a finding.
+
+		if ( false === $size ) {
+			return 'its size could not be read';
+		}
+
+		if ( $size > 8192 ) {
+			return 'it is too large to be a guard';
+		}
+
+		$contents = @file_get_contents( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file, read verbatim for tokenising.
+
+		if ( false === $contents ) {
+			return 'it could not be read';
+		}
+
+		$forbidden_tokens = array( T_EVAL, T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE, T_OPEN_TAG_WITH_ECHO, T_ECHO, T_PRINT );
+
+		// $_SERVER is left out on purpose. The most common guard of all builds
+		// its 403 header from SERVER_PROTOCOL, and without a call from the list
+		// below it cannot turn that into anything. The rest carry attacker
+		// input straight into the file and have no business in a guard.
+		$forbidden_globals = array( '$_GET', '$_POST', '$_REQUEST', '$_COOKIE', '$_FILES', '$_ENV', '$GLOBALS' );
+
+		$forbidden_calls = array(
+			'eval',
+			'assert',
+			'system',
+			'exec',
+			'passthru',
+			'shell_exec',
+			'popen',
+			'proc_open',
+			'create_function',
+			'call_user_func',
+			'call_user_func_array',
+			'base64_decode',
+			'gzinflate',
+			'gzuncompress',
+			'str_rot13',
+			'hex2bin',
+			'unserialize',
+			'file_get_contents',
+			'file_put_contents',
+			'fopen',
+			'fwrite',
+			'fputs',
+			'copy',
+			'rename',
+			'unlink',
+			'curl_exec',
+			'curl_init',
+			'move_uploaded_file',
+			'extract',
+			'preg_replace',
+			'preg_replace_callback',
+			'set_error_handler',
+		);
+
+		$tokens = @token_get_all( $contents ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Malformed input must not raise a parse warning.
+		$count  = count( $tokens );
+
+		for ( $i = 0; $i < $count; $i++ ) {
+			$token = $tokens[ $i ];
+
+			if ( ! is_array( $token ) ) {
+				// A backtick runs a shell command, and $ starts a variable variable.
+				if ( '`' === $token ) {
+					return 'it runs a shell command';
+				}
+
+				if ( '$' === $token ) {
+					return 'it builds a variable name at runtime';
+				}
+
+				continue;
+			}
+
+			if ( in_array( $token[0], $forbidden_tokens, true ) ) {
+				return sprintf(
+					/* translators: %s: a PHP keyword such as require or eval. */
+					__( 'it uses %s', 'security-check-report' ),
+					trim( $token[1] )
+				);
+			}
+
+			// Request data has no business in a guard file.
+			if ( T_VARIABLE === $token[0] && in_array( $token[1], $forbidden_globals, true ) ) {
+				return sprintf(
+					/* translators: %s: name of a PHP superglobal, for example $_GET. */
+					__( 'it reads %s', 'security-check-report' ),
+					$token[1]
+				);
+			}
+
+			// A variable used as a function name hides the call from this list.
+			if ( T_VARIABLE === $token[0] && self::next_is_call( $tokens, $i ) ) {
+				return 'it calls a function held in a variable';
+			}
+
+			if ( T_STRING === $token[0] && in_array( strtolower( $token[1] ), $forbidden_calls, true ) ) {
+				return sprintf(
+					/* translators: %s: name of a PHP function, for example base64_decode. */
+					__( 'it calls %s', 'security-check-report' ),
+					$token[1]
+				);
+			}
+
+			if ( T_INLINE_HTML === $token[0] && '' !== trim( $token[1] ) ) {
+				return 'it prints output of its own';
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Does an opening bracket follow, ignoring whitespace?
+	 *
+	 * @param array $tokens Token list from token_get_all().
+	 * @param int   $index  Position of the current token.
+	 * @return bool
+	 */
+	private static function next_is_call( $tokens, $index ) {
+		$count = count( $tokens );
+
+		for ( $i = $index + 1; $i < $count; $i++ ) {
+			if ( is_array( $tokens[ $i ] ) && T_WHITESPACE === $tokens[ $i ][0] ) {
+				continue;
+			}
+
+			return '(' === $tokens[ $i ];
+		}
+
+		return false;
 	}
 
 	/**

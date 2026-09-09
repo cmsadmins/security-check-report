@@ -412,7 +412,14 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 	 * @return array
 	 */
 	public static function two_factor_coverage() {
-		$plugins = self::active_from_list( 'two_factor_plugins' );
+		$plugins   = self::active_two_factor_plugins();
+		$meta_keys = array();
+
+		foreach ( $plugins as $keys ) {
+			$meta_keys = array_merge( $meta_keys, $keys );
+		}
+
+		$meta_keys = array_unique( $meta_keys );
 
 		$admins = self::privileged_users( true );
 
@@ -426,15 +433,17 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			);
 		}
 
-		$meta_keys = array(
-			'_two_factor_enabled_providers',
-			'wp_2fa_totp_key',
-			'wp_2fa_enabled_methods',
-			'itsec_two_factor_enabled_providers',
-		);
+		if ( empty( $meta_keys ) ) {
+			// Something adds a second factor, but none of the active plugins
+			// stores its state where this check can read it. Saying nothing is
+			// better than guessing either way.
+			return CASCR_Result::inconclusive(
+				__( 'A two-factor plugin is active, but which accounts use it cannot be read from here.', 'security-check-report' ),
+				__( 'Check the coverage in the plugin itself.', 'security-check-report' )
+			);
+		}
 
-		$without  = array();
-		$readable = false;
+		$without = array();
 
 		foreach ( $admins as $admin ) {
 			$has = false;
@@ -443,8 +452,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				$value = get_user_meta( $admin->ID, $key, true );
 
 				if ( ! empty( $value ) ) {
-					$has      = true;
-					$readable = true;
+					$has = true;
 					break;
 				}
 			}
@@ -454,17 +462,21 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			}
 		}
 
-		if ( ! $readable ) {
-			// A second factor is available but this plugin cannot see who uses
-			// it. Saying nothing is better than guessing either way.
-			return CASCR_Result::inconclusive(
-				__( 'A two-factor plugin is active, but which accounts use it cannot be read from here.', 'security-check-report' ),
-				__( 'Check the coverage in the plugin itself.', 'security-check-report' )
-			);
+		if ( empty( $without ) ) {
+			return CASCR_Result::pass( __( 'Every administrator has a second factor.', 'security-check-report' ), array_keys( $plugins ) );
 		}
 
-		if ( empty( $without ) ) {
-			return CASCR_Result::pass( __( 'Every administrator has a second factor.', 'security-check-report' ), $plugins );
+		if ( count( $without ) === count( $admins ) ) {
+			// The plugin is installed and nobody finished the setup, which is
+			// the same exposure as having no second factor at all. Earlier
+			// versions read that silence as "cannot tell" and stayed quiet.
+			return CASCR_Result::fail(
+				__( 'A two-factor plugin is active, but no administrator has set the second factor up.', 'security-check-report' ),
+				9,
+				self::cap( $without ),
+				__( 'Finish the setup for every administrator and require the second factor for the role. ReportedIP Hive, which we build ourselves, enforces it per role and covers TOTP, email and passkeys.', 'security-check-report' ),
+				self::hive_link()
+			);
 		}
 
 		return CASCR_Result::fail(
@@ -482,6 +494,37 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			self::cap( $without ),
 			__( 'Set up the second factor for those accounts, or require it for the administrator role.', 'security-check-report' )
 		);
+	}
+
+	/**
+	 * Which two-factor plugins are active, and what user meta does each write?
+	 *
+	 * @return array<string, string[]> Plugin name mapped to its user meta keys.
+	 */
+	private static function active_two_factor_plugins() {
+		self::load_plugin_api();
+
+		$active = array();
+
+		foreach ( (array) self::config( 'two_factor_plugins' ) as $plugin => $meta_keys ) {
+			// A third party may still hand us the old flat list.
+			if ( is_int( $plugin ) ) {
+				$plugin    = $meta_keys;
+				$meta_keys = array();
+			}
+
+			if ( ! is_plugin_active( $plugin ) ) {
+				continue;
+			}
+
+			$file = WP_PLUGIN_DIR . '/' . $plugin;
+			$data = file_exists( $file ) ? get_plugin_data( $file, false, false ) : array();
+			$name = ! empty( $data['Name'] ) ? $data['Name'] : basename( dirname( $plugin ) );
+
+			$active[ $name ] = (array) $meta_keys;
+		}
+
+		return $active;
 	}
 
 	/**

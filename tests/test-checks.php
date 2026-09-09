@@ -155,6 +155,34 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Two Factor', $result['fix'], 'The free option must be named first.' );
 	}
 
+	public function test_an_installed_two_factor_plugin_nobody_uses_is_a_finding() {
+		self::factory()->user->create( array( 'role' => 'administrator' ) );
+
+		$previous = get_option( 'active_plugins', array() );
+		update_option( 'active_plugins', array( 'two-factor/two-factor.php' ) );
+
+		$result = CASCR_Checks_Accounts::two_factor_coverage();
+
+		update_option( 'active_plugins', $previous );
+
+		$this->assertSame( 'fail', $result['status'], 'An unfinished setup is the same exposure as no second factor.' );
+		$this->assertNotEmpty( $result['items'] );
+		$this->assertNotEmpty( $result['link'] );
+	}
+
+	public function test_a_two_factor_plugin_with_unknown_storage_stays_inconclusive() {
+		self::factory()->user->create( array( 'role' => 'administrator' ) );
+
+		$previous = get_option( 'active_plugins', array() );
+		update_option( 'active_plugins', array( 'rublon/rublon.php' ) );
+
+		$result = CASCR_Checks_Accounts::two_factor_coverage();
+
+		update_option( 'active_plugins', $previous );
+
+		$this->assertSame( 'inconclusive', $result['status'], 'Without a known meta key the check must not guess.' );
+	}
+
 	public function test_a_check_that_throws_is_reported_as_inconclusive() {
 		add_filter(
 			'cascr_registry',
@@ -459,6 +487,94 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 		CASCR_Checks_Accounts::record_login( $user->user_login, $user );
 
 		$this->assertGreaterThan( 0, (int) get_user_meta( $user_id, CASCR_Checks_Accounts::META_LAST_LOGIN, true ) );
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Files
+	 * ------------------------------------------------------------------- */
+
+	/**
+	 * The shapes an upload folder guard actually takes in the wild, none of
+	 * which is worth reporting.
+	 *
+	 * @return array<string, string[]>
+	 */
+	public function guard_files() {
+		return array(
+			'silence'    => array( "<?php\n// Silence is golden.\n" ),
+			'bare tag'   => array( "<?php\n" ),
+			'exit'       => array( "<?php exit;\n" ),
+			'forbidden'  => array( "<?php\nheader( 'HTTP/1.0 403 Forbidden' );\nexit;\n" ),
+			'abspath'    => array( "<?php\nif ( ! defined( 'ABSPATH' ) ) {\n\texit;\n}\n" ),
+			'doc block'  => array( "<?php\n/**\n * Nothing to see here.\n */\n" ),
+			'protocol'   => array( "<?php header( \$_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden' ); exit;\n" ),
+		);
+	}
+
+	/**
+	 * @dataProvider guard_files
+	 *
+	 * @param string $contents File contents to write.
+	 */
+	public function test_guard_files_in_uploads_are_not_a_finding( $contents ) {
+		$dir = wp_upload_dir();
+
+		if ( empty( $dir['basedir'] ) || ! wp_mkdir_p( $dir['basedir'] . '/cascr-probe' ) ) {
+			$this->markTestSkipped( 'The uploads directory is not writable here.' );
+		}
+
+		$guard = $dir['basedir'] . '/cascr-probe/index.php';
+		file_put_contents( $guard, $contents ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Fixture.
+
+		$result = CASCR_Checks_Files::unallowed_files();
+
+		unlink( $guard );
+		rmdir( $dir['basedir'] . '/cascr-probe' );
+
+		$this->assertNotSame( 'fail', $result['status'], 'A guard file is what stops directory listing, not a finding.' );
+	}
+
+	/**
+	 * Files that must survive the guard filter, however they are named.
+	 *
+	 * @return array<string, string[]>
+	 */
+	public function shell_files() {
+		return array(
+			'request data'   => array( 'index.php', "<?php system( \$_GET['c'] );\n" ),
+			'eval'           => array( 'index.php', "<?php eval( 'phpinfo();' );\n" ),
+			'encoded'        => array( 'index.php', "<?php echo base64_decode( 'aGk=' );\n" ),
+			'backtick'       => array( 'index.php', "<?php echo `ls`;\n" ),
+			'variable call'  => array( 'index.php', "<?php \$f = 'phpinfo'; \$f();\n" ),
+			'plain php file' => array( 'notes.php', "<?php echo 'hello';\n" ),
+			'server echo'    => array( 'index.php', "<?php echo \$_SERVER['DOCUMENT_ROOT'];\n" ),
+			'cookie read'    => array( 'index.php', "<?php if ( ! empty( \$_COOKIE['x'] ) ) { header( 'Location: /' ); }\n" ),
+		);
+	}
+
+	/**
+	 * @dataProvider shell_files
+	 *
+	 * @param string $name     File name to write.
+	 * @param string $contents File contents to write.
+	 */
+	public function test_executable_uploads_are_still_reported( $name, $contents ) {
+		$dir = wp_upload_dir();
+
+		if ( empty( $dir['basedir'] ) || ! wp_mkdir_p( $dir['basedir'] . '/cascr-probe' ) ) {
+			$this->markTestSkipped( 'The uploads directory is not writable here.' );
+		}
+
+		$file = $dir['basedir'] . '/cascr-probe/' . $name;
+		file_put_contents( $file, $contents ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- Fixture.
+
+		$result = CASCR_Checks_Files::unallowed_files();
+
+		unlink( $file );
+		rmdir( $dir['basedir'] . '/cascr-probe' );
+
+		$this->assertSame( 'fail', $result['status'], 'A file that can do something must still be reported.' );
+		$this->assertNotEmpty( $result['items'] );
 	}
 
 	/* ---------------------------------------------------------------------

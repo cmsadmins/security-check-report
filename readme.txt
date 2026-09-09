@@ -5,7 +5,7 @@ Tags: security, audit, hardening, scanner, site-health
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -178,6 +178,15 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 == Changelog ==
 
 Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.3.2 =
+
+**Fixed**
+
+* The check for executable files in the uploads directory reported the empty index.php that WordPress and most plugins drop into every upload folder to stop directory listing. Those files are the opposite of a finding, and because the check counts as critical, a single one of them pulled an otherwise healthy site down to grade D. Across twenty sites the grade was identical for that reason alone. The check now reads such a file instead of judging it by name: an index.php passes only when it stays small and reads no request data, includes no other file, calls none of the functions a dropped shell needs and prints nothing of its own. Everything else is still reported, index.php included.
+* Every reported file now carries its size and, where an index.php did not pass, the reason it was reported. A guard file runs to a few hundred bytes, so the number alone usually settles what a file is.
+* Two-factor coverage could not tell an account that never finished the setup from one it simply could not read, and called both inconclusive. Each supported plugin is now listed together with the user meta it writes, so an installed plugin nobody uses is reported as the exposure it is, naming the accounts without a second factor.
+* Two-factor detection now covers ReportedIP Hive, Solid Security, Kadence Security, WP Defender and Google Authenticator. iThemes Security has been renamed twice and ships under three folder names, all of which are recognised.
 
 = 2.3.1 =
 
