@@ -123,6 +123,17 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			return CASCR_Result::pass( __( 'The theme and plugin editor is disabled.', 'security-check-report' ) );
 		}
 
+		// map_meta_cap() denies edit_plugins and edit_themes for either
+		// constant, so DISALLOW_FILE_MODS closes the editor as well. The item
+		// says which of the two is doing it, because only one of them also
+		// stops updates.
+		if ( defined( 'DISALLOW_FILE_MODS' ) && DISALLOW_FILE_MODS ) {
+			return CASCR_Result::pass(
+				__( 'The theme and plugin editor is disabled.', 'security-check-report' ),
+				array( __( 'DISALLOW_FILE_MODS closes the editor, DISALLOW_FILE_EDIT is not set', 'security-check-report' ) )
+			);
+		}
+
 		return CASCR_Result::fail(
 			__( 'The theme and plugin editor is available, so anyone who reaches an administrator account can run code.', 'security-check-report' ),
 			8,
@@ -211,15 +222,25 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			);
 		}
 
-		$config = ABSPATH . 'wp-config.php';
-		$age    = file_exists( $config ) ? time() - filemtime( $config ) : 0;
+		// There is no record of when the keys themselves changed. All that can
+		// be read is the modification time of the file they live in, which any
+		// unrelated edit resets and which a restored backup carries over from
+		// somewhere else. The wording stays with what was measured.
+		$config   = ABSPATH . 'wp-config.php';
+		$modified = file_exists( $config ) ? (int) filemtime( $config ) : 0;
 
-		if ( $age > YEAR_IN_SECONDS ) {
+		if ( $modified > 0 && ( time() - $modified ) > YEAR_IN_SECONDS ) {
 			return CASCR_Result::warn(
-				__( 'The authentication keys are set correctly but have not been rotated in over a year.', 'security-check-report' ),
+				__( 'The authentication keys are set correctly. wp-config.php has not been changed in over a year, which usually means the keys have not been rotated either.', 'security-check-report' ),
 				4,
-				array(),
-				__( 'Rotating the keys invalidates every stored session, which is the fastest way to lock out a stolen cookie.', 'security-check-report' )
+				array(
+					sprintf(
+						/* translators: %s: human readable time difference, for instance "14 months". */
+						__( 'wp-config.php was last modified %s ago; this is the age of the file, not of the keys', 'security-check-report' ),
+						human_time_diff( $modified, time() )
+					),
+				),
+				__( 'Generate a fresh set at api.wordpress.org/secret-key/1.1/salt/ and replace the block in wp-config.php. Rotating invalidates every stored session, which is the fastest way to lock out a stolen cookie. Everyone gets logged out once.', 'security-check-report' )
 			);
 		}
 
@@ -281,14 +302,16 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			$line = isset( $row[0] ) ? $row[0] : '';
 
 			// Full rights on the site database are normal on shared hosting.
-			// Full rights on every database, or the right to hand out rights,
-			// are not.
+			// Full rights on every database, or the right to hand out rights
+			// on every database, are not. A grant option that some hosts add
+			// to the site database alone hands out nothing the account does
+			// not already have there, so it is not counted.
 			if ( preg_match( '/\bALL PRIVILEGES\s+ON\s+\*\.\*/i', $line ) ) {
 				$excessive[] = __( 'all privileges on every database', 'security-check-report' );
 			}
 
-			if ( false !== stripos( $line, 'WITH GRANT OPTION' ) ) {
-				$excessive[] = __( 'may grant privileges to other accounts', 'security-check-report' );
+			if ( false !== stripos( $line, 'WITH GRANT OPTION' ) && preg_match( '/\bON\s+\*\.\*/i', $line ) ) {
+				$excessive[] = __( 'may grant privileges on every database to other accounts', 'security-check-report' );
 			}
 
 			foreach ( array( 'SUPER', 'FILE', 'PROCESS', 'SHUTDOWN' ) as $privilege ) {
@@ -364,7 +387,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 		}
 
 		if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-			$issues[] = __( 'ALTERNATE_WP_CRON is enabled, which appends scheduling parameters to visitor URLs', 'security-check-report' );
+			$issues[] = __( 'ALTERNATE_WP_CRON is enabled: it schedules through a redirect that carries doing_wp_cron in the address, which defeats page caching for that request and leaves the parameter in access logs and in referrers sent to other sites', 'security-check-report' );
 			$score    = max( $score, 4 );
 		}
 
@@ -373,8 +396,8 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 		if ( ! empty( $orphaned ) ) {
 			foreach ( $orphaned as $hook ) {
 				$issues[] = sprintf(
-					/* translators: %s: name of a scheduled hook with no code behind it. */
-					__( 'scheduled hook with no code behind it: %s', 'security-check-report' ),
+					/* translators: %s: name of a scheduled hook with no listener in this request. */
+					__( 'scheduled hook with no listener registered in this request: %s', 'security-check-report' ),
 					$hook
 				);
 			}
@@ -394,7 +417,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 
 		$fix = $disabled && $overdue > 0
 			? __( 'DISABLE_WP_CRON is set but nothing is triggering wp-cron.php. Set up a server cron job, or remove the constant.', 'security-check-report' )
-			: __( 'Review the scheduled events under Tools, Site Health, Info.', 'security-check-report' );
+			: __( 'WordPress ships no screen for scheduled events. List them with wp cron event list on the command line, or install a scheduler plugin to see them in the dashboard.', 'security-check-report' );
 
 		return $score >= CASCR_Result::THRESHOLD_FAIL
 			? CASCR_Result::fail( __( 'The scheduler needs attention.', 'security-check-report' ), $score, $issues, $fix )
@@ -458,26 +481,23 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 	}
 
 	/**
-	 * Do any options carry injected markup or foreign addresses?
+	 * Do any options carry injected code or scripts from another host?
 	 *
 	 * Search engine spam is written into the options table far more often than
 	 * into files, because it survives a plugin reinstall.
 	 *
+	 * Code fragments and foreign script tags are kept apart on purpose. A
+	 * fragment of PHP in an option has no legitimate reason to be there; a
+	 * script tag usually belongs to an analytics or consent tool and only
+	 * deserves a look, not an alarm.
+	 *
 	 * @return array
 	 */
 	public static function suspicious_options() {
-		$findings = array();
+		$code    = array();
+		$scripts = array();
 
 		$site = wp_parse_url( home_url(), PHP_URL_HOST );
-
-		if ( untrailingslashit( get_option( 'siteurl' ) ) !== untrailingslashit( get_option( 'home' ) ) ) {
-			$findings[] = sprintf(
-				/* translators: 1: siteurl option, 2: home option. */
-				__( 'siteurl (%1$s) and home (%2$s) point to different addresses', 'security-check-report' ),
-				get_option( 'siteurl' ),
-				get_option( 'home' )
-			);
-		}
 
 		$options = wp_load_alloptions();
 
@@ -491,7 +511,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 
 				foreach ( array( 'base64_decode(', 'eval(', 'gzinflate(', 'str_rot13(' ) as $needle ) {
 					if ( false !== strpos( $value, $needle ) ) {
-						$findings[] = sprintf(
+						$code[] = sprintf(
 							/* translators: 1: option name, 2: the suspicious code fragment. */
 							__( 'option %1$s contains %2$s', 'security-check-report' ),
 							$name,
@@ -504,7 +524,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 				if ( preg_match_all( '#<script[^>]+src=["\']?(https?:)?//([^"\'/\s>]+)#i', $value, $matches ) ) {
 					foreach ( $matches[2] as $host ) {
 						if ( $host !== $site ) {
-							$findings[] = sprintf(
+							$scripts[] = sprintf(
 								/* translators: 1: option name, 2: external host name. */
 								__( 'option %1$s loads a script from %2$s', 'security-check-report' ),
 								$name,
@@ -516,27 +536,46 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			}
 		}
 
-		$findings = array_values( array_unique( $findings ) );
+		$code    = array_values( array_unique( $code ) );
+		$scripts = array_values( array_unique( $scripts ) );
 
-		if ( empty( $findings ) ) {
-			return CASCR_Result::pass( __( 'No injected markup or foreign addresses were found in the options.', 'security-check-report' ) );
+		if ( ! empty( $code ) ) {
+			return CASCR_Result::fail(
+				sprintf(
+					/* translators: %d: number of option entries containing code fragments. */
+					_n(
+						'%d option entry contains a code fragment.',
+						'%d option entries contain code fragments.',
+						count( $code ),
+						'security-check-report'
+					),
+					count( $code )
+				),
+				9,
+				self::cap( array_merge( $code, $scripts ) ),
+				__( 'Look at each entry before removing it. An option that stores PHP is worth tracing back to the plugin that wrote it.', 'security-check-report' )
+			);
 		}
 
-		return CASCR_Result::fail(
-			sprintf(
-				/* translators: %d: number of suspicious option entries. */
-				_n(
-					'%d option entry looks injected.',
-					'%d option entries look injected.',
-					count( $findings ),
-					'security-check-report'
+		if ( ! empty( $scripts ) ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %d: number of option entries loading a script from another host. */
+					_n(
+						'%d option entry loads a script from another host.',
+						'%d option entries load a script from another host.',
+						count( $scripts ),
+						'security-check-report'
+					),
+					count( $scripts )
 				),
-				count( $findings )
-			),
-			9,
-			self::cap( $findings ),
-			__( 'Check each entry. Some are legitimate, for instance analytics snippets a plugin stores on purpose.', 'security-check-report' )
-		);
+				4,
+				self::cap( $scripts ),
+				__( 'Analytics and consent tools store script tags this way on purpose. Go through the list once and check that every host is one you chose.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::pass( __( 'No option contains a code fragment or loads a script from another host.', 'security-check-report' ) );
 	}
 
 	/**
@@ -606,11 +645,14 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			);
 		}
 
+		// A limit in the web server, in a firewall or at a reverse proxy is
+		// invisible from inside WordPress, so this says what was looked at
+		// rather than claiming there is no limit anywhere.
 		return CASCR_Result::fail(
-			__( 'Nothing limits repeated login attempts, so passwords can be guessed at full speed.', 'security-check-report' ),
+			__( 'No plugin that limits repeated login attempts is active. This check can only see plugins, so a limit in the web server or in front of the site does not show up here.', 'security-check-report' ),
 			8,
 			array(),
-			__( 'Install a login limiter, or rate limit wp-login.php and the XML-RPC endpoint at the server.', 'security-check-report' )
+			__( 'Install a login limiter, or rate limit wp-login.php and the XML-RPC endpoint at the server. If a limit is already in place outside WordPress, mute this check.', 'security-check-report' )
 		);
 	}
 
@@ -630,18 +672,23 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 		}
 
 		return CASCR_Result::warn(
-			__( 'No password policy is enforced. WordPress warns about weak passwords but still accepts them.', 'security-check-report' ),
+			__( 'No password policy plugin is active. This check can only see plugins, so a rule enforced in a theme, in an identity provider or by a hosting platform does not show up here. On its own, WordPress warns about weak passwords and then accepts them.', 'security-check-report' ),
 			5,
 			array(),
-			__( 'Enforce a minimum strength for accounts that can publish or administer.', 'security-check-report' )
+			__( 'Enforce a minimum strength for accounts that can publish or administer. If that already happens outside WordPress, mute this check.', 'security-check-report' )
 		);
 	}
 
 	/**
-	 * Scheduled hooks that no code listens to any more.
+	 * Scheduled hooks that nothing listens to in this request.
 	 *
 	 * Replaces the previous heuristic, which flagged any hook name made of
 	 * eight to twelve lowercase letters and therefore caught legitimate ones.
+	 *
+	 * has_action() only knows the callbacks registered for the request that is
+	 * running, so a plugin that hooks up in the front end alone shows up here
+	 * during an admin run. The item text says so rather than claiming the code
+	 * is gone.
 	 *
 	 * @param array $crons Output of _get_cron_array().
 	 * @return string[]

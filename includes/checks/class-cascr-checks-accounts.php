@@ -20,6 +20,32 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 	const META_LAST_LOGIN = 'cascr_last_login';
 
 	/**
+	 * How many accounts a single user query returns at most.
+	 */
+	const USER_QUERY_LIMIT = 200;
+
+	/**
+	 * Whether the last privileged_users() call ran into that limit.
+	 *
+	 * A site with more privileged accounts than the limit gets an answer about
+	 * the first few hundred of them. Saying so is the difference between a
+	 * result and a result that looks like the whole picture.
+	 *
+	 * @var bool
+	 */
+	private static $user_query_capped = false;
+
+	/**
+	 * Meta values that mean the second factor is off rather than set up.
+	 *
+	 * Google Authenticator stores the string "disabled", which is not empty,
+	 * so an emptiness test reads it as protection.
+	 *
+	 * @var string[]
+	 */
+	private static $factor_off_values = array( '', '0', 'disabled', 'off', 'none' );
+
+	/**
 	 * Roles whose accounts can publish, install or administer.
 	 *
 	 * @var string[]
@@ -66,11 +92,14 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			array_merge(
 				$args,
 				array(
-					'number' => 200,
+					'number' => self::USER_QUERY_LIMIT,
 					'fields' => 'ID',
 				)
 			)
 		);
+
+		self::$user_query_capped = count( $ids ) >= self::USER_QUERY_LIMIT;
+
 		$ids = array_map( 'intval', $ids );
 
 		if ( is_multisite() ) {
@@ -94,6 +123,75 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		}
 
 		return $users;
+	}
+
+	/**
+	 * Sentence to append when the account query hit its limit.
+	 *
+	 * @return string Empty string when every privileged account was seen.
+	 */
+	private static function query_limit_note() {
+		if ( ! self::$user_query_capped ) {
+			return '';
+		}
+
+		return ' ' . sprintf(
+			/* translators: %d: maximum number of accounts a single query returns. */
+			__( 'This site has more privileged accounts than one query returns, so only the first %d were looked at.', 'security-check-report' ),
+			self::USER_QUERY_LIMIT
+		);
+	}
+
+	/**
+	 * Translated name of a role, falling back to its slug.
+	 *
+	 * The slug is what WordPress stores and what nobody recognises: the
+	 * settings screen offers "Subscriber", not "subscriber".
+	 *
+	 * @param string $slug Role slug.
+	 * @return string
+	 */
+	private static function role_name( $slug ) {
+		$roles = wp_roles();
+
+		if ( $roles instanceof WP_Roles ) {
+			$names = $roles->get_names();
+
+			if ( isset( $names[ $slug ] ) ) {
+				return translate_user_role( $names[ $slug ] );
+			}
+		}
+
+		return (string) $slug;
+	}
+
+	/**
+	 * Does a meta value mean the account actually has a second factor?
+	 *
+	 * Plugins write an off state as often as they delete the meta, and every
+	 * one of those values survives an emptiness test.
+	 *
+	 * @param mixed $value Stored meta value.
+	 * @return bool
+	 */
+	private static function factor_is_set( $value ) {
+		if ( is_array( $value ) ) {
+			foreach ( $value as $entry ) {
+				if ( self::factor_is_set( $entry ) ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		// A stored object is whatever the plugin serialised; there is no off
+		// value to recognise in it, so its presence has to count.
+		if ( is_object( $value ) ) {
+			return true;
+		}
+
+		return ! in_array( strtolower( trim( (string) $value ) ), self::$factor_off_values, true );
 	}
 
 	/**
@@ -149,7 +247,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 						'security-check-report'
 					),
 					count( $users )
-				)
+				) . self::query_limit_note()
 			);
 		}
 
@@ -215,7 +313,12 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		if ( $count > 5 ) {
 			$findings[] = sprintf(
 				/* translators: %d: number of administrator accounts. */
-				__( '%d accounts hold administrator rights', 'security-check-report' ),
+				_n(
+					'%d account holds administrator rights',
+					'%d accounts hold administrator rights',
+					$count,
+					'security-check-report'
+				),
 				$count
 			);
 			$score = 5;
@@ -282,6 +385,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		}
 
 		$findings = array();
+		$drift    = array();
 		$snapshot = array();
 
 		foreach ( $roles->roles as $slug => $role ) {
@@ -318,13 +422,13 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 
 			foreach ( $snapshot as $slug => $hash ) {
 				if ( ! isset( $baseline[ $slug ] ) ) {
-					$findings[] = sprintf(
+					$drift[] = sprintf(
 						/* translators: %s: role slug. */
 						__( 'the role %s was added after the first scan', 'security-check-report' ),
 						$slug
 					);
 				} elseif ( $baseline[ $slug ] !== $hash ) {
-					$findings[] = sprintf(
+					$drift[] = sprintf(
 						/* translators: %s: role slug. */
 						__( 'the capabilities of the role %s changed after the first scan', 'security-check-report' ),
 						$slug
@@ -333,16 +437,29 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			}
 		}
 
-		if ( empty( $findings ) ) {
-			return CASCR_Result::pass( __( 'No role below administrator holds administrator-level capabilities.', 'security-check-report' ) );
+		// Two questions share this check, and only one of them is an
+		// escalation. Installing a shop or a membership plugin adds roles, and
+		// reporting that as full control below administrator says more than
+		// the list underneath it can support.
+		if ( ! empty( $findings ) ) {
+			return CASCR_Result::fail(
+				__( 'Roles below administrator hold capabilities that amount to full control.', 'security-check-report' ),
+				9,
+				self::cap( array_merge( $findings, $drift ) ),
+				__( 'Some plugins add these on purpose. Anything you cannot account for should be removed.', 'security-check-report' )
+			);
 		}
 
-		return CASCR_Result::fail(
-			__( 'Roles below administrator hold capabilities that amount to full control.', 'security-check-report' ),
-			9,
-			self::cap( $findings ),
-			__( 'Some plugins add these on purpose. Anything you cannot account for should be removed.', 'security-check-report' )
-		);
+		if ( ! empty( $drift ) ) {
+			return CASCR_Result::warn(
+				__( 'The role definitions changed since the first scan, but no role below administrator gained administrator-level capabilities.', 'security-check-report' ),
+				5,
+				self::cap( $drift ),
+				__( 'Plugins add and adjust roles when they are installed. Match the list against what was installed, and remove what nobody asked for.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::pass( __( 'No role below administrator holds administrator-level capabilities.', 'security-check-report' ) );
 	}
 
 	/**
@@ -365,6 +482,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		$role   = get_option( 'default_role' );
 		$object = get_role( $role );
 		$caps   = $object ? array_keys( array_filter( $object->capabilities ) ) : array();
+		$label  = self::role_name( $role );
 
 		$dangerous = array_intersect( self::$escalation_caps, $caps );
 
@@ -373,7 +491,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				sprintf(
 					/* translators: %s: name of the default role for new accounts. */
 					__( 'Anyone can register and immediately receives the role %s, which carries administrator-level capabilities.', 'security-check-report' ),
-					$role
+					$label
 				),
 				10,
 				$dangerous,
@@ -386,7 +504,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				sprintf(
 					/* translators: %s: name of the default role for new accounts. */
 					__( 'Anyone can register and immediately receives the role %s, which may publish.', 'security-check-report' ),
-					$role
+					$label
 				),
 				8,
 				array(),
@@ -398,7 +516,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			sprintf(
 				/* translators: %s: name of the default role for new accounts. */
 				__( 'Registration is open. New accounts receive the role %s.', 'security-check-report' ),
-				$role
+				$label
 			),
 			4,
 			array(),
@@ -428,7 +546,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				__( 'No second factor is available, so a stolen password is enough to reach the dashboard.', 'security-check-report' ),
 				9,
 				array(),
-				__( 'Install a two-factor plugin and require it at least for administrators. Two Factor, maintained by the WordPress core team, is a solid free choice. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys alongside its login protection.', 'security-check-report' ),
+				__( 'Install a two-factor plugin and require it at least for administrators. Two Factor is a widely used free plugin kept up by WordPress contributors and is a solid choice. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys in its Full Edition; the copy in the plugin directory is Hive Light and brings login protection only.', 'security-check-report' ),
 				self::hive_link()
 			);
 		}
@@ -451,7 +569,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			foreach ( $meta_keys as $key ) {
 				$value = get_user_meta( $admin->ID, $key, true );
 
-				if ( ! empty( $value ) ) {
+				if ( self::factor_is_set( $value ) ) {
 					$has = true;
 					break;
 				}
@@ -474,7 +592,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				__( 'A two-factor plugin is active, but no administrator has set the second factor up.', 'security-check-report' ),
 				9,
 				self::cap( $without ),
-				__( 'Finish the setup for every administrator and require the second factor for the role. ReportedIP Hive, which we build ourselves, enforces it per role and covers TOTP, email and passkeys.', 'security-check-report' ),
+				__( 'Finish the setup for every administrator and require the second factor for the role. ReportedIP Hive, which we build ourselves, enforces it per role in its Full Edition; the copy in the plugin directory is Hive Light and brings login protection only.', 'security-check-report' ),
 				self::hive_link()
 			);
 		}
@@ -507,7 +625,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 	private static function hive_link() {
 		return array(
 			'url'   => 'https://reportedip.com/products/wordpress-plugin/',
-			'label' => __( 'ReportedIP Hive, our own plugin with TOTP, email and passkeys', 'security-check-report' ),
+			'label' => __( 'ReportedIP Hive, our own plugin: TOTP, email and passkeys are in the Full Edition', 'security-check-report' ),
 		);
 	}
 
@@ -525,8 +643,14 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			return CASCR_Result::pass( __( 'This WordPress version has no application passwords.', 'security-check-report' ) );
 		}
 
+		// WordPress refuses application passwords over plain HTTP, so on such a
+		// site this says nothing about whether anyone switched them off, and
+		// the ones already issued stay in the database either way.
 		if ( function_exists( 'wp_is_application_passwords_available' ) && ! wp_is_application_passwords_available() ) {
-			return CASCR_Result::pass( __( 'Application passwords are switched off on this site.', 'security-check-report' ) );
+			return CASCR_Result::inconclusive(
+				__( 'Application passwords are unavailable here. WordPress requires HTTPS for them, so whether they were switched off deliberately cannot be told apart from that, and passwords issued earlier are not listed.', 'security-check-report' ),
+				__( 'Serve the site over HTTPS and run the check again. Until then, review the existing application passwords in each user profile.', 'security-check-report' )
+			);
 		}
 
 		$users = self::privileged_users();
@@ -575,7 +699,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		}
 
 		if ( empty( $all ) ) {
-			return CASCR_Result::pass( __( 'No application passwords are in use by privileged accounts.', 'security-check-report' ) );
+			return CASCR_Result::pass( __( 'No application passwords are in use by privileged accounts.', 'security-check-report' ) . self::query_limit_note() );
 		}
 
 		if ( empty( $stale ) ) {
@@ -589,7 +713,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 						'security-check-report'
 					),
 					count( $all )
-				),
+				) . self::query_limit_note(),
 				self::cap( $all )
 			);
 		}
@@ -631,8 +755,9 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 
 		$items = array( isset( $open[ $setting ] ) ? $open[ $setting ] : $setting );
 
-		$role = get_option( 'default_role' );
-		$caps = get_role( $role ) ? array_keys( array_filter( get_role( $role )->capabilities ) ) : array();
+		$role  = get_option( 'default_role' );
+		$label = self::role_name( $role );
+		$caps  = get_role( $role ) ? array_keys( array_filter( get_role( $role )->capabilities ) ) : array();
 
 		$dangerous = array_intersect( self::$escalation_caps, $caps );
 
@@ -641,11 +766,11 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 				sprintf(
 					/* translators: %s: name of the default role for new accounts. */
 					__( 'Network registration is open and new accounts receive the role %s on this site, which carries administrator-level capabilities.', 'security-check-report' ),
-					$role
+					$label
 				),
 				10,
 				array_merge( $items, $dangerous ),
-				__( 'Under Network Admin, Settings, set registration to none, or lower the default role of this site.', 'security-check-report' )
+				__( 'Under Network Admin, Settings, Registration Settings, choose "Registration is disabled", or lower the default role of this site.', 'security-check-report' )
 			);
 		}
 
@@ -653,11 +778,11 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			sprintf(
 				/* translators: %s: name of the default role for new accounts. */
 				__( 'Network registration is open. New accounts receive the role %s on this site.', 'security-check-report' ),
-				$role
+				$label
 			),
 			4,
 			$items,
-			__( 'If the network does not need public sign-ups, set registration to none under Network Admin, Settings.', 'security-check-report' )
+			__( 'If the network does not need public sign-ups, choose "Registration is disabled" under Network Admin, Settings, Registration Settings.', 'security-check-report' )
 		);
 	}
 

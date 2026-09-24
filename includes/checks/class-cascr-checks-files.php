@@ -20,6 +20,17 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 	const PROBE_PREFIX = 'cascr-test-';
 
 	/**
+	 * Files from the exposed list that are running configuration.
+	 *
+	 * .user.ini is the per-directory INI of the CGI and FastCGI builds and
+	 * .htpasswd holds the credentials of a live HTTP authentication. Deleting
+	 * either changes how the site runs, so they get their own advice.
+	 *
+	 * @var string[]
+	 */
+	private static $active_config_files = array( '.user.ini', '.htpasswd' );
+
+	/**
 	 * Can wp-config.php be written to by the web server?
 	 *
 	 * @return array
@@ -237,10 +248,15 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			return CASCR_Result::inconclusive( __( 'The uploads directory could not be read.', 'security-check-report' ) );
 		}
 
-		$dangerous = array( 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'php8', 'phps', 'phar', 'sh', 'cgi', 'pl', 'py', 'exe' );
-		$found     = array();
-		$visited   = 0;
-		$limit     = 20000;
+		// Only the first group is something a web server hands to an
+		// interpreter. An installer or a shell script distributed through the
+		// media library is a questionable upload, not code execution.
+		$server_side = array( 'php', 'phtml', 'php3', 'php4', 'php5', 'php7', 'php8', 'phps', 'phar', 'cgi', 'pl' );
+		$standalone  = array( 'sh', 'py', 'exe' );
+		$found       = array();
+		$inert       = array();
+		$visited     = 0;
+		$limit       = 20000;
 
 		try {
 			$iterator = new RecursiveIteratorIterator(
@@ -256,7 +272,10 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 					continue;
 				}
 
-				if ( ! in_array( strtolower( $file->getExtension() ), $dangerous, true ) ) {
+				$extension = strtolower( $file->getExtension() );
+				$runnable  = in_array( $extension, $server_side, true );
+
+				if ( ! $runnable && ! in_array( $extension, $standalone, true ) ) {
 					continue;
 				}
 
@@ -273,7 +292,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 				// Size is the cheapest hint at what a file is, and for an
 				// index.php that did not pass as a guard the reason says which
 				// line of it to look at first.
-				$found[] = sprintf(
+				$entry = sprintf(
 					/* translators: 1: file path, 2: file size, already formatted, 3: why the file was reported, or an empty string. */
 					__( '%1$s (%2$s)%3$s', 'security-check-report' ),
 					self::relative( $file->getPathname() ),
@@ -284,30 +303,54 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 						$reason
 					)
 				);
+
+				if ( $runnable ) {
+					$found[] = $entry;
+				} else {
+					$inert[] = $entry;
+				}
 			}
 		} catch ( Exception $e ) {
 			return CASCR_Result::inconclusive( __( 'The uploads directory could not be scanned completely.', 'security-check-report' ) );
 		}
 
-		if ( empty( $found ) ) {
-			return CASCR_Result::pass( __( 'The uploads directory holds no executable files.', 'security-check-report' ) );
+		if ( ! empty( $found ) ) {
+			return CASCR_Result::fail(
+				sprintf(
+					/* translators: %d: number of executable files found in uploads. */
+					_n(
+						'%d executable file sits in the uploads directory.',
+						'%d executable files sit in the uploads directory.',
+						count( $found ),
+						'security-check-report'
+					),
+					count( $found )
+				),
+				9,
+				self::cap( array_merge( $found, $inert ) ),
+				__( 'Media uploads never need to be executable. Inspect each file before deleting it.', 'security-check-report' )
+			);
 		}
 
-		return CASCR_Result::fail(
-			sprintf(
-				/* translators: %d: number of executable files found in uploads. */
-				_n(
-					'%d executable file sits in the uploads directory.',
-					'%d executable files sit in the uploads directory.',
-					count( $found ),
-					'security-check-report'
+		if ( ! empty( $inert ) ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %d: number of files in uploads that the web server does not run. */
+					_n(
+						'%d file that the web server does not run sits in the uploads directory.',
+						'%d files that the web server does not run sit in the uploads directory.',
+						count( $inert ),
+						'security-check-report'
+					),
+					count( $inert )
 				),
-				count( $found )
-			),
-			9,
-			self::cap( $found ),
-			__( 'Media uploads never need to be executable. Inspect each file before deleting it.', 'security-check-report' )
-		);
+				5,
+				self::cap( $inert ),
+				__( 'Installers and scripts handed out through the media library are downloads, not code this site runs. Check that each one is meant to be there.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::pass( __( 'The uploads directory holds no executable files.', 'security-check-report' ) );
 	}
 
 	/**
@@ -328,23 +371,23 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 	 */
 	private static function guard_verdict( $path ) {
 		if ( ! function_exists( 'token_get_all' ) ) {
-			return 'the tokeniser is unavailable';
+			return __( 'the tokeniser is unavailable', 'security-check-report' );
 		}
 
 		$size = @filesize( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- An unreadable file stays a finding.
 
 		if ( false === $size ) {
-			return 'its size could not be read';
+			return __( 'its size could not be read', 'security-check-report' );
 		}
 
 		if ( $size > 8192 ) {
-			return 'it is too large to be a guard';
+			return __( 'it is too large to be a guard', 'security-check-report' );
 		}
 
 		$contents = @file_get_contents( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Local file, read verbatim for tokenising.
 
 		if ( false === $contents ) {
-			return 'it could not be read';
+			return __( 'it could not be read', 'security-check-report' );
 		}
 
 		$forbidden_tokens = array( T_EVAL, T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE, T_OPEN_TAG_WITH_ECHO, T_ECHO, T_PRINT );
@@ -399,11 +442,11 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			if ( ! is_array( $token ) ) {
 				// A backtick runs a shell command, and $ starts a variable variable.
 				if ( '`' === $token ) {
-					return 'it runs a shell command';
+					return __( 'it runs a shell command', 'security-check-report' );
 				}
 
 				if ( '$' === $token ) {
-					return 'it builds a variable name at runtime';
+					return __( 'it builds a variable name at runtime', 'security-check-report' );
 				}
 
 				continue;
@@ -428,7 +471,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 
 			// A variable used as a function name hides the call from this list.
 			if ( T_VARIABLE === $token[0] && self::next_is_call( $tokens, $i ) ) {
-				return 'it calls a function held in a variable';
+				return __( 'it calls a function held in a variable', 'security-check-report' );
 			}
 
 			if ( T_STRING === $token[0] && in_array( strtolower( $token[1] ), $forbidden_calls, true ) ) {
@@ -440,7 +483,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			}
 
 			if ( T_INLINE_HTML === $token[0] && '' !== trim( $token[1] ) ) {
-				return 'it prints output of its own';
+				return __( 'it prints output of its own', 'security-check-report' );
 			}
 		}
 
@@ -521,12 +564,27 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			return CASCR_Result::pass( __( 'PHP files in the uploads directory are not served.', 'security-check-report' ) );
 		}
 
-		if ( false !== strpos( wp_remote_retrieve_body( $response ), $marker ) ) {
+		$body = trim( wp_remote_retrieve_body( $response ) );
+
+		// An interpreter that ran the probe echoes the marker and nothing
+		// else. A server handing the file out as text returns the marker too,
+		// with the opening PHP tag still around it, and that is a different
+		// problem with a different fix.
+		if ( $marker === $body ) {
 			return CASCR_Result::fail(
 				__( 'The server runs PHP files from the uploads directory, which turns any file upload flaw into code execution.', 'security-check-report' ),
 				9,
 				array(),
-				__( 'Block PHP in the uploads directory in the server configuration, or add an .htaccess there that denies .php files.', 'security-check-report' )
+				self::with_rule_file_note( __( 'Deny .php files in the uploads directory.', 'security-check-report' ) )
+			);
+		}
+
+		if ( false !== strpos( $body, $marker ) ) {
+			return CASCR_Result::fail(
+				__( 'The server does not run PHP files in the uploads directory but hands them out as text, so anything uploaded there can be read back line by line.', 'security-check-report' ),
+				8,
+				array(),
+				self::with_rule_file_note( __( 'Deny access to .php files in the uploads directory instead of only switching the interpreter off for them.', 'security-check-report' ) )
 			);
 		}
 
@@ -580,7 +638,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 				),
 				10,
 				$served,
-				__( 'Delete the files. Anything readable here can contain database credentials and API keys.', 'security-check-report' )
+				__( 'Delete the files. Anything readable here can contain database credentials and API keys.', 'security-check-report' ) . self::active_config_note( $served )
 			);
 		}
 
@@ -598,7 +656,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 				),
 				5,
 				$present,
-				__( 'Move the files out of the web root. A server configuration change is all it takes to expose them.', 'security-check-report' )
+				__( 'Move the files out of the web root. A server configuration change is all it takes to expose them.', 'security-check-report' ) . self::active_config_note( $present )
 			);
 		}
 
@@ -679,9 +737,17 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 
 		$served  = array();
 		$present = array();
+		$unknown = array();
 
 		foreach ( $found as $relative => $absolute ) {
 			$public = CASCR_Http::is_public( home_url( '/' . $relative ) );
+
+			// A failed request is not an answer. Reading it as "not served"
+			// is the wrong way round to be wrong about a database dump.
+			if ( null === $public ) {
+				$unknown[] = $relative;
+				continue;
+			}
 
 			if ( $public ) {
 				$served[] = sprintf(
@@ -704,20 +770,27 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			);
 		}
 
-		return CASCR_Result::warn(
-			sprintf(
-				/* translators: %d: number of dumps or archives found. */
-				_n(
-					'%d database dump or archive sits in the web root but is not served.',
-					'%d database dumps or archives sit in the web root but are not served.',
-					count( $present ),
-					'security-check-report'
+		if ( ! empty( $present ) ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %d: number of dumps or archives found. */
+					_n(
+						'%d database dump or archive sits in the web root but is not served.',
+						'%d database dumps or archives sit in the web root but are not served.',
+						count( $present ),
+						'security-check-report'
+					),
+					count( $present )
 				),
-				count( $present )
-			),
-			6,
-			$present,
-			__( 'Move the files somewhere outside the web root.', 'security-check-report' )
+				6,
+				$present,
+				__( 'Move the files somewhere outside the web root.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::inconclusive(
+			__( 'A database dump or archive lies in the web root, and whether the server hands it out could not be verified.', 'security-check-report' ),
+			__( 'Move the files somewhere outside the web root rather than waiting for the answer.', 'security-check-report' )
 		);
 	}
 
@@ -876,7 +949,9 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			? strtolower( sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) )
 			: '';
 
-		if ( false !== strpos( $server, 'nginx' ) || false !== strpos( $server, 'caddy' ) ) {
+		// On IIS, WordPress writes web.config and never .htaccess, so the
+		// advice below would leave a warning that nothing can clear.
+		if ( false !== strpos( $server, 'nginx' ) || false !== strpos( $server, 'caddy' ) || false !== strpos( $server, 'microsoft-iis' ) ) {
 			return CASCR_Result::info(
 				__( 'This server does not use .htaccess. Its rules live in the server configuration and cannot be inspected from here.', 'security-check-report' )
 			);
@@ -891,6 +966,39 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			5,
 			array(),
 			__( 'Save the permalink settings once. WordPress writes a basic .htaccess by itself.', 'security-check-report' )
+		);
+	}
+
+	/**
+	 * Appends where a deny rule belongs, which depends on the web server.
+	 *
+	 * An .htaccess only does anything on Apache and LiteSpeed, and there only
+	 * where AllowOverride permits it.
+	 *
+	 * @param string $fix Remediation sentence.
+	 * @return string
+	 */
+	private static function with_rule_file_note( $fix ) {
+		return $fix . ' ' . __( 'On Apache and LiteSpeed an .htaccess in that directory does it, as long as AllowOverride allows the rule; on nginx and Caddy it belongs in the server configuration.', 'security-check-report' );
+	}
+
+	/**
+	 * Appends the exception for files that are running configuration.
+	 *
+	 * @param string[] $names File names that were reported.
+	 * @return string Empty string when none of them is live configuration.
+	 */
+	private static function active_config_note( $names ) {
+		$active = array_intersect( self::$active_config_files, $names );
+
+		if ( empty( $active ) ) {
+			return '';
+		}
+
+		return ' ' . sprintf(
+			/* translators: %s: comma separated file names, for example ".user.ini, .htpasswd". */
+			__( 'Keep %s: those are running configuration, not leftovers. Deny access to them at the server instead of deleting them.', 'security-check-report' ),
+			implode( ', ', $active )
 		);
 	}
 

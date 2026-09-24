@@ -20,6 +20,20 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 	const HSTS_MIN_AGE = 15552000;
 
 	/**
+	 * Days of remaining certificate lifetime that count as a failure.
+	 */
+	const CERT_FAIL_DAYS = 14;
+
+	/**
+	 * Days of remaining certificate lifetime that count as a warning.
+	 *
+	 * Ballot SC-081v3 takes the maximum certificate lifetime down to 100 days
+	 * in March 2027 and to 47 in 2029, so a renewal that only happens when
+	 * somebody remembers it will start to run out of room.
+	 */
+	const CERT_WARN_DAYS = 30;
+
+	/**
 	 * Is the whole site served over HTTPS?
 	 *
 	 * The previous version called is_ssl(), which only says whether the
@@ -72,6 +86,11 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 	/**
 	 * How long is the certificate still valid, and over which protocol?
+	 *
+	 * Peer verification is switched off on purpose: the question here is the
+	 * expiry date, and a connection that is refused answers nothing at all.
+	 * The price is that the trust chain and the host name go unchecked, which
+	 * is why no result of this check calls a certificate trusted.
 	 *
 	 * @return array
 	 */
@@ -132,7 +151,20 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			return CASCR_Result::inconclusive( __( 'The certificate could not be parsed.', 'security-check-report' ) );
 		}
 
-		$expires   = (int) $cert['validTo_time_t'];
+		return self::certificate_result( (int) $cert['validTo_time_t'], $protocol );
+	}
+
+	/**
+	 * Turns an expiry date and a protocol version into a verdict.
+	 *
+	 * Split off from the connection handling so the thresholds can be exercised
+	 * without a TLS server on the other end.
+	 *
+	 * @param int    $expires  Expiry timestamp from the certificate.
+	 * @param string $protocol Negotiated protocol, empty when unknown.
+	 * @return array
+	 */
+	protected static function certificate_result( $expires, $protocol ) {
 		$remaining = $expires - time();
 
 		$items = array(
@@ -141,6 +173,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 				__( 'valid until %s', 'security-check-report' ),
 				date_i18n( get_option( 'date_format' ), $expires )
 			),
+			__( 'the trust chain and the host name are not checked here', 'security-check-report' ),
 		);
 
 		if ( '' !== $protocol ) {
@@ -156,7 +189,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			);
 		}
 
-		if ( $remaining < 14 * DAY_IN_SECONDS ) {
+		if ( $remaining < self::CERT_FAIL_DAYS * DAY_IN_SECONDS ) {
 			return CASCR_Result::fail(
 				sprintf(
 					/* translators: %s: human readable time until expiry. */
@@ -166,6 +199,19 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 				7,
 				$items,
 				__( 'Renew it and check that automatic renewal runs.', 'security-check-report' )
+			);
+		}
+
+		if ( $remaining < self::CERT_WARN_DAYS * DAY_IN_SECONDS ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %s: human readable time until expiry. */
+					__( 'The TLS certificate expires in %s, which leaves little room if a renewal fails.', 'security-check-report' ),
+					human_time_diff( time(), $expires )
+				),
+				4,
+				$items,
+				__( 'Renew it and let the renewal run automatically. Certificate lifetimes drop to 100 days in March 2027 and to 47 days in 2029, so a manual renewal will get tight.', 'security-check-report' )
 			);
 		}
 
@@ -182,7 +228,10 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			);
 		}
 
-		return CASCR_Result::pass( __( 'The TLS certificate is valid and not about to expire.', 'security-check-report' ), $items );
+		return CASCR_Result::pass(
+			__( 'The TLS certificate is within its validity period and not about to expire.', 'security-check-report' ),
+			$items
+		);
 	}
 
 	/**
@@ -303,11 +352,20 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			$max_age = (int) $matches[1];
 		}
 
-		if ( $max_age < self::HSTS_MIN_AGE ) {
+		// Seconds are how the header is written, but nobody reads a six figure
+		// number as a duration, and the yardstick belongs next to the value.
+		if ( 0 === $max_age ) {
 			$issues[] = sprintf(
-				/* translators: %d: max-age value in seconds. */
-				_n( 'max-age is only %d second', 'max-age is only %d seconds', $max_age, 'security-check-report' ),
-				$max_age
+				/* translators: %s: recommended minimum lifetime, already formatted. */
+				__( 'the header carries no usable max-age, so it expires immediately instead of lasting at least %s', 'security-check-report' ),
+				human_time_diff( 0, self::HSTS_MIN_AGE )
+			);
+		} elseif ( $max_age < self::HSTS_MIN_AGE ) {
+			$issues[] = sprintf(
+				/* translators: 1: current max-age as a duration, 2: recommended minimum as a duration. */
+				__( 'max-age lasts %1$s, the recommendation is at least %2$s', 'security-check-report' ),
+				human_time_diff( 0, $max_age ),
+				human_time_diff( 0, self::HSTS_MIN_AGE )
 			);
 		}
 
@@ -323,7 +381,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			__( 'The HSTS header is present but weaker than it should be.', 'security-check-report' ),
 			4,
 			$issues,
-			__( 'Use max-age=31536000; includeSubDomains. Add preload only when every subdomain is on HTTPS for good.', 'security-check-report' )
+			__( 'Use max-age=31536000; includeSubDomains, which is one year. Anything shorter than six months counts as weak here. Add preload only when every subdomain is on HTTPS for good.', 'security-check-report' )
 		);
 	}
 
@@ -360,21 +418,53 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			);
 		}
 
-		$issues = array();
+		$directives    = self::csp_directives( $policy );
+		$issues        = array();
+		$unsafe_inline = false;
+		$unsafe_eval   = false;
+		$wildcard      = false;
 
-		if ( false !== stripos( $policy, "'unsafe-inline'" ) ) {
+		foreach ( $directives as $name => $sources ) {
+			// A browser that understands 'strict-dynamic' or a nonce ignores
+			// 'unsafe-inline' in the same directive. The strict policy everyone
+			// copies carries it on purpose, as a fallback for older browsers,
+			// and reporting that would send people to remove the fallback.
+			$has_fallback = false;
+
+			foreach ( $sources as $source ) {
+				if ( "'strict-dynamic'" === $source || 0 === strpos( $source, "'nonce-" ) ) {
+					$has_fallback = true;
+				}
+			}
+
+			if ( ! $has_fallback && in_array( "'unsafe-inline'", $sources, true ) ) {
+				$unsafe_inline = true;
+			}
+
+			if ( in_array( "'unsafe-eval'", $sources, true ) ) {
+				$unsafe_eval = true;
+			}
+
+			// Only the bare star opens the door. A host wildcard such as
+			// *.cdn.example.com names one place and is a normal thing to write.
+			if ( in_array( $name, array( 'default-src', 'script-src' ), true ) && in_array( '*', $sources, true ) ) {
+				$wildcard = true;
+			}
+		}
+
+		if ( $unsafe_inline ) {
 			$issues[] = __( "'unsafe-inline' allows injected inline scripts to run", 'security-check-report' );
 		}
 
-		if ( false !== stripos( $policy, "'unsafe-eval'" ) ) {
+		if ( $unsafe_eval ) {
 			$issues[] = __( "'unsafe-eval' allows strings to be executed as code", 'security-check-report' );
 		}
 
-		if ( preg_match( '/(default|script)-src[^;]*\s\*/i', $policy ) ) {
+		if ( $wildcard ) {
 			$issues[] = __( 'a wildcard source allows scripts from anywhere', 'security-check-report' );
 		}
 
-		if ( false === stripos( $policy, 'object-src' ) && false === stripos( $policy, 'default-src' ) ) {
+		if ( ! isset( $directives['object-src'] ) && ! isset( $directives['default-src'] ) ) {
 			$issues[] = __( 'neither default-src nor object-src is set', 'security-check-report' );
 		}
 
@@ -391,7 +481,13 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 	}
 
 	/**
-	 * Are the session cookies marked properly?
+	 * Are the cookies the login page hands out marked properly?
+	 *
+	 * The request is unauthenticated, so the session cookies are out of reach:
+	 * WordPress only issues those after a successful sign-in. What arrives here
+	 * is the cookie the login form sets beforehand, which is why the wording
+	 * stays with the cookies that were actually seen. A server that forgets the
+	 * attributes on this one usually forgets them on the others as well.
 	 *
 	 * @return array
 	 */
@@ -413,9 +509,21 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 		$issues = array();
 
 		foreach ( $cookies as $cookie ) {
-			$name = trim( strtok( $cookie, '=' ) );
+			$parts = explode( ';', $cookie );
+			$pair  = explode( '=', array_shift( $parts ), 2 );
+			$name  = trim( $pair[0] );
 
-			if ( $https && false === stripos( $cookie, 'secure' ) ) {
+			// Only the part behind the first semicolon holds attributes. A
+			// search over the whole header would let a cookie called
+			// "secure_session" pass for one that carries the Secure flag.
+			$flags = array();
+
+			foreach ( $parts as $attribute ) {
+				$attribute = explode( '=', $attribute, 2 );
+				$flags[]   = strtolower( trim( $attribute[0] ) );
+			}
+
+			if ( $https && ! in_array( 'secure', $flags, true ) ) {
 				$issues[] = sprintf(
 					/* translators: %s: cookie name. */
 					__( '%s is not marked Secure', 'security-check-report' ),
@@ -423,7 +531,18 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 				);
 			}
 
-			if ( false === stripos( $cookie, 'samesite' ) ) {
+			// WordPress sets HttpOnly on the authentication cookies itself, so
+			// a cookie without it here points at something in front of it that
+			// rewrites the header.
+			if ( ! in_array( 'httponly', $flags, true ) ) {
+				$issues[] = sprintf(
+					/* translators: %s: cookie name. */
+					__( '%s is readable from JavaScript, it has no HttpOnly attribute', 'security-check-report' ),
+					$name
+				);
+			}
+
+			if ( ! in_array( 'samesite', $flags, true ) ) {
 				$issues[] = sprintf(
 					/* translators: %s: cookie name. */
 					__( '%s has no SameSite attribute', 'security-check-report' ),
@@ -433,14 +552,14 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 		}
 
 		if ( empty( $issues ) ) {
-			return CASCR_Result::pass( __( 'The cookies set by the login page carry the right attributes.', 'security-check-report' ) );
+			return CASCR_Result::pass( __( 'The cookies the login page hands out before sign-in carry the right attributes.', 'security-check-report' ) );
 		}
 
 		return CASCR_Result::warn(
-			__( 'Cookies are sent without the attributes that limit where a browser will send them back.', 'security-check-report' ),
+			__( 'The login page hands out cookies without the attributes that limit where a browser will send them back.', 'security-check-report' ),
 			4,
 			self::cap( array_unique( $issues ) ),
-			__( 'Set SameSite=Lax on the session cookies at the server, and Secure on every cookie once the site is on HTTPS.', 'security-check-report' )
+			__( 'Set HttpOnly, SameSite=Lax and, on an HTTPS site, Secure at the server. The session cookies appear only after a successful sign-in and are not part of this measurement.', 'security-check-report' )
 		);
 	}
 
@@ -598,20 +717,32 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 		}
 
 		$items = array();
+		$score = 4;
 
-		if ( false !== strpos( $body, 'system.multicall' ) ) {
-			$items[] = __( 'system.multicall is available, which lets one request try many passwords', 'security-check-report' );
+		// The same filter wp_xmlrpc_server::login() consults. It turns away
+		// every method that needs a login, which is what most of the security
+		// plugins set, and it leaves the endpoint answering.
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- This is core's own filter, read here rather than introduced.
+		$authenticated = (bool) apply_filters( 'xmlrpc_enabled', true );
+
+		if ( ! $authenticated ) {
+			$items[] = __( 'the xmlrpc_enabled filter refuses every method that needs a login, but the endpoint keeps answering', 'security-check-report' );
+		}
+
+		if ( $authenticated && false !== strpos( $body, 'system.multicall' ) ) {
+			$items[] = __( 'system.multicall bundles many calls into one request. Since WordPress 4.4 the first failed login ends the rest, so it no longer multiplies password guesses, but one request still does the work of many', 'security-check-report' );
 		}
 
 		if ( false !== strpos( $body, 'pingback.ping' ) ) {
 			$items[] = __( 'pingback.ping is available, which lets the site be used to probe other hosts', 'security-check-report' );
+			$score   = 5;
 		}
 
 		return CASCR_Result::warn(
 			__( 'The XML-RPC endpoint answers method calls.', 'security-check-report' ),
-			empty( $items ) ? 4 : 6,
+			$score,
 			$items,
-			__( 'If nothing uses XML-RPC, block xmlrpc.php at the server. The Jetpack and app clients are the usual exceptions.', 'security-check-report' )
+			__( 'If nothing uses XML-RPC, block xmlrpc.php in the web server, which is the only place that stops the requests before WordPress handles them. The xmlrpc_enabled filter only turns away the methods that need a login. Jetpack and the mobile apps are the usual reasons to leave it open.', 'security-check-report' )
 		);
 	}
 
@@ -624,17 +755,48 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 		$methods = array();
 		$unknown = 0;
 
-		$response = CASCR_Http::get( home_url( '/?author=1' ), array( 'redirection' => 0 ) );
+		// Author 1 is often gone on an older site, and the redirect that gives
+		// the login name away only happens with pretty permalinks. Probing a
+		// few accounts that really exist, and accepting a plain 200 as an
+		// answer, keeps the check working on both kinds of setup.
+		$ids = get_users(
+			array(
+				'fields' => 'ID',
+				'number' => 3,
+			)
+		);
 
-		if ( is_wp_error( $response ) ) {
-			++$unknown;
-		} else {
+		$ids     = empty( $ids ) ? array( 1 ) : $ids;
+		$login   = false;
+		$archive = false;
+		$failed  = 0;
+
+		foreach ( $ids as $id ) {
+			$response = CASCR_Http::get( home_url( '/?author=' . (int) $id ), array( 'redirection' => 0 ) );
+
+			if ( is_wp_error( $response ) ) {
+				++$failed;
+				continue;
+			}
+
 			$code     = wp_remote_retrieve_response_code( $response );
 			$location = self::header( $response, 'location' );
 
 			if ( in_array( $code, array( 301, 302 ), true ) && false !== strpos( $location, '/author/' ) ) {
-				$methods[] = __( 'the ?author=N parameter reveals the login name', 'security-check-report' );
+				$login = true;
+			} elseif ( 200 === $code ) {
+				$archive = true;
 			}
+		}
+
+		if ( $failed === count( $ids ) ) {
+			++$unknown;
+		}
+
+		if ( $login ) {
+			$methods[] = __( 'the ?author=N parameter redirects to the author archive and gives the login name away', 'security-check-report' );
+		} elseif ( $archive ) {
+			$methods[] = __( 'the ?author=N parameter answers with an author archive, which confirms which account IDs exist', 'security-check-report' );
 		}
 
 		$response = CASCR_Http::get( rest_url( 'wp/v2/users' ), array( 'headers' => array( 'Accept' => 'application/json' ) ) );
@@ -678,7 +840,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			__( 'User names can be read without logging in, which turns password guessing from two unknowns into one.', 'security-check-report' ),
 			min( 7, 4 + count( $methods ) ),
 			$methods,
-			__( 'Require authentication on the users endpoint and stop the ?author redirect. Display names that differ from login names help too.', 'security-check-report' )
+			__( 'Require authentication on the users endpoint and stop the ?author redirect. A different display name changes nothing here: the author slug keeps the login name it was generated from, and that is what the redirect and the REST answer carry.', 'security-check-report' )
 		);
 	}
 
@@ -692,17 +854,12 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			return CASCR_Result::inconclusive( __( 'The REST API is not available.', 'security-check-report' ) );
 		}
 
-		$routes = rest_get_server()->get_routes();
-		$open   = array();
-
-		// The batch endpoint deliberately has no callback of its own: it checks
-		// permissions on each request it carries instead. Reporting it would be
-		// a finding on stock WordPress and would teach people to ignore this
-		// check.
-		$expected = array( '/batch/v1' );
+		$routes  = rest_get_server()->get_routes();
+		$public  = array();
+		$missing = array();
 
 		foreach ( $routes as $route => $handlers ) {
-			if ( in_array( $route, $expected, true ) ) {
+			if ( self::is_public_by_design( $route ) ) {
 				continue;
 			}
 
@@ -716,10 +873,17 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 				$permission = isset( $handler['permission_callback'] ) ? $handler['permission_callback'] : null;
 
-				if ( null === $permission || '__return_true' === $permission ) {
-					$open[] = sprintf(
+				if ( null === $permission ) {
+					$missing[] = sprintf(
 						/* translators: 1: REST route, 2: comma separated HTTP methods. */
-						__( '%1$s accepts %2$s from anyone', 'security-check-report' ),
+						__( '%1$s accepts %2$s and names no permission callback at all', 'security-check-report' ),
+						$route,
+						implode( ', ', $writes )
+					);
+				} elseif ( '__return_true' === $permission ) {
+					$public[] = sprintf(
+						/* translators: 1: REST route, 2: comma separated HTTP methods. */
+						__( '%1$s is registered as open to anyone for %2$s', 'security-check-report' ),
 						$route,
 						implode( ', ', $writes )
 					);
@@ -727,39 +891,95 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			}
 		}
 
-		$open = array_values( array_unique( $open ) );
+		$public  = array_values( array_unique( $public ) );
+		$missing = array_values( array_unique( $missing ) );
 
-		if ( empty( $open ) ) {
-			return CASCR_Result::pass( __( 'Every REST route that changes data checks permissions first.', 'security-check-report' ) );
+		if ( empty( $public ) && empty( $missing ) ) {
+			return CASCR_Result::pass( __( 'Every REST route that changes data decides who may call it.', 'security-check-report' ) );
 		}
 
-		return CASCR_Result::fail(
+		// A route without any callback is a mistake WordPress itself complains
+		// about. '__return_true' is the spelling the handbook prescribes for a
+		// route that is meant to be open, so it is a question, not a verdict.
+		if ( ! empty( $missing ) ) {
+			return CASCR_Result::fail(
+				sprintf(
+					/* translators: %d: number of write routes without a permission callback. */
+					_n(
+						'%d REST route accepts changes without naming a permission callback.',
+						'%d REST routes accept changes without naming a permission callback.',
+						count( $missing ),
+						'security-check-report'
+					),
+					count( $missing )
+				),
+				8,
+				self::cap( array_merge( $missing, $public ) ),
+				__( 'Since WordPress 5.5 every route has to name one. The route belongs to whichever plugin registered it, so report it to the author and remove the plugin until it is fixed.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::warn(
 			sprintf(
-				/* translators: %d: number of unauthenticated write routes. */
+				/* translators: %d: number of write routes that are open on purpose. */
 				_n(
-					'%d REST route accepts changes without checking permissions.',
-					'%d REST routes accept changes without checking permissions.',
-					count( $open ),
+					'%d REST route accepts changes from anyone who asks.',
+					'%d REST routes accept changes from anyone who asks.',
+					count( $public ),
 					'security-check-report'
 				),
-				count( $open )
+				count( $public )
 			),
-			8,
-			self::cap( $open ),
-			__( 'The route belongs to whichever plugin registered it. Report it to the author, or remove the plugin.', 'security-check-report' )
+			5,
+			self::cap( $public ),
+			__( 'Some routes are open on purpose and check the request inside the callback, a contact form or a shop cart for instance. Ask the plugin that registered the route whether this one is meant to be open, and remove the plugin until it is fixed if it is not.', 'security-check-report' )
 		);
+	}
+
+	/**
+	 * Is this a route that is unauthenticated on purpose?
+	 *
+	 * The batch endpoint has no callback of its own and checks permissions on
+	 * each request it carries. The Store API serves a shop to visitors who are
+	 * not logged in and authorises inside the callback. Reporting either would
+	 * be a finding on an ordinary install and would teach people to skip past
+	 * this check.
+	 *
+	 * @param string $route Registered route.
+	 * @return bool
+	 */
+	private static function is_public_by_design( $route ) {
+		foreach ( array( '/batch/v1', '/wc/store/v' ) as $prefix ) {
+			if ( 0 === strpos( $route, $prefix ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
 	 * Can the client address be faked?
 	 *
-	 * If the site sits directly on the internet but a forwarded header arrives
-	 * anyway, that header came from the visitor. Any plugin that trusts it for
-	 * rate limiting or blocking can be walked straight past.
+	 * A forwarded header is only worth trusting when something in front of the
+	 * site wrote it. From inside PHP the two cases look the same, so this check
+	 * reports what it can prove and says so when it cannot prove anything.
 	 *
 	 * @return array
 	 */
 	public static function proxy_ip_configuration() {
+		$remote = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+
+		// Under WP-CLI or cron there is no request to look at, and the friendly
+		// branch below would report a clean result for a measurement that never
+		// took place.
+		if ( '' === $remote || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			return CASCR_Result::inconclusive(
+				__( 'This check reads the headers of the current request, and this run has none.', 'security-check-report' ),
+				__( 'Open the report in the browser to have it checked.', 'security-check-report' )
+			);
+		}
+
 		$headers = array( 'HTTP_X_FORWARDED_FOR', 'HTTP_X_REAL_IP', 'HTTP_CLIENT_IP', 'HTTP_CF_CONNECTING_IP', 'HTTP_TRUE_CLIENT_IP' );
 		$present = array();
 
@@ -773,35 +993,62 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			return CASCR_Result::pass( __( 'No forwarded address headers arrive, so the client address cannot be faked through them.', 'security-check-report' ) );
 		}
 
-		$remote     = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
-		$is_private = '' !== $remote && ! filter_var(
+		$is_private = ! filter_var(
 			$remote,
 			FILTER_VALIDATE_IP,
 			FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
 		);
 
-		if ( $is_private ) {
+		// A content delivery network connects from public addresses of its own,
+		// so a private REMOTE_ADDR is not the only shape a correct setup takes.
+		// An inbound CF-Connecting-IP together with a CF-Ray on the site's own
+		// response is the one edge that can be confirmed from here.
+		$behind_edge = ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) && '' !== self::header( CASCR_Http::home(), 'cf-ray' );
+
+		if ( $is_private || $behind_edge ) {
 			return CASCR_Result::pass(
 				__( 'Forwarded address headers arrive from a proxy in front of the site, which is the expected setup.', 'security-check-report' ),
 				$present
 			);
 		}
 
-		return CASCR_Result::warn(
-			__( 'Forwarded address headers arrive even though the request came straight from the internet, so anything trusting them can be fooled.', 'security-check-report' ),
-			6,
-			array_merge(
-				$present,
-				array(
-					sprintf(
-						/* translators: %s: remote IP address of the current request. */
-						__( 'the connection came from %s', 'security-check-report' ),
-						$remote
-					),
-				)
+		return CASCR_Result::inconclusive(
+			sprintf(
+				/* translators: 1: comma separated list of forwarded address headers, 2: remote IP address of the current request. */
+				__( 'Forwarded address headers arrive (%1$s) from %2$s, and a header written by a proxy looks the same from here as one a visitor sent along.', 'security-check-report' ),
+				implode( ', ', $present ),
+				$remote
 			),
-			__( 'Configure security plugins to read the address from REMOTE_ADDR, or strip these headers at the edge.', 'security-check-report' )
+			__( 'If nothing sits in front of the site, have the security plugins read REMOTE_ADDR. If a proxy does, make sure it overwrites these headers rather than passing on whatever arrived.', 'security-check-report' )
 		);
+	}
+
+	/**
+	 * Splits a policy into directives, each one a list of its source tokens.
+	 *
+	 * Both the inline question and the wildcard question are about a single
+	 * directive: a nonce in script-src says nothing about style-src, and a
+	 * substring search over the whole header cannot tell the two apart.
+	 *
+	 * @param string $policy Policy header value.
+	 * @return array<string, string[]> Source lists, keyed by directive name.
+	 */
+	private static function csp_directives( $policy ) {
+		$directives = array();
+
+		foreach ( explode( ';', strtolower( $policy ) ) as $part ) {
+			$tokens = preg_split( '/\s+/', trim( $part ), -1, PREG_SPLIT_NO_EMPTY );
+
+			if ( empty( $tokens ) ) {
+				continue;
+			}
+
+			$name = array_shift( $tokens );
+
+			$directives[ $name ] = $tokens;
+		}
+
+		return $directives;
 	}
 
 	/**

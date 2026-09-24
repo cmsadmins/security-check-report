@@ -15,6 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CASCR_Checks_Core extends CASCR_Checks_Base {
 
 	/**
+	 * WP_AUTO_UPDATE_CORE values that put the site on a pre-release channel.
+	 *
+	 * Core treats all four the same way: every update is installed, including
+	 * the minor ones. Leaving branch-development out reported the widest
+	 * setting there is as no automatic updates at all.
+	 *
+	 * @var string[]
+	 */
+	const PRE_RELEASE_CHANNELS = array( 'beta', 'rc', 'development', 'branch-development' );
+
+	/**
 	 * End of security support per PHP branch.
 	 *
 	 * Dates instead of a hardcoded minimum, so the check keeps telling the
@@ -182,22 +193,63 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	/**
 	 * Are automatic core updates enabled?
 	 *
+	 * WP_AUTO_UPDATE_CORE is only one of four switches. The updater is also off
+	 * when AUTOMATIC_UPDATER_DISABLED is set, when file modifications are
+	 * disallowed or when a filter says so, and reading the constant alone gave
+	 * those three sites a clean result. DISALLOW_FILE_MODS matters most here:
+	 * disallow_file_mods recommends it, so both checks have to describe the
+	 * same installation.
+	 *
 	 * @return array
 	 */
 	public static function automatic_core_updates() {
-		$setting = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : 'minor';
+		// Core owns the answer to whether the updater may run at all, so ask it
+		// instead of repeating the rule. That covers DISALLOW_FILE_MODS,
+		// AUTOMATIC_UPDATER_DISABLED and the automatic_updater_disabled filter,
+		// which a host can set without any constant being visible.
+		require_once ABSPATH . 'wp-admin/includes/class-wp-automatic-updater.php';
+		$updater = new WP_Automatic_Updater();
 
-		// true means every core update, which is more coverage than 'minor',
-		// not less. The previous version reported it as a risk.
-		if ( true === $setting ) {
-			return CASCR_Result::pass( __( 'All automatic core updates are enabled.', 'security-check-report' ) );
+		if ( $updater->is_disabled() ) {
+			$blockers = array();
+
+			if ( ! wp_is_file_mod_allowed( 'automatic_updater' ) ) {
+				$blockers[] = 'DISALLOW_FILE_MODS';
+			}
+
+			if ( defined( 'AUTOMATIC_UPDATER_DISABLED' ) && AUTOMATIC_UPDATER_DISABLED ) {
+				$blockers[] = 'AUTOMATIC_UPDATER_DISABLED';
+			}
+
+			if ( empty( $blockers ) ) {
+				$blockers[] = 'automatic_updater_disabled';
+			}
+
+			return CASCR_Result::fail(
+				__( 'The automatic updater cannot run, so security releases are not installed on their own.', 'security-check-report' ),
+				8,
+				$blockers,
+				__( 'Allow file modifications again, or install core updates another way, for example over WP-CLI or the hosting platform.', 'security-check-report' )
+			);
 		}
 
-		if ( 'minor' === $setting ) {
-			return CASCR_Result::pass( __( 'Automatic minor and security updates are enabled.', 'security-check-report' ) );
+		$setting = defined( 'WP_AUTO_UPDATE_CORE' ) ? WP_AUTO_UPDATE_CORE : null;
+
+		// The branches below follow Core_Upgrader::should_update_to_version():
+		// only false switches updates off, every pre-release channel switches
+		// all of them on, and any other value leaves the site options in
+		// charge. branch-development used to land in the closing branch, which
+		// reported the widest setting there is as no updates at all.
+		if ( false === $setting ) {
+			return CASCR_Result::fail(
+				__( 'Automatic core updates are switched off, so security releases are not installed on their own.', 'security-check-report' ),
+				8,
+				array( 'WP_AUTO_UPDATE_CORE' ),
+				__( 'Remove the WP_AUTO_UPDATE_CORE constant from wp-config.php or set it to minor.', 'security-check-report' )
+			);
 		}
 
-		if ( in_array( $setting, array( 'beta', 'rc', 'development' ), true ) ) {
+		if ( in_array( $setting, self::PRE_RELEASE_CHANNELS, true ) ) {
 			return CASCR_Result::warn(
 				__( 'This installation receives pre-release core updates.', 'security-check-report' ),
 				5,
@@ -206,12 +258,22 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			);
 		}
 
-		return CASCR_Result::fail(
-			__( 'Automatic core updates are switched off, so security releases are not installed on their own.', 'security-check-report' ),
-			8,
-			array(),
-			__( 'Remove the WP_AUTO_UPDATE_CORE constant from wp-config.php or set it to minor.', 'security-check-report' )
-		);
+		// true means every core update, which is more coverage than 'minor',
+		// not less. The previous version reported it as a risk.
+		if ( true === $setting ) {
+			return CASCR_Result::pass( __( 'All automatic core updates are enabled.', 'security-check-report' ) );
+		}
+
+		if ( 'minor' !== $setting && 'enabled' !== get_site_option( 'auto_update_core_minor', 'enabled' ) ) {
+			return CASCR_Result::fail(
+				__( 'Automatic minor and security updates are switched off for this site.', 'security-check-report' ),
+				8,
+				array( 'auto_update_core_minor' ),
+				__( 'Re-enable automatic updates for maintenance and security releases under Dashboard, Updates.', 'security-check-report' )
+			);
+		}
+
+		return CASCR_Result::pass( __( 'Automatic minor and security updates are enabled.', 'security-check-report' ) );
 	}
 
 	/**
@@ -307,9 +369,11 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	 * needed a hand maintained allow list of core files to stay quiet. Comparing
 	 * against the official file list finds the same thing without the list.
 	 *
+	 * @param int $limit Executable files to compare before giving up. Lower
+	 *                   values exist so the abort path can be exercised.
 	 * @return array
 	 */
-	public static function unknown_core_files() {
+	public static function unknown_core_files( $limit = 8000 ) {
 		$checksums = self::checksums();
 
 		if ( empty( $checksums ) ) {
@@ -318,10 +382,11 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			);
 		}
 
-		$known   = array_fill_keys( array_keys( $checksums ), true );
-		$unknown = array();
-		$scanned = 0;
-		$limit   = 8000;
+		$known     = array_fill_keys( array_keys( $checksums ), true );
+		$unknown   = array();
+		$scanned   = 0;
+		$truncated = false;
+		$limit     = max( 1, (int) $limit );
 
 		foreach ( array( 'wp-admin', 'wp-includes' ) as $dir ) {
 			$root = ABSPATH . $dir;
@@ -336,20 +401,24 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 				);
 
 				foreach ( $iterator as $file ) {
-					if ( $scanned >= $limit ) {
-						break 2;
-					}
-
 					if ( ! $file->isFile() ) {
 						continue;
 					}
-
-					++$scanned;
 
 					$extension = strtolower( $file->getExtension() );
 					if ( ! in_array( $extension, array( 'php', 'phtml', 'phar', 'inc' ), true ) ) {
 						continue;
 					}
+
+					// Only the files that can be compared count against the
+					// budget. Counting images too let a media heavy core
+					// directory end the scan before wp-includes was reached.
+					if ( $scanned >= $limit ) {
+						$truncated = true;
+						break 2;
+					}
+
+					++$scanned;
 
 					$relative = self::relative( $file->getPathname() );
 
@@ -365,6 +434,19 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 		}
 
 		if ( empty( $unknown ) ) {
+			// An aborted scan says nothing about the files it never opened, so
+			// it must not be reported as an all clear.
+			if ( $truncated ) {
+				return CASCR_Result::inconclusive(
+					sprintf(
+						/* translators: %d: number of executable files that were compared before the scan stopped. */
+						__( 'The scan stopped after %d executable files, so the core directories were only compared in part.', 'security-check-report' ),
+						$scanned
+					),
+					__( 'Nothing unexpected turned up in the part that was read. Compare the remaining files with a fresh copy of this WordPress release.', 'security-check-report' )
+				);
+			}
+
 			return CASCR_Result::pass(
 				__( 'The core directories contain no files beyond the official release.', 'security-check-report' )
 			);
@@ -653,6 +735,7 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 		self::load_plugin_api();
 
 		$closed  = array();
+		$unknown = 0;
 		$checked = 0;
 
 		foreach ( get_plugins() as $file => $data ) {
@@ -662,7 +745,17 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 
 			$info = self::directory_info( $file );
 
-			if ( null === $info || is_wp_error( $info ) ) {
+			if ( null === $info ) {
+				continue;
+			}
+
+			if ( is_wp_error( $info ) ) {
+				// A plugin the directory never listed is not a gap. A plugin
+				// whose listing could not be reached is one, and the site must
+				// not read that as an all clear.
+				if ( 'cascr_unavailable' === $info->get_error_code() ) {
+					++$unknown;
+				}
 				continue;
 			}
 
@@ -673,7 +766,23 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			}
 		}
 
-		if ( 0 === $checked ) {
+		if ( empty( $closed ) && $unknown > 0 ) {
+			return CASCR_Result::inconclusive(
+				sprintf(
+					/* translators: %d: number of plugins whose listing could not be retrieved. */
+					_n(
+						'The listing of %d active plugin could not be retrieved, so the directory status is open.',
+						'The listings of %d active plugins could not be retrieved, so the directory status is open.',
+						$unknown,
+						'security-check-report'
+					),
+					$unknown
+				),
+				__( 'Run the report again once api.wordpress.org can be reached from this server.', 'security-check-report' )
+			);
+		}
+
+		if ( empty( $closed ) && 0 === $checked ) {
 			return CASCR_Result::inconclusive(
 				__( 'No plugin information could be retrieved from the directory.', 'security-check-report' )
 			);
@@ -861,7 +970,12 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	}
 
 	/**
-	 * Other WordPress installations sharing the same account.
+	 * Other WordPress installations next to this one.
+	 *
+	 * What is actually measured is the parent directory down to two levels,
+	 * which is where a second installation on the same account usually sits.
+	 * It says nothing about the rest of the account, so the wording stays with
+	 * what was looked at.
 	 *
 	 * @return array
 	 */
@@ -913,8 +1027,8 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			sprintf(
 				/* translators: %d: number of other WordPress installations found. */
 				_n(
-					'%d other WordPress installation shares this hosting account.',
-					'%d other WordPress installations share this hosting account.',
+					'%d other WordPress installation sits in the directory above this one.',
+					'%d other WordPress installations sit in the directory above this one.',
 					count( $installs ),
 					'security-check-report'
 				),
@@ -980,6 +1094,9 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	 *
 	 * @param string $file Plugin file, for example akismet/akismet.php.
 	 * @return object|WP_Error|null Null when the plugin has no directory slug.
+	 *                              WP_Error cascr_not_listed when the directory
+	 *                              has no such plugin, cascr_unavailable when
+	 *                              the answer could not be obtained.
 	 */
 	private static function directory_info( $file ) {
 		$slug = dirname( $file );
@@ -995,39 +1112,58 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			return 'none' === $cached ? new WP_Error( 'cascr_not_listed' ) : (object) $cached;
 		}
 
-		require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
-
-		$info = plugins_api(
-			'plugin_information',
-			array(
-				'slug'   => $slug,
-				'fields' => array(
-					'sections'          => false,
-					'short_description' => false,
-					'screenshots'       => false,
-					'ratings'           => false,
-					'contributors'      => false,
-					'banners'           => false,
-					'icons'             => false,
-					'last_updated'      => true,
-					'tested'            => true,
-					'active_installs'   => true,
+		// Read the endpoint rather than going through plugins_api(). A closed
+		// listing is served as HTTP 404 with the closed flag in the same body,
+		// and plugins_api() turns every 404 into a WP_Error, so the one field
+		// this file exists for never reached the caller.
+		$response = CASCR_Http::get(
+			add_query_arg(
+				array(
+					'action'  => 'plugin_information',
+					'request' => array(
+						'slug'   => $slug,
+						'fields' => array(
+							'sections'          => 0,
+							'short_description' => 0,
+							'screenshots'       => 0,
+							'ratings'           => 0,
+							'contributors'      => 0,
+							'banners'           => 0,
+							'icons'             => 0,
+							'versions'          => 0,
+						),
+					),
 				),
+				'https://api.wordpress.org/plugins/info/1.2/'
 			)
 		);
 
-		if ( is_wp_error( $info ) ) {
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error( 'cascr_unavailable', $response->get_error_message() );
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ) );
+
+		if ( ! is_object( $body ) ) {
+			return new WP_Error( 'cascr_unavailable', __( 'The plugin directory returned no usable answer.', 'security-check-report' ) );
+		}
+
+		$closed = ! empty( $body->closed ) || ( isset( $body->error ) && 'closed' === $body->error );
+
+		// Any other error is the directory saying it has no such plugin, which
+		// is a normal state for a commercial or in-house plugin.
+		if ( ! $closed && ! empty( $body->error ) ) {
 			set_transient( $cache_key, 'none', 12 * HOUR_IN_SECONDS );
 
-			return $info;
+			return new WP_Error( 'cascr_not_listed' );
 		}
 
 		$slim = array(
-			'slug'            => isset( $info->slug ) ? $info->slug : $slug,
-			'last_updated'    => isset( $info->last_updated ) ? $info->last_updated : '',
-			'tested'          => isset( $info->tested ) ? $info->tested : '',
-			'active_installs' => isset( $info->active_installs ) ? $info->active_installs : 0,
-			'closed'          => ! empty( $info->closed ),
+			'slug'            => isset( $body->slug ) ? $body->slug : $slug,
+			'last_updated'    => isset( $body->last_updated ) ? $body->last_updated : '',
+			'tested'          => isset( $body->tested ) ? $body->tested : '',
+			'active_installs' => isset( $body->active_installs ) ? $body->active_installs : 0,
+			'closed'          => $closed,
 		);
 
 		set_transient( $cache_key, $slim, 12 * HOUR_IN_SECONDS );

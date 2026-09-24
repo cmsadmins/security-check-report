@@ -113,8 +113,16 @@ return array(
 	 * and reports the reassuring answer to both. An empty list means the
 	 * storage is unknown, which is the one case where saying nothing is right.
 	 *
-	 * iThemes Security became Solid Security and then Kadence Security. All
-	 * three ship under the folder names below and keep the same user meta.
+	 * iThemes Security became Solid Security and then Kadence Security, but
+	 * only the product name changed: the free edition still ships as
+	 * better-wp-security and writes the same user meta as the Two Factor
+	 * plugin it is built on. A commercial edition keeps the folder of the free
+	 * one it grew out of, so the paid entries below are the historic folder
+	 * names, not a slug per product name.
+	 *
+	 * Folders that no plugin ever had are worse than useless here. They can
+	 * never match, and on a case-sensitive filesystem a folder spelled with
+	 * the wrong case never matches either.
 	 */
 	'two_factor_plugins'       => array(
 		'two-factor/two-factor.php'                     => array( '_two_factor_enabled_providers' ),
@@ -122,23 +130,23 @@ return array(
 		'wp-2fa/wp-2fa.php'                             => array( 'wp_2fa_enabled_methods', 'wp_2fa_totp_key' ),
 		'wordfence-login-security/wordfence-login-security.php' => array(),
 		'miniorange-2-factor-authentication/miniorange_2_factor_settings.php' => array(),
-		'miniOrange-2-factor-authentication/miniorange-2-factor.php' => array(),
 		'duo-wordpress/duo.php'                         => array(),
 		'rublon/rublon.php'                             => array(),
-		'keyy-two-factor-authentication/keyy.php'       => array(),
 		'google-authenticator/google-authenticator.php' => array( 'googleauthenticator_enabled' ),
 		'wp-google-authenticator/wp-google-authenticator.php' => array( 'wpga_active' ),
 		'two-factor-authentication/two-factor-authentication.php' => array(),
-		'better-wp-security/better-wp-security.php'     => array( 'itsec_two_factor_enabled_providers' ),
-		'ithemes-security-pro/ithemes-security-pro.php' => array( 'itsec_two_factor_enabled_providers' ),
-		'solid-security/solid-security.php'             => array( 'itsec_two_factor_enabled_providers' ),
-		'solid-security-pro/solid-security-pro.php'     => array( 'itsec_two_factor_enabled_providers' ),
-		'kadence-security/kadence-security.php'         => array( 'itsec_two_factor_enabled_providers' ),
-		'kadence-security-pro/kadence-security-pro.php' => array( 'itsec_two_factor_enabled_providers' ),
-		'reportedip-hive/reportedip-hive.php'           => array( 'reportedip_hive_2fa_enabled' ),
-		'shield-security/shield-security.php'           => array(),
+		'better-wp-security/better-wp-security.php'     => array( '_two_factor_enabled_providers' ),
+		'ithemes-security-pro/ithemes-security-pro.php' => array( '_two_factor_enabled_providers' ),
+		'solid-security-pro/solid-security-pro.php'     => array( '_two_factor_enabled_providers' ),
+		'kadence-security-pro/kadence-security-pro.php' => array( '_two_factor_enabled_providers' ),
+		// Hive Light carries login protection only. The second factor is in
+		// the Full Edition, which ships from the same folder, so the folder
+		// says nothing about whether a second factor is there to read.
+		'reportedip-hive/reportedip-hive.php'           => array(),
 		'wp-simple-firewall/wp-simple-firewall.php'     => array(),
-		'defender-security/wp-defender.php'             => array( '_wpdef_two_fa_enabled' ),
+		// Defender moved its provider list; the TOTP key of the older
+		// releases is still read, so an account set up back then counts.
+		'defender-security/wp-defender.php'             => array( 'wd_2fa_enabled_providers', 'defenderAuthOn' ),
 		'jetpack/jetpack.php'                           => array(),
 	),
 
