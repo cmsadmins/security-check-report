@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-24T09:26:22+00:00\n"
+"POT-Creation-Date: 2026-09-24T15:54:33+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: security-check-report\n"
@@ -48,7 +48,8 @@ msgid "Why it matters"
 msgstr ""
 
 #: config/docs.php:17
-#: includes/class-cascr-admin.php:109
+#: includes/class-cascr-admin.php:112
+#: includes/class-cascr-admin.php:490
 msgid "What to do"
 msgstr ""
 
@@ -2468,304 +2469,392 @@ msgstr ""
 msgid "Send the headers from the web server so they cover static files too. Start with X-Content-Type-Options and Referrer-Policy, they never break anything."
 msgstr ""
 
-#: includes/class-cascr-admin.php:25
-#: includes/class-cascr-admin.php:121
-#: includes/class-cascr-admin.php:151
-msgid "Security Check Report"
+#: includes/class-cascr-admin-dashboard.php:79
+#: includes/class-cascr-admin.php:110
+msgid "Risk score"
 msgstr ""
 
-#: includes/class-cascr-admin.php:26
+#: includes/class-cascr-admin-dashboard.php:88
+msgid "Re-check everything"
+msgstr ""
+
+#. translators: 1: date of the first recorded run, 2: grade letter, 3: number of findings.
+#: includes/class-cascr-admin-dashboard.php:123
+#, php-format
+msgid "Started on %1$s: grade %2$s with %3$d finding."
+msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: number of checks re-checked on their own, 2: date of the last full pass.
+#: includes/class-cascr-admin-dashboard.php:191
+#, php-format
+msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
+msgid_plural "%1$d checks have been re-checked on their own since the full pass on %2$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-cascr-admin-dashboard.php:219
+msgid "Your progress"
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:228
+msgid "Risk over the recorded runs, oldest on the left."
+msgstr ""
+
+#. translators: 1: date of the run, 2: grade letter.
+#: includes/class-cascr-admin-dashboard.php:249
+#, php-format
+msgid "%1$s: grade %2$s"
+msgstr ""
+
+#. translators: %d: number of recorded runs.
+#: includes/class-cascr-admin-dashboard.php:266
+#, php-format
+msgid "%d recorded run, the oldest on the left."
+msgid_plural "%d recorded runs, the oldest on the left."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-cascr-admin-dashboard.php:283
+msgid "Your next five"
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:284
+msgid "Work through these in order. Everything else can wait."
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:297
+#: includes/class-cascr-scoring.php:196
+msgid "Nothing needs your attention right now."
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:335
+#: includes/class-cascr-admin.php:137
+msgid "Done, check it now"
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:338
+#: includes/class-cascr-admin.php:138
+msgid "later"
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:341
+#: includes/class-cascr-admin.php:113
+#: includes/class-cascr-admin.php:502
+msgid "Read more about this check"
+msgstr ""
+
+#. translators: %d: number of findings that are not on the short list.
+#: includes/class-cascr-admin-dashboard.php:382
+#: includes/class-cascr-admin.php:136
+#, php-format
+msgid "Still open (%d)"
+msgstr ""
+
+#. translators: %d: number of checks that were a finding once and pass now.
+#: includes/class-cascr-admin-dashboard.php:422
+#, php-format
+msgid "Resolved (%d)"
+msgstr ""
+
+#: includes/class-cascr-admin-dashboard.php:450
+msgid "By category"
+msgstr ""
+
+#. translators: 1: number of passed checks, 2: number of checks in the category.
+#: includes/class-cascr-admin-dashboard.php:473
+#, php-format
+msgid "%1$d of %2$d passed"
+msgstr ""
+
+#: includes/class-cascr-admin.php:24
+#: includes/class-cascr-nudges.php:99
 msgid "Security Check"
 msgstr ""
 
+#: includes/class-cascr-admin.php:27
+#: includes/class-cascr-admin.php:120
+#: includes/class-cascr-admin.php:160
+msgid "Security Check Report"
+msgstr ""
+
 #. translators: 1: number of the check being run, 2: total number of checks.
-#: includes/class-cascr-admin.php:89
+#: includes/class-cascr-admin.php:104
 #, php-format
 msgid "Check %1$d of %2$d"
 msgstr ""
 
-#: includes/class-cascr-admin.php:90
+#: includes/class-cascr-admin.php:105
 msgid "This check could not be completed."
 msgstr ""
 
-#: includes/class-cascr-admin.php:91
+#: includes/class-cascr-admin.php:106
+#: includes/class-cascr-admin.php:386
+#: includes/class-cascr-admin.php:603
 msgid "Passed"
 msgstr ""
 
-#: includes/class-cascr-admin.php:92
+#: includes/class-cascr-admin.php:107
+#: includes/class-cascr-admin.php:385
+#: includes/class-cascr-admin.php:604
 msgid "Warning"
 msgstr ""
 
-#: includes/class-cascr-admin.php:93
+#: includes/class-cascr-admin.php:108
+#: includes/class-cascr-admin.php:384
+#: includes/class-cascr-admin.php:605
 msgid "Failed"
 msgstr ""
 
-#: includes/class-cascr-admin.php:94
+#: includes/class-cascr-admin.php:109
+#: includes/class-cascr-admin.php:387
+#: includes/class-cascr-admin.php:606
 msgid "Not determined"
 msgstr ""
 
-#: includes/class-cascr-admin.php:95
-msgid "Muted"
-msgstr ""
-
-#: includes/class-cascr-admin.php:96
-msgid "All"
-msgstr ""
-
-#: includes/class-cascr-admin.php:97
-msgid "Risk score"
-msgstr ""
-
-#: includes/class-cascr-admin.php:98
+#: includes/class-cascr-admin.php:111
 msgid "Your to-do list"
 msgstr ""
 
-#: includes/class-cascr-admin.php:99
-msgid "Work through these in order. Everything else can wait."
-msgstr ""
-
-#: includes/class-cascr-admin.php:100
-#: includes/class-cascr-scoring.php:169
-msgid "Nothing needs your attention right now."
-msgstr ""
-
-#: includes/class-cascr-admin.php:101
-msgid "Since the previous run"
-msgstr ""
-
-#: includes/class-cascr-admin.php:102
-msgid "newly failing"
-msgstr ""
-
-#: includes/class-cascr-admin.php:103
-msgid "resolved"
-msgstr ""
-
-#: includes/class-cascr-admin.php:104
-msgid "changed"
-msgstr ""
-
-#: includes/class-cascr-admin.php:105
-msgid "Nothing changed since the previous run."
-msgstr ""
-
-#: includes/class-cascr-admin.php:106
-msgid "All checks"
-msgstr ""
-
-#: includes/class-cascr-admin.php:107
-msgid "Take the report with you"
-msgstr ""
-
-#: includes/class-cascr-admin.php:108
-msgid "Details"
-msgstr ""
-
-#: includes/class-cascr-admin.php:110
-msgid "Read more about this check"
-msgstr ""
-
-#: includes/class-cascr-admin.php:111
+#: includes/class-cascr-admin.php:114
+#: includes/class-cascr-admin.php:505
 msgid "Mute this finding"
 msgstr ""
 
-#: includes/class-cascr-admin.php:112
+#: includes/class-cascr-admin.php:115
+#: includes/class-cascr-admin.php:505
 msgid "Unmute"
 msgstr ""
 
-#: includes/class-cascr-admin.php:113
+#: includes/class-cascr-admin.php:116
+#: includes/class-cascr-admin.php:508
 msgid "Muted until the finding changes."
 msgstr ""
 
-#: includes/class-cascr-admin.php:114
+#: includes/class-cascr-admin.php:117
 msgid "The finding is shown again."
 msgstr ""
 
-#: includes/class-cascr-admin.php:115
-msgid "Download as text"
-msgstr ""
-
-#: includes/class-cascr-admin.php:116
-msgid "Download as JSON"
-msgstr ""
-
-#: includes/class-cascr-admin.php:117
-msgid "Download as CSV"
-msgstr ""
-
 #: includes/class-cascr-admin.php:118
-msgid "Copy report"
-msgstr ""
-
-#: includes/class-cascr-admin.php:119
 msgid "The report was copied to the clipboard."
 msgstr ""
 
-#: includes/class-cascr-admin.php:120
+#: includes/class-cascr-admin.php:119
 msgid "The report could not be copied."
 msgstr ""
 
-#: includes/class-cascr-admin.php:122
+#: includes/class-cascr-admin.php:121
 msgid "Generated"
 msgstr ""
 
-#: includes/class-cascr-admin.php:123
+#: includes/class-cascr-admin.php:122
 #: includes/class-cascr-cli.php:71
 msgid "Grade"
 msgstr ""
 
-#: includes/class-cascr-admin.php:124
+#: includes/class-cascr-admin.php:123
 msgid "Summary"
 msgstr ""
 
-#: includes/class-cascr-admin.php:125
+#: includes/class-cascr-admin.php:124
 msgid "Checks"
 msgstr ""
 
-#: includes/class-cascr-admin.php:129
+#: includes/class-cascr-admin.php:128
 msgid "Check"
 msgstr ""
 
-#: includes/class-cascr-admin.php:130
+#: includes/class-cascr-admin.php:129
 msgid "Category"
 msgstr ""
 
-#: includes/class-cascr-admin.php:131
+#: includes/class-cascr-admin.php:130
 msgid "Severity"
 msgstr ""
 
-#: includes/class-cascr-admin.php:132
+#: includes/class-cascr-admin.php:131
 msgid "Status"
 msgstr ""
 
-#: includes/class-cascr-admin.php:133
+#: includes/class-cascr-admin.php:132
 msgid "Score"
 msgstr ""
 
-#: includes/class-cascr-admin.php:134
+#: includes/class-cascr-admin.php:133
 msgid "Result"
 msgstr ""
 
-#: includes/class-cascr-admin.php:136
-msgid "Run again"
+#: includes/class-cascr-admin.php:139
+msgid "Checking again"
 msgstr ""
 
-#: includes/class-cascr-admin.php:137
+#: includes/class-cascr-admin.php:140
+msgid "Resolved"
+msgstr ""
+
+#: includes/class-cascr-admin.php:141
+msgid "Still open after the re-check."
+msgstr ""
+
+#: includes/class-cascr-admin.php:142
+msgid "Nothing is left on the list. Run all checks again whenever you have changed something."
+msgstr ""
+
+#: includes/class-cascr-admin.php:143
 msgid "The security check finished."
 msgstr ""
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:156
+#: includes/class-cascr-admin.php:165
 #, php-format
 msgid "%d check across your WordPress installation."
 msgid_plural "%d checks across your WordPress installation."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-cascr-admin.php:170
+#: includes/class-cascr-admin.php:182
+msgid "What each check looks at"
+msgstr ""
+
+#: includes/class-cascr-admin.php:186
+#: includes/class-cascr-admin.php:191
+msgid "Search the checks"
+msgstr ""
+
+#: includes/class-cascr-admin.php:197
+msgid "No check matches that search."
+msgstr ""
+
+#: includes/class-cascr-admin.php:205
+msgid "WordPress security"
+msgstr ""
+
+#: includes/class-cascr-admin.php:207
+msgid "Documentation"
+msgstr ""
+
+#: includes/class-cascr-admin.php:209
+msgid "Report a false positive"
+msgstr ""
+
+#: includes/class-cascr-admin.php:211
+msgid "Support"
+msgstr ""
+
+#: includes/class-cascr-admin.php:229
 msgid "Step 1:"
 msgstr ""
 
-#: includes/class-cascr-admin.php:171
+#: includes/class-cascr-admin.php:230
 msgid "Start the check"
 msgstr ""
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:177
+#: includes/class-cascr-admin.php:236
 #, php-format
 msgid "%d checks, about a minute. Nothing on your site is changed."
 msgstr ""
 
-#: includes/class-cascr-admin.php:188
-msgid "I understand that these checks read the site, write one temporary file to the uploads folder and delete it again, and that the result is an assessment rather than a guarantee."
-msgstr ""
-
-#: includes/class-cascr-admin.php:193
+#: includes/class-cascr-admin.php:247
 msgid "Start the security check"
 msgstr ""
 
-#: includes/class-cascr-admin.php:195
-msgid "Tick the box above to start."
-msgstr ""
-
-#. translators: 1: relative time since the last run, 2: grade letter, 3: grade label.
-#: includes/class-cascr-admin.php:213
-#, php-format
-msgid "Last run %1$s ago: grade %2$s, %3$s."
-msgstr ""
-
-#: includes/class-cascr-admin.php:229
+#: includes/class-cascr-admin.php:258
 msgid "Step 2:"
 msgstr ""
 
-#: includes/class-cascr-admin.php:230
+#: includes/class-cascr-admin.php:259
 msgid "Your result"
 msgstr ""
 
-#: includes/class-cascr-admin.php:232
+#: includes/class-cascr-admin.php:261
 msgid "A grade, what it means, and the short list to work through."
 msgstr ""
 
-#: includes/class-cascr-admin.php:237
-#: includes/class-cascr-admin.php:259
+#: includes/class-cascr-admin.php:266
+#: includes/class-cascr-admin.php:283
 msgid "Appears once the check has run."
 msgstr ""
 
-#: includes/class-cascr-admin.php:251
+#: includes/class-cascr-admin.php:275
 msgid "Step 3:"
 msgstr ""
 
-#: includes/class-cascr-admin.php:252
+#: includes/class-cascr-admin.php:276
 msgid "Go through everything else"
 msgstr ""
 
-#: includes/class-cascr-admin.php:254
+#: includes/class-cascr-admin.php:278
 msgid "Every check with its detail, filterable, and the report to take away."
 msgstr ""
 
-#: includes/class-cascr-admin.php:271
-msgid "What each check looks at"
+#: includes/class-cascr-admin.php:299
+msgid "These checks read the site, write one temporary file to the uploads folder and delete it again. The result is an assessment rather than a guarantee."
 msgstr ""
 
-#: includes/class-cascr-admin.php:275
-#: includes/class-cascr-admin.php:280
-msgid "Search the checks"
+#: includes/class-cascr-admin.php:310
+msgid "I understand."
 msgstr ""
 
-#: includes/class-cascr-admin.php:286
-msgid "No check matches that search."
+#: includes/class-cascr-admin.php:328
+msgid "Tick the box above to start."
 msgstr ""
 
-#: includes/class-cascr-admin.php:294
-msgid "WordPress security"
+#: includes/class-cascr-admin.php:383
+msgid "All"
 msgstr ""
 
-#: includes/class-cascr-admin.php:296
-msgid "Documentation"
+#: includes/class-cascr-admin.php:388
+msgid "Muted"
 msgstr ""
 
-#: includes/class-cascr-admin.php:298
-msgid "Report a false positive"
+#: includes/class-cascr-admin.php:392
+msgid "All checks"
 msgstr ""
 
-#: includes/class-cascr-admin.php:300
-msgid "Support"
+#: includes/class-cascr-admin.php:442
+msgid "No check matches that filter."
 msgstr ""
 
-#: includes/class-cascr-admin.php:352
-#: includes/class-cascr-scoring.php:216
+#: includes/class-cascr-admin.php:481
+msgid "Details"
+msgstr ""
+
+#: includes/class-cascr-admin.php:521
+msgid "Download as text"
+msgstr ""
+
+#: includes/class-cascr-admin.php:522
+msgid "Download as JSON"
+msgstr ""
+
+#: includes/class-cascr-admin.php:523
+msgid "Download as CSV"
+msgstr ""
+
+#: includes/class-cascr-admin.php:524
+msgid "Copy report"
+msgstr ""
+
+#: includes/class-cascr-admin.php:528
+msgid "Take the report with you"
+msgstr ""
+
+#: includes/class-cascr-admin.php:586
+#: includes/class-cascr-scoring.php:243
 msgid "Critical"
 msgstr ""
 
-#: includes/class-cascr-admin.php:353
+#: includes/class-cascr-admin.php:587
 msgid "High"
 msgstr ""
 
-#: includes/class-cascr-admin.php:354
+#: includes/class-cascr-admin.php:588
 msgid "Medium"
 msgstr ""
 
-#: includes/class-cascr-admin.php:355
+#: includes/class-cascr-admin.php:589
 msgid "Low"
 msgstr ""
 
@@ -2775,6 +2864,55 @@ msgstr ""
 
 #: includes/class-cascr-cli.php:111
 msgid "Nothing needs your attention."
+msgstr ""
+
+#. translators: %s: number of failed checks.
+#: includes/class-cascr-nudges.php:76
+#, php-format
+msgid "%s failed check"
+msgid_plural "%s failed checks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-cascr-nudges.php:113
+msgid "This site has not been checked yet."
+msgstr ""
+
+#: includes/class-cascr-nudges.php:118
+msgid "Run the first check"
+msgstr ""
+
+#. translators: %d: number of findings still open.
+#: includes/class-cascr-nudges.php:138
+#, php-format
+msgid "%d open task"
+msgid_plural "%d open tasks"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: length of time, for example "2 weeks".
+#: includes/class-cascr-nudges.php:152
+#, php-format
+msgid "Last full check %s ago."
+msgstr ""
+
+#: includes/class-cascr-nudges.php:162
+#: includes/class-cascr-nudges.php:195
+msgid "Open the report"
+msgstr ""
+
+#. translators: %s: length of time, for example "2 months".
+#: includes/class-cascr-nudges.php:190
+#, php-format
+msgid "The last full security check on this site ran %s ago."
+msgstr ""
+
+#: includes/class-cascr-nudges.php:197
+msgid "Stop reminding me"
+msgstr ""
+
+#: includes/class-cascr-nudges.php:233
+msgid "You are not allowed to do that."
 msgstr ""
 
 #: includes/class-cascr-registry.php:172
@@ -3037,12 +3175,17 @@ msgstr ""
 msgid "Client IP detection"
 msgstr ""
 
-#: includes/class-cascr-rest.php:115
+#: includes/class-cascr-rest.php:141
 msgid "You are not allowed to run security checks on this site."
 msgstr ""
 
-#: includes/class-cascr-rest.php:147
+#: includes/class-cascr-rest.php:173
+#: includes/class-cascr-rest.php:198
 msgid "There is no check with that identifier."
+msgstr ""
+
+#: includes/class-cascr-rest.php:208
+msgid "There is no stored report to update. Run all checks once first."
 msgstr ""
 
 #: includes/class-cascr-result.php:111
@@ -3053,8 +3196,16 @@ msgstr ""
 msgid "The check could not be completed on this server."
 msgstr ""
 
-#. translators: %d: number of failed checks.
+#. translators: 1: grade letter, 2: number of findings.
 #: includes/class-cascr-scoring.php:145
+#, php-format
+msgid "Today: grade %1$s with %2$d finding."
+msgid_plural "Today: grade %1$s with %2$d findings."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of failed checks.
+#: includes/class-cascr-scoring.php:172
 #, php-format
 msgid "%d finding needs your attention now."
 msgid_plural "%d findings need your attention now."
@@ -3062,7 +3213,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of warnings.
-#: includes/class-cascr-scoring.php:158
+#: includes/class-cascr-scoring.php:185
 #, php-format
 msgid "%d more is worth improving."
 msgid_plural "%d more are worth improving."
@@ -3070,25 +3221,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of checks that could not be completed.
-#: includes/class-cascr-scoring.php:175
+#: includes/class-cascr-scoring.php:202
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-cascr-scoring.php:212
+#: includes/class-cascr-scoring.php:239
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-cascr-scoring.php:213
+#: includes/class-cascr-scoring.php:240
 msgid "Good"
 msgstr ""
 
-#: includes/class-cascr-scoring.php:214
+#: includes/class-cascr-scoring.php:241
 msgid "Moderate"
 msgstr ""
 
-#: includes/class-cascr-scoring.php:215
+#: includes/class-cascr-scoring.php:242
 msgid "Poor"
 msgstr ""
