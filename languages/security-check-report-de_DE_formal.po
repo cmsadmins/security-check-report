@@ -576,9 +576,9 @@ msgid ""
 "A site that merely answers on https while still advertising http lets a "
 "login travel in the clear whenever someone types the address without the s."
 msgstr ""
-"Eine Website, die auf https nur antwortet, aber weiter http angibt, lässt "
-"eine Anmeldung im Klartext laufen, sobald jemand die Adresse ohne das s "
-"eintippt."
+"Eine Website, die zwar über https erreichbar ist, aber weiterhin http als "
+"Adresse angibt, lässt eine Anmeldung im Klartext laufen, sobald jemand die "
+"Adresse ohne das s eintippt."
 
 #: config/docs.php:297
 msgid ""
@@ -699,8 +699,7 @@ msgid "%d privileged account uses a guessable password."
 msgid_plural "%d privileged accounts use guessable passwords."
 msgstr[0] ""
 "%d privilegiertes Konto verwendet ein leicht zu erratendes Passwort."
-msgstr[1] ""
-"%d privilegierte Konten verwenden ein leicht zu erratendes Passwort."
+msgstr[1] "%d privilegierte Konten verwenden leicht zu erratende Passwörter."
 
 #: includes/checks/class-cascr-checks-accounts.php:269
 msgid "Reset those passwords now and check the account activity afterwards."
@@ -1271,8 +1270,8 @@ msgid ""
 "No backup plugin was detected. Recovery from a compromise depends on having "
 "one."
 msgstr ""
-"Kein Backup-Plugin gefunden. Ohne Backup gibt es nach einer Kompromittierung"
-" keinen Weg zurück."
+"Kein Backup-Plugin gefunden. Ob Sie nach einer Kompromittierung "
+"zurückkommen, hängt daran, dass es eines gibt."
 
 #: includes/checks/class-cascr-checks-config.php:627
 msgid ""
@@ -1509,7 +1508,7 @@ msgstr "Alle aktiven Plugins sind aktuell."
 msgid "%d active plugin has an update waiting."
 msgid_plural "%d active plugins have updates waiting."
 msgstr[0] "%d aktives Plugin wartet auf ein Update."
-msgstr[1] "%d aktive Plugins warten auf ein Update."
+msgstr[1] "Für %d aktive Plugins liegen Updates bereit."
 
 #: includes/checks/class-cascr-checks-core.php:525
 #: includes/checks/class-cascr-checks-core.php:579
@@ -2333,8 +2332,8 @@ msgstr "weder default-src noch object-src ist gesetzt"
 msgid ""
 "A Content Security Policy is enforced and contains no obvious escape hatch."
 msgstr ""
-"Eine Content Security Policy wird durchgesetzt und enthält keine "
-"offensichtliche Hintertür."
+"Eine Content Security Policy wird durchgesetzt und enthält kein "
+"offensichtliches Schlupfloch."
 
 #: includes/checks/class-cascr-checks-network.php:514
 msgid ""
@@ -4142,12 +4141,12 @@ msgstr ""
 "und gegen den nächsten Administrator, der den Editor öffnet. WordPress hat "
 "keine Oberfläche, um eine Berechtigung wieder zu entziehen, dafür braucht es"
 " ein Rolleneditor-Plugin oder eine Zeile Code in einem Plugin, remove_cap "
-"auf die Rolle. Das Plugin zu deaktivieren, das sie hinzugefügt hat, macht "
-"nichts rückgängig, die Berechtigung bleibt in der Datenbank. Eine Rolle, die"
-" sich aus bekanntem Grund geändert hat, wird weiterhin gemeldet: Die "
-"Vergleichsbasis wird einmal geschrieben und nicht aktualisiert. Die Prüfung "
-"stummzuschalten ist damit der einzige Weg, das zu quittieren, und es "
-"verbirgt die Befunde zu den Berechtigungen gleich mit."
+"auf die Rolle. Das Plugin zu deaktivieren, das die Berechtigung hinzugefügt "
+"hat, ändert daran nichts, die Berechtigung bleibt in der Datenbank. Eine "
+"Rolle, die sich aus bekanntem Grund geändert hat, wird weiterhin gemeldet: "
+"Die Vergleichsbasis wird einmal geschrieben und nicht aktualisiert. Die "
+"Prüfung stummzuschalten ist damit der einzige Weg, das abzuhaken, und damit "
+"verschwinden die Befunde zu den Berechtigungen gleich mit."
 
 #: config/docs.php:277
 msgid ""
@@ -4816,7 +4815,7 @@ msgstr ""
 msgid "%d option entry contains a code fragment."
 msgid_plural "%d option entries contain code fragments."
 msgstr[0] "%d Optionseintrag enthält ein Code-Fragment."
-msgstr[1] "%d Optionseinträge enthalten ein Code-Fragment."
+msgstr[1] "%d Optionseinträge enthalten Code-Fragmente."
 
 #: includes/checks/class-cascr-checks-config.php:583
 msgid ""
@@ -5561,7 +5560,7 @@ msgstr ""
 #, php-format
 msgid "%1$d scheduled event is overdue by %2$s"
 msgid_plural "%1$d scheduled events are overdue, the oldest by %2$s"
-msgstr[0] "%1$d geplantes Ereignis ist überfällig um %2$s"
+msgstr[0] "%1$d geplantes Ereignis ist um %2$s überfällig"
 msgstr[1] "%1$d geplante Ereignisse sind überfällig, das älteste um %2$s"
 
 #. translators: 1: number of overdue events, 2: human readable time
@@ -5570,7 +5569,7 @@ msgstr[1] "%1$d geplante Ereignisse sind überfällig, das älteste um %2$s"
 #, php-format
 msgid "%1$d scheduled event is overdue by %2$s."
 msgid_plural "%1$d scheduled events are overdue, the oldest by %2$s."
-msgstr[0] "%1$d geplantes Ereignis ist überfällig um %2$s."
+msgstr[0] "%1$d geplantes Ereignis ist um %2$s überfällig."
 msgstr[1] "%1$d geplante Ereignisse sind überfällig, das älteste um %2$s."
 
 #: includes/checks/class-cascr-checks-network.php:63

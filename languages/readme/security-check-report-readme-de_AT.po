@@ -1076,7 +1076,7 @@ msgid ""
 "subsite looked like it had a custom one."
 msgstr ""
 "Die Tabellenpräfix-Prüfung verglich auf Multisite das Präfix der einzelnen "
-"Website, sodass jede Unterseite aussah, als hätte sie ein eigenes."
+"Website, sodass jede Website im Netzwerk aussah, als hätte sie ein eigenes."
 
 #. Found in changelog list item.
 msgid ""
