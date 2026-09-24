@@ -18,15 +18,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CASCR_Admin_Dashboard {
 
 	/**
-	 * Height of the curve in user units. Also the full risk scale.
+	 * Height of the curve in user units. Also the full risk scale, so a bar is
+	 * as many units tall as the run was risky.
 	 */
-	const CURVE_HEIGHT = 56;
+	const CURVE_HEIGHT = 100;
 
 	/**
-	 * Width of one bar and the gap that follows it.
+	 * Width of one bar and the gap that follows it, in user units.
+	 *
+	 * The drawing carries its own width, so ten runs fill the card the way a
+	 * chart should and two runs stay a pair of bars rather than two slabs. Past
+	 * roughly a dozen runs the page is narrower than the drawing and the
+	 * stylesheet scales the whole row down, gaps included.
 	 */
-	const CURVE_BAR = 10;
-	const CURVE_GAP = 4;
+	const CURVE_BAR = 88;
+	const CURVE_GAP = 20;
 
 	/**
 	 * Prints the dashboard view.

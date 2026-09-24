@@ -716,6 +716,15 @@
     border-top: 1px solid var(--cascr-border-soft);
 }
 
+/*
+ * The admin stylesheet sets a display on headings, which beats the hidden
+ * attribute in the markup. Without this an empty "Details" heading sits above
+ * every finding that has nothing to list.
+ */
+.cascr [hidden] {
+    display: none !important;
+}
+
 .cascr-result__heading {
     margin: var(--cascr-space-4) 0 var(--cascr-space-2);
     font-size: 12px;
@@ -815,19 +824,23 @@
 }
 
 /*
- * The drawing is one user unit per pixel, so two recorded runs would be 24
- * pixels wide and read as a rendering fault. The minimum stretches the row to
- * a width that looks intentional; from about a dozen runs on the drawing is
- * wider than the minimum anyway and keeps its own scale, capped by the page.
+ * The drawing carries its own width in user units, one per pixel, and the two
+ * bounds here decide what that turns into. The minimum keeps the two runs of a
+ * new installation from reading as a rendering fault; the maximum hands the
+ * whole row back to the card as soon as there are more runs than fit, which
+ * from about a dozen on is every one of them. The height is set here rather
+ * than taken from the drawing: the aspect ratio is free, so the difference
+ * between a bad grade and a good one is a difference anyone can see.
  */
 .cascr-curve__svg {
     display: block;
     min-width: 160px;
     max-width: 100%;
+    height: 124px;
     background: var(--cascr-bg-soft);
     border: 1px solid var(--cascr-border);
     padding: var(--cascr-space-2);
-    box-sizing: content-box;
+    box-sizing: border-box;
 }
 
 .cascr-curve__bar { fill: var(--cascr-unknown); }
