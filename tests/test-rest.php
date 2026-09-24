@@ -73,7 +73,16 @@ class Test_CASCR_REST extends WP_UnitTestCase {
 	public function test_all_routes_are_registered() {
 		$routes = $this->server->get_routes();
 
-		foreach ( array( '/tests', '/run/(?P<id>[a-z0-9_]+)', '/report', '/ignore' ) as $route ) {
+		$expected = array(
+			'/tests',
+			'/run/(?P<id>[a-z0-9_]+)',
+			'/recheck/(?P<id>[a-z0-9_]+)',
+			'/consent',
+			'/report',
+			'/ignore',
+		);
+
+		foreach ( $expected as $route ) {
 			$this->assertArrayHasKey( '/' . CASCR_REST::NAMESPACE_V1 . $route, $routes );
 		}
 	}
@@ -85,12 +94,15 @@ class Test_CASCR_REST extends WP_UnitTestCase {
 		$this->assertSame( 401, $this->call( 'POST', '/run/wp_debug' )->get_status() );
 		$this->assertSame( 401, $this->call( 'GET', '/report' )->get_status() );
 		$this->assertSame( 401, $this->call( 'POST', '/ignore', array( 'id' => 'wp_debug' ) )->get_status() );
+		$this->assertSame( 401, $this->call( 'POST', '/recheck/wp_debug' )->get_status() );
+		$this->assertSame( 401, $this->call( 'POST', '/consent' )->get_status() );
 	}
 
 	public function test_a_subscriber_is_rejected() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 
 		$this->assertSame( 403, $this->call( 'POST', '/run/wp_debug' )->get_status() );
+		$this->assertSame( 403, $this->call( 'POST', '/recheck/wp_debug' )->get_status() );
 	}
 
 	public function test_an_administrator_can_list_the_checks() {
@@ -151,6 +163,61 @@ class Test_CASCR_REST extends WP_UnitTestCase {
 
 		$this->assertNotNull( $data['run'] );
 		$this->assertSame( 'A', $data['run']['grade'] );
+	}
+
+	public function test_an_unknown_check_cannot_be_rechecked() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertSame( 404, $this->call( 'POST', '/recheck/does_not_exist' )->get_status() );
+	}
+
+	/**
+	 * A re-check only makes sense against a stored run. Without one there is
+	 * nothing to replace and no grade to recalculate.
+	 */
+	public function test_a_recheck_without_a_stored_run_is_refused() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertSame( 409, $this->call( 'POST', '/recheck/wp_debug' )->get_status() );
+	}
+
+	public function test_a_recheck_answers_with_result_grade_and_priorities() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->call(
+			'POST',
+			'/report',
+			array( 'results' => array( 'wp_debug' => CASCR_Result::fail( 'debug is on', 9 ) ) )
+		);
+
+		$response = $this->call( 'POST', '/recheck/wp_debug' );
+		$data     = $response->get_data();
+
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertSame( 'wp_debug', $data['id'] );
+		$this->assertArrayHasKey( 'status', $data['result'] );
+		$this->assertArrayHasKey( 'grade', $data['summary'] );
+		$this->assertArrayHasKey( 'verdict', $data['summary'] );
+		// The headline sentence comes finished, so the browser never has to
+		// pick a plural form of its own.
+		$this->assertNotEmpty( $data['summary']['today'] );
+		// The note about the grade no longer coming from one pass belongs in
+		// the same answer, otherwise it only shows up after the next reload.
+		$this->assertNotEmpty( $data['summary']['note'] );
+		$this->assertArrayHasKey( 'priorities', $data );
+		$this->assertArrayHasKey( 'wp_debug', $data['partial'] );
+
+		$stored = CASCR_Store::last_run();
+
+		$this->assertSame( $data['result']['status'], $stored['tests']['wp_debug']['status'] );
+		$this->assertSame( $data['summary']['grade'], $stored['grade'] );
+	}
+
+	public function test_consent_is_recorded() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertGreaterThan( 0, $this->call( 'POST', '/consent' )->get_data()['consent'] );
+		$this->assertTrue( CASCR_Store::consent() );
 	}
 
 	public function test_muting_and_unmuting_through_the_api() {

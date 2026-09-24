@@ -22,6 +22,8 @@ class CASCR_Store {
 	const OPTION_PREVIOUS = 'cascr_previous_scan';
 	const OPTION_IGNORED  = 'cascr_ignored';
 	const OPTION_BASELINE = 'cascr_baseline';
+	const OPTION_CONSENT  = 'cascr_consent';
+	const OPTION_BADGE    = 'cascr_badge';
 
 	const IGNORE_PERMANENT     = 'permanent';
 	const IGNORE_UNTIL_CHANGED = 'until_changed';
@@ -34,6 +36,10 @@ class CASCR_Store {
 	 * @return array The stored run.
 	 */
 	public static function save_run( $results, $summary ) {
+		// Old installations have two runs and no history. Seeding before the
+		// rotation is the last moment at which both of them still exist.
+		CASCR_History::migrate();
+
 		$current = get_option( self::OPTION_LAST, array() );
 		if ( ! empty( $current ) ) {
 			update_option( self::OPTION_PREVIOUS, $current, false );
@@ -49,18 +55,133 @@ class CASCR_Store {
 		);
 
 		foreach ( $results as $id => $result ) {
-			$run['tests'][ $id ] = array(
-				'status'  => $result['status'],
-				'score'   => $result['score'],
-				'summary' => $result['summary'],
-				'hash'    => self::fingerprint( $result ),
-				'ignored' => ! empty( $result['ignored'] ),
-			);
+			$run['tests'][ $id ] = self::stored_test( $result );
 		}
 
 		update_option( self::OPTION_LAST, $run, false );
 
+		self::remember_badge( $summary['counts'] );
+
+		CASCR_History::append( $run );
+
 		return $run;
+	}
+
+	/**
+	 * Replaces one test inside the stored run after a re-check.
+	 *
+	 * Everything else in the run is left exactly as the last full pass found
+	 * it. The identifier is noted under 'partial' so the interface can say that
+	 * the grade no longer comes from a single pass, and the history stays
+	 * untouched: a re-check is not a run.
+	 *
+	 * @param string $id     Test identifier.
+	 * @param array  $result The fresh result.
+	 * @return array|false The updated run, or false when there is nothing to patch.
+	 */
+	public static function patch_test( $id, $result ) {
+		$run = self::last_run();
+
+		if ( empty( $run['tests'] ) || ! isset( $run['tests'][ $id ] ) ) {
+			return false;
+		}
+
+		$run['tests'][ $id ] = self::stored_test( $result );
+
+		$partial = isset( $run['partial'] ) && is_array( $run['partial'] ) ? $run['partial'] : array();
+
+		$partial[ $id ] = time();
+		$run['partial'] = $partial;
+
+		$summary = CASCR_Scoring::summarize( $run['tests'] );
+
+		$run['grade']  = $summary['grade'];
+		$run['risk']   = $summary['risk'];
+		$run['counts'] = $summary['counts'];
+
+		update_option( self::OPTION_LAST, $run, false );
+
+		self::remember_badge( $summary['counts'] );
+
+		return $run;
+	}
+
+	/**
+	 * The one number the menu bubble needs, kept apart from the run.
+	 *
+	 * The bubble is drawn on every single admin page. Reading the full run for
+	 * it would unserialise the findings of sixty checks each time, so the count
+	 * gets an option of its own. It is an integer, so this is the one value
+	 * here that is worth autoloading.
+	 *
+	 * @param array $counts Status counts from CASCR_Scoring::summarize().
+	 */
+	private static function remember_badge( $counts ) {
+		update_option( self::OPTION_BADGE, isset( $counts['fail'] ) ? (int) $counts['fail'] : 0 );
+	}
+
+	/**
+	 * Open failures as of the last write, or zero when nothing is known.
+	 *
+	 * @return int
+	 */
+	public static function badge() {
+		return (int) get_option( self::OPTION_BADGE, 0 );
+	}
+
+	/**
+	 * Whether the site owner has agreed to the checks being run.
+	 *
+	 * Anyone with a stored run has agreed at least once, back when the checkbox
+	 * was still asked on every visit. Asking them again after an update would
+	 * be a step backwards.
+	 *
+	 * @return bool
+	 */
+	public static function consent() {
+		if ( (int) get_option( self::OPTION_CONSENT, 0 ) > 0 ) {
+			return true;
+		}
+
+		return ! empty( self::last_run() );
+	}
+
+	/**
+	 * Records the one time agreement.
+	 *
+	 * @return int The recorded timestamp.
+	 */
+	public static function set_consent() {
+		$now = time();
+
+		update_option( self::OPTION_CONSENT, $now, false );
+
+		return $now;
+	}
+
+	/**
+	 * The shape a result is remembered in.
+	 *
+	 * One place for it, because a run written by the full pass and a run
+	 * patched by a re-check have to be indistinguishable afterwards. The items
+	 * come along because the page is rendered from the stored run alone: without
+	 * them nobody could see what a finding actually named. Their length is
+	 * already bounded by CASCR_Checks_Base::cap().
+	 *
+	 * @param array $result Result array.
+	 * @return array
+	 */
+	private static function stored_test( $result ) {
+		return array(
+			'status'  => $result['status'],
+			'score'   => $result['score'],
+			'summary' => $result['summary'],
+			'items'   => isset( $result['items'] ) && is_array( $result['items'] ) ? array_values( $result['items'] ) : array(),
+			'fix'     => isset( $result['fix'] ) ? $result['fix'] : '',
+			'link'    => isset( $result['link'] ) ? $result['link'] : array(),
+			'hash'    => self::fingerprint( $result ),
+			'ignored' => ! empty( $result['ignored'] ),
+		);
 	}
 
 	/**
@@ -69,9 +190,7 @@ class CASCR_Store {
 	 * @return array
 	 */
 	public static function last_run() {
-		$run = get_option( self::OPTION_LAST, array() );
-
-		return is_array( $run ) ? $run : array();
+		return self::normalize( get_option( self::OPTION_LAST, array() ) );
 	}
 
 	/**
@@ -80,9 +199,50 @@ class CASCR_Store {
 	 * @return array
 	 */
 	public static function previous_run() {
-		$run = get_option( self::OPTION_PREVIOUS, array() );
+		return self::normalize( get_option( self::OPTION_PREVIOUS, array() ) );
+	}
 
-		return is_array( $run ) ? $run : array();
+	/**
+	 * Fills in what a run written by an older version does not carry.
+	 *
+	 * Up to 2.3.2 a stored test held status, score, summary, hash and ignored
+	 * and nothing else. Scoring reads the remediation step and the help link,
+	 * the rendered result list reads the findings, and the first page view
+	 * after an update would otherwise run into whichever of them it touches
+	 * first. Doing it on the way out of the option means no caller has to know
+	 * which version wrote the run.
+	 *
+	 * The union keeps the keys a current run already has, in their order, so a
+	 * run written by this version passes through unchanged.
+	 *
+	 * @param mixed $run Whatever the option holds.
+	 * @return array
+	 */
+	private static function normalize( $run ) {
+		if ( ! is_array( $run ) ) {
+			return array();
+		}
+
+		if ( empty( $run['tests'] ) || ! is_array( $run['tests'] ) ) {
+			return $run;
+		}
+
+		$defaults = array(
+			'status'  => CASCR_Result::STATUS_INCONCLUSIVE,
+			'score'   => 0,
+			'summary' => '',
+			'items'   => array(),
+			'fix'     => '',
+			'link'    => array(),
+			'hash'    => '',
+			'ignored' => false,
+		);
+
+		foreach ( $run['tests'] as $id => $test ) {
+			$run['tests'][ $id ] = (array) $test + $defaults;
+		}
+
+		return $run;
 	}
 
 	/**
@@ -304,6 +464,9 @@ class CASCR_Store {
 			self::OPTION_PREVIOUS,
 			self::OPTION_IGNORED,
 			self::OPTION_BASELINE,
+			self::OPTION_CONSENT,
+			self::OPTION_BADGE,
+			CASCR_History::OPTION,
 		);
 	}
 }

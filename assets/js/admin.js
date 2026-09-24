@@ -1,9 +1,9 @@
 /**
  * CMS ADMINS Security Check Report
  *
- * The browser runs the checks and draws the result. It does not decide what
- * anything means: the status, the score, the grade and the ordering all come
- * from PHP, so a report generated over WP-CLI says exactly the same thing.
+ * The page itself is rendered in PHP. What is left here is what a stored run
+ * cannot do on its own: run the checks, re-check a single task, filter the
+ * list, search the documentation and hand the report out as a file.
  */
 (() => {
     'use strict';
@@ -12,12 +12,17 @@
     const i18n = config.i18n || {};
     const tests = config.tests || {};
     const categories = config.categories || {};
+    const severities = config.severities || {};
 
     const STATUS = {
         pass: 'pass',
         warn: 'warn',
         fail: 'fail',
         inconclusive: 'inconclusive',
+    };
+
+    const state = {
+        priorities: Array.isArray(config.priorities) ? config.priorities : [],
     };
 
     const statusLabel = (status) => ({
@@ -78,11 +83,23 @@
             return Api.request(`/run/${encodeURIComponent(id)}`, { method: 'POST', signal });
         }
 
+        static recheck(id) {
+            return Api.request(`/recheck/${encodeURIComponent(id)}`, { method: 'POST' });
+        }
+
         static saveReport(results) {
             return Api.request('/report', {
                 method: 'POST',
                 body: JSON.stringify({ results }),
             });
+        }
+
+        static report() {
+            return Api.request('/report');
+        }
+
+        static consent() {
+            return Api.request('/consent', { method: 'POST' });
         }
 
         static setIgnore(id, ignore) {
@@ -110,7 +127,7 @@
             this.#limit = Math.max(1, Number(limit) || 1);
         }
 
-        async run({ onProgress, onResult }) {
+        async run({ onProgress }) {
             this.#controller = new AbortController();
 
             const results = {};
@@ -145,7 +162,6 @@
                     done += 1;
 
                     onProgress(done, total, id);
-                    onResult(id, result);
                 }
             };
 
@@ -166,7 +182,7 @@
     }
 
     /**
-     * Turns a finished run into text, JSON and CSV.
+     * Turns a stored run into text, JSON and CSV.
      */
     class Exporter {
         constructor(results, summary) {
@@ -276,379 +292,6 @@
             document.body.removeChild(link);
 
             URL.revokeObjectURL(url);
-        }
-    }
-
-    /**
-     * Draws the report.
-     */
-    class ReportView {
-        #results = {};
-        #summary = null;
-        #filter = 'all';
-
-        constructor(nodes) {
-            this.nodes = nodes;
-        }
-
-        setData(results, summary) {
-            this.#results = results;
-            this.#summary = summary;
-        }
-
-        render() {
-            this.#renderScore();
-            this.#renderPriorities();
-            this.#renderDiff();
-            this.#renderResults();
-            this.#renderExport();
-        }
-
-        #renderScore() {
-            const target = this.nodes.score;
-            target.textContent = '';
-
-            if (!this.#summary) {
-                return;
-            }
-
-            const grade = this.#summary.grade;
-            const counts = this.#summary.counts;
-
-            const card = el('div', `cascr-score__card cascr-score__card--${grade.toLowerCase()}`);
-
-            const badge = el('div', 'cascr-score__grade');
-            badge.appendChild(el('span', 'cascr-score__letter', grade));
-            badge.appendChild(el('span', 'cascr-score__label', (config.grades || {})[grade] || ''));
-            card.appendChild(badge);
-
-            const meta = el('div', 'cascr-score__meta');
-
-            const risk = el('div', 'cascr-score__risk');
-            risk.appendChild(el('span', 'cascr-score__risk-value', `${this.#summary.risk}%`));
-            risk.appendChild(el('span', 'cascr-score__risk-label', i18n.riskScore));
-            meta.appendChild(risk);
-
-            const stats = el('div', 'cascr-score__stats');
-            [
-                ['fail', counts.fail, i18n.statusFail],
-                ['warn', counts.warn, i18n.statusWarn],
-                ['pass', counts.pass, i18n.statusPass],
-                ['inconclusive', counts.inconclusive, i18n.statusUnknown],
-                ['ignored', counts.ignored, i18n.statusIgnored],
-            ].forEach(([key, value, label]) => {
-                if (!value) {
-                    return;
-                }
-                const stat = el('span', `cascr-stat cascr-stat--${key}`);
-                stat.appendChild(el('strong', null, value));
-                stat.appendChild(el('span', null, ` ${label}`));
-                stats.appendChild(stat);
-            });
-
-            meta.appendChild(stats);
-            card.appendChild(meta);
-            target.appendChild(card);
-
-            if (this.#summary.verdict) {
-                const verdict = el('p', 'cascr-score__verdict', this.#summary.verdict);
-                target.appendChild(verdict);
-            }
-        }
-
-        #renderPriorities() {
-            const target = this.nodes.priorities;
-            target.textContent = '';
-
-            if (!this.#summary) {
-                return;
-            }
-
-            const priorities = this.#summary.priorities || [];
-
-            target.appendChild(el('h2', 'cascr-section__title', i18n.nextActions));
-
-            if (!priorities.length) {
-                target.appendChild(el('p', 'cascr-empty', i18n.nothingToDo));
-                return;
-            }
-
-            target.appendChild(el('p', 'cascr-section__lead', i18n.todoIntro));
-
-            const list = el('ol', 'cascr-priorities__list');
-
-            priorities.forEach((item) => {
-                const entry = el('li', `cascr-priority cascr-priority--${item.severity}`);
-
-                const head = el('div', 'cascr-priority__head');
-                head.appendChild(el('span', 'cascr-priority__label', item.label));
-                head.appendChild(el('span', `cascr-badge cascr-badge--${item.severity}`, statusLabel(item.status)));
-                entry.appendChild(head);
-
-                entry.appendChild(el('p', 'cascr-priority__summary', item.summary));
-
-                if (item.fix) {
-                    entry.appendChild(el('p', 'cascr-priority__fix', item.fix));
-                }
-
-                if (item.link && item.link.url) {
-                    const helper = el('a', 'cascr-result__helper', item.link.label);
-                    helper.href = item.link.url;
-                    helper.target = '_blank';
-                    helper.rel = 'noopener noreferrer';
-                    entry.appendChild(helper);
-                }
-
-                const link = el('a', 'cascr-priority__link', i18n.documentation);
-                link.href = `#cascr-doc-${item.id}`;
-                link.addEventListener('click', () => openDoc(item.id));
-                entry.appendChild(link);
-
-                list.appendChild(entry);
-            });
-
-            target.appendChild(list);
-        }
-
-        #renderDiff() {
-            const target = this.nodes.diff;
-            target.textContent = '';
-
-            const diff = this.#summary && this.#summary.diff;
-
-            if (!diff) {
-                return;
-            }
-
-            target.appendChild(el('h2', 'cascr-section__title', i18n.sinceLastRun));
-
-            const groups = [
-                ['broken', diff.broken, i18n.newIssues],
-                ['fixed', diff.fixed, i18n.fixedIssues],
-                ['changed', diff.changed, i18n.changedIssues],
-            ].filter(([, ids]) => ids && ids.length);
-
-            if (!groups.length) {
-                target.appendChild(el('p', 'cascr-empty', i18n.noChange));
-                return;
-            }
-
-            const wrap = el('div', 'cascr-diff__groups');
-
-            groups.forEach(([key, ids, label]) => {
-                const group = el('div', `cascr-diff__group cascr-diff__group--${key}`);
-                group.appendChild(el('h3', 'cascr-diff__title', `${ids.length} ${label}`));
-
-                const list = el('ul', 'cascr-diff__list');
-                ids.forEach((id) => {
-                    list.appendChild(el('li', null, (tests[id] || {}).label || id));
-                });
-
-                group.appendChild(list);
-                wrap.appendChild(group);
-            });
-
-            target.appendChild(wrap);
-        }
-
-        #renderResults() {
-            const target = this.nodes.results;
-            target.textContent = '';
-
-            target.appendChild(el('h2', 'cascr-section__title', i18n.results));
-            target.appendChild(this.#buildFilters());
-
-            const list = el('div', 'cascr-results__list');
-
-            Object.keys(categories).forEach((category) => {
-                const ids = Object.keys(this.#results).filter((id) => {
-                    const test = tests[id] || {};
-                    return test.category === category && this.#matchesFilter(this.#results[id]);
-                });
-
-                if (!ids.length) {
-                    return;
-                }
-
-                const group = el('div', 'cascr-results__group');
-                group.appendChild(el('h3', 'cascr-results__group-title', categories[category]));
-
-                ids.forEach((id) => group.appendChild(this.#buildRow(id)));
-
-                list.appendChild(group);
-            });
-
-            if (!list.childNodes.length) {
-                list.appendChild(el('p', 'cascr-empty', i18n.nothingToDo));
-            }
-
-            target.appendChild(list);
-        }
-
-        #buildFilters() {
-            const bar = el('div', 'cascr-filters');
-
-            // Counted from what is on screen rather than from the stored run,
-            // so muting a finding updates the chips immediately.
-            const counts = { total: 0, pass: 0, warn: 0, fail: 0, inconclusive: 0, ignored: 0 };
-
-            Object.keys(this.#results).forEach((id) => {
-                const result = this.#results[id];
-                counts.total += 1;
-                if (result.ignored) {
-                    counts.ignored += 1;
-                } else {
-                    counts[result.status] += 1;
-                }
-            });
-
-            const options = [
-                ['all', i18n.filterAll, counts.total],
-                [STATUS.fail, i18n.statusFail, counts.fail],
-                [STATUS.warn, i18n.statusWarn, counts.warn],
-                [STATUS.pass, i18n.statusPass, counts.pass],
-                [STATUS.inconclusive, i18n.statusUnknown, counts.inconclusive],
-                ['ignored', i18n.statusIgnored, counts.ignored],
-            ];
-
-            options.forEach(([value, label, count]) => {
-                if (value !== 'all' && !count) {
-                    return;
-                }
-
-                const button = el('button', 'cascr-filter');
-                button.type = 'button';
-                button.textContent = `${label} (${count || 0})`;
-                button.setAttribute('aria-pressed', String(this.#filter === value));
-
-                if (this.#filter === value) {
-                    button.classList.add('is-active');
-                }
-
-                button.addEventListener('click', () => {
-                    this.#filter = value;
-                    this.#renderResults();
-                });
-
-                bar.appendChild(button);
-            });
-
-            return bar;
-        }
-
-        #matchesFilter(result) {
-            if (this.#filter === 'all') {
-                return true;
-            }
-            if (this.#filter === 'ignored') {
-                return Boolean(result.ignored);
-            }
-            return !result.ignored && result.status === this.#filter;
-        }
-
-        #buildRow(id) {
-            const result = this.#results[id];
-            const test = tests[id] || {};
-            const status = result.ignored ? 'ignored' : result.status;
-
-            const row = el('details', `cascr-result cascr-result--${status}`);
-            row.id = `cascr-result-${id}`;
-
-            const summary = el('summary', 'cascr-result__summary');
-            summary.appendChild(el('span', `cascr-status cascr-status--${status}`, statusLabel(result.status)));
-            summary.appendChild(el('span', 'cascr-result__label', test.label || id));
-            summary.appendChild(el('span', 'cascr-result__text', result.summary));
-            row.appendChild(summary);
-
-            const body = el('div', 'cascr-result__body');
-
-            if (result.items && result.items.length) {
-                body.appendChild(el('h4', 'cascr-result__heading', i18n.details));
-                const list = el('ul', 'cascr-result__items');
-                result.items.forEach((item) => list.appendChild(el('li', null, item)));
-                body.appendChild(list);
-            }
-
-            if (result.fix) {
-                body.appendChild(el('h4', 'cascr-result__heading', i18n.recommendation));
-                body.appendChild(el('p', 'cascr-result__fix', result.fix));
-            }
-
-            const actions = el('div', 'cascr-result__actions');
-
-            if (result.link && result.link.url) {
-                const helper = el('a', 'cascr-result__helper', result.link.label);
-                helper.href = result.link.url;
-                helper.target = '_blank';
-                helper.rel = 'noopener noreferrer';
-                body.appendChild(helper);
-            }
-
-            const docLink = el('a', 'cascr-result__link', i18n.documentation);
-            docLink.href = `#cascr-doc-${id}`;
-            docLink.addEventListener('click', () => openDoc(id));
-            actions.appendChild(docLink);
-
-            if (result.status === STATUS.fail || result.status === STATUS.warn || result.ignored) {
-                const mute = el('button', 'button button-link cascr-result__mute', result.ignored ? i18n.unmute : i18n.mute);
-                mute.type = 'button';
-                mute.addEventListener('click', async () => {
-                    mute.disabled = true;
-                    try {
-                        const response = await Api.setIgnore(id, !result.ignored);
-                        result.ignored = Boolean(response.ignored);
-                        this.#renderResults();
-                        announce(result.ignored ? i18n.muted : i18n.unmuted);
-                    } finally {
-                        mute.disabled = false;
-                    }
-                });
-                actions.appendChild(mute);
-            }
-
-            if (result.ignored) {
-                actions.appendChild(el('span', 'cascr-result__muted-note', i18n.muted));
-            }
-
-            body.appendChild(actions);
-            row.appendChild(body);
-
-            return row;
-        }
-
-        #renderExport() {
-            const target = this.nodes.export;
-            target.textContent = '';
-
-            if (!this.#summary) {
-                return;
-            }
-
-            target.appendChild(el('h2', 'cascr-section__title', i18n.exportTitle));
-
-            const exporter = new Exporter(this.#results, this.#summary);
-            const row = el('div', 'cascr-export__row');
-
-            const buttons = [
-                [i18n.exportText, () => Exporter.download(exporter.text(), `${exporter.filename}.txt`, 'text/plain')],
-                [i18n.exportJson, () => Exporter.download(exporter.json(), `${exporter.filename}.json`, 'application/json')],
-                [i18n.exportCsv, () => Exporter.download(exporter.csv(), `${exporter.filename}.csv`, 'text/csv')],
-                [i18n.copyReport, async () => {
-                    const ok = await copyText(exporter.text());
-                    announce(ok ? i18n.copied : i18n.copyFailed);
-                    notify(ok ? i18n.copied : i18n.copyFailed, ok ? 'success' : 'error');
-                }],
-            ];
-
-            buttons.forEach(([label, handler]) => {
-                const button = el('button', 'button');
-                button.type = 'button';
-                button.textContent = label;
-                button.addEventListener('click', handler);
-                row.appendChild(button);
-            });
-
-            target.appendChild(row);
         }
     }
 
@@ -762,144 +405,540 @@
     }
 
     /**
-     * Wires the page together.
+     * The filter chips above the full list.
+     *
+     * Counts are taken from the rows on screen rather than from the stored
+     * run, so muting a finding moves the numbers straight away.
      */
-    /**
-     * Wires the page together and keeps the three steps in sync.
-     */
-    class App {
+    class Filters {
         constructor() {
-            this.nodes = {
-                consent: document.getElementById('cascr-consent'),
-                run: document.getElementById('cascr-run'),
-                launchHint: document.getElementById('cascr-launch-hint'),
-                progress: document.getElementById('cascr-progress'),
-                progressBar: document.getElementById('cascr-progress-bar'),
-                progressLabel: document.getElementById('cascr-progress-label'),
-                resultPanel: document.getElementById('cascr-result-panel'),
-                findingsPanel: document.getElementById('cascr-findings-panel'),
-                waiting2: document.getElementById('cascr-waiting-2'),
-                waiting3: document.getElementById('cascr-waiting-3'),
-                steps: [
-                    document.getElementById('cascr-step-1'),
-                    document.getElementById('cascr-step-2'),
-                    document.getElementById('cascr-step-3'),
-                ],
-                score: document.getElementById('cascr-score'),
-                priorities: document.getElementById('cascr-priorities'),
-                diff: document.getElementById('cascr-diff'),
-                results: document.getElementById('cascr-results'),
-                export: document.getElementById('cascr-export'),
-            };
+            this.bar = document.getElementById('cascr-filters');
+            this.empty = document.getElementById('cascr-results-empty');
+            this.rows = Array.from(document.querySelectorAll('[data-cascr-row]'));
+            this.groups = Array.from(document.querySelectorAll('[data-cascr-group]'));
+            this.active = 'all';
 
-            if (!this.nodes.run) {
+            if (!this.bar) {
                 return;
             }
 
-            this.view = new ReportView(this.nodes);
-            new DocSearch();
+            this.bar.addEventListener('click', (event) => {
+                const button = event.target.closest('[data-cascr-filter]');
+                if (button) {
+                    this.active = button.dataset.cascrFilter;
+                    this.apply();
+                }
+            });
+        }
 
-            this.nodes.consent.addEventListener('change', (event) => {
-                const ready = event.target.checked;
-                this.nodes.run.disabled = !ready;
-                if (this.nodes.launchHint) {
-                    this.nodes.launchHint.hidden = ready;
+        apply() {
+            if (!this.bar) {
+                return;
+            }
+
+            let visible = 0;
+
+            this.rows.forEach((row) => {
+                const match = this.active === 'all' || row.dataset.cascrStatus === this.active;
+                row.hidden = !match;
+                if (match) {
+                    visible += 1;
                 }
             });
 
-            this.nodes.run.addEventListener('click', () => this.start());
+            this.groups.forEach((group) => {
+                group.hidden = !group.querySelector('[data-cascr-row]:not([hidden])');
+            });
+
+            if (this.empty) {
+                this.empty.hidden = visible > 0;
+            }
+
+            this.bar.querySelectorAll('[data-cascr-filter]').forEach((button) => {
+                const on = button.dataset.cascrFilter === this.active;
+                button.classList.toggle('is-active', on);
+                button.setAttribute('aria-pressed', String(on));
+            });
+        }
+
+        refresh() {
+            if (!this.bar) {
+                return;
+            }
+
+            const counts = { all: 0 };
+
+            this.rows.forEach((row) => {
+                const status = row.dataset.cascrStatus;
+                counts.all += 1;
+                counts[status] = (counts[status] || 0) + 1;
+            });
+
+            this.bar.querySelectorAll('[data-cascr-filter]').forEach((button) => {
+                const value = button.dataset.cascrFilter;
+                const count = counts[value] || 0;
+
+                button.textContent = `${button.dataset.cascrLabel} (${count})`;
+                button.hidden = value !== 'all' && count === 0;
+            });
+
+            if (this.active !== 'all' && !counts[this.active]) {
+                this.active = 'all';
+            }
+
+            this.apply();
+        }
+    }
+
+    /**
+     * The checklist, the re-check and everything that hangs off a stored run.
+     */
+    class Dashboard {
+        constructor() {
+            this.list = document.getElementById('cascr-tasks-list');
+            this.done = document.getElementById('cascr-tasks-done');
+            this.empty = document.getElementById('cascr-tasks-empty');
+            this.open = document.getElementById('cascr-open');
+            this.filters = new Filters();
+
+            document.addEventListener('click', (event) => this.#dispatch(event));
+        }
+
+        #dispatch(event) {
+            const doc = event.target.closest('[data-cascr-doc]');
+            if (doc) {
+                openDoc(doc.dataset.cascrDoc);
+                return;
+            }
+
+            const recheck = event.target.closest('[data-cascr-recheck]');
+            if (recheck) {
+                this.#recheck(recheck);
+                return;
+            }
+
+            const later = event.target.closest('[data-cascr-later]');
+            if (later) {
+                this.#later(later);
+                return;
+            }
+
+            const mute = event.target.closest('[data-cascr-mute]');
+            if (mute) {
+                this.#mute(mute);
+                return;
+            }
+
+            const exportButton = event.target.closest('[data-cascr-export]');
+            if (exportButton) {
+                this.#export(exportButton);
+            }
         }
 
         /**
-         * Marks a step as upcoming, current or done.
+         * Checks one task again and swaps what the answer changed.
          */
-        #setStep(index, state) {
-            const step = this.nodes.steps[index];
-            if (!step) {
+        async #recheck(button) {
+            const id = button.dataset.cascrRecheck;
+            const caption = button.textContent;
+
+            button.disabled = true;
+            button.textContent = i18n.taskChecking;
+
+            let data;
+            try {
+                data = await Api.recheck(id);
+            } catch (error) {
+                notify(error.message || i18n.error, 'error');
+                button.disabled = false;
+                button.textContent = caption;
                 return;
             }
-            step.classList.remove('is-upcoming', 'is-current', 'is-done');
-            step.classList.add(state);
+
+            state.priorities = data.priorities || [];
+
+            this.#updateGrade(data.summary);
+            this.#updateRow(id, data.result);
+
+            const passed = data.result.status === STATUS.pass;
+
+            if (passed) {
+                this.#addResolved(id, data.result.summary);
+            }
+
+            this.#renderTasks();
+
+            const message = passed
+                ? `${i18n.taskResolved}: ${data.result.summary}`
+                : `${i18n.taskRemains} ${data.result.summary}`;
+
+            announce(`${message} ${i18n.grade}: ${data.summary.grade}.`);
+        }
+
+        /**
+         * Mutes a task until its finding says something else.
+         *
+         * The new short list depends on the mute, so this is the one action
+         * that goes back to the server for the whole page.
+         */
+        async #later(button) {
+            button.disabled = true;
+
+            try {
+                await Api.setIgnore(button.dataset.cascrLater, true);
+                window.location.reload();
+            } catch (error) {
+                notify(error.message || i18n.error, 'error');
+                button.disabled = false;
+            }
+        }
+
+        async #mute(button) {
+            const row = button.closest('[data-cascr-row]');
+            if (!row) {
+                return;
+            }
+
+            const muted = row.dataset.cascrStatus === 'ignored';
+
+            button.disabled = true;
+
+            try {
+                const response = await Api.setIgnore(button.dataset.cascrMute, !muted);
+                const status = response.ignored ? 'ignored' : row.dataset.cascrReal;
+
+                row.dataset.cascrStatus = status;
+                row.className = `cascr-result cascr-result--${status}`;
+                button.textContent = response.ignored ? i18n.unmute : i18n.mute;
+
+                const note = row.querySelector('[data-cascr-muted-note]');
+                if (note) {
+                    note.hidden = !response.ignored;
+                }
+
+                this.filters.refresh();
+                announce(response.ignored ? i18n.muted : i18n.unmuted);
+            } catch (error) {
+                notify(error.message || i18n.error, 'error');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        async #export(button) {
+            const format = button.dataset.cascrExport;
+
+            button.disabled = true;
+
+            try {
+                const data = await Api.report();
+
+                if (!data || !data.run) {
+                    return;
+                }
+
+                const exporter = new Exporter(data.run.tests, {
+                    grade: data.run.grade,
+                    risk: data.run.risk,
+                    counts: data.run.counts,
+                    priorities: state.priorities,
+                });
+
+                if (format === 'copy') {
+                    const ok = await copyText(exporter.text());
+                    announce(ok ? i18n.copied : i18n.copyFailed);
+                    notify(ok ? i18n.copied : i18n.copyFailed, ok ? 'success' : 'error');
+                    return;
+                }
+
+                const files = {
+                    text: [exporter.text(), `${exporter.filename}.txt`, 'text/plain'],
+                    json: [exporter.json(), `${exporter.filename}.json`, 'application/json'],
+                    csv: [exporter.csv(), `${exporter.filename}.csv`, 'text/csv'],
+                };
+
+                if (files[format]) {
+                    Exporter.download(...files[format]);
+                }
+            } catch (error) {
+                notify(error.message || i18n.error, 'error');
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        #updateGrade(summary) {
+            const card = document.querySelector('[data-cascr-card]');
+            if (card) {
+                card.className = `cascr-score__card cascr-score__card--${String(summary.grade).toLowerCase()}`;
+            }
+
+            const set = (selector, value) => {
+                const node = document.querySelector(selector);
+                if (node) {
+                    node.textContent = value;
+                }
+            };
+
+            set('[data-cascr-letter]', summary.grade);
+            set('[data-cascr-grade-label]', summary.label || (config.grades || {})[summary.grade] || '');
+            set('[data-cascr-risk]', `${summary.risk}%`);
+            set('[data-cascr-verdict]', summary.verdict || '');
+            set('[data-cascr-today]', summary.today || '');
+
+            // A grade that no longer comes from one pass has to say so right
+            // away, not after the next reload.
+            const note = document.querySelector('[data-cascr-partial]');
+            if (note) {
+                note.textContent = summary.note || '';
+                note.hidden = !summary.note;
+            }
+        }
+
+        /**
+         * Brings the row in the full list in line with the fresh result.
+         */
+        #updateRow(id, result) {
+            const row = document.querySelector(`[data-cascr-row="${CSS.escape(id)}"]`);
+            if (!row) {
+                return;
+            }
+
+            row.dataset.cascrReal = result.status;
+
+            if (row.dataset.cascrStatus !== 'ignored') {
+                row.dataset.cascrStatus = result.status;
+                row.className = `cascr-result cascr-result--${result.status}`;
+            }
+
+            const badge = row.querySelector('[data-cascr-status-label]');
+            if (badge) {
+                badge.className = `cascr-status cascr-status--${result.status}`;
+                badge.textContent = statusLabel(result.status);
+            }
+
+            const summary = row.querySelector('[data-cascr-summary]');
+            if (summary) {
+                summary.textContent = result.summary;
+            }
+
+            const items = row.querySelector('[data-cascr-items]');
+            const itemsHeading = row.querySelector('[data-cascr-items-heading]');
+            if (items) {
+                items.textContent = '';
+                (result.items || []).forEach((item) => items.appendChild(el('li', null, item)));
+                items.hidden = !(result.items || []).length;
+                if (itemsHeading) {
+                    itemsHeading.hidden = items.hidden;
+                }
+            }
+
+            const fix = row.querySelector('[data-cascr-fix]');
+            const fixHeading = row.querySelector('[data-cascr-fix-heading]');
+            if (fix) {
+                fix.textContent = result.fix || '';
+                fix.hidden = !result.fix;
+                if (fixHeading) {
+                    fixHeading.hidden = fix.hidden;
+                }
+            }
+
+            this.filters.refresh();
+        }
+
+        #addResolved(id, summary) {
+            if (!this.done) {
+                return;
+            }
+
+            const entry = el('li', 'cascr-task__resolved');
+            entry.appendChild(el('span', 'cascr-status cascr-status--pass', i18n.taskResolved));
+            entry.appendChild(el('span', 'cascr-task__label', (tests[id] || {}).label || id));
+            entry.appendChild(el('span', 'cascr-task__text', summary));
+
+            this.done.appendChild(entry);
+        }
+
+        /**
+         * Redraws the five open tasks from the answer of the re-check.
+         */
+        #renderTasks() {
+            if (!this.list) {
+                return;
+            }
+
+            this.list.textContent = '';
+            state.priorities.forEach((task) => {
+                this.list.appendChild(this.#buildTask(task));
+                this.#closeOpenEntry(task.id);
+            });
+
+            if (this.empty) {
+                this.empty.hidden = state.priorities.length > 0;
+                if (!state.priorities.length) {
+                    this.empty.textContent = i18n.nothingLeft;
+                }
+            }
+        }
+
+        /**
+         * The same card CASCR_Admin_Dashboard::render_task() prints.
+         */
+        #buildTask(task) {
+            const entry = el('li', `cascr-task cascr-task--${task.severity}`);
+            entry.dataset.cascrTask = task.id;
+
+            const head = el('div', 'cascr-task__head');
+            head.appendChild(el('span', 'cascr-task__label', task.label));
+            head.appendChild(el('span', `cascr-badge cascr-badge--${task.severity}`, severities[task.severity] || task.severity));
+            entry.appendChild(head);
+
+            const summary = el('p', 'cascr-task__summary', task.summary);
+            summary.dataset.cascrTaskSummary = '';
+            entry.appendChild(summary);
+
+            if (task.fix) {
+                entry.appendChild(el('p', 'cascr-task__fix', task.fix));
+            }
+
+            if (task.link && task.link.url) {
+                const helper = el('a', 'cascr-result__helper', task.link.label);
+                helper.href = task.link.url;
+                helper.target = '_blank';
+                helper.rel = 'noopener noreferrer';
+                entry.appendChild(helper);
+            }
+
+            const actions = el('div', 'cascr-task__actions');
+
+            const done = el('button', 'button button-primary', i18n.taskDone);
+            done.type = 'button';
+            done.dataset.cascrRecheck = task.id;
+            actions.appendChild(done);
+
+            const later = el('button', 'button button-link cascr-task__later', i18n.taskLater);
+            later.type = 'button';
+            later.dataset.cascrLater = task.id;
+            actions.appendChild(later);
+
+            const doc = el('a', 'cascr-result__link', i18n.documentation);
+            doc.href = `#cascr-doc-${task.id}`;
+            doc.dataset.cascrDoc = task.id;
+            actions.appendChild(doc);
+
+            entry.appendChild(actions);
+
+            return entry;
+        }
+
+        /**
+         * A finding that moved up into the short list must not stay below it.
+         */
+        #closeOpenEntry(id) {
+            const entry = document.querySelector(`[data-cascr-open="${CSS.escape(id)}"]`);
+
+            if (!entry || entry.hidden) {
+                return;
+            }
+
+            entry.hidden = true;
+
+            const counter = document.querySelector('[data-cascr-open-count]');
+            const left = document.querySelectorAll('[data-cascr-open]:not([hidden])').length;
+
+            if (counter) {
+                counter.textContent = sprintf(i18n.stillOpen, left);
+            }
+
+            if (this.open && left === 0) {
+                this.open.hidden = true;
+            }
+        }
+    }
+
+    /**
+     * The full pass.
+     */
+    class Runner {
+        constructor() {
+            this.button = document.getElementById('cascr-run');
+            this.consent = document.getElementById('cascr-consent');
+            this.hint = document.getElementById('cascr-launch-hint');
+            this.progress = document.getElementById('cascr-progress');
+            this.bar = document.getElementById('cascr-progress-bar');
+            this.label = document.getElementById('cascr-progress-label');
+
+            if (!this.button) {
+                return;
+            }
+
+            if (this.consent) {
+                this.consent.addEventListener('change', (event) => {
+                    const ready = event.target.checked;
+                    this.button.disabled = !ready;
+                    if (this.hint) {
+                        this.hint.hidden = ready;
+                    }
+                });
+            }
+
+            this.button.addEventListener('click', () => this.start());
         }
 
         async start() {
             const ids = Object.keys(tests);
 
-            this.nodes.run.disabled = true;
-            this.nodes.progress.hidden = false;
-            if (this.nodes.launchHint) {
-                this.nodes.launchHint.hidden = true;
+            this.button.disabled = true;
+            this.progress.hidden = false;
+            if (this.hint) {
+                this.hint.hidden = true;
             }
             this.setProgress(0, ids.length, '');
 
-            const runner = new TestRunner(ids, config.concurrency);
-
-            const results = await runner.run({
-                onProgress: (done, total, id) => this.setProgress(done, total, id),
-                onResult: () => {},
-            });
-
-            let summary = null;
-            try {
-                const saved = await Api.saveReport(results);
-                summary = saved.summary;
-            } catch (error) {
-                notify(i18n.error, 'error');
+            if (this.consent && this.consent.checked) {
+                await Api.consent().catch(() => {});
             }
 
-            this.nodes.progress.hidden = true;
-            this.nodes.run.disabled = false;
-            this.nodes.run.textContent = i18n.runAgain;
+            const results = await new TestRunner(ids, config.concurrency).run({
+                onProgress: (done, total, id) => this.setProgress(done, total, id),
+            });
 
-            if (!summary) {
+            try {
+                await Api.saveReport(results);
+            } catch (error) {
+                this.progress.hidden = true;
+                this.button.disabled = false;
+                notify(error.message || i18n.error, 'error');
                 return;
             }
 
-            this.view.setData(results, summary);
-            this.view.render();
+            announce(i18n.scanFinished);
 
-            this.#setStep(0, 'is-done');
-            this.#setStep(1, 'is-current');
-            this.#setStep(2, 'is-current');
-
-            [this.nodes.waiting2, this.nodes.waiting3].forEach((n) => {
-                if (n) {
-                    n.hidden = true;
-                }
-            });
-            [this.nodes.resultPanel, this.nodes.findingsPanel].forEach((n) => {
-                if (n) {
-                    n.hidden = false;
-                }
-            });
-
-            // The result sits below the fold on most screens, and a report you
-            // have to go looking for is a report that gets missed.
-            const target = this.nodes.steps[1];
-            if (target) {
-                target.scrollIntoView({
-                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
-                    block: 'start',
-                });
-            }
-
-            announce(`${i18n.scanFinished} ${i18n.grade}: ${summary.grade}. ${summary.verdict || ''}`);
+            // The run is stored by now, and the page is built from the stored
+            // run. Reloading is cheaper than a second renderer in here.
+            window.location.reload();
         }
 
         setProgress(done, total, id) {
             const percent = total ? Math.round((done / total) * 100) : 0;
-            this.nodes.progressBar.style.width = `${percent}%`;
+            this.bar.style.width = `${percent}%`;
 
             const label = id && tests[id] ? tests[id].label : '';
-            this.nodes.progressLabel.textContent = label
+            this.label.textContent = label
                 ? `${sprintf(i18n.progress, done, total)}: ${label}`
                 : sprintf(i18n.progress, done, total);
         }
     }
 
+    const boot = () => {
+        new DocSearch();
+        new Dashboard();
+        new Runner();
+    };
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new App());
+        document.addEventListener('DOMContentLoaded', boot);
     } else {
-        new App();
+        boot();
     }
 })();

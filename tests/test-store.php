@@ -56,6 +56,185 @@ class Test_CASCR_Store extends WP_UnitTestCase {
 		$this->assertSame( 'fail', CASCR_Store::last_run()['tests']['wp_debug']['status'] );
 	}
 
+	/**
+	 * A re-check touches exactly one entry. Everything else has to stay the way
+	 * the last full pass found it.
+	 */
+	public function test_a_single_test_can_be_replaced_after_a_recheck() {
+		$this->store( $this->results() );
+
+		$run = CASCR_Store::patch_test( 'wp_debug', CASCR_Result::fail( 'debug is on', 9 ) );
+
+		$this->assertSame( 'fail', $run['tests']['wp_debug']['status'] );
+		$this->assertSame( 'pass', $run['tests']['db_prefix']['status'] );
+		$this->assertCount( count( CASCR_Registry::ids() ), $run['tests'] );
+		$this->assertSame( 1, $run['counts']['fail'] );
+		$this->assertSame( $run, CASCR_Store::last_run() );
+	}
+
+	public function test_a_recheck_is_noted_as_partial_and_rescores_the_run() {
+		$this->store( $this->results( array( 'wp_debug' => CASCR_Result::fail( 'debug is on', 9 ) ) ) );
+
+		$before = CASCR_Store::last_run();
+		$run    = CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
+
+		$this->assertArrayHasKey( 'wp_debug', $run['partial'] );
+		$this->assertSame( 0, $run['counts']['fail'] );
+		$this->assertLessThan( $before['risk'], $run['risk'] );
+	}
+
+	/**
+	 * A partial pass is not a run, so it must not become a point on the curve.
+	 */
+	public function test_a_recheck_does_not_extend_the_history() {
+		$this->store( $this->results() );
+
+		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::fail( 'debug is on', 9 ) );
+
+		$this->assertCount( 1, CASCR_History::all() );
+	}
+
+	public function test_nothing_is_patched_without_a_stored_run() {
+		$this->assertFalse( CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'ok' ) ) );
+	}
+
+	public function test_an_unknown_identifier_is_not_patched_in() {
+		$this->store( $this->results() );
+
+		$this->assertFalse( CASCR_Store::patch_test( 'not_a_real_check', CASCR_Result::pass( 'ok' ) ) );
+	}
+
+	/**
+	 * Anyone with a stored run agreed back when the checkbox was still asked on
+	 * every visit. Asking again after an update would be a step backwards.
+	 */
+	public function test_an_existing_run_counts_as_consent() {
+		$this->assertFalse( CASCR_Store::consent() );
+
+		$this->store( $this->results() );
+
+		$this->assertTrue( CASCR_Store::consent() );
+	}
+
+	public function test_consent_can_be_given_before_the_first_run() {
+		$this->assertGreaterThan( 0, CASCR_Store::set_consent() );
+		$this->assertTrue( CASCR_Store::consent() );
+	}
+
+	/**
+	 * The page is rendered from the stored run, so the findings have to survive
+	 * the write. The history stays a single character per test.
+	 */
+	public function test_a_stored_run_keeps_the_findings() {
+		$this->store( $this->results( array( 'unallowed_files' => CASCR_Result::fail( 'two files', 9, array( 'a.php', 'b.php' ) ) ) ) );
+
+		$this->assertSame( array( 'a.php', 'b.php' ), CASCR_Store::last_run()['tests']['unallowed_files']['items'] );
+		$this->assertSame( 'f', CASCR_History::latest()['tests']['unallowed_files'] );
+	}
+
+	/**
+	 * A run in the shape 2.3.2 wrote it: status, score, summary, hash, ignored,
+	 * and nothing else.
+	 *
+	 * @return array
+	 */
+	private function legacy_run() {
+		$tests = array();
+
+		foreach ( CASCR_Registry::ids() as $id ) {
+			$tests[ $id ] = array(
+				'status'  => CASCR_Result::STATUS_PASS,
+				'score'   => 0,
+				'summary' => 'ok',
+				'hash'    => 'legacy',
+				'ignored' => false,
+			);
+		}
+
+		$tests['wp_debug']['status']  = CASCR_Result::STATUS_FAIL;
+		$tests['wp_debug']['score']   = 9;
+		$tests['wp_debug']['summary'] = 'debug is on';
+
+		$tests['db_prefix']['status']  = CASCR_Result::STATUS_WARN;
+		$tests['db_prefix']['score']   = 4;
+		$tests['db_prefix']['summary'] = 'default prefix';
+
+		return array(
+			'generated' => time() - DAY_IN_SECONDS,
+			'version'   => '2.3.2',
+			'grade'     => 'C',
+			'risk'      => 12.5,
+			'counts'    => array(
+				'pass'         => count( CASCR_Registry::ids() ) - 2,
+				'warn'         => 1,
+				'fail'         => 1,
+				'inconclusive' => 0,
+				'ignored'      => 0,
+				'total'        => count( CASCR_Registry::ids() ),
+			),
+			'tests'     => $tests,
+		);
+	}
+
+	/**
+	 * Every installation updating from 2.3.2 reads such a run back on its first
+	 * page view. Scoring wants the remediation step and the help link, the
+	 * result list wants the findings, and none of them are in there.
+	 */
+	public function test_a_run_from_an_older_version_is_read_without_warnings() {
+		update_option( CASCR_Store::OPTION_LAST, $this->legacy_run(), false );
+
+		$noticed = array();
+
+		set_error_handler(
+			function ( $number, $message ) use ( &$noticed ) {
+				$noticed[] = $message;
+
+				return true;
+			}
+		);
+
+		$tests      = CASCR_Store::last_run()['tests'];
+		$priorities = CASCR_Scoring::priorities( $tests );
+		$summary    = CASCR_Scoring::summarize( $tests );
+
+		restore_error_handler();
+
+		$this->assertSame( array(), $noticed, 'Reading a run from an older version must not raise a warning.' );
+
+		$this->assertSame( array( 'wp_debug', 'db_prefix' ), wp_list_pluck( $priorities, 'id' ) );
+		$this->assertSame( 'debug is on', $priorities[0]['summary'] );
+		$this->assertSame( '', $priorities[0]['fix'] );
+		$this->assertSame( array(), $priorities[0]['link'] );
+		$this->assertSame( array(), $tests['wp_debug']['items'] );
+		$this->assertNotEmpty( $summary['grade'] );
+	}
+
+	/**
+	 * Filling in the missing keys must not rewrite a run this version wrote.
+	 */
+	public function test_a_current_run_is_read_back_unchanged() {
+		$run = $this->store( $this->results() );
+
+		$this->assertSame( $run, CASCR_Store::last_run() );
+	}
+
+	/**
+	 * The bubble is drawn on every admin page, so its number lives apart from
+	 * the run and has to follow both ways of writing one.
+	 */
+	public function test_the_menu_count_is_kept_apart_from_the_run() {
+		$this->assertSame( 0, CASCR_Store::badge() );
+
+		$this->store( $this->results( array( 'wp_debug' => CASCR_Result::fail( 'debug is on', 9 ) ) ) );
+
+		$this->assertSame( 1, CASCR_Store::badge() );
+
+		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
+
+		$this->assertSame( 0, CASCR_Store::badge() );
+	}
+
 	public function test_there_is_no_comparison_before_the_second_run() {
 		$this->store( $this->results() );
 

@@ -39,11 +39,14 @@ class CASCR_SecurityCheck {
 		'includes/class-cascr-result.php',
 		'includes/class-cascr-http.php',
 		'includes/class-cascr-store.php',
+		'includes/class-cascr-history.php',
 		'includes/class-cascr-registry.php',
 		'includes/class-cascr-scoring.php',
 		'includes/class-cascr-runner.php',
 		'includes/class-cascr-rest.php',
 		'includes/class-cascr-admin.php',
+		'includes/class-cascr-admin-dashboard.php',
+		'includes/class-cascr-nudges.php',
 		'includes/checks/class-cascr-checks-base.php',
 		'includes/checks/class-cascr-checks-core.php',
 		'includes/checks/class-cascr-checks-config.php',
@@ -63,6 +66,8 @@ class CASCR_SecurityCheck {
 		add_action( 'admin_menu', array( 'CASCR_Admin', 'register_menu' ) );
 		add_action( 'admin_enqueue_scripts', array( 'CASCR_Admin', 'enqueue' ) );
 		add_action( 'rest_api_init', array( 'CASCR_REST', 'register_routes' ) );
+
+		CASCR_Nudges::register();
 
 		// WordPress keeps no login history. Recording it from here is what lets
 		// the account check say anything about dormant administrators.

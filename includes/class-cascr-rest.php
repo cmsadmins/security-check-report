@@ -52,6 +52,32 @@ class CASCR_REST {
 
 		register_rest_route(
 			self::NAMESPACE_V1,
+			'/recheck/(?P<id>[a-z0-9_]+)',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( __CLASS__, 'recheck_test' ),
+				'permission_callback' => array( __CLASS__, 'can_manage' ),
+				'args'                => array(
+					'id' => array(
+						'required' => true,
+						'type'     => 'string',
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::NAMESPACE_V1,
+			'/consent',
+			array(
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => array( __CLASS__, 'set_consent' ),
+				'permission_callback' => array( __CLASS__, 'can_manage' ),
+			)
+		);
+
+		register_rest_route(
+			self::NAMESPACE_V1,
 			'/report',
 			array(
 				array(
@@ -150,6 +176,72 @@ class CASCR_REST {
 		}
 
 		return rest_ensure_response( $result );
+	}
+
+	/**
+	 * Runs one check again and writes it into the stored run.
+	 *
+	 * This is what the "done, check it now" button behind a task calls. The
+	 * answer carries the new grade and the new priority list, so the page can
+	 * swap the affected card without reloading everything.
+	 *
+	 * @param WP_REST_Request $request Request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public static function recheck_test( $request ) {
+		$id     = $request['id'];
+		$result = CASCR_Runner::run( $id );
+
+		if ( null === $result ) {
+			return new WP_Error(
+				'cascr_unknown_test',
+				__( 'There is no check with that identifier.', 'security-check-report' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		$run = CASCR_Store::patch_test( $id, $result );
+
+		if ( false === $run ) {
+			return new WP_Error(
+				'cascr_no_run',
+				__( 'There is no stored report to update. Run all checks once first.', 'security-check-report' ),
+				array( 'status' => 409 )
+			);
+		}
+
+		$summary = CASCR_Scoring::summarize( $run['tests'] );
+
+		return rest_ensure_response(
+			array(
+				'id'         => $id,
+				'result'     => $result,
+				'partial'    => $run['partial'],
+				'summary'    => array(
+					'grade'   => $summary['grade'],
+					'label'   => CASCR_Scoring::grade_label( $summary['grade'] ),
+					'risk'    => $summary['risk'],
+					'counts'  => $summary['counts'],
+					'verdict' => $summary['verdict'],
+					// Finished sentences, not numbers: their plural form is
+					// decided here, where the catalogue is.
+					'today'   => CASCR_Scoring::today( $summary['grade'], $summary['counts'] ),
+					'note'    => CASCR_Admin_Dashboard::partial_line( $run ),
+				),
+				'priorities' => $summary['priorities'],
+			)
+		);
+	}
+
+	/**
+	 * Records the one time agreement to run the checks.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public static function set_consent() {
+		return rest_ensure_response(
+			array( 'consent' => CASCR_Store::set_consent() )
+		);
 	}
 
 	/**

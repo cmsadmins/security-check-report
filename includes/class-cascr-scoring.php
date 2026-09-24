@@ -127,6 +127,33 @@ class CASCR_Scoring {
 	}
 
 	/**
+	 * Where the site stands today, in one sentence.
+	 *
+	 * Same reason as the verdict below: a re-check moves the number, and a
+	 * browser that picks the plural form itself gets it wrong in every language
+	 * with more than two of them. The finished line travels with the answer.
+	 *
+	 * @param string $grade  Grade letter.
+	 * @param array  $counts Status counts from summarize().
+	 * @return string
+	 */
+	public static function today( $grade, $counts ) {
+		$open = (int) $counts['fail'] + (int) $counts['warn'];
+
+		return sprintf(
+			/* translators: 1: grade letter, 2: number of findings. */
+			_n(
+				'Today: grade %1$s with %2$d finding.',
+				'Today: grade %1$s with %2$d findings.',
+				$open,
+				'security-check-report'
+			),
+			$grade,
+			$open
+		);
+	}
+
+	/**
 	 * The result in one plain sentence.
 	 *
 	 * A letter grade tells you where you stand but not what to do with it.
@@ -253,7 +280,10 @@ class CASCR_Scoring {
 				'status'   => $result['status'],
 				'score'    => $result['score'],
 				'summary'  => $result['summary'],
-				'fix'      => $result['fix'],
+				// A run stored before 2.4 carries neither of these. The store
+				// fills them in on the way out, this is for anyone handing over
+				// results that never went through it.
+				'fix'      => isset( $result['fix'] ) ? $result['fix'] : '',
 				'link'     => isset( $result['link'] ) ? $result['link'] : array(),
 				'rank'     => array(
 					CASCR_Result::STATUS_FAIL === $result['status'] ? 1 : 0,
