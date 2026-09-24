@@ -653,10 +653,16 @@ class CASCR_Registry {
 				'severity' => self::SEVERITY_MEDIUM,
 				'callback' => array( $c, 'rest_open_routes' ),
 			),
+			// The check can only end in pass or inconclusive: a forwarded header
+			// that nothing confirms is a question, not a verdict, and an
+			// inconclusive result is left out of the grade entirely. A high
+			// severity would therefore describe a finding that never occurs.
+			// Low keeps the entry where it belongs in the priority list on the
+			// day the check learns to decide.
 			'proxy_ip_configuration' => array(
 				'label'    => __( 'Client IP detection', 'security-check-report' ),
 				'category' => self::CATEGORY_NETWORK,
-				'severity' => self::SEVERITY_HIGH,
+				'severity' => self::SEVERITY_LOW,
 				'callback' => array( $c, 'proxy_ip_configuration' ),
 			),
 		);

@@ -13,7 +13,7 @@ Read-only security audit for WordPress: 61 checks, an A to F grade, and a checkl
 
 == Description ==
 
-Security Check Report looks at 61 aspects of a WordPress installation and turns the findings into a graded report. It changes nothing. Every check reads state, and the only thing ever written is one temporary file in the uploads folder that is deleted again in the same request.
+Security Check Report looks at 61 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
 
 The report opens with the five things worth doing first, not with a table of 61 rows. Every finding says what was found, why it matters and what to do about it.
 
@@ -37,7 +37,7 @@ Each task has a button that runs that one check again and answers within seconds
 
 = What it checks =
 
-**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other installations sharing the account.
+**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other WordPress installations sitting next to this one.
 
 **Configuration.** Debug mode, debug log exposure, the theme and plugin editor, installing code from the dashboard, authentication keys and salts, table prefix, database user privileges, whether the scheduler actually runs, autoloaded options size, injected content in the options table, backups, login protection, password policy.
 
@@ -87,16 +87,18 @@ There is one exception, and it is deliberate. To find out whether your server wo
 
 = Does it send data anywhere? =
 
-Only to `api.wordpress.org`, and only through the WordPress functions that already talk to it for update checks:
+Only to `api.wordpress.org`, to the same endpoints WordPress itself uses for its update checks:
 
-* `https://api.wordpress.org/core/version-check/1.7/` to learn the current WordPress version
-* `https://api.wordpress.org/plugins/update-check/1.1/` and `https://api.wordpress.org/themes/update-check/1.1/` for pending updates
-* `https://api.wordpress.org/plugins/info/1.2/` to see whether a plugin listing is still open and when it was last released
+* `https://api.wordpress.org/core/version-check/1.7/`, read from the update information WordPress already holds, to learn the current WordPress version. The plugin never asks this endpoint itself.
+* `https://api.wordpress.org/plugins/update-check/1.1/` and `https://api.wordpress.org/themes/update-check/1.1/` for pending updates, likewise read from what WordPress already holds
+* `https://api.wordpress.org/plugins/info/1.2/` to see whether a plugin listing is still open and when it was last released. This is the one endpoint the plugin requests directly rather than through `plugins_api()`, because a closed listing is served as an HTTP 404 that `plugins_api()` turns into an error, which loses the very flag the check needs. The answer is cached for twelve hours.
 * `https://api.wordpress.org/core/checksums/1.0/` for the official core file hashes
 
 WordPress.org [privacy policy](https://wordpress.org/about/privacy/) and [terms of service](https://wordpress.org/about/terms-of-service/).
 
 The remaining requests go to your own site, because several checks can only be answered from the outside: whether a file is served, whether a header is sent, whether a directory is listed. There is no telemetry and no reporting back to the plugin author.
+
+One of those requests to your own site does not use the WordPress HTTP API. The certificate check opens a plain TLS connection to your own host name on port 443 to read the expiry date, because the HTTP API does not hand the certificate back. The target is still your own site and nothing leaves it, but `WP_HTTP_BLOCK_EXTERNAL` and the `pre_http_request` and `http_request_args` filters do not apply to that one connection.
 
 = What does the plugin store? =
 
