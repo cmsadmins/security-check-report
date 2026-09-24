@@ -373,7 +373,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			$issues[] = sprintf(
 				/* translators: 1: number of overdue events, 2: human readable time difference. */
 				_n(
-					'%1$d scheduled event is overdue, by %2$s',
+					'%1$d scheduled event is overdue by %2$s',
 					'%1$d scheduled events are overdue, the oldest by %2$s',
 					$overdue,
 					'security-check-report'
@@ -385,7 +385,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			$summary[] = sprintf(
 				/* translators: 1: number of overdue events, 2: human readable time difference. */
 				_n(
-					'%1$d scheduled event is overdue, by %2$s.',
+					'%1$d scheduled event is overdue by %2$s.',
 					'%1$d scheduled events are overdue, the oldest by %2$s.',
 					$overdue,
 					'security-check-report'

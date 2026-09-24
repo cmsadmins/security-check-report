@@ -118,7 +118,7 @@ return array(
 		__( 'Set WP_DEBUG to false in production and do the debugging on a staging copy. If debug mode has to stay on for a while, at least set WP_DEBUG_DISPLAY to false so nothing reaches the page.', 'security-check-report' )
 	),
 	'debug_log_exposure'             => $cascr_doc(
-		__( 'Whether a debug log exists and whether the web server hands it out. A log at a path of your own choosing is located first: above the web root it is out of reach and the check passes, below it the same download test runs as for the default location.', 'security-check-report' ),
+		__( 'Whether a debug log exists and whether the web server hands it out. For a log at a path of your own choosing the check works out where that path sits: above the web root it is out of reach and the check passes, below it the same download test runs as for the default location.', 'security-check-report' ),
 		__( 'The log accumulates file paths, query fragments and occasionally credentials. A publicly readable one is a slow leak that nobody watches.', 'security-check-report' ),
 		__( 'Delete the file and keep the log outside the web root by setting WP_DEBUG_LOG to a path above it. A log that exists but is not served is still worth deleting once the problem is solved.', 'security-check-report' )
 	),
@@ -201,7 +201,7 @@ return array(
 		__( 'Set the directories to 755, or 750 where the group is right. Apply it to the directory itself, not recursively to everything inside, otherwise the files below end up executable too. Where the permissions cannot be read at all the check says so rather than reporting them as fine.', 'security-check-report' ) . ' ' . $cascr_chmod
 	),
 	'world_writable_paths'           => $cascr_doc(
-		__( 'Files and folders one level below the web root, wp-content, the plugin folder and the theme folder that carry the world-writable bit. wp-config.php, wp-admin, wp-includes, wp-content and the uploads folder are left out: they have a check of their own, and counting them twice would let one chmod lower the grade twice.', 'security-check-report' ),
+		__( 'Files and folders that carry the world-writable bit. Four places are looked at, one level deep each: the web root, wp-content, the plugin folder and the theme folder. wp-config.php, wp-admin, wp-includes, wp-content and the uploads folder are left out: they have a check of their own, and counting them twice would let one chmod lower the grade twice.', 'security-check-report' ),
 		__( 'Nothing in a WordPress installation needs to be writable by everyone. Where it happens it is nearly always a botched chmod during troubleshooting that was never undone.', 'security-check-report' ),
 		__( 'Set files to 644 and directories to 755. wp-config.php is the exception, it belongs at 640 or 440. If something only works at 777, the ownership is wrong and that is the thing to fix.', 'security-check-report' )
 	),

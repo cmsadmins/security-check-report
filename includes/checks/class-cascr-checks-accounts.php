@@ -338,7 +338,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 
 		$user_one = get_user_by( 'id', 1 );
 		if ( $user_one && user_can( $user_one, 'manage_options' ) ) {
-			$summary[]  = __( 'The account with ID 1 is an administrator.', 'security-check-report' );
+			$summary[]  = __( 'The account with ID 1 is an administrator, and that is the first ID anyone tries.', 'security-check-report' );
 			$findings[] = __( 'the account with ID 1 is an administrator, which is the first ID anyone tries', 'security-check-report' );
 			$score      = max( $score, 4 );
 		}

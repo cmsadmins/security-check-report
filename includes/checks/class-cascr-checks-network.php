@@ -60,7 +60,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 		if ( ! defined( 'FORCE_SSL_ADMIN' ) || ! FORCE_SSL_ADMIN ) {
 			$details[] = __( 'FORCE_SSL_ADMIN is not set', 'security-check-report' );
-			$summary[] = __( 'The site is served over HTTPS, but the dashboard is not pinned to it: FORCE_SSL_ADMIN is not set.', 'security-check-report' );
+			$summary[] = __( 'The site is served over HTTPS, but the dashboard can still be reached over http: FORCE_SSL_ADMIN is not set.', 'security-check-report' );
 		}
 
 		$plain    = set_url_scheme( $home, 'http' );
@@ -479,12 +479,12 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 		if ( $unsafe_inline ) {
 			$issues[]   = __( "'unsafe-inline' allows injected inline scripts to run", 'security-check-report' );
-			$openings[] = "'unsafe-inline'";
+			$openings[] = __( "inline scripts ('unsafe-inline')", 'security-check-report' );
 		}
 
 		if ( $unsafe_eval ) {
 			$issues[]   = __( "'unsafe-eval' allows strings to be executed as code", 'security-check-report' );
-			$openings[] = "'unsafe-eval'";
+			$openings[] = __( "eval ('unsafe-eval')", 'security-check-report' );
 		}
 
 		if ( $wildcard ) {
@@ -494,7 +494,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 		if ( ! isset( $directives['object-src'] ) && ! isset( $directives['default-src'] ) ) {
 			$issues[]   = __( 'neither default-src nor object-src is set', 'security-check-report' );
-			$openings[] = __( 'neither default-src nor object-src', 'security-check-report' );
+			$openings[] = __( 'no fallback directive', 'security-check-report' );
 		}
 
 		if ( empty( $issues ) ) {
