@@ -123,6 +123,13 @@ return array(
 	 * Folders that no plugin ever had are worse than useless here. They can
 	 * never match, and on a case-sensitive filesystem a folder spelled with
 	 * the wrong case never matches either.
+	 *
+	 * The WebAuthn provider carries the meta key of the Two Factor plugin
+	 * although it writes keys of its own. It is an add-on that registers a
+	 * provider inside Two Factor and does nothing without it, so an account
+	 * that finished the setup appears in the list the base plugin keeps. The
+	 * keys of every detected plugin are merged before they are read, so the
+	 * entry costs nothing where the base plugin is present anyway.
 	 */
 	'two_factor_plugins'       => array(
 		'two-factor/two-factor.php'                     => array( '_two_factor_enabled_providers' ),

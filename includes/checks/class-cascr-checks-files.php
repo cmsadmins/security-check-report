@@ -175,6 +175,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 		$found   = array();
 		$visited = 0;
 		$limit   = 4000;
+		$skip    = self::separately_scored();
 
 		$roots = array(
 			ABSPATH,
@@ -200,6 +201,12 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 						break 2;
 					}
 
+					$path = wp_normalize_path( $entry->getPathname() );
+
+					if ( in_array( $path, $skip, true ) ) {
+						continue;
+					}
+
 					if ( self::is_world_writable( $entry->getPathname() ) ) {
 						$found[] = self::relative( $entry->getPathname() );
 					}
@@ -212,7 +219,7 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 		$found = array_values( array_unique( $found ) );
 
 		if ( empty( $found ) ) {
-			return CASCR_Result::pass( __( 'Nothing below the web root is writable by everyone.', 'security-check-report' ) );
+			return CASCR_Result::pass( __( 'Nothing below the web root is writable by everyone, leaving aside the paths that have a check of their own.', 'security-check-report' ) );
 		}
 
 		return CASCR_Result::fail(
@@ -228,8 +235,39 @@ class CASCR_Checks_Files extends CASCR_Checks_Base {
 			),
 			8,
 			self::cap( $found ),
-			__( 'Set files to 644 and directories to 755. Nothing needs to be world-writable.', 'security-check-report' )
+			__( 'Set files to 644 and directories to 755. Nothing needs to be world-writable. wp-config.php, the core directories and the uploads folder are not listed here, they have a check of their own.', 'security-check-report' )
 		);
+	}
+
+	/**
+	 * Paths another check already scores on its own.
+	 *
+	 * This scan walks the same two levels those checks look at, so a single
+	 * chmod on wp-content used to cost the grade twice and one on
+	 * wp-config.php three times over. Skipping them here leaves no gap: each
+	 * of these paths is still reached by the check that names it.
+	 *
+	 * The core directories are taken from ABSPATH rather than from the
+	 * constants, because directory_permissions looks them up that way and a
+	 * content directory moved elsewhere is therefore not among them.
+	 *
+	 * @return string[] Normalised absolute paths.
+	 */
+	private static function separately_scored() {
+		$paths = array(
+			ABSPATH . 'wp-config.php',
+			ABSPATH . 'wp-content',
+			ABSPATH . 'wp-includes',
+			ABSPATH . 'wp-admin',
+		);
+
+		$uploads = wp_upload_dir();
+
+		if ( ! empty( $uploads['basedir'] ) ) {
+			$paths[] = $uploads['basedir'];
+		}
+
+		return array_map( 'wp_normalize_path', $paths );
 	}
 
 	/**

@@ -34,6 +34,24 @@ class CASCR_Store {
 	const IGNORE_UNTIL_CHANGED = 'until_changed';
 
 	/**
+	 * Baseline key of every check that reports drift, keyed by test identifier.
+	 *
+	 * @var array
+	 */
+	private static $drift_keys = array(
+		'role_capability_drift'   => 'roles',
+		'plugin_ownership_change' => 'plugin_authors',
+		'mu_plugins_and_dropins'  => 'mu_and_dropins',
+	);
+
+	/**
+	 * What those checks saw while running in this request.
+	 *
+	 * @var array
+	 */
+	private static $observed = array();
+
+	/**
 	 * Stores a completed run and rotates the previous one.
 	 *
 	 * @param array $results Results keyed by test identifier.
@@ -411,9 +429,41 @@ class CASCR_Store {
 		);
 
 		$saved = update_option( self::OPTION_IGNORED, $ignored, false );
+
+		self::accept_drift( $id );
 		self::recount_run();
 
 		return $saved;
+	}
+
+	/**
+	 * Moves a drift baseline forward when the finding it produced is muted.
+	 *
+	 * A drift check reports the difference to the first observation, so a role
+	 * that was changed on purpose keeps being reported for good. Muting is the
+	 * moment the site owner says the new state is the accepted one, and without
+	 * moving the comparison point along the only way out was to mute the check
+	 * for good, which takes the escalation findings of the same check with it.
+	 *
+	 * The value comes from the run that muting is based on, so nothing is
+	 * accepted here that was not on screen. Unmuting deliberately does not move
+	 * the baseline back: the state it described is gone by then and inventing
+	 * one would be worse than having none.
+	 *
+	 * @param string $id Test identifier.
+	 */
+	private static function accept_drift( $id ) {
+		if ( ! isset( self::$drift_keys[ $id ] ) ) {
+			return;
+		}
+
+		$key = self::$drift_keys[ $id ];
+
+		if ( ! array_key_exists( $key, self::$observed ) ) {
+			return;
+		}
+
+		self::rebase( $key, self::$observed[ $key ] );
 	}
 
 	/**
@@ -529,11 +579,17 @@ class CASCR_Store {
 	 * Drift checks compare against the first observation. Overwriting it on
 	 * every run would make the comparison meaningless.
 	 *
+	 * The value is kept for the rest of the request either way, because muting
+	 * the finding accepts exactly this state and has no other way of getting
+	 * at it.
+	 *
 	 * @param string $key   Baseline key.
 	 * @param mixed  $value Value to record.
 	 * @return bool True when a new value was written.
 	 */
 	public static function remember( $key, $value ) {
+		self::$observed[ $key ] = $value;
+
 		$baseline = get_option( self::OPTION_BASELINE, array() );
 		if ( ! is_array( $baseline ) ) {
 			$baseline = array();
@@ -551,6 +607,8 @@ class CASCR_Store {
 
 	/**
 	 * Replaces a baseline value after the user has accepted the change.
+	 *
+	 * Called from accept_drift() when a drift finding is muted.
 	 *
 	 * @param string $key   Baseline key.
 	 * @param mixed  $value Value to record.

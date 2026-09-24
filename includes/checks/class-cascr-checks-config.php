@@ -60,11 +60,9 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 	 */
 	public static function debug_log_exposure() {
 		$log = WP_CONTENT_DIR . '/debug.log';
-		$url = content_url( '/debug.log' );
 
 		if ( defined( 'WP_DEBUG_LOG' ) && is_string( WP_DEBUG_LOG ) && '' !== WP_DEBUG_LOG ) {
 			$log = WP_DEBUG_LOG;
-			$url = '';
 		}
 
 		if ( ! file_exists( $log ) ) {
@@ -79,12 +77,12 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			size_format( $size ? $size : 0 )
 		);
 
+		$url = self::served_url( $log );
+
 		if ( '' === $url ) {
-			return CASCR_Result::warn(
-				__( 'A debug log exists outside the default location.', 'security-check-report' ),
-				4,
-				array( $item ),
-				__( 'Make sure the file sits outside the web root and delete it once the problem is solved.', 'security-check-report' )
+			return CASCR_Result::pass(
+				__( 'A debug log exists, but it sits outside everything the web server hands out.', 'security-check-report' ),
+				array( $item )
 			);
 		}
 
@@ -346,6 +344,7 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 	 */
 	public static function wp_cron_health() {
 		$issues   = array();
+		$summary  = array();
 		$score    = 0;
 		$disabled = defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON;
 
@@ -383,12 +382,25 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 				human_time_diff( $oldest, $now )
 			);
 
+			$summary[] = sprintf(
+				/* translators: 1: number of overdue events, 2: human readable time difference. */
+				_n(
+					'%1$d scheduled event is overdue, by %2$s.',
+					'%1$d scheduled events are overdue, the oldest by %2$s.',
+					$overdue,
+					'security-check-report'
+				),
+				$overdue,
+				human_time_diff( $oldest, $now )
+			);
+
 			$score = $disabled ? 8 : 6;
 		}
 
 		if ( defined( 'ALTERNATE_WP_CRON' ) && ALTERNATE_WP_CRON ) {
-			$issues[] = __( 'ALTERNATE_WP_CRON is enabled: it schedules through a redirect that carries doing_wp_cron in the address, which defeats page caching for that request and leaves the parameter in access logs and in referrers sent to other sites', 'security-check-report' );
-			$score    = max( $score, 4 );
+			$summary[] = __( 'ALTERNATE_WP_CRON is enabled.', 'security-check-report' );
+			$issues[]  = __( 'ALTERNATE_WP_CRON is enabled: it schedules through a redirect that carries doing_wp_cron in the address, which defeats page caching for that request and leaves the parameter in access logs and in referrers sent to other sites', 'security-check-report' );
+			$score     = max( $score, 4 );
 		}
 
 		$orphaned = self::orphaned_cron_hooks( $crons );
@@ -401,6 +413,17 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 					$hook
 				);
 			}
+
+			$summary[] = sprintf(
+				/* translators: %d: number of scheduled hooks with no listener. */
+				_n(
+					'%d scheduled hook has no listener in this request.',
+					'%d scheduled hooks have no listener in this request.',
+					count( $orphaned ),
+					'security-check-report'
+				),
+				count( $orphaned )
+			);
 
 			// Usually a leftover from a removed plugin, occasionally something
 			// that was planted. Worth a look, not worth an alarm.
@@ -419,9 +442,13 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 			? __( 'DISABLE_WP_CRON is set but nothing is triggering wp-cron.php. Set up a server cron job, or remove the constant.', 'security-check-report' )
 			: __( 'WordPress ships no screen for scheduled events. List them with wp cron event list on the command line, or install a scheduler plugin to see them in the dashboard.', 'security-check-report' );
 
+		// Naming what was found, because the list of events is only visible
+		// once the row is opened and the exports carry this sentence alone.
+		$found = implode( ' ', $summary );
+
 		return $score >= CASCR_Result::THRESHOLD_FAIL
-			? CASCR_Result::fail( __( 'The scheduler needs attention.', 'security-check-report' ), $score, $issues, $fix )
-			: CASCR_Result::warn( __( 'The scheduler needs attention.', 'security-check-report' ), max( $score, 4 ), $issues, $fix );
+			? CASCR_Result::fail( $found, $score, $issues, $fix )
+			: CASCR_Result::warn( $found, max( $score, 4 ), $issues, $fix );
 	}
 
 	/**
@@ -733,5 +760,55 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 		}
 
 		return array_slice( array_values( array_unique( $orphaned ) ), 0, 10 );
+	}
+
+	/**
+	 * The address a file would be served under, empty when it is out of reach.
+	 *
+	 * A log at a path of its own used to be reported without ever being looked
+	 * at, which said the same thing about a path above the web root as about
+	 * one sitting next to the uploads. Only the second of those is a finding,
+	 * and which one it is can be answered here.
+	 *
+	 * Protected rather than private because WP_DEBUG_LOG is a constant core
+	 * always defines, so the test suite cannot reach this through the check.
+	 *
+	 * @param string $path File path.
+	 * @return string Empty when the file is below neither the content directory nor the web root.
+	 */
+	protected static function served_url( $path ) {
+		$path = self::canonical( $path );
+
+		// The content directory is tried first: it is the more specific of the
+		// two and is allowed to sit outside ABSPATH entirely.
+		$content = trailingslashit( self::canonical( WP_CONTENT_DIR ) );
+
+		if ( 0 === strpos( $path, $content ) ) {
+			return content_url( '/' . substr( $path, strlen( $content ) ) );
+		}
+
+		$root = trailingslashit( self::canonical( ABSPATH ) );
+
+		if ( 0 === strpos( $path, $root ) ) {
+			return site_url( '/' . substr( $path, strlen( $root ) ) );
+		}
+
+		return '';
+	}
+
+	/**
+	 * A path in the one spelling two of them can be compared in.
+	 *
+	 * WP_DEBUG_LOG is handed to the error log of PHP unchanged, so it may be
+	 * relative, may contain a symlink and may walk back up through the tree.
+	 * Any of those would otherwise read as a path outside the web root.
+	 *
+	 * @param string $path File or directory path.
+	 * @return string
+	 */
+	private static function canonical( $path ) {
+		$real = realpath( $path );
+
+		return wp_normalize_path( false !== $real ? $real : $path );
 	}
 }

@@ -89,8 +89,12 @@ class CASCR_Result {
 	/**
 	 * Informational result that never contributes to the grade.
 	 *
-	 * The registry gives these checks a weight of 0; the status is only there
-	 * so the interface can render them in the neutral style.
+	 * The score is fixed at 0, so an informational result can never cost
+	 * anything. What the weight in the registry then decides is whether the
+	 * check is dropped from the grade altogether, as with security_plugins at
+	 * weight 0, or counts like a finding with nothing against it, as with
+	 * htaccess and application_password_inventory. The status is only there so
+	 * the interface can render the result in the neutral style.
 	 *
 	 * @param string   $summary One sentence, translated.
 	 * @param string[] $items   Supporting detail, raw and unescaped.

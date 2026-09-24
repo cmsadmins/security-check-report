@@ -56,8 +56,11 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			);
 		}
 
+		$summary = array();
+
 		if ( ! defined( 'FORCE_SSL_ADMIN' ) || ! FORCE_SSL_ADMIN ) {
 			$details[] = __( 'FORCE_SSL_ADMIN is not set', 'security-check-report' );
+			$summary[] = __( 'The site is served over HTTPS, but the dashboard is not pinned to it: FORCE_SSL_ADMIN is not set.', 'security-check-report' );
 		}
 
 		$plain    = set_url_scheme( $home, 'http' );
@@ -69,6 +72,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 
 			if ( ! in_array( $code, array( 301, 308 ), true ) || 0 !== strpos( $location, 'https://' ) ) {
 				$details[] = __( 'the http address does not redirect permanently to https', 'security-check-report' );
+				$summary[] = __( 'The http address does not redirect permanently to https, so a visitor who types the bare domain can still be served over http.', 'security-check-report' );
 			}
 		}
 
@@ -76,8 +80,11 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			return CASCR_Result::pass( __( 'The site is served over HTTPS and http is redirected.', 'security-check-report' ) );
 		}
 
+		// The summary says which half is missing: the list underneath it only
+		// appears once the row is opened, and the exports carry the sentence
+		// on its own.
 		return CASCR_Result::warn(
-			__( 'The site uses HTTPS, but the setup is not complete.', 'security-check-report' ),
+			implode( ' ', $summary ),
 			5,
 			$details,
 			__( "Add define( 'FORCE_SSL_ADMIN', true ); to wp-config.php and redirect http to https with a 301.", 'security-check-report' )
@@ -346,6 +353,7 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 		}
 
 		$issues  = array();
+		$weak    = array();
 		$max_age = 0;
 
 		if ( preg_match( '/max-age\s*=\s*(\d+)/i', $header, $matches ) ) {
@@ -360,6 +368,8 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 				__( 'the header carries no usable max-age, so it expires immediately instead of lasting at least %s', 'security-check-report' ),
 				human_time_diff( 0, self::HSTS_MIN_AGE )
 			);
+
+			$weak[] = __( 'no usable max-age', 'security-check-report' );
 		} elseif ( $max_age < self::HSTS_MIN_AGE ) {
 			$issues[] = sprintf(
 				/* translators: 1: current max-age as a duration, 2: recommended minimum as a duration. */
@@ -367,18 +377,31 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 				human_time_diff( 0, $max_age ),
 				human_time_diff( 0, self::HSTS_MIN_AGE )
 			);
+
+			$weak[] = sprintf(
+				/* translators: %s: current max-age as a duration. */
+				__( 'a max-age of only %s', 'security-check-report' ),
+				human_time_diff( 0, $max_age )
+			);
 		}
 
 		if ( false === stripos( $header, 'includeSubDomains' ) ) {
 			$issues[] = __( 'includeSubDomains is not set', 'security-check-report' );
+			$weak[]   = __( 'no includeSubDomains', 'security-check-report' );
 		}
 
 		if ( empty( $issues ) ) {
 			return CASCR_Result::pass( __( 'The HSTS header is set up properly.', 'security-check-report' ), array( $header ) );
 		}
 
+		// What is weak about it belongs in the sentence itself: the list below
+		// is only visible once the row is opened.
 		return CASCR_Result::warn(
-			__( 'The HSTS header is present but weaker than it should be.', 'security-check-report' ),
+			sprintf(
+				/* translators: %s: comma separated list of what the header is missing. */
+				__( 'The HSTS header is present but weak: %s.', 'security-check-report' ),
+				implode( ', ', $weak )
+			),
 			4,
 			$issues,
 			__( 'Use max-age=31536000; includeSubDomains, which is one year. Anything shorter than six months counts as weak here. Add preload only when every subdomain is on HTTPS for good.', 'security-check-report' )
@@ -452,28 +475,40 @@ class CASCR_Checks_Network extends CASCR_Checks_Base {
 			}
 		}
 
+		$openings = array();
+
 		if ( $unsafe_inline ) {
-			$issues[] = __( "'unsafe-inline' allows injected inline scripts to run", 'security-check-report' );
+			$issues[]   = __( "'unsafe-inline' allows injected inline scripts to run", 'security-check-report' );
+			$openings[] = "'unsafe-inline'";
 		}
 
 		if ( $unsafe_eval ) {
-			$issues[] = __( "'unsafe-eval' allows strings to be executed as code", 'security-check-report' );
+			$issues[]   = __( "'unsafe-eval' allows strings to be executed as code", 'security-check-report' );
+			$openings[] = "'unsafe-eval'";
 		}
 
 		if ( $wildcard ) {
-			$issues[] = __( 'a wildcard source allows scripts from anywhere', 'security-check-report' );
+			$issues[]   = __( 'a wildcard source allows scripts from anywhere', 'security-check-report' );
+			$openings[] = __( 'a wildcard script source', 'security-check-report' );
 		}
 
 		if ( ! isset( $directives['object-src'] ) && ! isset( $directives['default-src'] ) ) {
-			$issues[] = __( 'neither default-src nor object-src is set', 'security-check-report' );
+			$issues[]   = __( 'neither default-src nor object-src is set', 'security-check-report' );
+			$openings[] = __( 'neither default-src nor object-src', 'security-check-report' );
 		}
 
 		if ( empty( $issues ) ) {
 			return CASCR_Result::pass( __( 'A Content Security Policy is enforced and contains no obvious escape hatch.', 'security-check-report' ) );
 		}
 
+		// Which opening it is decides what has to change, so the summary names
+		// it rather than leaving it to the list underneath.
 		return CASCR_Result::warn(
-			__( 'A Content Security Policy is enforced but leaves the main hole open.', 'security-check-report' ),
+			sprintf(
+				/* translators: %s: comma separated list of the weak parts of the policy. */
+				__( 'A Content Security Policy is enforced but leaves openings: %s.', 'security-check-report' ),
+				implode( ', ', $openings )
+			),
 			5,
 			$issues,
 			__( 'Replace unsafe-inline with a nonce or a hash for the scripts the site really needs.', 'security-check-report' )

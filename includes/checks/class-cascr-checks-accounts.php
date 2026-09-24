@@ -308,9 +308,21 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 
 		$count    = count( $admins );
 		$findings = array();
+		$summary  = array();
 		$score    = 0;
 
 		if ( $count > 5 ) {
+			$summary[] = sprintf(
+				/* translators: %d: number of administrator accounts. */
+				_n(
+					'%d account holds administrator rights.',
+					'%d accounts hold administrator rights.',
+					$count,
+					'security-check-report'
+				),
+				$count
+			);
+
 			$findings[] = sprintf(
 				/* translators: %d: number of administrator accounts. */
 				_n(
@@ -326,6 +338,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 
 		$user_one = get_user_by( 'id', 1 );
 		if ( $user_one && user_can( $user_one, 'manage_options' ) ) {
+			$summary[]  = __( 'The account with ID 1 is an administrator.', 'security-check-report' );
 			$findings[] = __( 'the account with ID 1 is an administrator, which is the first ID anyone tries', 'security-check-report' );
 			$score      = max( $score, 4 );
 		}
@@ -345,6 +358,17 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 		}
 
 		if ( ! empty( $dormant ) ) {
+			$summary[] = sprintf(
+				/* translators: %d: number of administrator accounts that have not signed in for over a year. */
+				_n(
+					'%d administrator has not signed in for over a year.',
+					'%d administrators have not signed in for over a year.',
+					count( $dormant ),
+					'security-check-report'
+				),
+				count( $dormant )
+			);
+
 			$findings = array_merge( $findings, $dormant );
 			$score    = max( $score, 6 );
 		}
@@ -364,8 +388,11 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			);
 		}
 
+		// The summary carries the finding itself, because the list below it is
+		// only visible once the row is opened and the exports and the command
+		// line show this sentence on its own.
 		return CASCR_Result::warn(
-			__( 'The set of administrator accounts is worth reviewing.', 'security-check-report' ),
+			implode( ' ', $summary ),
 			$score,
 			self::cap( $findings ),
 			__( 'Give people the lowest role that lets them do their work, and remove accounts that are no longer used.', 'security-check-report' )

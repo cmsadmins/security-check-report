@@ -291,6 +291,33 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 		}
 	}
 
+	/**
+	 * A log at a path of its own used to get the same vague warning wherever it
+	 * sat: above the web root, where nothing can fetch it, and next to the
+	 * uploads, where anyone can. Core always defines WP_DEBUG_LOG, so the test
+	 * asks the resolution directly instead of rewriting the constant.
+	 */
+	public function test_where_a_debug_log_sits_decides_whether_it_can_be_fetched() {
+		$inside = wp_normalize_path( WP_CONTENT_DIR ) . '/cascr-log-probe.log';
+		$root   = wp_normalize_path( ABSPATH ) . 'cascr-log-probe.log';
+		$away   = rtrim( wp_normalize_path( get_temp_dir() ), '/' ) . '/cascr-log-probe.log';
+		$probes = array( $inside, $root, $away );
+
+		foreach ( $probes as $path ) {
+			if ( false === file_put_contents( $path, "probe\n" ) ) { // phpcs:ignore
+				$this->markTestSkipped( 'The probe files cannot be written here.' );
+			}
+		}
+
+		$urls = array_map( array( 'CASCR_Config_Probe', 'url' ), $probes );
+
+		array_map( 'unlink', $probes );
+
+		$this->assertSame( content_url( '/cascr-log-probe.log' ), $urls[0] );
+		$this->assertSame( site_url( '/cascr-log-probe.log' ), $urls[1] );
+		$this->assertSame( '', $urls[2], 'Above the web root there is nothing to fetch.' );
+	}
+
 	public function test_the_editor_is_reported_according_to_the_constant() {
 		$result = CASCR_Checks_Config::file_edit();
 
@@ -1547,5 +1574,22 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 
 		$this->assertSame( 'pass', $result['status'] );
 		$this->assertNotEmpty( $result['items'], 'The result must say which constant closed the editor.' );
+	}
+}
+
+/**
+ * Reaches the path resolution of the debug log check.
+ *
+ * WP_DEBUG_LOG is defined by core on every request, so the only way into that
+ * resolution from a test is through the class that owns it.
+ */
+class CASCR_Config_Probe extends CASCR_Checks_Config {
+
+	/**
+	 * @param string $path File path.
+	 * @return string
+	 */
+	public static function url( $path ) {
+		return self::served_url( $path );
 	}
 }

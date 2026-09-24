@@ -153,6 +153,26 @@ class Test_CASCR_Checks_Accounts_Files extends WP_UnitTestCase {
 	}
 
 	/* ---------------------------------------------------------------------
+	 * Administrators
+	 * ------------------------------------------------------------------- */
+
+	/**
+	 * The summary is the whole finding in the list of open items, in every
+	 * export and on the command line. "Worth reviewing" said nothing there.
+	 */
+	public function test_the_administrator_finding_says_what_was_found() {
+		for ( $i = 0; $i < 6; $i++ ) {
+			self::factory()->user->create( array( 'role' => 'administrator' ) );
+		}
+
+		$result = CASCR_Checks_Accounts::admin_account_hygiene();
+
+		$this->assertSame( 'warn', $result['status'] );
+		$this->assertStringContainsString( 'administrator rights', $result['summary'] );
+		$this->assertMatchesRegularExpression( '/\d/', $result['summary'], 'The summary carries the number, not only that something turned up.' );
+	}
+
+	/* ---------------------------------------------------------------------
 	 * Roles
 	 * ------------------------------------------------------------------- */
 
@@ -172,6 +192,30 @@ class Test_CASCR_Checks_Accounts_Files extends WP_UnitTestCase {
 		$this->assertSame( 'warn', $result['status'], 'A role that appeared is not administrator-level access.' );
 		$this->assertNotEmpty( $result['items'] );
 		$this->assertLessThan( CASCR_Result::THRESHOLD_FAIL, $result['score'] );
+	}
+
+	/**
+	 * Muting says the new state is accepted, so it has to become the point the
+	 * next run compares against. Without that, a role changed on purpose can
+	 * only be quietened by muting the check for good, which takes its
+	 * escalation findings with it.
+	 */
+	public function test_muting_a_drift_finding_moves_the_baseline_with_it() {
+		CASCR_Checks_Accounts::role_capability_drift();
+
+		add_role( 'cascr_accepted_role', 'CASCR Accepted Role', array( 'read' => true ) );
+
+		$drift = CASCR_Checks_Accounts::role_capability_drift();
+
+		CASCR_Store::ignore( 'role_capability_drift', $drift );
+		CASCR_Store::unignore( 'role_capability_drift' );
+
+		$after = CASCR_Checks_Accounts::role_capability_drift();
+
+		remove_role( 'cascr_accepted_role' );
+
+		$this->assertSame( 'warn', $drift['status'], 'The change is reported before it is accepted.' );
+		$this->assertSame( 'pass', $after['status'], 'The accepted state is the new comparison point.' );
 	}
 
 	public function test_an_escalated_role_still_fails_after_the_split() {
@@ -233,6 +277,40 @@ class Test_CASCR_Checks_Accounts_Files extends WP_UnitTestCase {
 		$this->clean_uploads( $file );
 
 		$this->assertSame( 'fail', $result['status'] );
+	}
+
+	/* ---------------------------------------------------------------------
+	 * Permissions
+	 * ------------------------------------------------------------------- */
+
+	/**
+	 * wp-content is scored by directory_permissions and was scored again by
+	 * the sweep, so a single chmod cost the grade twice. It has to leave the
+	 * sweep and stay in the check that names it.
+	 */
+	public function test_a_directory_with_its_own_check_is_not_counted_twice() {
+		$dir = ABSPATH . 'wp-content';
+
+		if ( ! is_dir( $dir ) ) {
+			$this->markTestSkipped( 'The content directory does not sit below ABSPATH here.' );
+		}
+
+		$before = fileperms( $dir ) & 0777;
+
+		if ( ! @chmod( $dir, 0777 ) ) { // phpcs:ignore
+			$this->markTestSkipped( 'The permissions of the content directory cannot be changed here.' );
+		}
+
+		clearstatcache();
+
+		$sweep = CASCR_Checks_Files::world_writable_paths();
+		$core  = CASCR_Checks_Files::directory_permissions();
+
+		chmod( $dir, $before );
+		clearstatcache();
+
+		$this->assertNotContains( 'wp-content', $sweep['items'], 'The sweep leaves it to the check that scores it.' );
+		$this->assertSame( 'fail', $core['status'], 'And that check still reports it, so nothing falls through.' );
 	}
 
 	/* ---------------------------------------------------------------------
