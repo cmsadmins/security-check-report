@@ -1,0 +1,910 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Security Check Report readme 0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Source: translate.wordpress.org dev-readme export\n"
+
+#. Short description.
+msgid ""
+"Read-only security audit for WordPress: 60 checks, an A to F grade, and a "
+"short list of what to fix first."
+msgstr ""
+
+#. Plugin name.
+msgid "CMS ADMINS Security Check Report"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"If a check reports something you believe is wrong, a GitHub issue with the "
+"finding text is the fastest way to get it fixed. False positives are treated"
+" as bugs."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"It is built and maintained by <a href=\"https://www.cms-admins.de/\">CMS "
+"ADMINS</a>, a Munich agency that has been looking after WordPress and Drupal"
+" installations since 2012."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"WordPress 7.0 and newer, PHP 7.4 through 8.5. Every release is tested "
+"against WordPress 7.0 and the current version, on single site and on "
+"multisite, and linted on all seven PHP branches in between."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Yes. <code>cascr_registry</code> filters the list of checks, so you can add,"
+" remove or reweight one. <code>cascr_test_result</code> filters an "
+"individual result before it is scored. A check is a callable that returns "
+"one of the four outcomes built by <code>CASCR_Result</code>."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The checks that look at files, permissions and server configuration "
+"necessarily report the same thing on every site in the network, because they"
+" describe one installation. There is no network-wide overview screen."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Several things work differently on a network, and the checks account for it."
+" Registration is a network setting, so the sign-up check reads that instead "
+"of the per-site option. Network administrators hold every capability "
+"regardless of their role on the current site, so the account, password and "
+"two-factor checks include them. The table prefix check looks at the base "
+"prefix rather than the per-site one."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Yes. It runs per site: anyone with <code>manage_options</code> on a site can"
+" run it there and sees that site's accounts, plugins, themes and options."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, and it produces the same grade as the screen because the scoring "
+"happens in PHP either way."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Monthly is a reasonable baseline, plus a run after any larger change: a "
+"migration, a new plugin, a server move. From the second run onwards the "
+"report opens with what changed since the previous one."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"That is the difference between accepting a known state and going blind to "
+"it, and it is why muting is offered instead of a permanent dismissal by "
+"default."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Mute it. The plugin hides the finding and stores a fingerprint of what it "
+"was reporting. As soon as the content changes, for instance one more "
+"affected file, it comes back on its own."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Because it could not get an answer, usually a blocked outbound request or a "
+"file it is not allowed to read. That is deliberately not treated as a "
+"finding. An unreachable endpoint says nothing about your site, and reporting"
+" it as a problem would teach you to ignore the report."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The score is the weighted risk as a percentage of the worst possible "
+"outcome. Checks that could not be determined are left out of both sides of "
+"that calculation, so a blocked outbound request never moves the grade in "
+"either direction. A failing critical check pulls the result down to at least"
+" a D, which is what stops one serious problem from being averaged away. A "
+"few checks are informational and carry no weight at all."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Every check carries an urgency, and the urgency sets how much a finding "
+"weighs:"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"It will notice several things that point at a compromise: core files that "
+"differ from the official release, executable files in the uploads folder, "
+"must-use plugins or drop-ins that appeared out of nowhere, roles that gained"
+" administrator capabilities, injected scripts in the options table. If any "
+"of those turn up, treat it as a starting point for an investigation, not as "
+"a verdict."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Neither. It finds configuration weaknesses and exposure, which is what most "
+"WordPress sites are actually taken over through. It does not block traffic "
+"and it does not clean an infected site."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"It also records a login timestamp for each account, in user meta, because "
+"WordPress keeps no login history of its own and the administrator check "
+"would otherwise have nothing to say about dormant accounts. That is deleted "
+"on uninstall too."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid "Four options in your database, all removed when you delete the plugin:"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The remaining requests go to your own site, because several checks can only "
+"be answered from the outside: whether a file is served, whether a header is "
+"sent, whether a directory is listed. There is no telemetry and no reporting "
+"back to the plugin author."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"WordPress.org <a href=\"https://wordpress.org/about/privacy/\">privacy "
+"policy</a> and <a href=\"https://wordpress.org/about/terms-of-"
+"service/\">terms of service</a>."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Only to <code>api.wordpress.org</code>, and only through the WordPress "
+"functions that already talk to it for update checks:"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"There is one exception, and it is deliberate. To find out whether your "
+"server would execute a PHP file dropped into the uploads folder, the plugin "
+"has to try. It writes one file with a random name, requests it once over "
+"HTTP and deletes it in the same request. A shutdown handler removes the file"
+" even if PHP dies in between, and anything left behind by an earlier "
+"interrupted run is cleaned up before the next one starts."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid "No. Every check reads state and reports on it."
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"Background reading: our <a href=\"https://www.cms-"
+"admins.de/docs/\">documentation</a> and <a href=\"https://www.cms-"
+"admins.de/wordpress-sicherheit/\">what we do about WordPress security</a>"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"Questions about a finding: the <a "
+"href=\"https://wordpress.org/support/plugin/security-check-"
+"report/\">WordPress.org support forum</a>"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"Bugs and feature requests: <a href=\"https://github.com/cmsadmins/security-"
+"check-report/issues\">GitHub issues</a>"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>Low</strong>, weight 1.0: fingerprinting and good practice"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>Medium</strong>, weight 1.5: headers, permissions, policies"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<strong>High</strong>, weight 2.0: updates, transport security, important "
+"configuration"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<strong>Critical</strong>, weight 3.0: authentication, code execution, "
+"exposed secrets"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>F</strong>, critical: act now"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>D</strong>, poor: significant weaknesses, act soon"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>C</strong>, moderate: several things worth addressing"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>B</strong>, good: minor improvements available"
+msgstr ""
+
+#. Found in faq list item.
+msgid "<strong>A</strong>, excellent: nothing of substance outstanding"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"a baseline recorded on the first run, holding plugin authors, role "
+"definitions and the list of must-use plugins and drop-ins, so later runs can"
+" spot changes"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"which findings you have muted, together with a fingerprint of what they said"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"the last run and the one before it, so the report can show what changed"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/core/checksums/1.0/</code> for the official "
+"core file hashes"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/info/1.2/</code> to see whether a "
+"plugin listing is still open and when it was last released"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/update-check/1.1/</code> and "
+"<code>https://api.wordpress.org/themes/update-check/1.1/</code> for pending "
+"updates"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/core/version-check/1.7/</code> to learn the "
+"current WordPress version"
+msgstr ""
+
+#. Found in faq header.
+msgid "Who is behind this plugin, and where do I report a problem?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Which WordPress and PHP versions are supported?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Can I add my own checks?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Does it work on multisite?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Can I run it from the command line?"
+msgstr ""
+
+#. Found in faq header.
+msgid "How often should I run it?"
+msgstr ""
+
+#. Found in faq header.
+msgid "A finding does not apply to my setup. What now?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Why does a check say \"Not determined\"?"
+msgstr ""
+
+#. Found in faq header.
+msgid "How is the grade calculated?"
+msgstr ""
+
+#. Found in faq header.
+msgid "What do the grades mean?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Is this a malware scanner or a firewall?"
+msgstr ""
+
+#. Found in faq header.
+msgid "What does the plugin store?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Does it send data anywhere?"
+msgstr ""
+
+#. Found in faq header.
+msgid "Does the plugin change anything on my site?"
+msgstr ""
+
+#. Found in installation paragraph.
+msgid ""
+"The plugin needs PHP 7.4 or newer and WordPress 7.0 or newer. Running the "
+"checks requires the <code>manage_options</code> capability, so on a normal "
+"site that means an administrator."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Open \"Security Check\" in the admin menu and start a run."
+msgstr ""
+
+#. Found in installation list item.
+msgid "Activate it on the Plugins screen."
+msgstr ""
+
+#. Found in installation list item.
+msgid ""
+"Install the plugin from the WordPress plugin directory, or upload the folder"
+" to <code>/wp-content/plugins/security-check-report</code>."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<a href=\"https://www.cms-admins.de/\">CMS ADMINS</a> maintains, hosts and "
+"secures WordPress and Drupal sites from Munich. This plugin is the checklist"
+" we run ourselves, packaged up. It is free, it stays free, and it works the "
+"same whether or not you ever talk to us."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"The plugin talks to <code>api.wordpress.org</code> and to your own site. "
+"Nothing else, and there is no telemetry. See the questions below for exactly"
+" which endpoints and what is stored locally."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Network and transport.</strong> HTTPS and the redirect from http, "
+"TLS certificate expiry and negotiated protocol, the security headers and "
+"their quality rather than their mere presence, cookie attributes, CORS, "
+"exposed software versions, legacy discovery tags, XML-RPC, user enumeration,"
+" REST routes that accept writes without checking permissions, and whether "
+"the client address can be faked through forwarded headers."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Accounts and access.</strong> Guessable passwords, predictable "
+"administrator names, how many accounts hold administrator rights and which "
+"have gone dormant, roles below administrator holding capabilities they "
+"should not have, open registration and the role it hands out, two-factor "
+"coverage per administrator, the application password inventory including "
+"when each was last used and from where."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Files and permissions.</strong> Permissions on wp-config.php, the "
+"uploads folder and the core directories, world-writable paths, executable "
+"files among the media, whether the server runs PHP from the uploads folder, "
+"configuration and backup files that the server hands out, readable .git, "
+".svn and .hg folders, database dumps in the web root, leftovers from "
+"interrupted updates, directory listing."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Configuration.</strong> Debug mode, debug log exposure, the theme "
+"and plugin editor, installing code from the dashboard, authentication keys "
+"and salts, table prefix, database user privileges, whether the scheduler "
+"actually runs, autoloaded options size, injected content in the options "
+"table, backups, login protection, password policy."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Core, plugins and themes.</strong> WordPress version, PHP version "
+"against the published end-of-life dates, automatic core updates, core file "
+"integrity against the official checksums, files in the core directories that"
+" are not part of WordPress, pending plugin and theme updates, unused plugins"
+" and themes, plugins that look abandoned, plugins whose listing was closed, "
+"plugins whose author changed, must-use plugins and drop-ins, other "
+"installations sharing the account."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"The report opens with the five things worth doing first, not with a table of"
+" 60 rows. Every finding says what was found, why it matters and what to do "
+"about it. From the second run onwards the report also says what changed "
+"since the last one, which is usually the part worth reading."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"Security Check Report looks at 60 aspects of a WordPress installation and "
+"turns the findings into a graded report. It changes nothing. Every check "
+"reads state, and the only thing ever written is one temporary file in the "
+"uploads folder that is deleted again in the same request."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"<a href=\"https://github.com/cmsadmins/security-check-report\">Source code "
+"and issues on GitHub</a>"
+msgstr ""
+
+#. Found in description list item.
+msgid "<a href=\"https://www.cms-admins.de/docs/\">Documentation and guides</a>"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"<a href=\"https://www.cms-admins.de/wordpress-sicherheit/\">What we do about"
+" WordPress security</a>"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Not an auto-fixer. Every finding comes with instructions, and you carry them"
+" out."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Not a vulnerability database. It reports that a plugin is outdated, "
+"abandoned or delisted; it does not look up individual CVEs."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Not a malware scanner. It compares core files against the official checksums"
+" and looks for injected content in the options table, but it does not hunt "
+"for signatures in plugin or theme code, and it removes nothing."
+msgstr ""
+
+#. Found in description list item.
+msgid "Not a firewall. It blocks nothing and intercepts no requests."
+msgstr ""
+
+#. Found in description list item.
+msgid "An explanation of every check, searchable, right on the page"
+msgstr ""
+
+#. Found in description list item.
+msgid "A WP-CLI command that produces the same grade as the screen"
+msgstr ""
+
+#. Found in description list item.
+msgid "Exports as plain text, JSON and CSV"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"\"Not determined\" as a real outcome, so a blocked request is never reported"
+" as a problem and never moves the grade"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Muting that remembers what a finding said, so an accepted finding comes back"
+" the moment it actually changes"
+msgstr ""
+
+#. Found in description list item.
+msgid "A comparison with the previous run: newly failing, resolved, changed"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A priority list of at most five items, derived from urgency and score rather"
+" than from guesswork"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A weighted grade from A to F, where one failing critical check cannot be "
+"hidden by fifty passing minor ones"
+msgstr ""
+
+#. Found in description header.
+msgid "Who builds it"
+msgstr ""
+
+#. Found in description header.
+msgid "Data and connections"
+msgstr ""
+
+#. Found in description header.
+msgid "What it is not"
+msgstr ""
+
+#. Found in description header.
+msgid "What it checks"
+msgstr ""
+
+#. Found in description header.
+msgid "What you get"
+msgstr ""
+
+#. Screenshot description.
+msgid "The built-in documentation for every check, with a search"
+msgstr ""
+
+#. Screenshot description.
+msgid ""
+"All checks, grouped by area and filterable by outcome, with one finding "
+"expanded"
+msgstr ""
+
+#. Screenshot description.
+msgid "The report: grade, risk score and the five things to do first"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Two-factor detection now covers ReportedIP Hive, Solid Security, Kadence "
+"Security, WP Defender and Google Authenticator. iThemes Security has been "
+"renamed twice and ships under three folder names, all of which are "
+"recognised."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Two-factor coverage could not tell an account that never finished the setup "
+"from one it simply could not read, and called both inconclusive. Each "
+"supported plugin is now listed together with the user meta it writes, so an "
+"installed plugin nobody uses is reported as the exposure it is, naming the "
+"accounts without a second factor."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Every reported file now carries its size and, where an index.php did not "
+"pass, the reason it was reported. A guard file runs to a few hundred bytes, "
+"so the number alone usually settles what a file is."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The check for executable files in the uploads directory reported the empty "
+"index.php that WordPress and most plugins drop into every upload folder to "
+"stop directory listing. Those files are the opposite of a finding, and "
+"because the check counts as critical, a single one of them pulled an "
+"otherwise healthy site down to grade D. Across twenty sites the grade was "
+"identical for that reason alone. The check now reads such a file instead of "
+"judging it by name: an index.php passes only when it stays small and reads "
+"no request data, includes no other file, calls none of the functions a "
+"dropped shell needs and prints nothing of its own. Everything else is still "
+"reported, index.php included."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Removed three interface strings and two stylesheet rules left behind by the "
+"rebuild."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A finding can carry a link to further help. The two-factor finding uses it "
+"to point at the Two Factor plugin from the WordPress core team and at "
+"ReportedIP Hive, which we build ourselves and name as ours."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The priority list is now called what it is, a to-do list, and says to work "
+"through it in order."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The page scrolls to the result when a run finishes, instead of leaving it "
+"below the fold."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The result opens with a plain sentence, not just a letter: how many findings"
+" need attention now, how many are worth improving, and how many checks could"
+" not be completed."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The start button says what it does and how long it takes, and the note about"
+" the temporary file sits directly above it."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The screen is now laid out as three steps: start the check, read the result,"
+" go through everything else. Steps two and three say what they will contain "
+"before the first run, so the page explains itself."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "<strong>Changed</strong>"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "<strong>Fixed</strong>"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "<strong>Added</strong>"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "<strong>Rebuilt</strong>"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid "Releases before 2.2.0 are listed in changelog.txt."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Unified the colour scheme and fixed several layout issues"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Rewrote every check description into a consistent format: what it checks, "
+"why it matters, what to do"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Added a live search across the check documentation"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Redesigned interface with a native details and summary accordion"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Fixed translation loading on WordPress 6.7 and newer"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Removed the Spamhaus IP blacklist test, which sent the server address to a "
+"third party without asking"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Fixed a PHP warning in the theme and plugin update checks when a path no "
+"longer exists"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Added an automated test suite covering every check and the permission and "
+"nonce gates"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The test suite now runs against multisite as well, as a blocking step before"
+" every release."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The JavaScript alert was replaced by an admin notice and a screen reader "
+"announcement."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Counts in the report use proper plural forms instead of assuming plural."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Every string in the interface is translatable. The report was previously "
+"hardcoded English with a German date format."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Duplicate checks merged (PHP version support, XML-RPC methods, login attempt"
+" limiting) and two dropped that could never fail (jQuery version, table "
+"storage engine)."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"One request to the homepage per run instead of four, and one update lookup "
+"instead of one request per installed plugin."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The interface followed the operating system colour scheme and painted dark "
+"cards onto the light dashboard. It now follows the WordPress admin."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Security headers were all or nothing. They are now scored per header, with "
+"the cross-origin isolation headers treated as optional."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The malware signature scan searched wp-admin and wp-includes for strings "
+"such as <code>eval(</code> and <code>$_GET[</code>, and needed a hand-"
+"maintained list of 180 core files to stay quiet. Replaced by a comparison "
+"against the official WordPress file list."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"\"Not modified in six months\" was treated as \"outdated\", which flagged "
+"well maintained plugins. Replaced by release date, tested-up-to version and "
+"directory status."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"<code>WP_AUTO_UPDATE_CORE</code> set to true was reported as a risk, "
+"although it enables more updates than the recommended setting."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Permission checks compared against exactly 0755 and therefore reported 0750 "
+"and the widespread setgid 2755 as insecure."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A stored cross-site scripting path: findings carrying site data such as "
+"plugin names or user names were written into the summary with innerHTML."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The table prefix check compared the per-site prefix on multisite, so every "
+"subsite looked like it had a custom one."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Network administrators were missing from the password, administrator, two-"
+"factor and application password checks. They hold every capability "
+"regardless of their role on a site, so a role query alone did not find them."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Multisite reported \"registration is closed\" on a network that let anyone "
+"sign up, because the check read the per-site option that multisite ignores. "
+"It now reads the network setting."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The filters <code>cascr_registry</code> and <code>cascr_test_result</code>."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Exports as plain text, JSON and CSV."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"\"Not determined\" as its own outcome, so a blocked request is no longer a "
+"finding and no longer affects the grade."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Muting with a content fingerprint, so an accepted finding reappears as soon "
+"as it actually changes."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "A comparison with the previous run: newly failing, resolved, changed."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A priority list of the five things worth doing first, at the top of the "
+"report."
+msgstr ""
+
+#. Found in changelog list item.
+msgid "<code>wp security-check run</code> as a WP-CLI command."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Twenty-five checks, among them publicly readable configuration files and "
+"repository folders, database dumps in the web root, must-use plugins and "
+"drop-ins, role and capability changes, the application password inventory "
+"with last use, two-factor coverage per administrator, unauthenticated REST "
+"write routes, TLS certificate expiry, HSTS and CSP quality, cookie "
+"attributes, client address spoofing and plugin ownership changes."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Results are stored, so the report can compare a run with the one before it."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The admin-ajax endpoint was replaced by REST routes under "
+"<code>cascr/v1</code>, running three checks at a time instead of strictly "
+"one after another."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Grading moved out of the browser and into PHP, which makes the result "
+"reproducible, testable and available outside the dashboard."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"One registry is now the single source of truth for a check: identifier, "
+"label, grouping, urgency, weight, callback and documentation used to live in"
+" four separate places that nothing kept in sync. A test now enforces that "
+"they match."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Removed unused legacy code paths and reached full WordPress Coding Standards"
+" compliance"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Continuous integration lints on seven PHP versions and runs the tests "
+"against WordPress 7.0 and the current release"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Requires WordPress 7.0 or newer"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Broadened PHP compatibility: the plugin runs on PHP 7.4 through 8.5"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Enabled certificate verification for the PHP execution test request"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "Removed unused legacy code and files"
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Renamed plugin folder, main file and text domain to security-check-report"
+msgstr ""
+
+#. Found in changelog list item.
+msgid "First release on the WordPress.org plugin directory"
+msgstr ""

@@ -1,0 +1,3094 @@
+# Copyright (C) 2026 Patrick Schlesinger
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: CMS ADMINS Security Check Report 2.3.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/security-check-report\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-24T09:26:22+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: security-check-report\n"
+
+#. Plugin Name of the plugin
+#: security-check-report.php
+msgid "CMS ADMINS Security Check Report"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: security-check-report.php
+msgid "https://wordpress.org/plugins/security-check-report"
+msgstr ""
+
+#. Description of the plugin
+#: security-check-report.php
+msgid "Runs a series of read-only security checks against your WordPress installation and turns the findings into a graded report with a short list of what to fix first."
+msgstr ""
+
+#. Author of the plugin
+#: security-check-report.php
+msgid "Patrick Schlesinger"
+msgstr ""
+
+#. Author URI of the plugin
+#: security-check-report.php
+msgid "https://www.cms-admins.de/"
+msgstr ""
+
+#: config/docs.php:15
+msgid "What it checks"
+msgstr ""
+
+#: config/docs.php:16
+msgid "Why it matters"
+msgstr ""
+
+#: config/docs.php:17
+#: includes/class-cascr-admin.php:109
+msgid "What to do"
+msgstr ""
+
+#: config/docs.php:37
+msgid "Whether the installed WordPress release is the current one."
+msgstr ""
+
+#: config/docs.php:38
+msgid "Security releases are published together with a description of what they fix, which tells everyone exactly what to try against sites that have not updated yet."
+msgstr ""
+
+#: config/docs.php:39
+msgid "Install the update. Leave automatic minor updates switched on so security releases arrive without anyone having to notice them."
+msgstr ""
+
+#: config/docs.php:42
+msgid "Whether the PHP branch this site runs on still receives security fixes, measured against the published end-of-life dates."
+msgstr ""
+
+#: config/docs.php:43
+msgid "Once a branch is retired, flaws found in it are never fixed. The site keeps working, which is exactly why this goes unnoticed for years."
+msgstr ""
+
+#: config/docs.php:44
+msgid "Ask the host to move the site to a supported branch. Test on a staging copy first: a PHP jump is the one upgrade that reliably breaks old plugins."
+msgstr ""
+
+#: config/docs.php:47
+msgid "Whether WordPress installs its own security releases."
+msgstr ""
+
+#: config/docs.php:48
+msgid "The window between a security release and the first attempts against it is measured in hours. Nobody updates that fast by hand."
+msgstr ""
+
+#: config/docs.php:49
+msgid "Leave the default in place, or set WP_AUTO_UPDATE_CORE to minor. Setting it to true is fine too and covers more."
+msgstr ""
+
+#: config/docs.php:52
+msgid "Every core file against the checksums WordPress.org publishes for this exact release."
+msgstr ""
+
+#: config/docs.php:53
+msgid "A modified core file is either a botched update or someone else editing the site. Both are worth knowing about, and the second one is urgent."
+msgstr ""
+
+#: config/docs.php:54
+msgid "Reinstall WordPress from Dashboard, Updates. If the same files change again afterwards, treat the site as compromised and rebuild it."
+msgstr ""
+
+#: config/docs.php:57
+msgid "Executable files inside wp-admin and wp-includes that are not part of the official release."
+msgstr ""
+
+#: config/docs.php:58
+msgid "Nothing but WordPress itself belongs in those two directories. A file that is not on the official list was put there by something else."
+msgstr ""
+
+#: config/docs.php:59
+msgid "Open each file before deleting it. Note that a few hosts do drop their own helper files into these directories."
+msgstr ""
+
+#: config/docs.php:62
+msgid "Whether any active plugin has an update waiting, using the update information WordPress already holds."
+msgstr ""
+
+#: config/docs.php:63
+msgid "Nine out of ten new vulnerabilities in the WordPress ecosystem are in plugins, and the fix is usually a version bump that was published weeks ago."
+msgstr ""
+
+#: config/docs.php:64
+msgid "Install the updates. Turn on automatic updates for the plugins you have no reason to hold back."
+msgstr ""
+
+#: config/docs.php:67
+msgid "Whether any installed theme has an update waiting."
+msgstr ""
+
+#: config/docs.php:68
+msgid "Themes get less attention than plugins, but they ship the same kind of code and are reachable on every page load."
+msgstr ""
+
+#: config/docs.php:69
+msgid "Install the updates and delete themes the site does not use."
+msgstr ""
+
+#: config/docs.php:72
+msgid "Plugins that are installed but not active, and themes that are neither the active theme nor its parent."
+msgstr ""
+
+#: config/docs.php:73
+msgid "Deactivated code still sits on disk and is still reachable by direct request in some setups. It also stops being updated the moment people forget about it."
+msgstr ""
+
+#: config/docs.php:74
+msgid "Delete what the site does not use. Keeping one spare default theme for troubleshooting is reasonable."
+msgstr ""
+
+#: config/docs.php:77
+msgid "How long ago each active plugin was last released, and which WordPress version its author last tested against."
+msgstr ""
+
+#: config/docs.php:78
+msgid "An abandoned plugin has no one left to publish a fix. The code keeps working right up until the day someone finds a hole in it."
+msgstr ""
+
+#: config/docs.php:79
+msgid "Look for a maintained alternative before it becomes urgent. File dates on disk say nothing about this, which is why the directory is asked instead."
+msgstr ""
+
+#: config/docs.php:82
+msgid "Whether any active plugin has had its listing closed in the WordPress plugin directory."
+msgstr ""
+
+#: config/docs.php:83
+msgid "A listing is usually closed because of an unfixed security problem. That makes it more serious than a plugin with a known, patched vulnerability, not less."
+msgstr ""
+
+#: config/docs.php:84
+msgid "Remove the plugin and replace it. Updates will never arrive for it again."
+msgstr ""
+
+#: config/docs.php:87
+msgid "Whether the author line of an installed plugin changed since the first scan."
+msgstr ""
+
+#: config/docs.php:88
+msgid "Buying an established plugin and shipping a malicious update to its existing users has become a common route in. The author line is the earliest thing a site can notice on its own."
+msgstr ""
+
+#: config/docs.php:89
+msgid "Confirm the handover is genuine and read the changelog of the release that came with it. Most changes are legitimate."
+msgstr ""
+
+#: config/docs.php:92
+msgid "Must-use plugins and drop-in files such as object-cache.php, advanced-cache.php and db.php, compared against what was there at the first scan."
+msgstr ""
+
+#: config/docs.php:93
+msgid "Both load on every single request and neither can be switched off from the dashboard. That combination makes them a favourite hiding place for code that is meant to stay."
+msgstr ""
+
+#: config/docs.php:94
+msgid "Open anything that appeared without you installing it. Managed hosts legitimately place their own caching drop-ins here."
+msgstr ""
+
+#: config/docs.php:97
+msgid "Whether other WordPress installations share the same hosting account."
+msgstr ""
+
+#: config/docs.php:98
+msgid "On most shared hosting, one compromised site can write into its neighbours. A forgotten test installation next door is a way into this one."
+msgstr ""
+
+#: config/docs.php:99
+msgid "Keep every installation updated, or delete the ones nobody uses."
+msgstr ""
+
+#: config/docs.php:105
+msgid "Whether debug output is switched on, and whether errors are printed into the page."
+msgstr ""
+
+#: config/docs.php:106
+msgid "Error output names file paths, database details and plugin internals. It is a free map of the installation for whoever triggers an error on purpose."
+msgstr ""
+
+#: config/docs.php:107
+msgid "Set WP_DEBUG to false in production and do the debugging on a staging copy."
+msgstr ""
+
+#: config/docs.php:110
+msgid "Whether a debug log exists and whether the web server hands it out."
+msgstr ""
+
+#: config/docs.php:111
+msgid "The log accumulates file paths, query fragments and occasionally credentials. A publicly readable one is a slow leak that nobody watches."
+msgstr ""
+
+#: config/docs.php:112
+msgid "Delete the file and keep the log outside the web root by setting WP_DEBUG_LOG to a path above it."
+msgstr ""
+
+#: config/docs.php:115
+msgid "Whether the built-in theme and plugin editor is available."
+msgstr ""
+
+#: config/docs.php:116
+msgid "The editor turns one stolen administrator password into arbitrary code execution, with no upload and no vulnerability required."
+msgstr ""
+
+#: config/docs.php:117
+msgid "Add define( 'DISALLOW_FILE_EDIT', true ); to wp-config.php. Nobody edits production code in a browser textarea anyway."
+msgstr ""
+
+#: config/docs.php:120
+msgid "Whether plugins and themes can be installed from the dashboard."
+msgstr ""
+
+#: config/docs.php:121
+msgid "Blocking the editor still leaves the installer. Uploading a zip is the shortest path from a stolen login to running code."
+msgstr ""
+
+#: config/docs.php:122
+msgid "On sites where code is deployed rather than clicked in, add define( 'DISALLOW_FILE_MODS', true ); to wp-config.php. Be aware that it also stops automatic updates, so the deployment has to cover those."
+msgstr ""
+
+#: config/docs.php:125
+msgid "Whether all eight authentication keys and salts are defined, long enough, not placeholders and not repeated."
+msgstr ""
+
+#: config/docs.php:126
+msgid "These values sign every login cookie and every nonce. Weak or duplicated ones make a stolen cookie easier to forge and harder to invalidate."
+msgstr ""
+
+#: config/docs.php:127
+msgid "Generate a fresh set at api.wordpress.org/secret-key/1.1/salt/ and paste it over the block in wp-config.php. Everyone is logged out once, which is also how you evict a stolen session."
+msgstr ""
+
+#: config/docs.php:130
+msgid "Whether the database still uses the default table prefix."
+msgstr ""
+
+#: config/docs.php:131
+msgid "A predictable prefix makes blind injection attempts easier, because the attacker does not have to discover the table names first. It is a small hurdle, not a wall."
+msgstr ""
+
+#: config/docs.php:132
+msgid "Change it during a migration rather than as a standalone step on a live site. Doing it in place breaks serialised option data if done carelessly."
+msgstr ""
+
+#: config/docs.php:135
+msgid "Whether the database account WordPress uses holds rights beyond its own database."
+msgstr ""
+
+#: config/docs.php:136
+msgid "Full rights on the site database are normal. Full rights on every database, or the right to hand out rights, means one injection reaches past this site."
+msgstr ""
+
+#: config/docs.php:137
+msgid "Create a dedicated account limited to this database and update wp-config.php."
+msgstr ""
+
+#: config/docs.php:140
+msgid "Whether scheduled events actually run, and whether anything is scheduled that no code listens to."
+msgstr ""
+
+#: config/docs.php:141
+msgid "Update checks, backups and scans all live in the scheduler. A stalled scheduler is silent: everything looks fine and nothing happens. Schedules with no code behind them are usually leftovers from a removed plugin, occasionally something that was planted."
+msgstr ""
+
+#: config/docs.php:142
+msgid "If DISABLE_WP_CRON is set, make sure a server cron job triggers wp-cron.php. Otherwise remove the constant."
+msgstr ""
+
+#: config/docs.php:145
+msgid "How much option data WordPress loads on every single request."
+msgstr ""
+
+#: config/docs.php:146
+msgid "This is usually a performance topic, but a bloated autoload set is also where forgotten logs and planted payloads accumulate, because nobody ever looks at it."
+msgstr ""
+
+#: config/docs.php:147
+msgid "Look at what the largest entries contain before deleting anything. Some plugins legitimately store a lot."
+msgstr ""
+
+#: config/docs.php:150
+msgid "Option values that contain code fragments or load scripts from another host, and whether the site and home addresses agree."
+msgstr ""
+
+#: config/docs.php:151
+msgid "Search engine spam is written into the options table far more often than into files, because it survives a plugin reinstall and never shows up in a file comparison."
+msgstr ""
+
+#: config/docs.php:152
+msgid "Check each entry before removing it. Analytics and consent tools legitimately store script tags this way."
+msgstr ""
+
+#: config/docs.php:155
+msgid "Whether a known backup plugin is active."
+msgstr ""
+
+#: config/docs.php:156
+msgid "Every other check on this page is about avoiding a bad day. A backup is what turns a bad day into an afternoon."
+msgstr ""
+
+#: config/docs.php:157
+msgid "A backup taken by the host counts just as much. This check can only see plugins, so ignore it if the host handles it."
+msgstr ""
+
+#: config/docs.php:160
+msgid "Which general security plugins are active. This one is informational and does not affect the grade."
+msgstr ""
+
+#: config/docs.php:161
+msgid "Having a security plugin installed says nothing about whether it is configured. It is listed here for context, not as a score."
+msgstr ""
+
+#: config/docs.php:162
+msgid "Nothing to do. If several are active, check that they are not fighting over the same rules."
+msgstr ""
+
+#: config/docs.php:165
+msgid "Whether anything limits repeated login attempts."
+msgstr ""
+
+#: config/docs.php:166
+msgid "Without a limit, passwords can be guessed at whatever rate the server will answer. Combined with readable user names, that is the most common way in."
+msgstr ""
+
+#: config/docs.php:167
+msgid "Install a login limiter, or rate limit wp-login.php and xmlrpc.php at the web server, which is cheaper and harder to bypass."
+msgstr ""
+
+#: config/docs.php:170
+msgid "Whether anything enforces a minimum password strength."
+msgstr ""
+
+#: config/docs.php:171
+msgid "WordPress warns about a weak password and then accepts it anyway. A warning is not a policy."
+msgstr ""
+
+#: config/docs.php:172
+msgid "Enforce a minimum strength at least for accounts that can publish or administer."
+msgstr ""
+
+#: config/docs.php:178
+msgid "The permission bits on wp-config.php."
+msgstr ""
+
+#: config/docs.php:179
+msgid "The file holds the database credentials and the authentication keys. On shared hosting, world-readable means readable by every other account on the machine."
+msgstr ""
+
+#: config/docs.php:180
+msgid "Set it to 640, or 440 if the web server runs as the owning account. Never 777."
+msgstr ""
+
+#: config/docs.php:183
+msgid "Whether the uploads directory is writable by everyone on the server."
+msgstr ""
+
+#: config/docs.php:184
+msgid "The directory has to be writable by PHP. It does not have to be writable by every other account on the machine, and on shared hosting those are not the same thing."
+msgstr ""
+
+#: config/docs.php:185
+msgid "Set it to 755, or 750 where the group is right. This check deliberately accepts anything that is not world-writable."
+msgstr ""
+
+#: config/docs.php:188
+msgid "Whether wp-content, wp-includes or wp-admin are writable by everyone."
+msgstr ""
+
+#: config/docs.php:189
+msgid "A world-writable core directory lets any account on the server drop a file that WordPress will then execute."
+msgstr ""
+
+#: config/docs.php:190
+#: includes/checks/class-cascr-checks-files.php:147
+msgid "Set the directories to 755 or 750."
+msgstr ""
+
+#: config/docs.php:193
+msgid "Files and folders below the web root that carry the world-writable bit."
+msgstr ""
+
+#: config/docs.php:194
+msgid "Nothing in a WordPress installation needs to be writable by everyone. Where it happens it is nearly always a botched chmod during troubleshooting that was never undone."
+msgstr ""
+
+#: config/docs.php:195
+msgid "Files 644, directories 755. If something only works at 777, the ownership is wrong and that is the thing to fix."
+msgstr ""
+
+#: config/docs.php:198
+msgid "Executable files sitting among the media uploads."
+msgstr ""
+
+#: config/docs.php:199
+msgid "Media never needs to be executable. A script in this directory is either a leftover or a shell that someone uploaded through a flaw elsewhere."
+msgstr ""
+
+#: config/docs.php:200
+msgid "Open each file before deleting it, and check the upload date against the server log. A hardening .htaccess in this directory is not a finding and is not reported here."
+msgstr ""
+
+#: config/docs.php:203
+msgid "Whether the server actually runs a PHP file placed in the uploads directory. A file is written, requested once and deleted again."
+msgstr ""
+
+#: config/docs.php:204
+msgid "This is what turns a file upload flaw from an annoyance into code execution. It is the single most valuable hardening step on this page."
+msgstr ""
+
+#: config/docs.php:205
+msgid "Block PHP in the uploads directory in the server configuration, or place an .htaccess there that denies .php files."
+msgstr ""
+
+#: config/docs.php:208
+msgid "Editor leftovers and backup copies around wp-config.php, plus .env and similar files. Existence is checked first, then whether the web server actually serves them."
+msgstr ""
+
+#: config/docs.php:209
+msgid "A file named wp-config.php.bak is not parsed as PHP, so the server hands out its contents as text, credentials and all. Whether that happens depends on the server, which is why both questions get asked."
+msgstr ""
+
+#: config/docs.php:210
+msgid "Delete the files. If one was reachable, assume its contents are known: rotate the database password and the authentication keys."
+msgstr ""
+
+#: config/docs.php:213
+msgid "Whether .git, .svn or .hg directories are readable over HTTP."
+msgstr ""
+
+#: config/docs.php:214
+msgid "A readable .git directory is the entire source history, including files that were committed once and deleted later. Credentials are found this way regularly."
+msgstr ""
+
+#: config/docs.php:215
+msgid "Block the directory at the web server, and preferably deploy without the repository metadata in the first place."
+msgstr ""
+
+#: config/docs.php:218
+msgid "Database dumps and archives in the web root or in wp-content, and whether they can be downloaded."
+msgstr ""
+
+#: config/docs.php:219
+msgid "A downloadable dump is every password hash, every email address and every private post in one file. It is usually left behind after a migration."
+msgstr ""
+
+#: config/docs.php:220
+msgid "Delete it. If it was reachable, rotate the database password and the authentication keys, and treat the user data as disclosed."
+msgstr ""
+
+#: config/docs.php:223
+msgid "Files in the web root that give away version and tooling details."
+msgstr ""
+
+#: config/docs.php:224
+msgid "None of these is a hole. Together they tell an attacker which WordPress version, which build tooling and which dependencies to look up."
+msgstr ""
+
+#: config/docs.php:225
+msgid "Deleting them is safe. WordPress recreates readme.html on every core update, so this one comes back."
+msgstr ""
+
+#: config/docs.php:228
+msgid "Contents of wp-content/upgrade and upgrade-temp-backup that are more than a day old."
+msgstr ""
+
+#: config/docs.php:229
+msgid "An interrupted update leaves an unpacked copy of a plugin behind, sometimes the old vulnerable version, and it stays reachable by direct request."
+msgstr ""
+
+#: config/docs.php:230
+msgid "Delete the contents of both folders. WordPress recreates them when it needs them."
+msgstr ""
+
+#: config/docs.php:233
+msgid "Whether the server lists the contents of wp-content, the plugin folder, the uploads folder and wp-includes."
+msgstr ""
+
+#: config/docs.php:234
+msgid "A listing names every installed plugin and its folder structure, which is a ready-made list of things to look up vulnerabilities for."
+msgstr ""
+
+#: config/docs.php:235
+#: includes/checks/class-cascr-checks-files.php:858
+msgid "Switch off autoindex in the server configuration, or add Options -Indexes to .htaccess."
+msgstr ""
+
+#: config/docs.php:238
+msgid "Whether an .htaccess file exists, on servers that use one."
+msgstr ""
+
+#: config/docs.php:239
+msgid "On Apache this file carries the rewrite rules and most hardening directives. Its absence means none of them are in place."
+msgstr ""
+
+#: config/docs.php:240
+msgid "Save the permalink settings once and WordPress writes a basic file. On nginx there is no .htaccess and this check reports nothing."
+msgstr ""
+
+#: config/docs.php:246
+msgid "Whether any account that can publish or administer uses a password from the common list, or a variation of its own login name. The stored hash is compared, no login is attempted."
+msgstr ""
+
+#: config/docs.php:247
+msgid "Password guessing is still how most WordPress sites are taken over. One weak administrator password makes every other measure on this page irrelevant."
+msgstr ""
+
+#: config/docs.php:248
+msgid "Reset those passwords now, then look at what the accounts did recently. Comparing hashes leaves no entry in the login log and triggers no lockout, so this check is safe to run repeatedly."
+msgstr ""
+
+#: config/docs.php:251
+msgid "Whether an administrator uses a predictable login name such as admin or root."
+msgstr ""
+
+#: config/docs.php:252
+msgid "Guessing a password needs the name too. A predictable name removes half the problem for the attacker."
+msgstr ""
+
+#: config/docs.php:253
+msgid "Create a new administrator with a different name, reassign the content, then delete the old account. Renaming in place is not possible from the dashboard."
+msgstr ""
+
+#: config/docs.php:256
+msgid "How many accounts hold administrator rights, whether the account with ID 1 is one of them, and which administrators have not signed in for a long time."
+msgstr ""
+
+#: config/docs.php:257
+msgid "Every administrator account is a separate way in. Dormant ones are the most dangerous, because nobody would notice them being used."
+msgstr ""
+
+#: config/docs.php:258
+msgid "Give people the lowest role that lets them work, and remove accounts nobody uses. Sign-in times are only known from the moment this plugin was installed, since WordPress keeps no login history of its own."
+msgstr ""
+
+#: config/docs.php:261
+msgid "Whether any role below administrator holds capabilities such as install_plugins, edit_files or manage_options, and whether the role definitions changed since the first scan."
+msgstr ""
+
+#: config/docs.php:262
+msgid "A subscriber with install_plugins is an administrator with a friendlier label. Compromised plugins add capabilities like this because it survives a password reset."
+msgstr ""
+
+#: config/docs.php:263
+msgid "Some plugins add capabilities on purpose, for instance shop or membership plugins. Remove anything you cannot account for."
+msgstr ""
+
+#: config/docs.php:266
+msgid "Whether anyone can register, and which role new accounts receive."
+msgstr ""
+
+#: config/docs.php:267
+msgid "Open registration is fine. Open registration handing out a role that can publish or install is an open door, and it is a setting that gets changed once and forgotten."
+msgstr ""
+
+#: config/docs.php:268
+msgid "Under Settings, General, set the default role to Subscriber, or switch registration off if the site does not need accounts."
+msgstr ""
+
+#: config/docs.php:271
+msgid "Whether a second factor is available at all, and which administrators actually have one set up."
+msgstr ""
+
+#: config/docs.php:272
+msgid "Whether the feature exists matters far less than who uses it. One administrator without a second factor is the account that will be targeted."
+msgstr ""
+
+#: config/docs.php:273
+msgid "Set it up for the accounts that are missing it, or require it for the administrator role. Two Factor, from the WordPress core team, is a solid free option. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys next to its login protection; it is named here because it fits, not because you need it. Coverage can only be read for the more common plugins; for others this check says so rather than guessing."
+msgstr ""
+
+#: config/docs.php:276
+msgid "Which application passwords exist for privileged accounts, when they were created, when they were last used and from where."
+msgstr ""
+
+#: config/docs.php:277
+msgid "Application passwords bypass the second factor by design. That makes a forgotten one the quietest way to keep access to a site, and an unused one from two years ago is worth more attention than the feature being switched on."
+msgstr ""
+
+#: config/docs.php:278
+msgid "Revoke what is no longer in use, under Users, Profile. Each one is a standing credential."
+msgstr ""
+
+#: config/docs.php:284
+msgid "Whether the site address uses https, whether the dashboard is forced onto it, and whether the http address redirects permanently."
+msgstr ""
+
+#: config/docs.php:285
+msgid "A site that merely answers on https while still advertising http lets a login travel in the clear whenever someone types the address without the s."
+msgstr ""
+
+#: config/docs.php:286
+msgid "Set the site and home addresses to https, add define( 'FORCE_SSL_ADMIN', true ); to wp-config.php and redirect http with a 301."
+msgstr ""
+
+#: config/docs.php:289
+msgid "How long the certificate is still valid and which protocol version the connection negotiates."
+msgstr ""
+
+#: config/docs.php:290
+msgid "An expired certificate replaces the site with a browser warning. Automatic renewal fails quietly more often than anyone expects."
+msgstr ""
+
+#: config/docs.php:291
+msgid "Renew it and then check that the renewal job actually ran, rather than assuming it will."
+msgstr ""
+
+#: config/docs.php:294
+msgid "Which of the recommended response headers the site sends. Each missing header counts separately."
+msgstr ""
+
+#: config/docs.php:295
+msgid "These headers are what limits the damage of a flaw elsewhere. They are cheap to add and nothing else on this page substitutes for them."
+msgstr ""
+
+#: config/docs.php:296
+msgid "Send them from the web server so static files are covered too. X-Content-Type-Options and Referrer-Policy are safe to add immediately; the cross-origin isolation headers are treated as optional here because they break embeds on ordinary sites."
+msgstr ""
+
+#: config/docs.php:299
+msgid "Not just whether the HSTS header exists, but whether its max-age is long enough and whether it covers subdomains."
+msgstr ""
+
+#: config/docs.php:300
+msgid "A max-age of a few minutes passes an existence check and protects nobody. The header only does its job when a browser remembers it for months."
+msgstr ""
+
+#: config/docs.php:301
+msgid "Use max-age=31536000 with includeSubDomains once the whole site is reliably on HTTPS. Add preload only when you are certain, since it is hard to undo."
+msgstr ""
+
+#: config/docs.php:304
+msgid "Whether a Content Security Policy is enforced, and whether it contains 'unsafe-inline', 'unsafe-eval' or a wildcard source."
+msgstr ""
+
+#: config/docs.php:305
+msgid "A policy that allows 'unsafe-inline' permits exactly what a policy exists to prevent. Report-only mode blocks nothing at all."
+msgstr ""
+
+#: config/docs.php:306
+msgid "Start with Content-Security-Policy-Report-Only, watch the reports until they are quiet, then send the same policy as the enforcing header. Replace unsafe-inline with a nonce."
+msgstr ""
+
+#: config/docs.php:309
+msgid "The attributes on the cookies the login page sets, in particular Secure and SameSite."
+msgstr ""
+
+#: config/docs.php:310
+msgid "Without SameSite, a browser sends the session cookie along with requests started by other sites, which is the ingredient a cross-site request forgery needs."
+msgstr ""
+
+#: config/docs.php:311
+msgid "Set SameSite=Lax on the session cookies at the web server, and Secure on every cookie once the site is on HTTPS. WordPress does not set SameSite by itself."
+msgstr ""
+
+#: config/docs.php:314
+msgid "Whether the site tells browsers that any origin may read its responses."
+msgstr ""
+
+#: config/docs.php:315
+msgid "A wildcard origin combined with credentials lets any website read logged-in responses from this one. It is a rare misconfiguration and a severe one."
+msgstr ""
+
+#: config/docs.php:316
+msgid "Name the origins that are actually allowed. Never combine the wildcard with Access-Control-Allow-Credentials."
+msgstr ""
+
+#: config/docs.php:319
+msgid "Whether the response headers name the exact PHP or server version."
+msgstr ""
+
+#: config/docs.php:320
+msgid "This is not a hole, it is a shortcut. It tells an attacker which known flaws are worth trying before they try anything."
+msgstr ""
+
+#: config/docs.php:321
+#: includes/checks/class-cascr-checks-network.php:520
+msgid "Set expose_php to Off in php.ini and trim the server token in the web server configuration."
+msgstr ""
+
+#: config/docs.php:324
+msgid "Discovery tags in the front page markup: the generator tag, the Windows Live Writer manifest and the Really Simple Discovery link."
+msgstr ""
+
+#: config/docs.php:325
+msgid "The generator tag publishes the exact WordPress version. The other two point at interfaces from an era when blogging clients were a thing."
+msgstr ""
+
+#: config/docs.php:326
+msgid "Remove the corresponding hooks from wp_head. This is fingerprinting rather than a vulnerability, so it is weighted lightly."
+msgstr ""
+
+#: config/docs.php:329
+msgid "Whether the XML-RPC endpoint answers method calls, and whether system.multicall and pingback.ping are among them."
+msgstr ""
+
+#: config/docs.php:330
+msgid "system.multicall lets one request carry hundreds of password attempts, which walks straight past a limiter that counts requests. pingback.ping lets the site be used to probe other hosts."
+msgstr ""
+
+#: config/docs.php:331
+msgid "If nothing uses XML-RPC, block xmlrpc.php at the web server. Jetpack and the mobile apps are the usual reasons to keep it."
+msgstr ""
+
+#: config/docs.php:334
+msgid "Three ways of reading out login names without being logged in: the ?author=N redirect, the REST users endpoint and the oEmbed endpoint."
+msgstr ""
+
+#: config/docs.php:335
+msgid "Guessing a password needs a name and a password. Readable names turn that into one unknown instead of two."
+msgstr ""
+
+#: config/docs.php:336
+msgid "Require authentication on the users endpoint and stop the author redirect. Setting display names that differ from login names helps regardless."
+msgstr ""
+
+#: config/docs.php:339
+msgid "REST routes that accept POST, PUT, PATCH or DELETE without checking permissions first."
+msgstr ""
+
+#: config/docs.php:340
+msgid "A write route with no permission callback can be called by anyone who knows the URL. This finds the pattern in third-party plugins, not just in the ones people already know about."
+msgstr ""
+
+#: config/docs.php:341
+msgid "The route belongs to whichever plugin registered it. Report it to the author, and remove the plugin until it is fixed."
+msgstr ""
+
+#: config/docs.php:344
+msgid "Whether forwarded address headers arrive, and whether the request actually came through a proxy."
+msgstr ""
+
+#: config/docs.php:345
+msgid "If the site sits directly on the internet and a forwarded header arrives anyway, the visitor wrote it. Anything that trusts it for rate limiting or blocking can be walked straight past by changing one header."
+msgstr ""
+
+#: config/docs.php:346
+msgid "Configure security plugins to read the address from REMOTE_ADDR, or strip these headers at the edge. Behind Cloudflare or a load balancer the opposite is true, and reading the header is correct."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:111
+msgid "The password list could not be loaded."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:117
+msgid "No privileged accounts were found."
+msgstr ""
+
+#. translators: %d: number of accounts checked.
+#: includes/checks/class-cascr-checks-accounts.php:145
+#, php-format
+msgid "The %d privileged account does not use a password from the common list."
+msgid_plural "None of the %d privileged accounts uses a password from the common list."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of accounts with a guessable password.
+#: includes/checks/class-cascr-checks-accounts.php:161
+#, php-format
+msgid "%d privileged account uses a guessable password."
+msgid_plural "%d privileged accounts use guessable passwords."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-accounts.php:171
+msgid "Reset those passwords now and check the account activity afterwards."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:192
+msgid "No administrator uses a predictable login name."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:196
+msgid "An administrator account uses a name that every password guesser tries first."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:199
+msgid "Create a new administrator with a different name, move the content over and delete the old account."
+msgstr ""
+
+#. translators: %d: number of administrator accounts.
+#: includes/checks/class-cascr-checks-accounts.php:218
+#, php-format
+msgid "%d accounts hold administrator rights"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:226
+msgid "the account with ID 1 is an administrator, which is the first ID anyone tries"
+msgstr ""
+
+#. translators: 1: user login, 2: human readable time since the last login.
+#: includes/checks/class-cascr-checks-accounts.php:237
+#, php-format
+msgid "%1$s last signed in %2$s ago"
+msgstr ""
+
+#. translators: %d: number of administrator accounts.
+#: includes/checks/class-cascr-checks-accounts.php:253
+#, php-format
+msgid "%d account holds administrator rights."
+msgid_plural "%d accounts hold administrator rights."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-accounts.php:265
+msgid "The set of administrator accounts is worth reviewing."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:268
+msgid "Give people the lowest role that lets them do their work, and remove accounts that are no longer used."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:281
+msgid "The role definitions could not be read."
+msgstr ""
+
+#. translators: 1: role name, 2: comma separated capability names.
+#: includes/checks/class-cascr-checks-accounts.php:301
+#, php-format
+msgid "the role %1$s holds %2$s"
+msgstr ""
+
+#. translators: %s: role name.
+#: includes/checks/class-cascr-checks-accounts.php:310
+#, php-format
+msgid "the role %s may post unfiltered HTML"
+msgstr ""
+
+#. translators: %s: role slug.
+#: includes/checks/class-cascr-checks-accounts.php:323
+#, php-format
+msgid "the role %s was added after the first scan"
+msgstr ""
+
+#. translators: %s: role slug.
+#: includes/checks/class-cascr-checks-accounts.php:329
+#, php-format
+msgid "the capabilities of the role %s changed after the first scan"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:337
+msgid "No role below administrator holds administrator-level capabilities."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:341
+msgid "Roles below administrator hold capabilities that amount to full control."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:344
+msgid "Some plugins add these on purpose. Anything you cannot account for should be removed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:362
+msgid "Registration is closed."
+msgstr ""
+
+#. translators: %s: name of the default role for new accounts.
+#: includes/checks/class-cascr-checks-accounts.php:375
+#, php-format
+msgid "Anyone can register and immediately receives the role %s, which carries administrator-level capabilities."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:380
+#: includes/checks/class-cascr-checks-accounts.php:393
+msgid "Set the default role to Subscriber under Settings, General."
+msgstr ""
+
+#. translators: %s: name of the default role for new accounts.
+#: includes/checks/class-cascr-checks-accounts.php:388
+#, php-format
+msgid "Anyone can register and immediately receives the role %s, which may publish."
+msgstr ""
+
+#. translators: %s: name of the default role for new accounts.
+#: includes/checks/class-cascr-checks-accounts.php:400
+#, php-format
+msgid "Registration is open. New accounts receive the role %s."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:405
+msgid "If the site does not need public accounts, switch registration off under Settings, General."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:428
+msgid "No second factor is available, so a stolen password is enough to reach the dashboard."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:431
+msgid "Install a two-factor plugin and require it at least for administrators. Two Factor, maintained by the WordPress core team, is a solid free choice. ReportedIP Hive, which we build ourselves, covers TOTP, email and passkeys alongside its login protection."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:441
+msgid "A two-factor plugin is active, but which accounts use it cannot be read from here."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:442
+msgid "Check the coverage in the plugin itself."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:466
+msgid "Every administrator has a second factor."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:474
+msgid "A two-factor plugin is active, but no administrator has set the second factor up."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:477
+msgid "Finish the setup for every administrator and require the second factor for the role. ReportedIP Hive, which we build ourselves, enforces it per role and covers TOTP, email and passkeys."
+msgstr ""
+
+#. translators: %d: number of administrators without a second factor.
+#: includes/checks/class-cascr-checks-accounts.php:485
+#, php-format
+msgid "%d administrator has no second factor."
+msgid_plural "%d administrators have no second factor."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-accounts.php:495
+msgid "Set up the second factor for those accounts, or require it for the administrator role."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:541
+msgid "ReportedIP Hive, our own plugin with TOTP, email and passkeys"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:556
+msgid "This WordPress version has no application passwords."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:560
+msgid "Application passwords are switched off on this site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:577
+#: includes/checks/class-cascr-checks-core.php:782
+#: includes/checks/class-cascr-checks-core.php:791
+msgid "no name"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:580
+#: includes/checks/class-cascr-checks-accounts.php:595
+msgid "never used"
+msgstr ""
+
+#. translators: 1: user login, 2: application password name, 3: creation date, 4: last use.
+#: includes/checks/class-cascr-checks-accounts.php:584
+#, php-format
+msgid "%1$s, \"%2$s\", created %3$s, %4$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:587
+msgid "unknown"
+msgstr ""
+
+#. translators: 1: human readable time since last use, 2: IP address.
+#: includes/checks/class-cascr-checks-accounts.php:591
+#, php-format
+msgid "last used %1$s ago from %2$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:609
+msgid "No application passwords are in use by privileged accounts."
+msgstr ""
+
+#. translators: %d: number of application passwords in use.
+#: includes/checks/class-cascr-checks-accounts.php:616
+#, php-format
+msgid "%d application password is in use and was used recently."
+msgid_plural "%d application passwords are in use and were used recently."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of forgotten application passwords.
+#: includes/checks/class-cascr-checks-accounts.php:631
+#, php-format
+msgid "%d application password has not been used in months."
+msgid_plural "%d application passwords have not been used in months."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-accounts.php:641
+msgid "Revoke what is no longer needed. These credentials skip the second factor."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:654
+msgid "Network registration is closed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:658
+msgid "anyone can create an account"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:659
+msgid "existing accounts can create new sites"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:660
+msgid "anyone can create an account and a new site"
+msgstr ""
+
+#. translators: %s: name of the default role for new accounts.
+#: includes/checks/class-cascr-checks-accounts.php:674
+#, php-format
+msgid "Network registration is open and new accounts receive the role %s on this site, which carries administrator-level capabilities."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:679
+msgid "Under Network Admin, Settings, set registration to none, or lower the default role of this site."
+msgstr ""
+
+#. translators: %s: name of the default role for new accounts.
+#: includes/checks/class-cascr-checks-accounts.php:686
+#, php-format
+msgid "Network registration is open. New accounts receive the role %s on this site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-accounts.php:691
+msgid "If the network does not need public sign-ups, set registration to none under Network Admin, Settings."
+msgstr ""
+
+#. translators: %d: number of further findings that are not listed.
+#. translators: %d: number of additional items not listed.
+#: includes/checks/class-cascr-checks-base.php:179
+#: includes/class-cascr-result.php:210
+#, php-format
+msgid "and %d more"
+msgid_plural "and %d more"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-config.php:24
+msgid "Debug mode is switched off."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:43
+msgid "Debug mode is on and errors are printed into the page."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:46
+msgid "Set WP_DEBUG to false in wp-config.php, or at least WP_DEBUG_DISPLAY."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:49
+msgid "Debug mode is on."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:52
+msgid "Set WP_DEBUG to false in wp-config.php on production sites."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:71
+msgid "No debug log exists."
+msgstr ""
+
+#. translators: 1: file path, 2: human readable file size.
+#. translators: 1: option name, 2: human readable size.
+#: includes/checks/class-cascr-checks-config.php:77
+#: includes/checks/class-cascr-checks-config.php:432
+#: includes/checks/class-cascr-checks-files.php:689
+#, php-format
+msgid "%1$s (%2$s)"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:84
+msgid "A debug log exists outside the default location."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:87
+msgid "Make sure the file sits outside the web root and delete it once the problem is solved."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:95
+msgid "A debug log exists, but it could not be checked whether it is publicly readable."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:101
+msgid "The debug log is readable from the web and exposes error details, file paths and sometimes credentials."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:104
+msgid "Delete the file and block access to it in the server configuration."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:109
+msgid "A debug log exists but is not publicly readable."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:112
+msgid "Delete the file once the problem is solved."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:123
+msgid "The theme and plugin editor is disabled."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:127
+msgid "The theme and plugin editor is available, so anyone who reaches an administrator account can run code."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:130
+msgid "Add define( 'DISALLOW_FILE_EDIT', true ); to wp-config.php."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:141
+msgid "Installing plugins and themes from the dashboard is disabled."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:145
+msgid "Plugins and themes can be installed from the dashboard. That is the shortest path from a stolen login to running code."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:148
+msgid "On sites where code is deployed rather than installed, add define( 'DISALLOW_FILE_MODS', true ); to wp-config.php. Note that this also stops automatic updates."
+msgstr ""
+
+#. translators: %s: name of the wp-config.php constant.
+#: includes/checks/class-cascr-checks-config.php:176
+#, php-format
+msgid "%s is not defined"
+msgstr ""
+
+#. translators: %s: name of the wp-config.php constant.
+#: includes/checks/class-cascr-checks-config.php:187
+#, php-format
+msgid "%s is a placeholder or too short"
+msgstr ""
+
+#. translators: %s: name of the wp-config.php constant.
+#: includes/checks/class-cascr-checks-config.php:196
+#, php-format
+msgid "%s repeats the value of another key"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:207
+msgid "The authentication keys are not set up correctly, which weakens every login cookie and nonce."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:210
+msgid "Generate a fresh set at api.wordpress.org/secret-key/1.1/salt/ and replace the block in wp-config.php. Everyone gets logged out once."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:219
+msgid "The authentication keys are set correctly but have not been rotated in over a year."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:222
+msgid "Rotating the keys invalidates every stored session, which is the fastest way to lock out a stolen cookie."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:226
+msgid "All eight authentication keys are set, long enough and distinct."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:243
+msgid "The database uses the default table prefix, which makes blind injection attempts easier."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:246
+msgid "Changing the prefix on a live site is risky. Do it during a migration, not as a standalone step."
+msgstr ""
+
+#. translators: %s: database table prefix.
+#: includes/checks/class-cascr-checks-config.php:253
+#, php-format
+msgid "A custom table prefix (%s) is in use."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:274
+msgid "The database account is not allowed to inspect its own privileges."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:287
+msgid "all privileges on every database"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:291
+msgid "may grant privileges to other accounts"
+msgstr ""
+
+#. translators: %s: name of a MySQL privilege.
+#: includes/checks/class-cascr-checks-config.php:298
+#, php-format
+msgid "holds the %s privilege"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:308
+msgid "The database account is limited to what WordPress needs."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:312
+msgid "The database account has more rights than WordPress needs, so an injection reaches further than this site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:315
+msgid "Create a dedicated account with rights on this database only and update wp-config.php."
+msgstr ""
+
+#. translators: 1: number of overdue events, 2: human readable time difference.
+#: includes/checks/class-cascr-checks-config.php:353
+#, php-format
+msgid "%1$d scheduled event is overdue, by %2$s"
+msgid_plural "%1$d scheduled events are overdue, the oldest by %2$s"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-config.php:367
+msgid "ALTERNATE_WP_CRON is enabled, which appends scheduling parameters to visitor URLs"
+msgstr ""
+
+#. translators: %s: name of a scheduled hook with no code behind it.
+#: includes/checks/class-cascr-checks-config.php:377
+#, php-format
+msgid "scheduled hook with no code behind it: %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:390
+msgid "WP-Cron is handled by a server cron job and nothing is overdue."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:391
+msgid "WP-Cron runs on page loads and nothing is overdue."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:396
+msgid "DISABLE_WP_CRON is set but nothing is triggering wp-cron.php. Set up a server cron job, or remove the constant."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:397
+msgid "Review the scheduled events under Tools, Site Health, Info."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:400
+#: includes/checks/class-cascr-checks-config.php:401
+msgid "The scheduler needs attention."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:413
+msgid "The autoloaded options could not be read."
+msgstr ""
+
+#. translators: %s: human readable size.
+#: includes/checks/class-cascr-checks-config.php:442
+#, php-format
+msgid "%s of options is loaded on every request."
+msgstr ""
+
+#. translators: %s: human readable size.
+#: includes/checks/class-cascr-checks-config.php:451
+#, php-format
+msgid "%s of options is loaded on every request. Bloated autoloaded options are often forgotten logs or planted payloads."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:456
+msgid "Look at what the largest entries contain before deleting anything."
+msgstr ""
+
+#. translators: 1: siteurl option, 2: home option.
+#: includes/checks/class-cascr-checks-config.php:476
+#, php-format
+msgid "siteurl (%1$s) and home (%2$s) point to different addresses"
+msgstr ""
+
+#. translators: 1: option name, 2: the suspicious code fragment.
+#: includes/checks/class-cascr-checks-config.php:496
+#, php-format
+msgid "option %1$s contains %2$s"
+msgstr ""
+
+#. translators: 1: option name, 2: external host name.
+#: includes/checks/class-cascr-checks-config.php:509
+#, php-format
+msgid "option %1$s loads a script from %2$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:522
+msgid "No injected markup or foreign addresses were found in the options."
+msgstr ""
+
+#. translators: %d: number of suspicious option entries.
+#: includes/checks/class-cascr-checks-config.php:528
+#, php-format
+msgid "%d option entry looks injected."
+msgid_plural "%d option entries look injected."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-config.php:538
+msgid "Check each entry. Some are legitimate, for instance analytics snippets a plugin stores on purpose."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:552
+msgid "A backup plugin is active."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:558
+msgid "No backup plugin was detected. Recovery from a compromise depends on having one."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:561
+msgid "A backup taken by the host also counts. This check can only see plugins."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:574
+msgid "No security plugin from the known list is active."
+msgstr ""
+
+#. translators: %d: number of active security plugins.
+#: includes/checks/class-cascr-checks-config.php:580
+#, php-format
+msgid "%d security plugin is active."
+msgid_plural "%d security plugins are active."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-config.php:604
+msgid "Repeated login attempts are being limited."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:610
+msgid "Nothing limits repeated login attempts, so passwords can be guessed at full speed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:613
+msgid "Install a login limiter, or rate limit wp-login.php and the XML-RPC endpoint at the server."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:627
+msgid "A password policy is enforced."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:633
+msgid "No password policy is enforced. WordPress warns about weak passwords but still accepts them."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-config.php:636
+msgid "Enforce a minimum strength for accounts that can publish or administer."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:73
+msgid "The latest WordPress version could not be determined."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:74
+msgid "Check that the site can reach api.wordpress.org."
+msgstr ""
+
+#. translators: %s: WordPress version number.
+#: includes/checks/class-cascr-checks-core.php:90
+#, php-format
+msgid "WordPress %s is up to date."
+msgstr ""
+
+#. translators: 1: installed WordPress version, 2: latest available version.
+#: includes/checks/class-cascr-checks-core.php:99
+#, php-format
+msgid "WordPress %1$s is outdated, %2$s is available."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:105
+msgid "Install the update from Dashboard, Updates. Take a backup first."
+msgstr ""
+
+#. translators: %s: PHP version number.
+#: includes/checks/class-cascr-checks-core.php:125
+#, php-format
+msgid "PHP %s is in use."
+msgstr ""
+
+#. translators: 1: PHP version number, 2: end of support date.
+#: includes/checks/class-cascr-checks-core.php:137
+#, php-format
+msgid "PHP %1$s stopped receiving security fixes on %2$s."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:143
+msgid "Ask your host to move the site to a supported PHP branch. Test on a staging copy first."
+msgstr ""
+
+#. translators: 1: PHP version number, 2: end of support date.
+#: includes/checks/class-cascr-checks-core.php:151
+#, php-format
+msgid "PHP %1$s reaches end of security support on %2$s."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:157
+msgid "Plan the upgrade to a newer PHP branch before that date."
+msgstr ""
+
+#. translators: 1: PHP version number, 2: end of support date.
+#: includes/checks/class-cascr-checks-core.php:165
+#, php-format
+msgid "PHP %1$s only receives security fixes, no more bug fixes. Support ends on %2$s."
+msgstr ""
+
+#. translators: %s: PHP version number.
+#: includes/checks/class-cascr-checks-core.php:176
+#, php-format
+msgid "PHP %s is fully supported."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:193
+msgid "All automatic core updates are enabled."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:197
+msgid "Automatic minor and security updates are enabled."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:202
+msgid "This installation receives pre-release core updates."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:205
+msgid "Set WP_AUTO_UPDATE_CORE to minor on production sites."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:210
+msgid "Automatic core updates are switched off, so security releases are not installed on their own."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:213
+msgid "Remove the WP_AUTO_UPDATE_CORE constant from wp-config.php or set it to minor."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:227
+msgid "No official checksums are available for this WordPress version."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:228
+msgid "Checksums are only published for release builds. Nightly or patched builds cannot be verified."
+msgstr ""
+
+#. translators: %d: number of files verified.
+#: includes/checks/class-cascr-checks-core.php:261
+#, php-format
+msgid "The %d core file matches the official checksums."
+msgid_plural "All %d core files match the official checksums."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: file path relative to the WordPress root.
+#: includes/checks/class-cascr-checks-core.php:275
+#, php-format
+msgid "modified: %s"
+msgstr ""
+
+#. translators: %s: file path relative to the WordPress root.
+#: includes/checks/class-cascr-checks-core.php:279
+#, php-format
+msgid "missing: %s"
+msgstr ""
+
+#. translators: %d: number of core files that differ from the official release.
+#: includes/checks/class-cascr-checks-core.php:288
+#, php-format
+msgid "%d core file differs from the official release."
+msgid_plural "%d core files differ from the official release."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:298
+msgid "Reinstall WordPress from Dashboard, Updates, Reinstall. If files keep changing, treat the site as compromised."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:317
+msgid "No official file list is available for this WordPress version."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:362
+msgid "The core directories could not be read completely."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:369
+msgid "The core directories contain no files beyond the official release."
+msgstr ""
+
+#. translators: %d: number of unexpected executable files.
+#: includes/checks/class-cascr-checks-core.php:376
+#, php-format
+msgid "%d executable file in the core directories is not part of WordPress."
+msgid_plural "%d executable files in the core directories are not part of WordPress."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:386
+msgid "Inspect each file. Nothing but WordPress itself belongs in wp-admin or wp-includes."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:402
+msgid "Plugin update information is not available."
+msgstr ""
+
+#. translators: 1: plugin name, 2: installed version, 3: available version.
+#: includes/checks/class-cascr-checks-core.php:419
+#, php-format
+msgid "%1$s (%2$s to %3$s)"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:427
+msgid "All active plugins are up to date."
+msgstr ""
+
+#. translators: %d: number of active plugins with a pending update.
+#: includes/checks/class-cascr-checks-core.php:433
+#, php-format
+msgid "%d active plugin has an update waiting."
+msgid_plural "%d active plugins have updates waiting."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:443
+#: includes/checks/class-cascr-checks-core.php:497
+msgid "Install the updates from Dashboard, Updates."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:462
+msgid "Theme update information is not available."
+msgstr ""
+
+#. translators: 1: theme name, 2: available version.
+#: includes/checks/class-cascr-checks-core.php:474
+#, php-format
+msgid "%1$s (update to %2$s)"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:481
+msgid "All themes are up to date."
+msgstr ""
+
+#. translators: %d: number of themes with a pending update.
+#: includes/checks/class-cascr-checks-core.php:487
+#, php-format
+msgid "%d theme has an update waiting."
+msgid_plural "%d themes have updates waiting."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:528
+msgid "No inactive plugins or unused themes are installed."
+msgstr ""
+
+#. translators: %s: plugin name.
+#: includes/checks/class-cascr-checks-core.php:534
+#, php-format
+msgid "inactive plugin: %s"
+msgstr ""
+
+#. translators: %s: theme name.
+#: includes/checks/class-cascr-checks-core.php:538
+#, php-format
+msgid "unused theme: %s"
+msgstr ""
+
+#. translators: %d: number of inactive plugins and unused themes.
+#: includes/checks/class-cascr-checks-core.php:544
+#, php-format
+msgid "%d inactive plugin or unused theme is installed."
+msgid_plural "%d inactive plugins or unused themes are installed."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:554
+msgid "Delete what is not needed. Deactivated code still sits on disk and stops receiving attention."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:590
+msgid "no release in over two years"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:592
+msgid "no release in over a year"
+msgstr ""
+
+#. translators: %s: WordPress version the plugin was last tested against.
+#: includes/checks/class-cascr-checks-core.php:602
+#, php-format
+msgid "last tested against WordPress %s"
+msgstr ""
+
+#. translators: 1: plugin name, 2: comma separated list of reasons.
+#: includes/checks/class-cascr-checks-core.php:610
+#, php-format
+msgid "%1$s: %2$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:619
+#: includes/checks/class-cascr-checks-core.php:678
+msgid "No plugin information could be retrieved from the directory."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:624
+msgid "Every active plugin from the directory is actively maintained."
+msgstr ""
+
+#. translators: %d: number of plugins that look abandoned.
+#: includes/checks/class-cascr-checks-core.php:630
+#, php-format
+msgid "%d active plugin looks abandoned."
+msgid_plural "%d active plugins look abandoned."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:640
+msgid "Look for a maintained alternative. Abandoned plugins do not get security fixes."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:683
+msgid "No active plugin has been removed from the directory."
+msgstr ""
+
+#. translators: %d: number of plugins that were removed from the directory.
+#: includes/checks/class-cascr-checks-core.php:689
+#, php-format
+msgid "%d active plugin has been removed from the WordPress directory."
+msgid_plural "%d active plugins have been removed from the WordPress directory."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:699
+msgid "Remove the plugin and replace it. A closed listing usually means an unfixed security problem."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:722
+msgid "The plugin authors have been recorded. Changes will be reported from the next scan on."
+msgstr ""
+
+#. translators: 1: plugin file, 2: previous author, 3: current author.
+#: includes/checks/class-cascr-checks-core.php:736
+#, php-format
+msgid "%1$s: %2$s became %3$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:738
+#: includes/checks/class-cascr-checks-core.php:739
+msgid "(none)"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:744
+msgid "No installed plugin changed its author."
+msgstr ""
+
+#. translators: %d: number of plugins whose author changed.
+#: includes/checks/class-cascr-checks-core.php:750
+#, php-format
+msgid "%d plugin changed its author."
+msgid_plural "%d plugins changed their author."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:760
+msgid "Confirm the handover is legitimate and read the changelog of the release that came with it."
+msgstr ""
+
+#. translators: 1: file name, 2: plugin name.
+#: includes/checks/class-cascr-checks-core.php:780
+#, php-format
+msgid "must-use plugin %1$s (%2$s)"
+msgstr ""
+
+#. translators: 1: file name, 2: plugin name.
+#: includes/checks/class-cascr-checks-core.php:789
+#, php-format
+msgid "drop-in %1$s (%2$s)"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:800
+#: includes/checks/class-cascr-checks-core.php:823
+msgid "No must-use plugins or drop-ins are installed."
+msgstr ""
+
+#. translators: %d: number of must-use plugins and drop-ins.
+#: includes/checks/class-cascr-checks-core.php:806
+#, php-format
+msgid "%d must-use plugin or drop-in is installed and has been recorded."
+msgid_plural "%d must-use plugins or drop-ins are installed and have been recorded."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of must-use plugins and drop-ins.
+#: includes/checks/class-cascr-checks-core.php:829
+#, php-format
+msgid "%d known must-use plugin or drop-in is installed."
+msgid_plural "%d known must-use plugins or drop-ins are installed."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of newly appeared must-use plugins or drop-ins.
+#: includes/checks/class-cascr-checks-core.php:849
+#, php-format
+msgid "%d must-use plugin or drop-in appeared since the first scan."
+msgid_plural "%d must-use plugins or drop-ins appeared since the first scan."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:859
+msgid "Open each file. This code runs on every request and cannot be switched off from the dashboard."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:874
+msgid "The parent directory could not be read."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:904
+msgid "The scan for other installations could not be completed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-core.php:909
+msgid "No other WordPress installation was found next to this one."
+msgstr ""
+
+#. translators: %d: number of other WordPress installations found.
+#: includes/checks/class-cascr-checks-core.php:915
+#, php-format
+msgid "%d other WordPress installation shares this hosting account."
+msgid_plural "%d other WordPress installations share this hosting account."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-core.php:925
+msgid "Keep every installation updated. A neglected one next door is an entry point into this one."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:35
+msgid "wp-config.php could not be located."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:41
+msgid "The permissions of wp-config.php could not be read."
+msgstr ""
+
+#. translators: 1: file path, 2: octal permissions.
+#. translators: 1: directory path, 2: octal permissions.
+#. translators: 1: directory name, 2: octal permissions.
+#: includes/checks/class-cascr-checks-files.php:46
+#: includes/checks/class-cascr-checks-files.php:92
+#: includes/checks/class-cascr-checks-files.php:135
+#, php-format
+msgid "%1$s has permissions %2$s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:53
+msgid "wp-config.php is writable by everyone on the server. It holds the database credentials and the authentication keys."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:56
+msgid "Set the file to 640 or 440 and make sure it is owned by the site account."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:62
+msgid "wp-config.php is readable by every account on the server."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:65
+msgid "On shared hosting, set the file to 640 or 440."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:69
+msgid "The permissions of wp-config.php are restrictive."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:81
+#: includes/checks/class-cascr-checks-files.php:486
+msgid "The uploads directory could not be located."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:87
+msgid "The permissions of the uploads directory could not be read."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:99
+msgid "The uploads directory is writable by everyone on the server."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:102
+msgid "Set the directory to 755 or 750. It only needs to be writable by the account that runs PHP."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:106
+msgid "The uploads directory is not writable by everyone."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:144
+msgid "Core directories are writable by everyone on the server."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:152
+msgid "The permissions of the core directories could not be read."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:155
+msgid "No core directory is writable by everyone."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:204
+msgid "Nothing below the web root is writable by everyone."
+msgstr ""
+
+#. translators: %d: number of world-writable paths.
+#: includes/checks/class-cascr-checks-files.php:210
+#, php-format
+msgid "%d path is writable by every account on the server."
+msgid_plural "%d paths are writable by every account on the server."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:220
+msgid "Set files to 644 and directories to 755. Nothing needs to be world-writable."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:237
+msgid "The uploads directory could not be read."
+msgstr ""
+
+#. translators: 1: file path, 2: file size, already formatted, 3: why the file was reported, or an empty string.
+#: includes/checks/class-cascr-checks-files.php:278
+#, php-format
+msgid "%1$s (%2$s)%3$s"
+msgstr ""
+
+#. translators: %s: reason the file was reported, for example "it reads $_SERVER".
+#: includes/checks/class-cascr-checks-files.php:283
+#, php-format
+msgid ", reported because %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:289
+msgid "The uploads directory could not be scanned completely."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:293
+msgid "The uploads directory holds no executable files."
+msgstr ""
+
+#. translators: %d: number of executable files found in uploads.
+#: includes/checks/class-cascr-checks-files.php:299
+#, php-format
+msgid "%d executable file sits in the uploads directory."
+msgid_plural "%d executable files sit in the uploads directory."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:309
+msgid "Media uploads never need to be executable. Inspect each file before deleting it."
+msgstr ""
+
+#. translators: %s: a PHP keyword such as require or eval.
+#: includes/checks/class-cascr-checks-files.php:415
+#, php-format
+msgid "it uses %s"
+msgstr ""
+
+#. translators: %s: name of a PHP superglobal, for example $_GET.
+#: includes/checks/class-cascr-checks-files.php:424
+#, php-format
+msgid "it reads %s"
+msgstr ""
+
+#. translators: %s: name of a PHP function, for example base64_decode.
+#: includes/checks/class-cascr-checks-files.php:437
+#, php-format
+msgid "it calls %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:480
+msgid "The filesystem could not be initialised for this check."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:497
+msgid "A test file could not be written to the uploads directory."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:515
+msgid "The test file could not be requested over HTTP."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:521
+msgid "PHP files in the uploads directory are not served."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:526
+msgid "The server runs PHP files from the uploads directory, which turns any file upload flaw into code execution."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:529
+msgid "Block PHP in the uploads directory in the server configuration, or add an .htaccess there that denies .php files."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:533
+msgid "PHP files in the uploads directory are not executed."
+msgstr ""
+
+#. translators: %d: number of publicly readable configuration files.
+#: includes/checks/class-cascr-checks-files.php:573
+#, php-format
+msgid "%d configuration or backup file is readable from the web."
+msgid_plural "%d configuration or backup files are readable from the web."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:583
+msgid "Delete the files. Anything readable here can contain database credentials and API keys."
+msgstr ""
+
+#. translators: %d: number of configuration files present but not served.
+#: includes/checks/class-cascr-checks-files.php:591
+#, php-format
+msgid "%d configuration or backup file sits in the web root but is not served."
+msgid_plural "%d configuration or backup files sit in the web root but are not served."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:601
+msgid "Move the files out of the web root. A server configuration change is all it takes to expose them."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:606
+msgid "It could not be verified whether these files are publicly readable."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:609
+msgid "No configuration or backup files were found in the web root."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:637
+msgid "A version control directory is readable from the web, which exposes the full source history and often credentials along with it."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:640
+msgid "Block the directory at the server, or deploy without the repository metadata."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:645
+msgid "The version control paths could not be checked."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:648
+msgid "No version control directory is readable from the web."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:677
+msgid "No database dumps or archives were found in the web root."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:700
+msgid "A database dump or archive can be downloaded from the site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:703
+msgid "Delete the file immediately and assume its contents are known. Then rotate the database password and the authentication keys."
+msgstr ""
+
+#. translators: %d: number of dumps or archives found.
+#: includes/checks/class-cascr-checks-files.php:710
+#, php-format
+msgid "%d database dump or archive sits in the web root but is not served."
+msgid_plural "%d database dumps or archives sit in the web root but are not served."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:720
+msgid "Move the files somewhere outside the web root."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:739
+msgid "The web root holds no leftover files."
+msgstr ""
+
+#. translators: %d: number of leftover files.
+#: includes/checks/class-cascr-checks-files.php:745
+#, php-format
+msgid "%d leftover file sits in the web root."
+msgid_plural "%d leftover files sit in the web root."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:755
+msgid "These files reveal version and tooling details. Deleting them is safe."
+msgstr ""
+
+#. translators: 1: path, 2: human readable age.
+#: includes/checks/class-cascr-checks-files.php:789
+#, php-format
+msgid "%1$s, left behind %2$s ago"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:797
+msgid "No leftovers from interrupted updates were found."
+msgstr ""
+
+#. translators: %d: number of leftover directories.
+#: includes/checks/class-cascr-checks-files.php:803
+#, php-format
+msgid "%d leftover from an interrupted update is still on disk."
+msgid_plural "%d leftovers from interrupted updates are still on disk."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-files.php:813
+msgid "These folders can hold unpacked, outdated copies of plugins that are still reachable. Delete them."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:855
+msgid "The server lists directory contents, which hands attackers a map of the installation."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:863
+msgid "Directory listing could not be checked."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:866
+msgid "The server does not list directory contents."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:881
+msgid "This server does not use .htaccess. Its rules live in the server configuration and cannot be inspected from here."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:886
+msgid "An .htaccess file is present."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:890
+msgid "No .htaccess file was found, so none of the usual hardening rules are in place."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-files.php:893
+msgid "Save the permalink settings once. WordPress writes a basic .htaccess by itself."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:38
+msgid "The site address still uses http, so every login and every form submission travels in the clear."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:41
+msgid "Get a certificate, switch the site and home addresses to https and redirect http to https."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:46
+msgid "FORCE_SSL_ADMIN is not set"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:57
+msgid "the http address does not redirect permanently to https"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:62
+msgid "The site is served over HTTPS and http is redirected."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:66
+msgid "The site uses HTTPS, but the setup is not complete."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:69
+msgid "Add define( 'FORCE_SSL_ADMIN', true ); to wp-config.php and redirect http to https with a 301."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:82
+msgid "The site does not use HTTPS, so there is no certificate to inspect."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:86
+msgid "This server cannot inspect TLS certificates."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:114
+msgid "No TLS connection to the site could be opened from the server itself."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:126
+msgid "The certificate could not be read."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:132
+msgid "The certificate could not be parsed."
+msgstr ""
+
+#. translators: %s: certificate expiry date.
+#: includes/checks/class-cascr-checks-network.php:141
+#, php-format
+msgid "valid until %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:152
+msgid "The TLS certificate has expired. Visitors get a browser warning instead of the site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:155
+msgid "Renew the certificate now and check that automatic renewal actually runs."
+msgstr ""
+
+#. translators: %s: human readable time until expiry.
+#: includes/checks/class-cascr-checks-network.php:163
+#, php-format
+msgid "The TLS certificate expires in %s."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:168
+msgid "Renew it and check that automatic renewal runs."
+msgstr ""
+
+#. translators: %s: negotiated TLS protocol version.
+#: includes/checks/class-cascr-checks-network.php:176
+#, php-format
+msgid "The connection was negotiated over %s, which browsers have retired."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:181
+msgid "Ask the host to allow TLS 1.2 and 1.3 only."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:185
+msgid "The TLS certificate is valid and not about to expire."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:201
+#: includes/checks/class-cascr-checks-network.php:285
+#: includes/checks/class-cascr-checks-network.php:339
+#: includes/checks/class-cascr-checks-network.php:456
+#: includes/checks/class-cascr-checks-network.php:499
+msgid "The response headers could not be retrieved."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:241
+msgid "All recommended security headers are present."
+msgstr ""
+
+#. translators: %s: comma separated list of optional headers.
+#: includes/checks/class-cascr-checks-network.php:247
+#, php-format
+msgid "optional and not set: %s"
+msgstr ""
+
+#. translators: %d: number of missing security headers.
+#: includes/checks/class-cascr-checks-network.php:258
+#, php-format
+msgid "%d recommended security header is missing."
+msgid_plural "%d recommended security headers are missing."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-network.php:279
+msgid "HSTS only applies to sites served over HTTPS."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:292
+msgid "No HSTS header is sent, so the first request of a visit can still be downgraded to http."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:295
+msgid "Send Strict-Transport-Security: max-age=31536000; includeSubDomains once the whole site is reliably on HTTPS."
+msgstr ""
+
+#. translators: %d: max-age value in seconds.
+#: includes/checks/class-cascr-checks-network.php:309
+#, php-format
+msgid "max-age is only %d second"
+msgid_plural "max-age is only %d seconds"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-network.php:315
+msgid "includeSubDomains is not set"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:319
+msgid "The HSTS header is set up properly."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:323
+msgid "The HSTS header is present but weaker than it should be."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:326
+msgid "Use max-age=31536000; includeSubDomains. Add preload only when every subdomain is on HTTPS for good."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:347
+msgid "No Content Security Policy is sent, so an injected script runs with no restriction."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:350
+msgid "Start with Content-Security-Policy-Report-Only, watch the reports for a while, then switch it to the enforcing header."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:356
+msgid "The Content Security Policy is only sent in report-only mode, so nothing is actually blocked."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:359
+msgid "Once the reports are quiet, send the same policy as Content-Security-Policy."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:366
+msgid "'unsafe-inline' allows injected inline scripts to run"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:370
+msgid "'unsafe-eval' allows strings to be executed as code"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:374
+msgid "a wildcard source allows scripts from anywhere"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:378
+msgid "neither default-src nor object-src is set"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:382
+msgid "A Content Security Policy is enforced and contains no obvious escape hatch."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:386
+msgid "A Content Security Policy is enforced but leaves the main hole open."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:389
+msgid "Replace unsafe-inline with a nonce or a hash for the scripts the site really needs."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:402
+msgid "The login page could not be requested."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:409
+msgid "The login page set no cookies that could be inspected."
+msgstr ""
+
+#. translators: %s: cookie name.
+#: includes/checks/class-cascr-checks-network.php:421
+#, php-format
+msgid "%s is not marked Secure"
+msgstr ""
+
+#. translators: %s: cookie name.
+#: includes/checks/class-cascr-checks-network.php:429
+#, php-format
+msgid "%s has no SameSite attribute"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:436
+msgid "The cookies set by the login page carry the right attributes."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:440
+msgid "Cookies are sent without the attributes that limit where a browser will send them back."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:443
+msgid "Set SameSite=Lax on the session cookies at the server, and Secure on every cookie once the site is on HTTPS."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:463
+msgid "No cross-origin headers are sent, which is the right default."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:468
+msgid "Every origin is allowed to read responses and to send credentials along."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:471
+msgid "Never combine the two. Name the origins that are actually allowed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:477
+msgid "Every origin is allowed to read responses from this site."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:480
+msgid "Name the origins that are actually allowed instead of using the wildcard."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:485
+msgid "Cross-origin access is limited to a named origin."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:513
+msgid "The response headers do not name software versions."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:517
+msgid "The response headers name the exact software versions in use, which saves an attacker the work of finding out."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:533
+msgid "The front page could not be retrieved."
+msgstr ""
+
+#. translators: %s: WordPress version number.
+#: includes/checks/class-cascr-checks-network.php:543
+#, php-format
+msgid "generator tag naming WordPress %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:546
+msgid "generator tag naming WordPress"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:550
+msgid "Windows Live Writer manifest link"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:554
+msgid "Really Simple Discovery link"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:558
+msgid "The front page emits no legacy discovery tags."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:562
+msgid "The front page emits discovery tags that give away details about the installation."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:565
+msgid "Remove the generator, wlwmanifest and RSD hooks from wp_head. This is fingerprinting, not a hole in itself."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:586
+msgid "The XML-RPC endpoint could not be reached."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:593
+msgid "The XML-RPC endpoint is blocked."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:597
+msgid "The XML-RPC endpoint does not answer method calls."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:603
+msgid "system.multicall is available, which lets one request try many passwords"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:607
+msgid "pingback.ping is available, which lets the site be used to probe other hosts"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:611
+msgid "The XML-RPC endpoint answers method calls."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:614
+msgid "If nothing uses XML-RPC, block xmlrpc.php at the server. The Jetpack and app clients are the usual exceptions."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:636
+msgid "the ?author=N parameter reveals the login name"
+msgstr ""
+
+#. translators: %d: number of user records returned by the REST API.
+#: includes/checks/class-cascr-checks-network.php:650
+#, php-format
+msgid "the REST endpoint /wp/v2/users lists %d account"
+msgid_plural "the REST endpoint /wp/v2/users lists %d accounts"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-network.php:667
+msgid "the oEmbed endpoint reveals the author"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:673
+msgid "User enumeration could not be checked."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:674
+msgid "The usual ways of reading out user names are closed."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:678
+msgid "User names can be read without logging in, which turns password guessing from two unknowns into one."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:681
+msgid "Require authentication on the users endpoint and stop the ?author redirect. Display names that differ from login names help too."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:692
+msgid "The REST API is not available."
+msgstr ""
+
+#. translators: 1: REST route, 2: comma separated HTTP methods.
+#: includes/checks/class-cascr-checks-network.php:722
+#, php-format
+msgid "%1$s accepts %2$s from anyone"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:733
+msgid "Every REST route that changes data checks permissions first."
+msgstr ""
+
+#. translators: %d: number of unauthenticated write routes.
+#: includes/checks/class-cascr-checks-network.php:739
+#, php-format
+msgid "%d REST route accepts changes without checking permissions."
+msgid_plural "%d REST routes accept changes without checking permissions."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/checks/class-cascr-checks-network.php:749
+msgid "The route belongs to whichever plugin registered it. Report it to the author, or remove the plugin."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:773
+msgid "No forwarded address headers arrive, so the client address cannot be faked through them."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:785
+msgid "Forwarded address headers arrive from a proxy in front of the site, which is the expected setup."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:791
+msgid "Forwarded address headers arrive even though the request came straight from the internet, so anything trusting them can be fooled."
+msgstr ""
+
+#. translators: %s: remote IP address of the current request.
+#: includes/checks/class-cascr-checks-network.php:798
+#, php-format
+msgid "the connection came from %s"
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:803
+msgid "Configure security plugins to read the address from REMOTE_ADDR, or strip these headers at the edge."
+msgstr ""
+
+#: includes/checks/class-cascr-checks-network.php:813
+msgid "Send the headers from the web server so they cover static files too. Start with X-Content-Type-Options and Referrer-Policy, they never break anything."
+msgstr ""
+
+#: includes/class-cascr-admin.php:25
+#: includes/class-cascr-admin.php:121
+#: includes/class-cascr-admin.php:151
+msgid "Security Check Report"
+msgstr ""
+
+#: includes/class-cascr-admin.php:26
+msgid "Security Check"
+msgstr ""
+
+#. translators: 1: number of the check being run, 2: total number of checks.
+#: includes/class-cascr-admin.php:89
+#, php-format
+msgid "Check %1$d of %2$d"
+msgstr ""
+
+#: includes/class-cascr-admin.php:90
+msgid "This check could not be completed."
+msgstr ""
+
+#: includes/class-cascr-admin.php:91
+msgid "Passed"
+msgstr ""
+
+#: includes/class-cascr-admin.php:92
+msgid "Warning"
+msgstr ""
+
+#: includes/class-cascr-admin.php:93
+msgid "Failed"
+msgstr ""
+
+#: includes/class-cascr-admin.php:94
+msgid "Not determined"
+msgstr ""
+
+#: includes/class-cascr-admin.php:95
+msgid "Muted"
+msgstr ""
+
+#: includes/class-cascr-admin.php:96
+msgid "All"
+msgstr ""
+
+#: includes/class-cascr-admin.php:97
+msgid "Risk score"
+msgstr ""
+
+#: includes/class-cascr-admin.php:98
+msgid "Your to-do list"
+msgstr ""
+
+#: includes/class-cascr-admin.php:99
+msgid "Work through these in order. Everything else can wait."
+msgstr ""
+
+#: includes/class-cascr-admin.php:100
+#: includes/class-cascr-scoring.php:169
+msgid "Nothing needs your attention right now."
+msgstr ""
+
+#: includes/class-cascr-admin.php:101
+msgid "Since the previous run"
+msgstr ""
+
+#: includes/class-cascr-admin.php:102
+msgid "newly failing"
+msgstr ""
+
+#: includes/class-cascr-admin.php:103
+msgid "resolved"
+msgstr ""
+
+#: includes/class-cascr-admin.php:104
+msgid "changed"
+msgstr ""
+
+#: includes/class-cascr-admin.php:105
+msgid "Nothing changed since the previous run."
+msgstr ""
+
+#: includes/class-cascr-admin.php:106
+msgid "All checks"
+msgstr ""
+
+#: includes/class-cascr-admin.php:107
+msgid "Take the report with you"
+msgstr ""
+
+#: includes/class-cascr-admin.php:108
+msgid "Details"
+msgstr ""
+
+#: includes/class-cascr-admin.php:110
+msgid "Read more about this check"
+msgstr ""
+
+#: includes/class-cascr-admin.php:111
+msgid "Mute this finding"
+msgstr ""
+
+#: includes/class-cascr-admin.php:112
+msgid "Unmute"
+msgstr ""
+
+#: includes/class-cascr-admin.php:113
+msgid "Muted until the finding changes."
+msgstr ""
+
+#: includes/class-cascr-admin.php:114
+msgid "The finding is shown again."
+msgstr ""
+
+#: includes/class-cascr-admin.php:115
+msgid "Download as text"
+msgstr ""
+
+#: includes/class-cascr-admin.php:116
+msgid "Download as JSON"
+msgstr ""
+
+#: includes/class-cascr-admin.php:117
+msgid "Download as CSV"
+msgstr ""
+
+#: includes/class-cascr-admin.php:118
+msgid "Copy report"
+msgstr ""
+
+#: includes/class-cascr-admin.php:119
+msgid "The report was copied to the clipboard."
+msgstr ""
+
+#: includes/class-cascr-admin.php:120
+msgid "The report could not be copied."
+msgstr ""
+
+#: includes/class-cascr-admin.php:122
+msgid "Generated"
+msgstr ""
+
+#: includes/class-cascr-admin.php:123
+#: includes/class-cascr-cli.php:71
+msgid "Grade"
+msgstr ""
+
+#: includes/class-cascr-admin.php:124
+msgid "Summary"
+msgstr ""
+
+#: includes/class-cascr-admin.php:125
+msgid "Checks"
+msgstr ""
+
+#: includes/class-cascr-admin.php:129
+msgid "Check"
+msgstr ""
+
+#: includes/class-cascr-admin.php:130
+msgid "Category"
+msgstr ""
+
+#: includes/class-cascr-admin.php:131
+msgid "Severity"
+msgstr ""
+
+#: includes/class-cascr-admin.php:132
+msgid "Status"
+msgstr ""
+
+#: includes/class-cascr-admin.php:133
+msgid "Score"
+msgstr ""
+
+#: includes/class-cascr-admin.php:134
+msgid "Result"
+msgstr ""
+
+#: includes/class-cascr-admin.php:136
+msgid "Run again"
+msgstr ""
+
+#: includes/class-cascr-admin.php:137
+msgid "The security check finished."
+msgstr ""
+
+#. translators: %d: number of checks the plugin runs.
+#: includes/class-cascr-admin.php:156
+#, php-format
+msgid "%d check across your WordPress installation."
+msgid_plural "%d checks across your WordPress installation."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-cascr-admin.php:170
+msgid "Step 1:"
+msgstr ""
+
+#: includes/class-cascr-admin.php:171
+msgid "Start the check"
+msgstr ""
+
+#. translators: %d: number of checks the plugin runs.
+#: includes/class-cascr-admin.php:177
+#, php-format
+msgid "%d checks, about a minute. Nothing on your site is changed."
+msgstr ""
+
+#: includes/class-cascr-admin.php:188
+msgid "I understand that these checks read the site, write one temporary file to the uploads folder and delete it again, and that the result is an assessment rather than a guarantee."
+msgstr ""
+
+#: includes/class-cascr-admin.php:193
+msgid "Start the security check"
+msgstr ""
+
+#: includes/class-cascr-admin.php:195
+msgid "Tick the box above to start."
+msgstr ""
+
+#. translators: 1: relative time since the last run, 2: grade letter, 3: grade label.
+#: includes/class-cascr-admin.php:213
+#, php-format
+msgid "Last run %1$s ago: grade %2$s, %3$s."
+msgstr ""
+
+#: includes/class-cascr-admin.php:229
+msgid "Step 2:"
+msgstr ""
+
+#: includes/class-cascr-admin.php:230
+msgid "Your result"
+msgstr ""
+
+#: includes/class-cascr-admin.php:232
+msgid "A grade, what it means, and the short list to work through."
+msgstr ""
+
+#: includes/class-cascr-admin.php:237
+#: includes/class-cascr-admin.php:259
+msgid "Appears once the check has run."
+msgstr ""
+
+#: includes/class-cascr-admin.php:251
+msgid "Step 3:"
+msgstr ""
+
+#: includes/class-cascr-admin.php:252
+msgid "Go through everything else"
+msgstr ""
+
+#: includes/class-cascr-admin.php:254
+msgid "Every check with its detail, filterable, and the report to take away."
+msgstr ""
+
+#: includes/class-cascr-admin.php:271
+msgid "What each check looks at"
+msgstr ""
+
+#: includes/class-cascr-admin.php:275
+#: includes/class-cascr-admin.php:280
+msgid "Search the checks"
+msgstr ""
+
+#: includes/class-cascr-admin.php:286
+msgid "No check matches that search."
+msgstr ""
+
+#: includes/class-cascr-admin.php:294
+msgid "WordPress security"
+msgstr ""
+
+#: includes/class-cascr-admin.php:296
+msgid "Documentation"
+msgstr ""
+
+#: includes/class-cascr-admin.php:298
+msgid "Report a false positive"
+msgstr ""
+
+#: includes/class-cascr-admin.php:300
+msgid "Support"
+msgstr ""
+
+#: includes/class-cascr-admin.php:352
+#: includes/class-cascr-scoring.php:216
+msgid "Critical"
+msgstr ""
+
+#: includes/class-cascr-admin.php:353
+msgid "High"
+msgstr ""
+
+#: includes/class-cascr-admin.php:354
+msgid "Medium"
+msgstr ""
+
+#: includes/class-cascr-admin.php:355
+msgid "Low"
+msgstr ""
+
+#: includes/class-cascr-cli.php:74
+msgid "risk score"
+msgstr ""
+
+#: includes/class-cascr-cli.php:111
+msgid "Nothing needs your attention."
+msgstr ""
+
+#: includes/class-cascr-registry.php:172
+msgid "Core, plugins and themes"
+msgstr ""
+
+#: includes/class-cascr-registry.php:173
+msgid "Configuration"
+msgstr ""
+
+#: includes/class-cascr-registry.php:174
+msgid "Files and permissions"
+msgstr ""
+
+#: includes/class-cascr-registry.php:175
+msgid "Accounts and access"
+msgstr ""
+
+#: includes/class-cascr-registry.php:176
+msgid "Network and transport"
+msgstr ""
+
+#: includes/class-cascr-registry.php:253
+msgid "WordPress version"
+msgstr ""
+
+#: includes/class-cascr-registry.php:259
+msgid "PHP version"
+msgstr ""
+
+#: includes/class-cascr-registry.php:265
+msgid "Automatic core updates"
+msgstr ""
+
+#: includes/class-cascr-registry.php:271
+msgid "Core file integrity"
+msgstr ""
+
+#: includes/class-cascr-registry.php:277
+msgid "Unknown files in core directories"
+msgstr ""
+
+#: includes/class-cascr-registry.php:283
+msgid "Plugin updates"
+msgstr ""
+
+#: includes/class-cascr-registry.php:289
+msgid "Theme updates"
+msgstr ""
+
+#: includes/class-cascr-registry.php:295
+msgid "Unused plugins and themes"
+msgstr ""
+
+#: includes/class-cascr-registry.php:301
+msgid "Abandoned plugins"
+msgstr ""
+
+#: includes/class-cascr-registry.php:307
+msgid "Plugins removed from the directory"
+msgstr ""
+
+#: includes/class-cascr-registry.php:313
+msgid "Plugin ownership changes"
+msgstr ""
+
+#: includes/class-cascr-registry.php:319
+msgid "Must-use plugins and drop-ins"
+msgstr ""
+
+#: includes/class-cascr-registry.php:325
+msgid "Other WordPress installations"
+msgstr ""
+
+#: includes/class-cascr-registry.php:341
+msgid "Debug mode"
+msgstr ""
+
+#: includes/class-cascr-registry.php:347
+msgid "Debug log exposure"
+msgstr ""
+
+#: includes/class-cascr-registry.php:353
+msgid "Theme and plugin editor"
+msgstr ""
+
+#: includes/class-cascr-registry.php:359
+msgid "Installing code from the dashboard"
+msgstr ""
+
+#: includes/class-cascr-registry.php:365
+msgid "Security keys and salts"
+msgstr ""
+
+#: includes/class-cascr-registry.php:371
+msgid "Database table prefix"
+msgstr ""
+
+#: includes/class-cascr-registry.php:377
+msgid "Database user privileges"
+msgstr ""
+
+#: includes/class-cascr-registry.php:383
+msgid "WP-Cron health"
+msgstr ""
+
+#: includes/class-cascr-registry.php:389
+msgid "Autoloaded options size"
+msgstr ""
+
+#: includes/class-cascr-registry.php:395
+msgid "Injected content in options"
+msgstr ""
+
+#: includes/class-cascr-registry.php:401
+msgid "Backups"
+msgstr ""
+
+#: includes/class-cascr-registry.php:407
+msgid "Installed security plugins"
+msgstr ""
+
+#: includes/class-cascr-registry.php:414
+msgid "Login protection"
+msgstr ""
+
+#: includes/class-cascr-registry.php:420
+msgid "Password policy"
+msgstr ""
+
+#: includes/class-cascr-registry.php:436
+msgid "wp-config.php permissions"
+msgstr ""
+
+#: includes/class-cascr-registry.php:442
+msgid "Uploads directory permissions"
+msgstr ""
+
+#: includes/class-cascr-registry.php:448
+msgid "Core directory permissions"
+msgstr ""
+
+#: includes/class-cascr-registry.php:454
+msgid "World-writable files and folders"
+msgstr ""
+
+#: includes/class-cascr-registry.php:460
+msgid "Executable files in uploads"
+msgstr ""
+
+#: includes/class-cascr-registry.php:466
+msgid "PHP execution in uploads"
+msgstr ""
+
+#: includes/class-cascr-registry.php:472
+msgid "Publicly readable configuration files"
+msgstr ""
+
+#: includes/class-cascr-registry.php:478
+msgid "Publicly readable repository folders"
+msgstr ""
+
+#: includes/class-cascr-registry.php:484
+msgid "Publicly readable database dumps"
+msgstr ""
+
+#: includes/class-cascr-registry.php:490
+msgid "Leftover files in the web root"
+msgstr ""
+
+#: includes/class-cascr-registry.php:496
+msgid "Leftovers from interrupted updates"
+msgstr ""
+
+#: includes/class-cascr-registry.php:502
+msgid "Directory listing"
+msgstr ""
+
+#: includes/class-cascr-registry.php:508
+msgid "Server rule file"
+msgstr ""
+
+#: includes/class-cascr-registry.php:524
+msgid "Weak passwords"
+msgstr ""
+
+#: includes/class-cascr-registry.php:530
+msgid "Predictable administrator name"
+msgstr ""
+
+#: includes/class-cascr-registry.php:536
+msgid "Administrator accounts"
+msgstr ""
+
+#: includes/class-cascr-registry.php:542
+msgid "Role and capability changes"
+msgstr ""
+
+#: includes/class-cascr-registry.php:548
+msgid "Open registration"
+msgstr ""
+
+#: includes/class-cascr-registry.php:554
+msgid "Two-factor coverage"
+msgstr ""
+
+#: includes/class-cascr-registry.php:560
+msgid "Application passwords"
+msgstr ""
+
+#: includes/class-cascr-registry.php:576
+msgid "HTTPS"
+msgstr ""
+
+#: includes/class-cascr-registry.php:582
+msgid "TLS certificate"
+msgstr ""
+
+#: includes/class-cascr-registry.php:588
+msgid "Security headers"
+msgstr ""
+
+#: includes/class-cascr-registry.php:594
+msgid "HSTS configuration"
+msgstr ""
+
+#: includes/class-cascr-registry.php:600
+msgid "Content Security Policy"
+msgstr ""
+
+#: includes/class-cascr-registry.php:606
+msgid "Cookie flags"
+msgstr ""
+
+#: includes/class-cascr-registry.php:612
+msgid "CORS configuration"
+msgstr ""
+
+#: includes/class-cascr-registry.php:618
+msgid "PHP version in response headers"
+msgstr ""
+
+#: includes/class-cascr-registry.php:624
+msgid "Legacy discovery tags"
+msgstr ""
+
+#: includes/class-cascr-registry.php:630
+msgid "XML-RPC interface"
+msgstr ""
+
+#: includes/class-cascr-registry.php:636
+msgid "User enumeration"
+msgstr ""
+
+#: includes/class-cascr-registry.php:642
+msgid "Unauthenticated REST routes"
+msgstr ""
+
+#: includes/class-cascr-registry.php:648
+msgid "Client IP detection"
+msgstr ""
+
+#: includes/class-cascr-rest.php:115
+msgid "You are not allowed to run security checks on this site."
+msgstr ""
+
+#: includes/class-cascr-rest.php:147
+msgid "There is no check with that identifier."
+msgstr ""
+
+#: includes/class-cascr-result.php:111
+msgid "The check returned an unexpected result."
+msgstr ""
+
+#: includes/class-cascr-runner.php:37
+msgid "The check could not be completed on this server."
+msgstr ""
+
+#. translators: %d: number of failed checks.
+#: includes/class-cascr-scoring.php:145
+#, php-format
+msgid "%d finding needs your attention now."
+msgid_plural "%d findings need your attention now."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of warnings.
+#: includes/class-cascr-scoring.php:158
+#, php-format
+msgid "%d more is worth improving."
+msgid_plural "%d more are worth improving."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of checks that could not be completed.
+#: includes/class-cascr-scoring.php:175
+#, php-format
+msgid "%d check could not be completed and is not counted."
+msgid_plural "%d checks could not be completed and are not counted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-cascr-scoring.php:212
+msgid "Excellent"
+msgstr ""
+
+#: includes/class-cascr-scoring.php:213
+msgid "Good"
+msgstr ""
+
+#: includes/class-cascr-scoring.php:214
+msgid "Moderate"
+msgstr ""
+
+#: includes/class-cascr-scoring.php:215
+msgid "Poor"
+msgstr ""
