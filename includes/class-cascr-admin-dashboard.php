@@ -18,8 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class CASCR_Admin_Dashboard {
 
 	/**
-	 * Height of the curve in user units. Also the full risk scale, so a bar is
-	 * as many units tall as the run was risky.
+	 * Height of the curve in user units, and the full scale with it.
+	 *
+	 * A bar stands for how well a run came out, not for how risky it was. Drawn
+	 * the other way round the section called "Your progress" shows almost
+	 * nothing once a site is in good shape, which is exactly when it has the
+	 * most to show. Bars that grow as the site improves say the same thing and
+	 * say it the way round people read it.
 	 */
 	const CURVE_HEIGHT = 100;
 
@@ -231,14 +236,17 @@ class CASCR_Admin_Dashboard {
 				viewBox="<?php echo esc_attr( sprintf( '0 0 %1$d %2$d', $width, self::CURVE_HEIGHT ) ); ?>"
 				preserveAspectRatio="none"
 				role="img"
-				aria-label="<?php echo esc_attr( __( 'Risk over the recorded runs, oldest on the left.', 'security-check-report' ) ); ?>"
+				aria-label="<?php echo esc_attr( __( 'How the site scored across the recorded runs, oldest on the left. A taller bar is a better run.', 'security-check-report' ) ); ?>"
 			>
 				<?php
 				$index = 0;
 
 				foreach ( $points as $point ) {
-					$risk   = isset( $point['r'] ) ? (float) $point['r'] : 0.0;
-					$height = (int) max( 2, round( $risk / 100 * self::CURVE_HEIGHT ) );
+					$risk = isset( $point['r'] ) ? (float) $point['r'] : 0.0;
+
+					// A run with everything wrong still gets a stub, so the
+					// worst point on the chart is a bar and not a gap.
+					$height = (int) max( 3, round( ( 100 - $risk ) / 100 * self::CURVE_HEIGHT ) );
 					$grade  = isset( $point['g'] ) && '' !== $point['g'] ? $point['g'] : 'F';
 					?>
 					<rect
@@ -269,7 +277,7 @@ class CASCR_Admin_Dashboard {
 				<?php
 				printf(
 					/* translators: %d: number of recorded runs. */
-					esc_html( _n( '%d recorded run, the oldest on the left.', '%d recorded runs, the oldest on the left.', $total, 'security-check-report' ) ),
+					esc_html( _n( '%d recorded run. A taller bar is a better run.', '%d recorded runs, the oldest on the left. A taller bar is a better run.', $total, 'security-check-report' ) ),
 					(int) $total
 				);
 				?>
