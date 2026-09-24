@@ -229,7 +229,31 @@ Releases before 2.2.0 are listed in changelog.txt.
 
 **Fixed**
 
-* Reading a run stored by an earlier version could raise a PHP warning, because those runs carry neither the recommendation nor the link nor the findings that the new report reads. Both readers now fill in what is missing.
+Every check was read against the sources it cites: php.net, the WordPress handbook, core source, MDN, and the packages of the plugins it recognises. That turned up findings that fire on correct configurations, one that could not fire at all, and claims that stopped being true years ago.
+
+* Sites with two-factor protection were reported as having none. The user meta key stored for iThemes, Solid and Kadence Security is not the one those plugins write, and the one for Defender does not exist in it at all. Google Authenticator stores the string "disabled", which counted as a second factor because it is not empty, so the one case the check exists for went unnoticed.
+* The check for plugins removed from the directory could not fire. The API answers 404 for a closed listing, and the WordPress function turns that into an error before the "closed" flag is ever read, so the check reported all clear in exactly the case it was written for. It now asks the endpoint itself and tells a closed listing, a plugin that was never listed and an unreachable one apart.
+* WordPress installed in its own directory was reported as an injected option value, at critical severity. Comparing the site and home addresses cannot tell that apart from a takeover, and in a real takeover both are changed together, so the comparison is gone.
+* A site behind Cloudflare was reported as having a spoofable client address. The check now looks for a proxy that identifies itself and says the result is undetermined when it cannot tell, rather than warning.
+* The WooCommerce Store API was reported as a write route left unprotected. Registering a route as public is the spelling the handbook prescribes, so a route with no permission callback at all and one that is deliberately public are now told apart.
+* The strict Content Security Policy from the published guidance was reported as leaving the hole it closes. Browsers that understand 'strict-dynamic' ignore the 'unsafe-inline' fallback beside it, and the check now does the same. A host wildcard is no longer mistaken for allowing scripts from anywhere.
+* DISALLOW_FILE_MODS closes the file editor and stops background updates. Neither check knew that, so following this plugin's own advice left one finding standing and turned another into a false all clear.
+* system.multicall has not amplified password guessing since WordPress 4.4, and the XML-RPC check now recognises the filter most security plugins use to switch the interface off.
+* The advice to pick a display name different from the login name does nothing, because the author slug keeps the login name it was generated from.
+* Application passwords were reported as switched off on every site without HTTPS, which is where WordPress refuses them in the first place.
+* A server that hands out the source of a PHP file was reported as running it. Those are different problems with different fixes.
+* .user.ini and .htpasswd were listed among files to delete. They are live configuration, and deleting the second one locks people out.
+* On IIS the check for .htaccess advised saving the permalink settings, which writes web.config there and never an .htaccess.
+* A role that merely appeared since the first run, as a shop or membership plugin does, was reported as a role holding administrator-level power.
+* Installers and shell scripts among the uploads are no longer treated as code the server runs.
+* A run stored by 2.3.2 could raise a PHP warning on the first page view after the update, and the mute state it was saved with is now kept until a run of this version replaces it.
+* Scans and lookups that cannot complete now say so instead of reporting all clear: a core file scan that hit its limit, a plugin listing that could not be retrieved, a database dump whose URL did not answer.
+
+**Explanations**
+
+* Every one of the sixty-one entries was read against the method it documents. Fourteen described outcomes the check does not have, or stayed silent about the ones it does.
+* The entry on security headers now names the values to enter, which is the one thing it was missing. The permission entries say where to change file permissions without shell access. Roughly a dozen terms are resolved where they first appear rather than assumed.
+* The warning about the table prefix named the wrong mechanism, and the reasoning for 640 against 440 on wp-config.php was inverted. Files in the web root were called harmless as a group, although phpinfo.php prints the whole PHP environment.
 
 = 2.3.2 =
 
@@ -320,7 +344,7 @@ Releases before 2.2.0 are listed in changelog.txt.
 == Upgrade Notice ==
 
 = 2.4.0 =
-The report becomes a checklist you can come back to. It keeps a history, shows what you have resolved since your first run, and confirms a fix on the spot instead of at the next full pass.
+The report becomes a checklist you can come back to, and a fact check over all sixty-one checks removed several findings that fired on correctly configured sites. Worth updating for either reason.
 
 = 2.3.1 =
 The screen now walks you through three steps and the result is stated in plain language, not just as a letter grade.
