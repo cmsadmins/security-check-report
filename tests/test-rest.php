@@ -198,14 +198,11 @@ class Test_CASCR_REST extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'status', $data['result'] );
 		$this->assertArrayHasKey( 'grade', $data['summary'] );
 		$this->assertArrayHasKey( 'verdict', $data['summary'] );
-		// The headline sentence comes finished, so the browser never has to
-		// pick a plural form of its own.
-		$this->assertNotEmpty( $data['summary']['today'] );
-		// The note about the grade no longer coming from one pass belongs in
-		// the same answer, otherwise it only shows up after the next reload.
-		$this->assertNotEmpty( $data['summary']['note'] );
 		$this->assertArrayHasKey( 'priorities', $data );
-		$this->assertArrayHasKey( 'wp_debug', $data['partial'] );
+		// The run records what the re-check found, not just that one happened.
+		// That single field is what the reloaded page reports from.
+		$this->assertSame( $data['result']['status'], $data['partial']['wp_debug']['status'] );
+		$this->assertSame( $data['result']['summary'], $data['partial']['wp_debug']['summary'] );
 
 		$stored = CASCR_Store::last_run();
 

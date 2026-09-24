@@ -182,8 +182,8 @@ class CASCR_REST {
 	 * Runs one check again and writes it into the stored run.
 	 *
 	 * This is what the "done, check it now" button behind a task calls. The
-	 * answer carries the new grade and the new priority list, so the page can
-	 * swap the affected card without reloading everything.
+	 * page reloads afterwards and is rendered from the stored run, so the
+	 * answer is here for anyone driving the route directly.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 * @return WP_REST_Response|WP_Error
@@ -223,10 +223,6 @@ class CASCR_REST {
 					'risk'    => $summary['risk'],
 					'counts'  => $summary['counts'],
 					'verdict' => $summary['verdict'],
-					// Finished sentences, not numbers: their plural form is
-					// decided here, where the catalogue is.
-					'today'   => CASCR_Scoring::today( $summary['grade'], $summary['counts'] ),
-					'note'    => CASCR_Admin_Dashboard::partial_line( $run ),
 				),
 				'priorities' => $summary['priorities'],
 			)

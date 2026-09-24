@@ -1,9 +1,11 @@
 /**
  * CMS ADMINS Security Check Report
  *
- * The page itself is rendered in PHP. What is left here is what a stored run
- * cannot do on its own: run the checks, re-check a single task, filter the
- * list, search the documentation and hand the report out as a file.
+ * The page itself is rendered in PHP, and every action that changes something
+ * reloads it rather than patching the markup back into agreement. What is left
+ * here is what a stored run cannot do on its own: run the checks, trigger a
+ * re-check, filter the list, search the documentation and hand the report out
+ * as a file.
  */
 (() => {
     'use strict';
@@ -21,9 +23,7 @@
         inconclusive: 'inconclusive',
     };
 
-    const state = {
-        priorities: Array.isArray(config.priorities) ? config.priorities : [],
-    };
+    const priorities = Array.isArray(config.priorities) ? config.priorities : [];
 
     const statusLabel = (status) => ({
         pass: i18n.statusPass,
@@ -31,6 +31,29 @@
         fail: i18n.statusFail,
         inconclusive: i18n.statusUnknown,
     }[status] || status);
+
+    /**
+     * The status as an export has to spell it out.
+     *
+     * A muted finding keeps its own status in the stored run, so without the
+     * addition the file says "Failed" about something the report page counts as
+     * settled and the totals above it stop adding up.
+     */
+    const statusText = (result) => (result.ignored
+        ? `${statusLabel(result.status)} (${i18n.statusMuted})`
+        : statusLabel(result.status));
+
+    /**
+     * Comes back on the given anchor.
+     *
+     * The page is built from the stored run, so a second renderer in here would
+     * only ever be the half of it somebody forgets to keep in step. The anchor
+     * is what keeps the reload from throwing the reader back to the top.
+     */
+    const reloadTo = (anchor) => {
+        window.location.hash = anchor;
+        window.location.reload();
+    };
 
     const announce = (message) => {
         if (window.wp && window.wp.a11y && typeof window.wp.a11y.speak === 'function') {
@@ -215,10 +238,16 @@
             );
             lines.push('');
 
-            if (this.summary.priorities && this.summary.priorities.length) {
+            // A finding that has been sent away is not a to-do. The list is
+            // scored on the server and reaches us with the page, so a mute
+            // recorded since then is filtered out against the run itself.
+            const todo = (this.summary.priorities || [])
+                .filter((item) => !(this.results[item.id] || {}).ignored);
+
+            if (todo.length) {
                 lines.push(i18n.nextActions);
                 lines.push('-'.repeat(i18n.nextActions.length));
-                this.summary.priorities.forEach((item, index) => {
+                todo.forEach((item, index) => {
                     lines.push(`${index + 1}. ${item.label}: ${item.summary}`);
                     if (item.fix) {
                         lines.push(`   ${item.fix}`);
@@ -233,7 +262,7 @@
             Object.keys(this.results).forEach((id) => {
                 const result = this.results[id];
                 const label = (tests[id] || {}).label || id;
-                lines.push(`[${statusLabel(result.status)}] ${label}`);
+                lines.push(`[${statusText(result)}] ${label}`);
                 lines.push(`  ${result.summary}`);
                 (result.items || []).forEach((item) => lines.push(`  - ${item}`));
                 if (result.fix) {
@@ -270,8 +299,8 @@
                 rows.push([
                     escape(test.label || id),
                     escape(categories[test.category] || test.category || ''),
-                    escape(test.severity || ''),
-                    escape(statusLabel(result.status)),
+                    escape(severities[test.severity] || test.severity || ''),
+                    escape(statusText(result)),
                     result.score,
                     escape(detail),
                 ].join(','));
@@ -407,8 +436,8 @@
     /**
      * The filter chips above the full list.
      *
-     * Counts are taken from the rows on screen rather than from the stored
-     * run, so muting a finding moves the numbers straight away.
+     * The counts come from the server with the markup. Muting reloads the
+     * page, so there is never a moment where they disagree with the rows.
      */
     class Filters {
         constructor() {
@@ -461,33 +490,6 @@
             });
         }
 
-        refresh() {
-            if (!this.bar) {
-                return;
-            }
-
-            const counts = { all: 0 };
-
-            this.rows.forEach((row) => {
-                const status = row.dataset.cascrStatus;
-                counts.all += 1;
-                counts[status] = (counts[status] || 0) + 1;
-            });
-
-            this.bar.querySelectorAll('[data-cascr-filter]').forEach((button) => {
-                const value = button.dataset.cascrFilter;
-                const count = counts[value] || 0;
-
-                button.textContent = `${button.dataset.cascrLabel} (${count})`;
-                button.hidden = value !== 'all' && count === 0;
-            });
-
-            if (this.active !== 'all' && !counts[this.active]) {
-                this.active = 'all';
-            }
-
-            this.apply();
-        }
     }
 
     /**
@@ -495,11 +497,8 @@
      */
     class Dashboard {
         constructor() {
-            this.list = document.getElementById('cascr-tasks-list');
-            this.done = document.getElementById('cascr-tasks-done');
-            this.empty = document.getElementById('cascr-tasks-empty');
-            this.open = document.getElementById('cascr-open');
             this.filters = new Filters();
+            this.busy = false;
 
             document.addEventListener('click', (event) => this.#dispatch(event));
         }
@@ -536,91 +535,84 @@
         }
 
         /**
-         * Checks one task again and swaps what the answer changed.
+         * Locks every task button while one check is being re-checked.
+         *
+         * Two re-checks answered at the same time both write the run, and the
+         * one that finished first is simply gone. The server keeps its own
+         * window as narrow as it can; this closes the one the interface opens.
+         */
+        #lock(on) {
+            this.busy = on;
+
+            document.querySelectorAll('[data-cascr-recheck], [data-cascr-later]')
+                .forEach((button) => {
+                    button.disabled = on;
+                });
+        }
+
+        /**
+         * Checks one task again. The outcome is recorded in the run, so the
+         * reloaded page can report it to everyone, not just to a screen reader.
          */
         async #recheck(button) {
-            const id = button.dataset.cascrRecheck;
-            const caption = button.textContent;
-
-            button.disabled = true;
-            button.textContent = i18n.taskChecking;
-
-            let data;
-            try {
-                data = await Api.recheck(id);
-            } catch (error) {
-                notify(error.message || i18n.error, 'error');
-                button.disabled = false;
-                button.textContent = caption;
+            if (this.busy) {
                 return;
             }
 
-            state.priorities = data.priorities || [];
+            const caption = button.textContent;
 
-            this.#updateGrade(data.summary);
-            this.#updateRow(id, data.result);
+            this.#lock(true);
+            button.textContent = i18n.taskChecking;
 
-            const passed = data.result.status === STATUS.pass;
-
-            if (passed) {
-                this.#addResolved(id, data.result.summary);
+            try {
+                await Api.recheck(button.dataset.cascrRecheck);
+                reloadTo('cascr-recheck');
+            } catch (error) {
+                notify(error.message || i18n.error, 'error');
+                this.#lock(false);
+                button.textContent = caption;
             }
-
-            this.#renderTasks();
-
-            const message = passed
-                ? `${i18n.taskResolved}: ${data.result.summary}`
-                : `${i18n.taskRemains} ${data.result.summary}`;
-
-            announce(`${message} ${i18n.grade}: ${data.summary.grade}.`);
         }
 
         /**
          * Mutes a task until its finding says something else.
-         *
-         * The new short list depends on the mute, so this is the one action
-         * that goes back to the server for the whole page.
          */
         async #later(button) {
-            button.disabled = true;
+            if (this.busy) {
+                return;
+            }
+
+            this.#lock(true);
 
             try {
                 await Api.setIgnore(button.dataset.cascrLater, true);
-                window.location.reload();
+                reloadTo('cascr-tasks');
             } catch (error) {
                 notify(error.message || i18n.error, 'error');
-                button.disabled = false;
+                this.#lock(false);
             }
         }
 
+        /**
+         * Mutes or unmutes a finding in the full list.
+         *
+         * The mute moves the grade, the verdict, the chips, the checklist and
+         * the menu bubble along with the row. The page comes back on the row
+         * itself, so none of that has to be kept in step twice.
+         */
         async #mute(button) {
             const row = button.closest('[data-cascr-row]');
             if (!row) {
                 return;
             }
 
-            const muted = row.dataset.cascrStatus === 'ignored';
-
             button.disabled = true;
 
             try {
-                const response = await Api.setIgnore(button.dataset.cascrMute, !muted);
-                const status = response.ignored ? 'ignored' : row.dataset.cascrReal;
-
-                row.dataset.cascrStatus = status;
-                row.className = `cascr-result cascr-result--${status}`;
-                button.textContent = response.ignored ? i18n.unmute : i18n.mute;
-
-                const note = row.querySelector('[data-cascr-muted-note]');
-                if (note) {
-                    note.hidden = !response.ignored;
-                }
-
-                this.filters.refresh();
-                announce(response.ignored ? i18n.muted : i18n.unmuted);
+                await Api.setIgnore(button.dataset.cascrMute, row.dataset.cascrStatus !== 'ignored');
+                reloadTo(row.id);
             } catch (error) {
                 notify(error.message || i18n.error, 'error');
-            } finally {
                 button.disabled = false;
             }
         }
@@ -641,7 +633,7 @@
                     grade: data.run.grade,
                     risk: data.run.risk,
                     counts: data.run.counts,
-                    priorities: state.priorities,
+                    priorities,
                 });
 
                 if (format === 'copy') {
@@ -664,194 +656,6 @@
                 notify(error.message || i18n.error, 'error');
             } finally {
                 button.disabled = false;
-            }
-        }
-
-        #updateGrade(summary) {
-            const card = document.querySelector('[data-cascr-card]');
-            if (card) {
-                card.className = `cascr-score__card cascr-score__card--${String(summary.grade).toLowerCase()}`;
-            }
-
-            const set = (selector, value) => {
-                const node = document.querySelector(selector);
-                if (node) {
-                    node.textContent = value;
-                }
-            };
-
-            set('[data-cascr-letter]', summary.grade);
-            set('[data-cascr-grade-label]', summary.label || (config.grades || {})[summary.grade] || '');
-            set('[data-cascr-risk]', `${summary.risk}%`);
-            set('[data-cascr-verdict]', summary.verdict || '');
-            set('[data-cascr-today]', summary.today || '');
-
-            // A grade that no longer comes from one pass has to say so right
-            // away, not after the next reload.
-            const note = document.querySelector('[data-cascr-partial]');
-            if (note) {
-                note.textContent = summary.note || '';
-                note.hidden = !summary.note;
-            }
-        }
-
-        /**
-         * Brings the row in the full list in line with the fresh result.
-         */
-        #updateRow(id, result) {
-            const row = document.querySelector(`[data-cascr-row="${CSS.escape(id)}"]`);
-            if (!row) {
-                return;
-            }
-
-            row.dataset.cascrReal = result.status;
-
-            if (row.dataset.cascrStatus !== 'ignored') {
-                row.dataset.cascrStatus = result.status;
-                row.className = `cascr-result cascr-result--${result.status}`;
-            }
-
-            const badge = row.querySelector('[data-cascr-status-label]');
-            if (badge) {
-                badge.className = `cascr-status cascr-status--${result.status}`;
-                badge.textContent = statusLabel(result.status);
-            }
-
-            const summary = row.querySelector('[data-cascr-summary]');
-            if (summary) {
-                summary.textContent = result.summary;
-            }
-
-            const items = row.querySelector('[data-cascr-items]');
-            const itemsHeading = row.querySelector('[data-cascr-items-heading]');
-            if (items) {
-                items.textContent = '';
-                (result.items || []).forEach((item) => items.appendChild(el('li', null, item)));
-                items.hidden = !(result.items || []).length;
-                if (itemsHeading) {
-                    itemsHeading.hidden = items.hidden;
-                }
-            }
-
-            const fix = row.querySelector('[data-cascr-fix]');
-            const fixHeading = row.querySelector('[data-cascr-fix-heading]');
-            if (fix) {
-                fix.textContent = result.fix || '';
-                fix.hidden = !result.fix;
-                if (fixHeading) {
-                    fixHeading.hidden = fix.hidden;
-                }
-            }
-
-            this.filters.refresh();
-        }
-
-        #addResolved(id, summary) {
-            if (!this.done) {
-                return;
-            }
-
-            const entry = el('li', 'cascr-task__resolved');
-            entry.appendChild(el('span', 'cascr-status cascr-status--pass', i18n.taskResolved));
-            entry.appendChild(el('span', 'cascr-task__label', (tests[id] || {}).label || id));
-            entry.appendChild(el('span', 'cascr-task__text', summary));
-
-            this.done.appendChild(entry);
-        }
-
-        /**
-         * Redraws the five open tasks from the answer of the re-check.
-         */
-        #renderTasks() {
-            if (!this.list) {
-                return;
-            }
-
-            this.list.textContent = '';
-            state.priorities.forEach((task) => {
-                this.list.appendChild(this.#buildTask(task));
-                this.#closeOpenEntry(task.id);
-            });
-
-            if (this.empty) {
-                this.empty.hidden = state.priorities.length > 0;
-                if (!state.priorities.length) {
-                    this.empty.textContent = i18n.nothingLeft;
-                }
-            }
-        }
-
-        /**
-         * The same card CASCR_Admin_Dashboard::render_task() prints.
-         */
-        #buildTask(task) {
-            const entry = el('li', `cascr-task cascr-task--${task.severity}`);
-            entry.dataset.cascrTask = task.id;
-
-            const head = el('div', 'cascr-task__head');
-            head.appendChild(el('span', 'cascr-task__label', task.label));
-            head.appendChild(el('span', `cascr-badge cascr-badge--${task.severity}`, severities[task.severity] || task.severity));
-            entry.appendChild(head);
-
-            const summary = el('p', 'cascr-task__summary', task.summary);
-            summary.dataset.cascrTaskSummary = '';
-            entry.appendChild(summary);
-
-            if (task.fix) {
-                entry.appendChild(el('p', 'cascr-task__fix', task.fix));
-            }
-
-            if (task.link && task.link.url) {
-                const helper = el('a', 'cascr-result__helper', task.link.label);
-                helper.href = task.link.url;
-                helper.target = '_blank';
-                helper.rel = 'noopener noreferrer';
-                entry.appendChild(helper);
-            }
-
-            const actions = el('div', 'cascr-task__actions');
-
-            const done = el('button', 'button button-primary', i18n.taskDone);
-            done.type = 'button';
-            done.dataset.cascrRecheck = task.id;
-            actions.appendChild(done);
-
-            const later = el('button', 'button button-link cascr-task__later', i18n.taskLater);
-            later.type = 'button';
-            later.dataset.cascrLater = task.id;
-            actions.appendChild(later);
-
-            const doc = el('a', 'cascr-result__link', i18n.documentation);
-            doc.href = `#cascr-doc-${task.id}`;
-            doc.dataset.cascrDoc = task.id;
-            actions.appendChild(doc);
-
-            entry.appendChild(actions);
-
-            return entry;
-        }
-
-        /**
-         * A finding that moved up into the short list must not stay below it.
-         */
-        #closeOpenEntry(id) {
-            const entry = document.querySelector(`[data-cascr-open="${CSS.escape(id)}"]`);
-
-            if (!entry || entry.hidden) {
-                return;
-            }
-
-            entry.hidden = true;
-
-            const counter = document.querySelector('[data-cascr-open-count]');
-            const left = document.querySelectorAll('[data-cascr-open]:not([hidden])').length;
-
-            if (counter) {
-                counter.textContent = sprintf(i18n.stillOpen, left);
-            }
-
-            if (this.open && left === 0) {
-                this.open.hidden = true;
             }
         }
     }

@@ -84,6 +84,66 @@ class Test_CASCR_Store extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The outcome of a re-check is the only thing that survives the reload the
+	 * page does afterwards. Kept in the run rather than in the browser, and in
+	 * one field rather than two, so the message, the archive and the note about
+	 * the partial grade all read the same record.
+	 */
+	public function test_a_recheck_records_what_it_found() {
+		$this->store( $this->results( array( 'wp_debug' => CASCR_Result::fail( 'debug is on', 9 ) ) ) );
+
+		$run   = CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
+		$entry = $run['partial']['wp_debug'];
+
+		$this->assertSame( 'pass', $entry['status'] );
+		$this->assertSame( 'debug is off', $entry['summary'] );
+		$this->assertGreaterThan( 0, $entry['t'] );
+	}
+
+	/**
+	 * The most recent re-check has to be the last entry, because that is what
+	 * the page reports on. Re-checking the same identifier twice must not leave
+	 * it sitting where it first appeared.
+	 */
+	public function test_the_newest_recheck_is_the_last_entry() {
+		$this->store( $this->results() );
+
+		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::fail( 'debug is on', 9 ) );
+		CASCR_Store::patch_test( 'db_prefix', CASCR_Result::warn( 'default prefix', 4 ) );
+		$run = CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
+
+		$this->assertSame( array( 'db_prefix', 'wp_debug' ), array_keys( $run['partial'] ) );
+	}
+
+	/**
+	 * Two re-checks in a row used to lose one of them: both handlers read the
+	 * run before either had written, and the first write was overwritten
+	 * wholesale. The run is read as late as it can be now, so a second patch
+	 * builds on the first.
+	 */
+	public function test_two_rechecks_in_a_row_both_survive() {
+		$this->store(
+			$this->results(
+				array(
+					'wp_debug'  => CASCR_Result::fail( 'debug is on', 9 ),
+					'db_prefix' => CASCR_Result::warn( 'default prefix', 4 ),
+				)
+			)
+		);
+
+		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
+		CASCR_Store::patch_test( 'db_prefix', CASCR_Result::pass( 'custom prefix' ) );
+
+		$run = CASCR_Store::last_run();
+
+		$this->assertSame( array( 'wp_debug', 'db_prefix' ), array_keys( $run['partial'] ) );
+		$this->assertSame( 'pass', $run['tests']['wp_debug']['status'] );
+		$this->assertSame( 'pass', $run['tests']['db_prefix']['status'] );
+		$this->assertSame( 0, $run['counts']['fail'] );
+		$this->assertSame( 0, $run['counts']['warn'] );
+	}
+
+	/**
 	 * A partial pass is not a run, so it must not become a point on the curve.
 	 */
 	public function test_a_recheck_does_not_extend_the_history() {
@@ -233,6 +293,77 @@ class Test_CASCR_Store extends WP_UnitTestCase {
 		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'debug is off' ) );
 
 		$this->assertSame( 0, CASCR_Store::badge() );
+	}
+
+	/**
+	 * Muting writes no run, and the grade, the risk and the counts in the
+	 * stored run are handed out as they are: the export route gives them to the
+	 * browser and the dashboard widget prints them. Left stale, the downloaded
+	 * report contradicted its own result list and the widget claimed open tasks
+	 * the report page no longer had.
+	 */
+	public function test_muting_brings_the_stored_run_along() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+
+		$this->assertSame( 1, CASCR_Store::last_run()['counts']['fail'] );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding );
+
+		$muted = CASCR_Store::last_run();
+
+		$this->assertSame( 0, $muted['counts']['fail'] );
+		$this->assertSame( 1, $muted['counts']['ignored'] );
+		$this->assertSame( 'A', $muted['grade'] );
+
+		CASCR_Store::unignore( 'unallowed_files' );
+
+		$this->assertSame( 1, CASCR_Store::last_run()['counts']['fail'] );
+	}
+
+	/**
+	 * A run written before the findings were stored cannot be fingerprinted
+	 * against a live result, so deciding the mute state again on it matched
+	 * nothing and every existing mute went quiet until the next full pass. The
+	 * flag such a run carries was right when it was written.
+	 */
+	public function test_a_run_from_an_older_version_keeps_its_mute_state() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		// Muted while the site was still on the older version, so the stored
+		// fingerprint was taken over a live result and its findings.
+		CASCR_Store::ignore( 'unallowed_files', $finding, CASCR_Store::IGNORE_UNTIL_CHANGED );
+
+		$legacy = $this->legacy_run();
+
+		$legacy['tests']['unallowed_files'] = array(
+			'status'  => CASCR_Result::STATUS_FAIL,
+			'score'   => 9,
+			'summary' => 'one file',
+			'hash'    => CASCR_Store::fingerprint( $finding ),
+			'ignored' => true,
+		);
+
+		update_option( CASCR_Store::OPTION_LAST, $legacy, false );
+
+		$this->assertTrue(
+			CASCR_Store::last_run()['tests']['unallowed_files']['ignored'],
+			'A mute recorded before the update must still hold on the run that was stored then.'
+		);
+	}
+
+	/**
+	 * Once a run of this version is stored the normal rule applies again.
+	 */
+	public function test_a_current_run_decides_the_mute_state_again() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding );
+
+		$this->assertTrue( CASCR_Store::last_run()['tests']['unallowed_files']['ignored'] );
 	}
 
 	public function test_there_is_no_comparison_before_the_second_run() {

@@ -25,6 +25,11 @@ class CASCR_Store {
 	const OPTION_CONSENT  = 'cascr_consent';
 	const OPTION_BADGE    = 'cascr_badge';
 
+	/**
+	 * First version whose stored run carries the findings of each test.
+	 */
+	const SHAPE_ITEMS = '2.4.0';
+
 	const IGNORE_PERMANENT     = 'permanent';
 	const IGNORE_UNTIL_CHANGED = 'until_changed';
 
@@ -71,9 +76,14 @@ class CASCR_Store {
 	 * Replaces one test inside the stored run after a re-check.
 	 *
 	 * Everything else in the run is left exactly as the last full pass found
-	 * it. The identifier is noted under 'partial' so the interface can say that
-	 * the grade no longer comes from a single pass, and the history stays
-	 * untouched: a re-check is not a run.
+	 * it. The outcome is noted under 'partial' so the interface can say that the
+	 * grade no longer comes from a single pass and can show what the re-check
+	 * actually found, and the history stays untouched: a re-check is not a run.
+	 *
+	 * The option is read here rather than by the caller because the check itself
+	 * takes seconds to run. Two re-checks started in that window would both write
+	 * back the copy they read before it, and whichever finished first would be
+	 * gone without a word.
 	 *
 	 * @param string $id     Test identifier.
 	 * @param array  $result The fresh result.
@@ -90,7 +100,17 @@ class CASCR_Store {
 
 		$partial = isset( $run['partial'] ) && is_array( $run['partial'] ) ? $run['partial'] : array();
 
-		$partial[ $id ] = time();
+		// Re-inserted rather than overwritten in place, so the most recent
+		// re-check is the last entry and the page can report on it without
+		// carrying a second field for the same thing.
+		unset( $partial[ $id ] );
+
+		$partial[ $id ] = array(
+			't'       => time(),
+			'status'  => $result['status'],
+			'summary' => $result['summary'],
+		);
+
 		$run['partial'] = $partial;
 
 		$summary = CASCR_Scoring::summarize( $run['tests'] );
@@ -190,7 +210,35 @@ class CASCR_Store {
 	 * @return array
 	 */
 	public static function last_run() {
-		return self::apply_mutes( self::normalize( get_option( self::OPTION_LAST, array() ) ) );
+		$run = self::normalize( get_option( self::OPTION_LAST, array() ) );
+
+		// A run written before this shape existed carries mute flags that were
+		// right when it was measured and a fingerprint that cannot be matched
+		// any more. Deciding again on such a run would silently drop every
+		// existing mute until the next full pass.
+		if ( self::predates_items( $run ) ) {
+			return $run;
+		}
+
+		return self::apply_mutes( $run );
+	}
+
+	/**
+	 * Whether a run was written before a stored test carried its findings.
+	 *
+	 * The mute fingerprint is taken over the items, so a run without them can
+	 * never produce the hash a live result produced. Runs of this shape carry
+	 * their version, so this settles itself the moment a full pass is done.
+	 *
+	 * @param array $run A run that has been through normalize().
+	 * @return bool
+	 */
+	private static function predates_items( $run ) {
+		if ( empty( $run['tests'] ) ) {
+			return false;
+		}
+
+		return empty( $run['version'] ) || version_compare( (string) $run['version'], self::SHAPE_ITEMS, '<' );
 	}
 
 	/**
@@ -363,7 +411,7 @@ class CASCR_Store {
 		);
 
 		$saved = update_option( self::OPTION_IGNORED, $ignored, false );
-		self::recount_badge();
+		self::recount_run();
 
 		return $saved;
 	}
@@ -384,19 +432,24 @@ class CASCR_Store {
 		unset( $ignored[ $id ] );
 
 		$saved = update_option( self::OPTION_IGNORED, $ignored, false );
-		self::recount_badge();
+		self::recount_run();
 
 		return $saved;
 	}
 
 	/**
-	 * Recounts the menu bubble after muting changed what counts as a failure.
+	 * Rescores the stored run after muting changed what counts as a failure.
 	 *
-	 * Muting does not write a run, so without this the bubble kept claiming a
-	 * failure the site owner had consciously sent away. Reading the full run
-	 * here is fine, this happens once per click rather than on every page.
+	 * Muting does not write a run, and the grade, the counts and the risk in
+	 * the stored run are not derived on the way out: the export route hands
+	 * them straight to the browser and the dashboard widget reads them as they
+	 * are. Left alone they kept describing a finding the site owner had just
+	 * sent away, so a downloaded report contradicted its own result list and
+	 * the widget claimed open tasks the report page no longer had. Reading the
+	 * full run here is fine, this happens once per click rather than on every
+	 * page.
 	 */
-	private static function recount_badge() {
+	private static function recount_run() {
 		$run = self::last_run();
 
 		if ( empty( $run['tests'] ) ) {
@@ -404,6 +457,12 @@ class CASCR_Store {
 		}
 
 		$summary = CASCR_Scoring::summarize( $run['tests'] );
+
+		$run['grade']  = $summary['grade'];
+		$run['risk']   = $summary['risk'];
+		$run['counts'] = $summary['counts'];
+
+		update_option( self::OPTION_LAST, $run, false );
 
 		self::remember_badge( $summary['counts'] );
 	}

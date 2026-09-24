@@ -65,9 +65,9 @@ class CASCR_Admin {
 	/**
 	 * Everything the script needs, including every string it renders.
 	 *
-	 * The page itself is rendered in PHP. What is left here is what the browser
-	 * builds on its own: the progress of a run, the card it swaps after a
-	 * re-check and the three exports.
+	 * The page itself is rendered in PHP, and every action that changes
+	 * something reloads it. What is left here is the progress of a run and the
+	 * three exports, which are built from the stored run in the browser.
 	 *
 	 * @return array
 	 */
@@ -83,8 +83,7 @@ class CASCR_Admin {
 			'tests'       => CASCR_Registry::for_client(),
 			'categories'  => CASCR_Registry::categories(),
 			// The exports read the run itself over the REST route, but the
-			// to-do list is scored in PHP, so it travels with the page and is
-			// replaced by whatever a re-check answers.
+			// to-do list is scored in PHP, so it travels with the page.
 			'priorities'  => empty( $run['tests'] ) ? array() : CASCR_Scoring::priorities( $run['tests'] ),
 			'grades'      => array(
 				'A' => CASCR_Scoring::grade_label( 'A' ),
@@ -107,14 +106,13 @@ class CASCR_Admin {
 				'statusWarn'     => __( 'Warning', 'security-check-report' ),
 				'statusFail'     => __( 'Failed', 'security-check-report' ),
 				'statusUnknown'  => __( 'Not determined', 'security-check-report' ),
+				// Every export has to say so when a finding was sent away.
+				// Without it a muted failure reads as an open one in the file
+				// and the numbers above it stop adding up.
+				'statusMuted'    => __( 'Muted', 'security-check-report' ),
 				'riskScore'      => __( 'Risk score', 'security-check-report' ),
 				'nextActions'    => __( 'Your to-do list', 'security-check-report' ),
 				'recommendation' => __( 'What to do', 'security-check-report' ),
-				'documentation'  => __( 'Read more about this check', 'security-check-report' ),
-				'mute'           => __( 'Mute this finding', 'security-check-report' ),
-				'unmute'         => __( 'Unmute', 'security-check-report' ),
-				'muted'          => __( 'Muted until the finding changes.', 'security-check-report' ),
-				'unmuted'        => __( 'The finding is shown again.', 'security-check-report' ),
 				'copied'         => __( 'The report was copied to the clipboard.', 'security-check-report' ),
 				'copyFailed'     => __( 'The report could not be copied.', 'security-check-report' ),
 				'reportTitle'    => __( 'Security Check Report', 'security-check-report' ),
@@ -132,14 +130,7 @@ class CASCR_Admin {
 					__( 'Score', 'security-check-report' ),
 					__( 'Result', 'security-check-report' ),
 				),
-				/* translators: %d: number of findings that are not on the short list. */
-				'stillOpen'      => __( 'Still open (%d)', 'security-check-report' ),
-				'taskDone'       => __( 'Done, check it now', 'security-check-report' ),
-				'taskLater'      => __( 'later', 'security-check-report' ),
 				'taskChecking'   => __( 'Checking again', 'security-check-report' ),
-				'taskResolved'   => __( 'Resolved', 'security-check-report' ),
-				'taskRemains'    => __( 'Still open after the re-check.', 'security-check-report' ),
-				'nothingLeft'    => __( 'Nothing is left on the list. Run all checks again whenever you have changed something.', 'security-check-report' ),
 				'scanFinished'   => __( 'The security check finished.', 'security-check-report' ),
 			),
 		);
@@ -402,7 +393,6 @@ class CASCR_Admin {
 						type="button"
 						class="cascr-filter<?php echo 'all' === $value ? ' is-active' : ''; ?>"
 						data-cascr-filter="<?php echo esc_attr( $value ); ?>"
-						data-cascr-label="<?php echo esc_attr( $label ); ?>"
 						aria-pressed="<?php echo 'all' === $value ? 'true' : 'false'; ?>"
 						<?php echo 'all' !== $value && 0 === $counts[ $value ] ? 'hidden' : ''; ?>
 					><?php echo esc_html( sprintf( '%1$s (%2$d)', $label, $counts[ $value ] ) ); ?></button>
@@ -447,9 +437,6 @@ class CASCR_Admin {
 	/**
 	 * One row of the full list.
 	 *
-	 * The detail containers are printed even when they are empty, so a re-check
-	 * can fill them without the browser having to know the markup.
-	 *
 	 * @param string $id   Test identifier.
 	 * @param array  $test Registry entry.
 	 * @param array  $data Stored result.
@@ -466,30 +453,29 @@ class CASCR_Admin {
 			id="cascr-result-<?php echo esc_attr( $id ); ?>"
 			data-cascr-row="<?php echo esc_attr( $id ); ?>"
 			data-cascr-status="<?php echo esc_attr( $status ); ?>"
-			data-cascr-real="<?php echo esc_attr( $data['status'] ); ?>"
 		>
 			<summary class="cascr-result__summary">
-				<span class="cascr-status cascr-status--<?php echo esc_attr( $status ); ?>" data-cascr-status-label>
+				<span class="cascr-status cascr-status--<?php echo esc_attr( $status ); ?>">
 					<?php echo esc_html( self::status_label( $data['status'] ) ); ?>
 				</span>
 				<span class="cascr-result__label"><?php echo esc_html( $test['label'] ); ?></span>
-				<span class="cascr-result__text" data-cascr-summary><?php echo esc_html( $data['summary'] ); ?></span>
+				<span class="cascr-result__text"><?php echo esc_html( $data['summary'] ); ?></span>
 			</summary>
 
 			<div class="cascr-result__body">
-				<h4 class="cascr-result__heading" data-cascr-items-heading <?php echo empty( $items ) ? 'hidden' : ''; ?>>
-					<?php esc_html_e( 'Details', 'security-check-report' ); ?>
-				</h4>
-				<ul class="cascr-result__items" data-cascr-items <?php echo empty( $items ) ? 'hidden' : ''; ?>>
-					<?php foreach ( $items as $item ) : ?>
-						<li><?php echo esc_html( $item ); ?></li>
-					<?php endforeach; ?>
-				</ul>
+				<?php if ( ! empty( $items ) ) : ?>
+					<h4 class="cascr-result__heading"><?php esc_html_e( 'Details', 'security-check-report' ); ?></h4>
+					<ul class="cascr-result__items">
+						<?php foreach ( $items as $item ) : ?>
+							<li><?php echo esc_html( $item ); ?></li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
 
-				<h4 class="cascr-result__heading" data-cascr-fix-heading <?php echo '' === $fix ? 'hidden' : ''; ?>>
-					<?php esc_html_e( 'What to do', 'security-check-report' ); ?>
-				</h4>
-				<p class="cascr-result__fix" data-cascr-fix <?php echo '' === $fix ? 'hidden' : ''; ?>><?php echo esc_html( $fix ); ?></p>
+				<?php if ( '' !== $fix ) : ?>
+					<h4 class="cascr-result__heading"><?php esc_html_e( 'What to do', 'security-check-report' ); ?></h4>
+					<p class="cascr-result__fix"><?php echo esc_html( $fix ); ?></p>
+				<?php endif; ?>
 
 				<?php if ( ! empty( $link ) ) : ?>
 					<a class="cascr-result__helper" href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer">
@@ -504,9 +490,9 @@ class CASCR_Admin {
 					<button type="button" class="button button-link cascr-result__mute" data-cascr-mute="<?php echo esc_attr( $id ); ?>">
 						<?php echo $muted ? esc_html__( 'Unmute', 'security-check-report' ) : esc_html__( 'Mute this finding', 'security-check-report' ); ?>
 					</button>
-					<span class="cascr-result__muted-note" data-cascr-muted-note <?php echo $muted ? '' : 'hidden'; ?>>
-						<?php esc_html_e( 'Muted until the finding changes.', 'security-check-report' ); ?>
-					</span>
+					<?php if ( $muted ) : ?>
+						<span class="cascr-result__muted-note"><?php esc_html_e( 'Muted until the finding changes.', 'security-check-report' ); ?></span>
+					<?php endif; ?>
 				</div>
 			</div>
 		</details>

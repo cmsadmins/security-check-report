@@ -784,6 +784,7 @@
 
 .cascr-dash__head,
 .cascr-curve,
+.cascr-notice,
 .cascr-tasks,
 .cascr-openlist,
 .cascr-archive,
@@ -996,6 +997,12 @@
 .cascr-openlist__text {
     flex: 1 1 260px;
     color: var(--cascr-text-soft);
+}
+
+/* Tells a pass measured by a single re-check apart from one a full run saw. */
+.cascr-archive__mark {
+    font-size: 12px;
+    color: var(--cascr-text-faint);
 }
 
 .cascr-archive__date {

@@ -59,9 +59,10 @@ class CASCR_Admin_Dashboard {
 
 		self::render_head( $run, $summary );
 		self::render_curve();
+		self::render_recheck( $run );
 		self::render_tasks( $summary['priorities'] );
 		self::render_open( $run, $summary['priorities'] );
-		self::render_archive();
+		self::render_archive( $run );
 		self::render_categories( $summary['categories'] );
 
 		CASCR_Admin::render_results( $run );
@@ -78,15 +79,15 @@ class CASCR_Admin_Dashboard {
 		$grade = $summary['grade'];
 		?>
 		<section class="cascr-dash__head">
-			<div class="cascr-score__card cascr-score__card--<?php echo esc_attr( strtolower( $grade ) ); ?>" data-cascr-card>
+			<div class="cascr-score__card cascr-score__card--<?php echo esc_attr( strtolower( $grade ) ); ?>">
 				<div class="cascr-score__grade">
-					<span class="cascr-score__letter" data-cascr-letter><?php echo esc_html( $grade ); ?></span>
-					<span class="cascr-score__label" data-cascr-grade-label><?php echo esc_html( CASCR_Scoring::grade_label( $grade ) ); ?></span>
+					<span class="cascr-score__letter"><?php echo esc_html( $grade ); ?></span>
+					<span class="cascr-score__label"><?php echo esc_html( CASCR_Scoring::grade_label( $grade ) ); ?></span>
 				</div>
 
 				<div class="cascr-score__meta">
 					<div class="cascr-score__risk">
-						<span class="cascr-score__risk-value" data-cascr-risk><?php echo esc_html( sprintf( '%s%%', $summary['risk'] ) ); ?></span>
+						<span class="cascr-score__risk-value"><?php echo esc_html( sprintf( '%s%%', $summary['risk'] ) ); ?></span>
 						<span class="cascr-score__risk-label"><?php esc_html_e( 'Risk score', 'security-check-report' ); ?></span>
 					</div>
 					<p class="cascr-dash__journey"><?php echo wp_kses_post( self::journey( $grade, $summary['counts'] ) ); ?></p>
@@ -103,7 +104,7 @@ class CASCR_Admin_Dashboard {
 
 			<?php CASCR_Admin::render_progress(); ?>
 
-			<p class="cascr-score__verdict" data-cascr-verdict><?php echo esc_html( $summary['verdict'] ); ?></p>
+			<p class="cascr-score__verdict"><?php echo esc_html( $summary['verdict'] ); ?></p>
 		</section>
 		<?php
 	}
@@ -111,17 +112,15 @@ class CASCR_Admin_Dashboard {
 	/**
 	 * Where this site started and where it stands today.
 	 *
-	 * The second half carries a hook of its own: a re-check moves it, and a
-	 * head that shows one grade while the sentence below it claims another is
-	 * worse than no sentence at all. The whole sentence is swapped rather than
-	 * the numbers inside it, because its plural form belongs to the number.
+	 * Both halves are finished sentences rather than numbers dropped into a
+	 * template, because their plural form belongs to the number in them.
 	 *
 	 * @param string $grade  Current grade.
 	 * @param array  $counts Status counts from summarize().
 	 * @return string HTML, safe for wp_kses_post.
 	 */
 	private static function journey( $grade, $counts ) {
-		$today = '<span data-cascr-today>' . esc_html( CASCR_Scoring::today( $grade, $counts ) ) . '</span>';
+		$today = esc_html( CASCR_Scoring::today( $grade, $counts ) );
 
 		$first = CASCR_History::first();
 
@@ -167,17 +166,16 @@ class CASCR_Admin_Dashboard {
 	/**
 	 * Says so when the grade no longer comes from a single pass.
 	 *
-	 * The paragraph is always in the markup, empty and hidden while the grade
-	 * still comes from one pass: the first re-check has to be able to put the
-	 * sentence there without a reload, and a claim like this one appearing a
-	 * page load too late is the same as it missing.
-	 *
 	 * @param array $run The stored run.
 	 */
 	private static function render_partial_note( $run ) {
 		$note = self::partial_line( $run );
+
+		if ( '' === $note ) {
+			return;
+		}
 		?>
-		<p class="cascr-dash__partial" data-cascr-partial <?php echo '' === $note ? 'hidden' : ''; ?>><?php echo esc_html( $note ); ?></p>
+		<p class="cascr-dash__partial"><?php echo esc_html( $note ); ?></p>
 		<?php
 	}
 
@@ -190,7 +188,7 @@ class CASCR_Admin_Dashboard {
 	 * @param array $run The stored run.
 	 * @return string Empty when the grade still comes from a single pass.
 	 */
-	public static function partial_line( $run ) {
+	private static function partial_line( $run ) {
 		if ( empty( $run['partial'] ) || ! is_array( $run['partial'] ) ) {
 			return '';
 		}
@@ -208,6 +206,82 @@ class CASCR_Admin_Dashboard {
 			$count,
 			wp_date( get_option( 'date_format' ), isset( $run['generated'] ) ? (int) $run['generated'] : time() )
 		);
+	}
+
+	/**
+	 * Every re-check the stored run has a recorded outcome for.
+	 *
+	 * The run carries one entry per identifier under 'partial', newest last.
+	 * That single field is what the note about the partial grade counts, what
+	 * the message below the curve reports and what the archive reads, so there
+	 * is nothing to keep in step.
+	 *
+	 * @param array $run The stored run.
+	 * @return array List of entries with id, time, status and summary.
+	 */
+	private static function rechecks( $run ) {
+		if ( empty( $run['partial'] ) || ! is_array( $run['partial'] ) ) {
+			return array();
+		}
+
+		$entries = array();
+
+		foreach ( $run['partial'] as $id => $entry ) {
+			// Before the outcome was kept, the field held nothing but the
+			// time of the re-check. Those entries still count towards the
+			// partial note, but there is no result to report for them.
+			if ( ! is_array( $entry ) || ! isset( $entry['status'] ) ) {
+				continue;
+			}
+
+			$entries[] = array(
+				'id'      => $id,
+				't'       => isset( $entry['t'] ) ? (int) $entry['t'] : 0,
+				'status'  => $entry['status'],
+				'summary' => isset( $entry['summary'] ) ? $entry['summary'] : '',
+			);
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * What the last re-check found, in the place the page shows hints.
+	 *
+	 * Without this the answer lived in the browser alone: sighted users saw
+	 * nothing at all when a check came back still failing, and anyone who
+	 * reloaded lost the confirmation that it had passed. The history stays out
+	 * of it, a partial pass is not a run.
+	 *
+	 * @param array $run The stored run.
+	 */
+	private static function render_recheck( $run ) {
+		$entries = self::rechecks( $run );
+
+		if ( empty( $entries ) ) {
+			return;
+		}
+
+		$last   = end( $entries );
+		$passed = CASCR_Result::STATUS_PASS === $last['status'];
+		$test   = CASCR_Registry::get( $last['id'] );
+		$label  = $test ? $test['label'] : $last['id'];
+
+		if ( $passed ) {
+			/* translators: %s: name of the check. */
+			$headline = sprintf( __( '%s passed the re-check.', 'security-check-report' ), $label );
+		} else {
+			/* translators: %s: name of the check. */
+			$headline = sprintf( __( '%s is still open after the re-check.', 'security-check-report' ), $label );
+		}
+		?>
+		<div class="notice notice-<?php echo $passed ? 'success' : 'warning'; ?> cascr-notice" id="cascr-recheck">
+			<p>
+				<strong><?php echo esc_html( $headline ); ?></strong>
+				<?php echo esc_html( $last['summary'] ); ?>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
@@ -297,9 +371,7 @@ class CASCR_Admin_Dashboard {
 			<h2 class="cascr-section__title"><?php esc_html_e( 'Your next five', 'security-check-report' ); ?></h2>
 			<p class="cascr-section__lead"><?php esc_html_e( 'Work through these in order. Everything else can wait.', 'security-check-report' ); ?></p>
 
-			<ul class="cascr-tasks__done" id="cascr-tasks-done"></ul>
-
-			<ol class="cascr-tasks__list" id="cascr-tasks-list">
+			<ol class="cascr-tasks__list">
 				<?php
 				foreach ( $priorities as $task ) {
 					self::render_task( $task );
@@ -307,18 +379,15 @@ class CASCR_Admin_Dashboard {
 				?>
 			</ol>
 
-			<p class="cascr-empty" id="cascr-tasks-empty" <?php echo empty( $priorities ) ? '' : 'hidden'; ?>>
-				<?php esc_html_e( 'Nothing needs your attention right now.', 'security-check-report' ); ?>
-			</p>
+			<?php if ( empty( $priorities ) ) : ?>
+				<p class="cascr-empty"><?php esc_html_e( 'Nothing needs your attention right now.', 'security-check-report' ); ?></p>
+			<?php endif; ?>
 		</section>
 		<?php
 	}
 
 	/**
 	 * One task card.
-	 *
-	 * The browser rebuilds this shape after a re-check, so the class names here
-	 * and the ones in admin.js have to stay in step.
 	 *
 	 * @param array $task One entry of the priority list.
 	 */
@@ -332,7 +401,7 @@ class CASCR_Admin_Dashboard {
 				</span>
 			</div>
 
-			<p class="cascr-task__summary" data-cascr-task-summary><?php echo esc_html( $task['summary'] ); ?></p>
+			<p class="cascr-task__summary"><?php echo esc_html( $task['summary'] ); ?></p>
 
 			<?php if ( ! empty( $task['fix'] ) ) : ?>
 				<p class="cascr-task__fix"><?php echo esc_html( $task['fix'] ); ?></p>
@@ -389,21 +458,19 @@ class CASCR_Admin_Dashboard {
 		?>
 		<details class="cascr-openlist" id="cascr-open">
 			<summary class="cascr-openlist__summary">
-				<span data-cascr-open-count>
-					<?php
-					printf(
-						/* translators: %d: number of findings that are not on the short list. */
-						esc_html__( 'Still open (%d)', 'security-check-report' ),
-						count( $open )
-					);
-					?>
-				</span>
+				<?php
+				printf(
+					/* translators: %d: number of findings that are not on the short list. */
+					esc_html__( 'Still open (%d)', 'security-check-report' ),
+					count( $open )
+				);
+				?>
 			</summary>
 
 			<ul class="cascr-openlist__list">
 				<?php foreach ( $open as $id => $test ) : ?>
 					<?php $definition = CASCR_Registry::get( $id ); ?>
-					<li class="cascr-openlist__item" data-cascr-open="<?php echo esc_attr( $id ); ?>">
+					<li class="cascr-openlist__item">
 						<span class="cascr-status cascr-status--<?php echo esc_attr( $test['status'] ); ?>">
 							<?php echo esc_html( CASCR_Admin::status_label( $test['status'] ) ); ?>
 						</span>
@@ -418,15 +485,49 @@ class CASCR_Admin_Dashboard {
 
 	/**
 	 * What this site has already put behind it.
+	 *
+	 * The history is the long record and a partial pass never writes to it, so
+	 * a task solved by a single re-check would be invisible here until the next
+	 * full run. Those entries are read from the run instead and are marked, so
+	 * nobody mistakes them for a measured pass of the whole site.
+	 *
+	 * @param array $run The stored run.
 	 */
-	private static function render_archive() {
-		$resolved = CASCR_History::resolved();
+	private static function render_archive( $run ) {
+		$entries = array();
 
-		if ( empty( $resolved ) ) {
+		foreach ( CASCR_History::resolved() as $id => $time ) {
+			$entries[ $id ] = array(
+				'time'    => (int) $time,
+				'recheck' => false,
+			);
+		}
+
+		foreach ( self::rechecks( $run ) as $entry ) {
+			if ( CASCR_Result::STATUS_PASS !== $entry['status'] ) {
+				// Measured as a finding again since the run the history
+				// recorded. Claiming it as resolved would be a lie the page
+				// contradicts three sections further up.
+				unset( $entries[ $entry['id'] ] );
+				continue;
+			}
+
+			$entries[ $entry['id'] ] = array(
+				'time'    => $entry['t'],
+				'recheck' => true,
+			);
+		}
+
+		if ( empty( $entries ) ) {
 			return;
 		}
 
-		arsort( $resolved );
+		uasort(
+			$entries,
+			function ( $a, $b ) {
+				return $b['time'] - $a['time'];
+			}
+		);
 		?>
 		<details class="cascr-archive">
 			<summary class="cascr-archive__summary">
@@ -434,17 +535,20 @@ class CASCR_Admin_Dashboard {
 				printf(
 					/* translators: %d: number of checks that were a finding once and pass now. */
 					esc_html__( 'Resolved (%d)', 'security-check-report' ),
-					count( $resolved )
+					count( $entries )
 				);
 				?>
 			</summary>
 
 			<ul class="cascr-archive__list">
-				<?php foreach ( $resolved as $id => $time ) : ?>
+				<?php foreach ( $entries as $id => $entry ) : ?>
 					<?php $test = CASCR_Registry::get( $id ); ?>
 					<li class="cascr-archive__item">
 						<span class="cascr-archive__label"><?php echo esc_html( $test ? $test['label'] : $id ); ?></span>
-						<span class="cascr-archive__date"><?php echo esc_html( wp_date( get_option( 'date_format' ), (int) $time ) ); ?></span>
+						<?php if ( $entry['recheck'] ) : ?>
+							<span class="cascr-archive__mark"><?php esc_html_e( 'after a re-check', 'security-check-report' ); ?></span>
+						<?php endif; ?>
+						<span class="cascr-archive__date"><?php echo esc_html( wp_date( get_option( 'date_format' ), $entry['time'] ) ); ?></span>
 					</li>
 				<?php endforeach; ?>
 			</ul>
