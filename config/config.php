@@ -143,6 +143,36 @@ return array(
 	),
 
 	/*
+	 * Plugins that label AI-generated content or disclose an AI system to
+	 * visitors, each with the option it writes once the labelling is switched
+	 * on. Every entry was read out of the plugin itself, not guessed from the
+	 * slug: a folder on disk only says someone meant to do this.
+	 *
+	 * The list covers what the directory offered in September 2026. It is
+	 * young and it will grow, which is what the cascr_registry filter is for.
+	 */
+	'ai_disclosure_plugins'    => array(
+		'transparai/transparai.php'                     => array( 'transparai_settings', 'transparai_compliance' ),
+		'eu-ai-label/eu-ai-label.php'                   => array( 'eu_ai_label_options' ),
+		'eu-ai-act-ready/eu-ai-act-ready.php'           => array( 'euaiactready_transparency_enabled', 'euaiactready_media_transparency' ),
+		'legalithm-ai-act/legalithm-ai-act.php'         => array( 'legalithm_ai_act_settings' ),
+		'legibright-ai-act-compliance/legibright-ai-act-compliance.php' => array( 'legibright_settings' ),
+		'tiriri-transparency-for-eu-ai-act/tiriri-transparency-for-eu-ai-act.php' => array( 'tiriri_settings' ),
+		'studiomeyer-ai-transparency-toolkit/studiomeyer-ai-transparency-toolkit.php' => array( 'smtt_settings' ),
+		'aim-transparency/aim-transparency.php'         => array( 'aicl_settings' ),
+		'klarvo-ai-transparency/klarvo-ai-transparency.php' => array( 'klarvo_ain_settings' ),
+		'intigra-disclosio/intigra-disclosio.php'       => array( 'aiid_settings' ),
+		'ai-image-disclosure-labels/ai-image-disclosure-labels.php' => array( 'gdaiidl_settings' ),
+		'oznaczai-image-labeling/oznaczai.php'          => array( 'oznaczai_image_labeling_settings' ),
+		'image-ai-labels-free/image-ai-labels-free.php' => array( 'kiimg_settings' ),
+		'onestep-ai-image-marker/onestep-ai-image-marker.php' => array( 'aiim_settings' ),
+		'radermacher-ai-media-marker/radermacher-ai-media-marker.php' => array( 'aiim_settings' ),
+		'schnieders-ai-media-labels/schnieders-ai-media-labels.php' => array( 'saiml_settings' ),
+		'ropemark-image-marking-for-eu-ai-act/ropemark-image-marking-for-eu-ai-act.php' => array( 'ropemark_settings' ),
+		'seonai-ai-image-checkmark/seonai-ai-image-checkmark.php' => array( 'sicm_settings' ),
+	),
+
+	/*
 	 * Plugins that take backups. A backup taken by the host counts too, which
 	 * is why a missing entry here is only a warning.
 	 */

@@ -53,6 +53,7 @@ class CASCR_SecurityCheck {
 		'includes/checks/class-cascr-checks-files.php',
 		'includes/checks/class-cascr-checks-accounts.php',
 		'includes/checks/class-cascr-checks-network.php',
+		'includes/checks/class-cascr-checks-transparency.php',
 	);
 
 	/**

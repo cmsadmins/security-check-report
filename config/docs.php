@@ -345,4 +345,12 @@ return array(
 		__( 'If the site sits directly on the internet and a forwarded header arrives anyway, the visitor wrote it. Anything that trusts it for rate limiting or blocking can be walked straight past by changing one header.', 'security-check-report' ),
 		__( 'Configure security plugins to read the address from REMOTE_ADDR, or strip these headers at the edge. Behind Cloudflare or a load balancer the opposite is true, and reading the header is correct.', 'security-check-report' )
 	),
+
+	// Transparency and disclosure.
+
+	'ai_content_disclosure'          => $cascr_doc(
+		__( 'Whether a plugin that labels AI-generated content and discloses AI systems to visitors is active, and whether its settings have actually been saved. Only local state is read; nothing is sent anywhere.', 'security-check-report' ),
+		__( 'Since 2 August 2026, Article 50 of the EU AI Act asks for a machine-readable label on AI-generated text, images, audio and video, and for a notice when a visitor is talking to an AI system. A site that publishes no AI output has nothing to label, and this check cannot tell those sites apart from the rest, which is why it only ever warns and carries a fraction of the usual weight.', 'security-check-report' ),
+		__( 'If the site publishes AI-generated content or runs a chatbot, install one of the disclosure plugins from the directory and switch the labelling on. EU AI Label and EU AI Act Ready are free and cover media labels and a visitor notice. TransparAI, which we build ourselves, puts media labels, text marking and chatbot disclosure in one place; it is named here because it fits, not because you need it. An installed plugin whose settings were never saved counts as nothing, so the check reads those settings rather than trusting the folder on disk.', 'security-check-report' )
+	),
 );

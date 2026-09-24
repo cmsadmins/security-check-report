@@ -412,7 +412,7 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 	 * @return array
 	 */
 	public static function two_factor_coverage() {
-		$plugins   = self::active_two_factor_plugins();
+		$plugins   = self::active_from_map( 'two_factor_plugins' );
 		$meta_keys = array();
 
 		foreach ( $plugins as $keys ) {
@@ -494,37 +494,6 @@ class CASCR_Checks_Accounts extends CASCR_Checks_Base {
 			self::cap( $without ),
 			__( 'Set up the second factor for those accounts, or require it for the administrator role.', 'security-check-report' )
 		);
-	}
-
-	/**
-	 * Which two-factor plugins are active, and what user meta does each write?
-	 *
-	 * @return array<string, string[]> Plugin name mapped to its user meta keys.
-	 */
-	private static function active_two_factor_plugins() {
-		self::load_plugin_api();
-
-		$active = array();
-
-		foreach ( (array) self::config( 'two_factor_plugins' ) as $plugin => $meta_keys ) {
-			// A third party may still hand us the old flat list.
-			if ( is_int( $plugin ) ) {
-				$plugin    = $meta_keys;
-				$meta_keys = array();
-			}
-
-			if ( ! is_plugin_active( $plugin ) ) {
-				continue;
-			}
-
-			$file = WP_PLUGIN_DIR . '/' . $plugin;
-			$data = file_exists( $file ) ? get_plugin_data( $file, false, false ) : array();
-			$name = ! empty( $data['Name'] ) ? $data['Name'] : basename( dirname( $plugin ) );
-
-			$active[ $name ] = (array) $meta_keys;
-		}
-
-		return $active;
 	}
 
 	/**

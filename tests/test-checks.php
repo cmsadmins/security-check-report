@@ -183,6 +183,67 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 		$this->assertSame( 'inconclusive', $result['status'], 'Without a known meta key the check must not guess.' );
 	}
 
+	/* ---------------------------------------------------------------------
+	 * Transparency
+	 * ------------------------------------------------------------------- */
+
+	public function test_ai_disclosure_warns_when_nothing_labels_ai_content() {
+		$result = CASCR_Checks_Transparency::ai_content_disclosure();
+
+		$this->assertSame( 'warn', $result['status'], 'A site with no AI content must not be failed for this.' );
+		$this->assertNotEmpty( $result['fix'] );
+		$this->assertNotEmpty( $result['link'] );
+		$this->assertStringStartsWith( 'https://', $result['link']['url'] );
+	}
+
+	public function test_a_configured_disclosure_plugin_passes() {
+		$previous = get_option( 'active_plugins', array() );
+		update_option( 'active_plugins', array( 'transparai/transparai.php' ) );
+		update_option( 'transparai_settings', array( 'enabled' => true ) );
+
+		$result = CASCR_Checks_Transparency::ai_content_disclosure();
+
+		update_option( 'active_plugins', $previous );
+		delete_option( 'transparai_settings' );
+
+		$this->assertSame( 'pass', $result['status'] );
+		$this->assertNotEmpty( $result['items'], 'The passing result must name what is doing the labelling.' );
+	}
+
+	public function test_an_installed_disclosure_plugin_nobody_set_up_is_not_a_pass() {
+		$previous = get_option( 'active_plugins', array() );
+		update_option( 'active_plugins', array( 'transparai/transparai.php' ) );
+
+		$result = CASCR_Checks_Transparency::ai_content_disclosure();
+
+		update_option( 'active_plugins', $previous );
+
+		$this->assertSame( 'warn', $result['status'], 'A folder on disk labels nothing.' );
+		$this->assertNotEmpty( $result['items'] );
+	}
+
+	/**
+	 * The check must stay inside the site. Anything else would add an endpoint
+	 * the readme does not list.
+	 */
+	public function test_ai_disclosure_makes_no_outbound_request() {
+		$calls = 0;
+
+		add_filter(
+			'pre_http_request',
+			function ( $preempt ) use ( &$calls ) {
+				++$calls;
+
+				return $preempt;
+			},
+			1
+		);
+
+		CASCR_Checks_Transparency::ai_content_disclosure();
+
+		$this->assertSame( 0, $calls );
+	}
+
 	public function test_a_check_that_throws_is_reported_as_inconclusive() {
 		add_filter(
 			'cascr_registry',

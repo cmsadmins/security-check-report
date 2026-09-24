@@ -9,13 +9,13 @@ Stable tag: 2.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Read-only security audit for WordPress: 60 checks, an A to F grade, and a checklist that records what you have fixed.
+Read-only security audit for WordPress: 61 checks, an A to F grade, and a checklist that records what you have fixed.
 
 == Description ==
 
-Security Check Report looks at 60 aspects of a WordPress installation and turns the findings into a graded report. It changes nothing. Every check reads state, and the only thing ever written is one temporary file in the uploads folder that is deleted again in the same request.
+Security Check Report looks at 61 aspects of a WordPress installation and turns the findings into a graded report. It changes nothing. Every check reads state, and the only thing ever written is one temporary file in the uploads folder that is deleted again in the same request.
 
-The report opens with the five things worth doing first, not with a table of 60 rows. Every finding says what was found, why it matters and what to do about it.
+The report opens with the five things worth doing first, not with a table of 61 rows. Every finding says what was found, why it matters and what to do about it.
 
 From the second run onwards the page no longer opens on the start button but on an overview: the grade, a line saying where the site stood on the first run and where it stands today, one bar per recorded run, five tasks to work through, what is still open, and what has been resolved and when.
 
@@ -46,6 +46,8 @@ Each task has a button that runs that one check again and answers within seconds
 **Accounts and access.** Guessable passwords, predictable administrator names, how many accounts hold administrator rights and which have gone dormant, roles below administrator holding capabilities they should not have, open registration and the role it hands out, two-factor coverage per administrator, the application password inventory including when each was last used and from where.
 
 **Network and transport.** HTTPS and the redirect from http, TLS certificate expiry and negotiated protocol, the security headers and their quality rather than their mere presence, cookie attributes, CORS, exposed software versions, legacy discovery tags, XML-RPC, user enumeration, REST routes that accept writes without checking permissions, and whether the client address can be faked through forwarded headers.
+
+**Transparency and disclosure.** Whether AI-generated content carries a machine-readable label and whether visitors are told when they are talking to an AI system, which Article 50 of the EU AI Act has asked for since 2 August 2026. The disclosure plugins in the directory are recognised by their folder and by the settings they write, so a plugin that was installed and never set up is not mistaken for an answer. A site that publishes no AI output has nothing to label, so this one only ever warns and barely moves the grade.
 
 = What it is not =
 
@@ -150,7 +152,7 @@ Monthly is a reasonable baseline, plus a run after any larger change: a migratio
 
 = What happens when I re-check a single task? =
 
-That one check runs again, its result replaces the old one in the stored run, and the grade is recalculated from what is then stored. It takes a few seconds, so you can fix something and see the result without sitting through 60 checks.
+That one check runs again, its result replaces the old one in the stored run, and the grade is recalculated from what is then stored. It takes a few seconds, so you can fix something and see the result without sitting through 61 checks.
 
 The history is left alone, because one check is not a run. As long as the stored run carries results from more than one pass, the page says how many checks were re-checked on their own and when the last full pass was, so the grade is never presented as something it is not.
 
@@ -214,6 +216,7 @@ Releases before 2.2.0 are listed in changelog.txt.
 * Every task carries a button that re-runs that one check and answers within seconds. A fix is confirmed while you are still at the screen, and the next task moves up, instead of waiting for the next full pass.
 * A history of the last 24 runs. The very first one is kept for good, so the opening line can always name where the site started. An installation upgrading from an earlier version finds its two stored runs as the first two points.
 * Progress per category, so it is visible which part of the site has been dealt with and which has not.
+* A sixth area, transparency and disclosure, with one check in it: whether AI-generated content on the site is labelled. Article 50 of the EU AI Act has asked for a machine-readable label and a notice for AI chatbots since 2 August 2026. The disclosure plugins from the directory are recognised by their folder and by the settings they write, and the check only ever warns, because a site with no AI content has nothing to label.
 * A count on the menu entry, a widget on the dashboard, and a reminder once the last full run is older than thirty days. The reminder can be switched off for good, per user.
 
 **Changed**

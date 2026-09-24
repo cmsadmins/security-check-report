@@ -30,6 +30,13 @@ class CASCR_Registry {
 	const CATEGORY_NETWORK = 'network';
 
 	/**
+	 * Obligations that are about telling people something, not about keeping
+	 * anyone out. Kept apart from the five security areas on purpose, so a
+	 * reader can see at a glance that nothing here is an attack surface.
+	 */
+	const CATEGORY_TRANSPARENCY = 'transparency';
+
+	/**
 	 * How much a failing check of each urgency drags the grade down.
 	 *
 	 * @var array<string, float>
@@ -84,7 +91,8 @@ class CASCR_Registry {
 			self::config_tests(),
 			self::file_tests(),
 			self::account_tests(),
-			self::network_tests()
+			self::network_tests(),
+			self::transparency_tests()
 		);
 
 		/**
@@ -169,11 +177,12 @@ class CASCR_Registry {
 	 */
 	public static function categories() {
 		return array(
-			self::CATEGORY_CORE    => __( 'Core, plugins and themes', 'security-check-report' ),
-			self::CATEGORY_CONFIG  => __( 'Configuration', 'security-check-report' ),
-			self::CATEGORY_FILES   => __( 'Files and permissions', 'security-check-report' ),
-			self::CATEGORY_ACCOUNT => __( 'Accounts and access', 'security-check-report' ),
-			self::CATEGORY_NETWORK => __( 'Network and transport', 'security-check-report' ),
+			self::CATEGORY_CORE         => __( 'Core, plugins and themes', 'security-check-report' ),
+			self::CATEGORY_CONFIG       => __( 'Configuration', 'security-check-report' ),
+			self::CATEGORY_FILES        => __( 'Files and permissions', 'security-check-report' ),
+			self::CATEGORY_ACCOUNT      => __( 'Accounts and access', 'security-check-report' ),
+			self::CATEGORY_NETWORK      => __( 'Network and transport', 'security-check-report' ),
+			self::CATEGORY_TRANSPARENCY => __( 'Transparency and disclosure', 'security-check-report' ),
 		);
 	}
 
@@ -649,6 +658,23 @@ class CASCR_Registry {
 				'category' => self::CATEGORY_NETWORK,
 				'severity' => self::SEVERITY_HIGH,
 				'callback' => array( $c, 'proxy_ip_configuration' ),
+			),
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function transparency_tests() {
+		$c = 'CASCR_Checks_Transparency';
+
+		return array(
+			'ai_content_disclosure' => array(
+				'label'    => __( 'AI content disclosure', 'security-check-report' ),
+				'category' => self::CATEGORY_TRANSPARENCY,
+				'severity' => self::SEVERITY_LOW,
+				'weight'   => 0.5,
+				'callback' => array( $c, 'ai_content_disclosure' ),
 			),
 		);
 	}

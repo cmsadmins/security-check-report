@@ -139,6 +139,43 @@ abstract class CASCR_Checks_Base {
 	}
 
 	/**
+	 * Active plugins from a config map, keyed by their display name.
+	 *
+	 * The value carries whatever a check needs to tell an installed plugin from
+	 * a finished setup: user meta for the second factor, option names for the
+	 * disclosure plugins. Both questions have the same shape, so they share the
+	 * lookup rather than each keeping their own copy of it.
+	 *
+	 * @param string $key Config list name.
+	 * @return array<string, array> Detail per active plugin, name as the key.
+	 */
+	protected static function active_from_map( $key ) {
+		self::load_plugin_api();
+
+		$active = array();
+
+		foreach ( (array) self::config( $key ) as $plugin => $detail ) {
+			// A third party may still hand us the old flat list.
+			if ( is_int( $plugin ) ) {
+				$plugin = $detail;
+				$detail = array();
+			}
+
+			if ( ! is_plugin_active( $plugin ) ) {
+				continue;
+			}
+
+			$file = WP_PLUGIN_DIR . '/' . $plugin;
+			$data = file_exists( $file ) ? get_plugin_data( $file, false, false ) : array();
+			$name = ! empty( $data['Name'] ) ? $data['Name'] : basename( dirname( $plugin ) );
+
+			$active[ $name ] = (array) $detail;
+		}
+
+		return $active;
+	}
+
+	/**
 	 * Header value from a response, case-insensitively.
 	 *
 	 * @param array|WP_Error $response Response.
