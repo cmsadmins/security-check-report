@@ -9,12 +9,220 @@ msgstr ""
 
 #. Short description.
 msgid ""
-"Read-only security audit for WordPress: 60 checks, an A to F grade, and a "
-"short list of what to fix first."
+"Read-only security audit for WordPress: 61 checks, an A to F grade, and a "
+"checklist that records what you have fixed."
 msgstr ""
 
 #. Plugin name.
 msgid "CMS ADMINS Security Check Report"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The history, the checklist and the reminder belong to a single site as well."
+" Every site in the network keeps its own."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"A command line run reports and stores nothing. The history, the checklist "
+"and the count on the menu entry follow the runs you start on the screen."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"If you already used an earlier version, the two runs it had stored become "
+"the first two points, so the display is not empty after the update."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The last 24 runs. When a 25th arrives, the second oldest point is dropped "
+"instead of the oldest, so the first run stays and the line about where the "
+"site started remains true. One point holds the date, the grade, the risk "
+"score and one character per check, which comes to a few kilobytes for the "
+"whole history."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The history is left alone, because one check is not a run. As long as the "
+"stored run carries results from more than one pass, the page says how many "
+"checks were re-checked on their own and when the last full pass was, so the "
+"grade is never presented as something it is not."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"That one check runs again, its result replaces the old one in the stored "
+"run, and the grade is recalculated from what is then stored. It takes a few "
+"seconds, so you can fix something and see the result without sitting through"
+" 61 checks."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Monthly is a reasonable baseline, plus a run after any larger change: a "
+"migration, a new plugin, a server move. Once the last full run is more than "
+"30 days old, a notice in the dashboard says so. You can switch that notice "
+"off for good, and it is the only reminder the plugin sends anywhere."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Two entries go into user meta. One is a login timestamp per account, because"
+" WordPress keeps no login history of its own and the administrator check "
+"would otherwise have nothing to say about dormant accounts. The other "
+"records that somebody switched off the reminder notice, which is a decision "
+"per person rather than per site. Both are deleted on uninstall."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"One of those requests to your own site does not use the WordPress HTTP API. "
+"The certificate check opens a plain TLS connection to your own host name on "
+"port 443 to read the expiry date, because the HTTP API does not hand the "
+"certificate back. The target is still your own site and nothing leaves it, "
+"but <code>WP_HTTP_BLOCK_EXTERNAL</code> and the "
+"<code>pre_http_request</code> and <code>http_request_args</code> filters do "
+"not apply to that one connection."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"Only to <code>api.wordpress.org</code>, to the same endpoints WordPress "
+"itself uses for its update checks:"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"the moment you agreed to the run, so you are not asked again on every visit"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"the number of failing checks from the last run, so the count on the menu "
+"entry does not have to load a whole run on every admin page"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"the history of the last 24 runs, each one holding the date, the grade, the "
+"risk score and a single character per check, which is what the progress "
+"display reads"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/info/1.2/</code> to see whether a "
+"plugin listing is still open and when it was last released. This is the one "
+"endpoint the plugin requests directly rather than through "
+"<code>plugins_api()</code>, because a closed listing is served as an HTTP "
+"404 that <code>plugins_api()</code> turns into an error, which loses the "
+"very flag the check needs. The answer is cached for twelve hours."
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/update-check/1.1/</code> and "
+"<code>https://api.wordpress.org/themes/update-check/1.1/</code> for pending "
+"updates, likewise read from what WordPress already holds"
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/core/version-check/1.7/</code>, read from "
+"the update information WordPress already holds, to learn the current "
+"WordPress version. The plugin never asks this endpoint itself."
+msgstr ""
+
+#. Found in faq header.
+msgid "How much history is kept?"
+msgstr ""
+
+#. Found in faq header.
+msgid "What happens when I re-check a single task?"
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Transparency and disclosure.</strong> Whether AI-generated content "
+"carries a machine-readable label and whether visitors are told when they are"
+" talking to an AI system, which Article 50 of the EU AI Act has asked for "
+"since 2 August 2026. The disclosure plugins in the directory are recognised "
+"by their folder and by the settings they write, so a plugin that was "
+"installed and never set up is not mistaken for an answer. A site that "
+"publishes no AI output has nothing to label, so this one only ever warns and"
+" barely moves the grade."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"Each task has a button that runs that one check again and answers within "
+"seconds, so a fix is confirmed while you are still on the screen instead of "
+"at the next full pass. A single re-check writes no point into the history, "
+"and the page says as much, because a grade pieced together from several "
+"passes is not a grade measured in one."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"From the second run onwards the page no longer opens on the start button but"
+" on an overview: the grade, a line saying where the site stood on the first "
+"run and where it stands today, one bar per recorded run, five tasks to work "
+"through, what is still open, and what has been resolved and when."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"The report opens with the five things worth doing first, not with a table of"
+" 61 rows. Every finding says what was found, why it matters and what to do "
+"about it."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"Security Check Report looks at 61 aspects of a WordPress installation and "
+"turns the findings into a graded report. It changes no setting, no file and "
+"no account. It stores its own results in the database, and it writes one "
+"temporary file in the uploads folder that is deleted again in the same "
+"request."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Not a monitor. Nothing runs in the background, nothing is scheduled, no mail"
+" is sent. A check runs when you start it."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard home and a reminder "
+"once the last run is more than 30 days old"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A history of the last 24 runs, with the very first one kept for good, so the"
+" starting point stays visible"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A button per task that re-runs that single check, so you see the result of a"
+" fix in seconds"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A checklist of five tasks at a time, derived from urgency and score rather "
+"than from guesswork, with the next one moving up when you finish one"
+msgstr ""
+
+#. Screenshot description.
+msgid ""
+"The overview from the second run onwards: grade, the way from the first run "
+"to today and the next five tasks"
 msgstr ""
 
 #. Found in faq paragraph.
@@ -77,13 +285,6 @@ msgstr ""
 
 #. Found in faq paragraph.
 msgid ""
-"Monthly is a reasonable baseline, plus a run after any larger change: a "
-"migration, a new plugin, a server move. From the second run onwards the "
-"report opens with what changed since the previous one."
-msgstr ""
-
-#. Found in faq paragraph.
-msgid ""
 "That is the difference between accepting a known state and going blind to "
 "it, and it is why muting is offered instead of a permanent dismissal by "
 "default."
@@ -139,14 +340,8 @@ msgstr ""
 
 #. Found in faq paragraph.
 msgid ""
-"It also records a login timestamp for each account, in user meta, because "
-"WordPress keeps no login history of its own and the administrator check "
-"would otherwise have nothing to say about dormant accounts. That is deleted "
-"on uninstall too."
-msgstr ""
-
-#. Found in faq paragraph.
-msgid "Four options in your database, all removed when you delete the plugin:"
+"A handful of options in your database, all removed when you delete the "
+"plugin:"
 msgstr ""
 
 #. Found in faq paragraph.
@@ -162,12 +357,6 @@ msgid ""
 "WordPress.org <a href=\"https://wordpress.org/about/privacy/\">privacy "
 "policy</a> and <a href=\"https://wordpress.org/about/terms-of-"
 "service/\">terms of service</a>."
-msgstr ""
-
-#. Found in faq paragraph.
-msgid ""
-"Only to <code>api.wordpress.org</code>, and only through the WordPress "
-"functions that already talk to it for update checks:"
 msgstr ""
 
 #. Found in faq paragraph.
@@ -265,25 +454,6 @@ msgstr ""
 msgid ""
 "<code>https://api.wordpress.org/core/checksums/1.0/</code> for the official "
 "core file hashes"
-msgstr ""
-
-#. Found in faq list item.
-msgid ""
-"<code>https://api.wordpress.org/plugins/info/1.2/</code> to see whether a "
-"plugin listing is still open and when it was last released"
-msgstr ""
-
-#. Found in faq list item.
-msgid ""
-"<code>https://api.wordpress.org/plugins/update-check/1.1/</code> and "
-"<code>https://api.wordpress.org/themes/update-check/1.1/</code> for pending "
-"updates"
-msgstr ""
-
-#. Found in faq list item.
-msgid ""
-"<code>https://api.wordpress.org/core/version-check/1.7/</code> to learn the "
-"current WordPress version"
 msgstr ""
 
 #. Found in faq header.
@@ -424,24 +594,8 @@ msgid ""
 "integrity against the official checksums, files in the core directories that"
 " are not part of WordPress, pending plugin and theme updates, unused plugins"
 " and themes, plugins that look abandoned, plugins whose listing was closed, "
-"plugins whose author changed, must-use plugins and drop-ins, other "
-"installations sharing the account."
-msgstr ""
-
-#. Found in description paragraph.
-msgid ""
-"The report opens with the five things worth doing first, not with a table of"
-" 60 rows. Every finding says what was found, why it matters and what to do "
-"about it. From the second run onwards the report also says what changed "
-"since the last one, which is usually the part worth reading."
-msgstr ""
-
-#. Found in description paragraph.
-msgid ""
-"Security Check Report looks at 60 aspects of a WordPress installation and "
-"turns the findings into a graded report. It changes nothing. Every check "
-"reads state, and the only thing ever written is one temporary file in the "
-"uploads folder that is deleted again in the same request."
+"plugins whose author changed, must-use plugins and drop-ins, other WordPress"
+" installations sitting next to this one."
 msgstr ""
 
 #. Found in description list item.
@@ -513,12 +667,6 @@ msgstr ""
 
 #. Found in description list item.
 msgid ""
-"A priority list of at most five items, derived from urgency and score rather"
-" than from guesswork"
-msgstr ""
-
-#. Found in description list item.
-msgid ""
 "A weighted grade from A to F, where one failing critical check cannot be "
 "hidden by fifty passing minor ones"
 msgstr ""
@@ -553,8 +701,228 @@ msgid ""
 "expanded"
 msgstr ""
 
-#. Screenshot description.
-msgid "The report: grade, risk score and the five things to do first"
+#. Found in changelog paragraph.
+msgid "<strong>Explanations</strong>"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"Every check was read against the sources it cites: php.net, the WordPress "
+"handbook, core source, MDN, and the packages of the plugins it recognises. "
+"That turned up findings that fire on correct configurations, one that could "
+"not fire at all, and claims that stopped being true years ago."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The warning about the table prefix named the wrong mechanism, and the "
+"reasoning for 640 against 440 on wp-config.php was inverted. Files in the "
+"web root were called harmless as a group, although phpinfo.php prints the "
+"whole PHP environment."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The entry on security headers now names the values to enter, which is the "
+"one thing it was missing. The permission entries say where to change file "
+"permissions without shell access. Roughly a dozen terms are resolved where "
+"they first appear rather than assumed."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Every one of the sixty-one entries was read against the method it documents."
+" Fourteen described outcomes the check does not have, or stayed silent about"
+" the ones it does."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Scans and lookups that cannot complete now say so instead of reporting all "
+"clear: a core file scan that hit its limit, a plugin listing that could not "
+"be retrieved, a database dump whose URL did not answer."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A run stored by 2.3.2 could raise a PHP warning on the first page view after"
+" the update, and the mute state it was saved with is now kept until a run of"
+" this version replaces it."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Installers and shell scripts among the uploads are no longer treated as code"
+" the server runs."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A role that merely appeared since the first run, as a shop or membership "
+"plugin does, was reported as a role holding administrator-level power."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"On IIS the check for .htaccess advised saving the permalink settings, which "
+"writes web.config there and never an .htaccess."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+".user.ini and .htpasswd were listed among files to delete. They are live "
+"configuration, and deleting the second one locks people out."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A server that hands out the source of a PHP file was reported as running it."
+" Those are different problems with different fixes."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Application passwords were reported as switched off on every site without "
+"HTTPS, which is where WordPress refuses them in the first place."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The advice to pick a display name different from the login name does "
+"nothing, because the author slug keeps the login name it was generated from."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"system.multicall has not amplified password guessing since WordPress 4.4, "
+"and the XML-RPC check now recognises the filter most security plugins use to"
+" switch the interface off."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"DISALLOW_FILE_MODS closes the file editor and stops background updates. "
+"Neither check knew that, so following this plugin's own advice left one "
+"finding standing and turned another into a false all clear."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The strict Content Security Policy from the published guidance was reported "
+"as leaving the hole it closes. Browsers that understand 'strict-dynamic' "
+"ignore the 'unsafe-inline' fallback beside it, and the check now does the "
+"same. A host wildcard is no longer mistaken for allowing scripts from "
+"anywhere."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The WooCommerce Store API was reported as a write route left unprotected. "
+"Registering a route as public is the spelling the handbook prescribes, so a "
+"route with no permission callback at all and one that is deliberately public"
+" are now told apart."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A site behind Cloudflare was reported as having a spoofable client address. "
+"The check now looks for a proxy that identifies itself and says the result "
+"is undetermined when it cannot tell, rather than warning."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"WordPress installed in its own directory was reported as an injected option "
+"value, at critical severity. Comparing the site and home addresses cannot "
+"tell that apart from a takeover, and in a real takeover both are changed "
+"together, so the comparison is gone."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The check for plugins removed from the directory could not fire. The API "
+"answers 404 for a closed listing, and the WordPress function turns that into"
+" an error before the \"closed\" flag is ever read, so the check reported all"
+" clear in exactly the case it was written for. It now asks the endpoint "
+"itself and tells a closed listing, a plugin that was never listed and an "
+"unreachable one apart."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Sites with two-factor protection were reported as having none. The user meta"
+" key stored for iThemes, Solid and Kadence Security is not the one those "
+"plugins write, and the one for Defender does not exist in it at all. Google "
+"Authenticator stores the string \"disabled\", which counted as a second "
+"factor because it is not empty, so the one case the check exists for went "
+"unnoticed."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A run stores what each check reported, so the report can be rebuilt without "
+"running everything again."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A single re-check never writes a point into the history, and the page says "
+"plainly that the grade then rests partly on older measurements. A partial "
+"pass is not a run."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"The report is built on the server now. It used to be assembled in the "
+"browser, which meant the overview could not exist before a run had finished,"
+" and the same markup would have had to be written twice."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard, and a reminder once "
+"the last full run is older than thirty days. The reminder can be switched "
+"off for good, per user."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A sixth area, transparency and disclosure, with one check in it: whether AI-"
+"generated content on the site is labelled. Article 50 of the EU AI Act has "
+"asked for a machine-readable label and a notice for AI chatbots since 2 "
+"August 2026. The disclosure plugins from the directory are recognised by "
+"their folder and by the settings they write, and the check only ever warns, "
+"because a site with no AI content has nothing to label."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Progress per category, so it is visible which part of the site has been "
+"dealt with and which has not."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A history of the last 24 runs. The very first one is kept for good, so the "
+"opening line can always name where the site started. An installation "
+"upgrading from an earlier version finds its two stored runs as the first two"
+" points."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"Every task carries a button that re-runs that one check and answers within "
+"seconds. A fix is confirmed while you are still at the screen, and the next "
+"task moves up, instead of waiting for the next full pass."
+msgstr ""
+
+#. Found in changelog list item.
+msgid ""
+"A checklist instead of a one-off verdict. From the second run onwards the "
+"page opens on an overview: the grade, where the site started and where it "
+"stands today, a bar for every run, the five things to work through, what is "
+"still open, and what has been resolved and when. The guided three-step "
+"walkthrough stays for the first run."
 msgstr ""
 
 #. Found in changelog list item.
