@@ -190,7 +190,7 @@ class CASCR_Store {
 	 * @return array
 	 */
 	public static function last_run() {
-		return self::normalize( get_option( self::OPTION_LAST, array() ) );
+		return self::apply_mutes( self::normalize( get_option( self::OPTION_LAST, array() ) ) );
 	}
 
 	/**
@@ -200,6 +200,34 @@ class CASCR_Store {
 	 */
 	public static function previous_run() {
 		return self::normalize( get_option( self::OPTION_PREVIOUS, array() ) );
+	}
+
+	/**
+	 * Re-reads the mute state of every test in a run.
+	 *
+	 * A run records what was muted at the moment it was measured. Muting is a
+	 * decision taken afterwards, usually while reading that very run, so the
+	 * recorded flag is out of date the moment it matters. Handing it back
+	 * verbatim left a finding that had just been sent away sitting on the list
+	 * until the next full pass, which read as the button doing nothing.
+	 *
+	 * The previous run is deliberately left alone. It is only ever used to say
+	 * what changed, and there the state at the time of measuring is the honest
+	 * answer.
+	 *
+	 * @param array $run A run that has been through normalize().
+	 * @return array
+	 */
+	private static function apply_mutes( $run ) {
+		if ( empty( $run['tests'] ) || ! is_array( $run['tests'] ) ) {
+			return $run;
+		}
+
+		foreach ( $run['tests'] as $id => $test ) {
+			$run['tests'][ $id ]['ignored'] = self::is_ignored( $id, $test );
+		}
+
+		return $run;
 	}
 
 	/**
@@ -334,7 +362,10 @@ class CASCR_Store {
 			'ignored_at' => time(),
 		);
 
-		return update_option( self::OPTION_IGNORED, $ignored, false );
+		$saved = update_option( self::OPTION_IGNORED, $ignored, false );
+		self::recount_badge();
+
+		return $saved;
 	}
 
 	/**
@@ -352,7 +383,29 @@ class CASCR_Store {
 
 		unset( $ignored[ $id ] );
 
-		return update_option( self::OPTION_IGNORED, $ignored, false );
+		$saved = update_option( self::OPTION_IGNORED, $ignored, false );
+		self::recount_badge();
+
+		return $saved;
+	}
+
+	/**
+	 * Recounts the menu bubble after muting changed what counts as a failure.
+	 *
+	 * Muting does not write a run, so without this the bubble kept claiming a
+	 * failure the site owner had consciously sent away. Reading the full run
+	 * here is fine, this happens once per click rather than on every page.
+	 */
+	private static function recount_badge() {
+		$run = self::last_run();
+
+		if ( empty( $run['tests'] ) ) {
+			return;
+		}
+
+		$summary = CASCR_Scoring::summarize( $run['tests'] );
+
+		self::remember_badge( $summary['counts'] );
 	}
 
 	/**

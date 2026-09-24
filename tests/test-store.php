@@ -320,6 +320,86 @@ class Test_CASCR_Store extends WP_UnitTestCase {
 		$this->assertFalse( CASCR_Store::is_ignored( 'unallowed_files', $result ) );
 	}
 
+	/**
+	 * Muting happens while reading a run, so the flag the run carries is out
+	 * of date the moment it matters. Without re-reading it, a finding sent
+	 * away stayed on the short list and the button looked broken.
+	 */
+	public function test_muting_after_a_run_takes_effect_without_a_new_run() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+
+		$before = CASCR_Store::last_run();
+		$this->assertFalse( $before['tests']['unallowed_files']['ignored'] );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding, CASCR_Store::IGNORE_UNTIL_CHANGED );
+
+		$after = CASCR_Store::last_run();
+
+		$this->assertTrue(
+			$after['tests']['unallowed_files']['ignored'],
+			'A finding muted after the run must read as muted straight away.'
+		);
+
+		$ids = wp_list_pluck( CASCR_Scoring::priorities( $after['tests'] ), 'id' );
+
+		$this->assertNotContains(
+			'unallowed_files',
+			$ids,
+			'A muted finding must leave the short list.'
+		);
+	}
+
+	public function test_unmuting_after_a_run_brings_the_finding_back() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding );
+		CASCR_Store::unignore( 'unallowed_files' );
+
+		$run = CASCR_Store::last_run();
+
+		$this->assertFalse( $run['tests']['unallowed_files']['ignored'] );
+	}
+
+	/**
+	 * Muting writes no run, so nothing else recounts the bubble.
+	 */
+	public function test_muting_updates_the_menu_bubble() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+
+		$this->assertSame( 1, CASCR_Store::badge() );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding );
+
+		$this->assertSame( 0, CASCR_Store::badge() );
+
+		CASCR_Store::unignore( 'unallowed_files' );
+
+		$this->assertSame( 1, CASCR_Store::badge() );
+	}
+
+	/**
+	 * The comparison answers what changed between two measurements, so there
+	 * the state at the time of measuring is the honest answer.
+	 */
+	public function test_the_previous_run_keeps_the_mute_state_it_was_stored_with() {
+		$finding = CASCR_Result::fail( 'one file', 9, array( 'a.php' ) );
+
+		$this->store( $this->results( array( 'unallowed_files' => $finding ) ) );
+		$this->store( $this->results() );
+
+		CASCR_Store::ignore( 'unallowed_files', $finding );
+
+		$previous = CASCR_Store::previous_run();
+
+		$this->assertFalse( $previous['tests']['unallowed_files']['ignored'] );
+	}
+
 	public function test_unknown_checks_cannot_be_muted() {
 		$this->assertFalse( CASCR_Store::ignore( 'not_a_real_check', CASCR_Result::pass( 'ok' ) ) );
 	}
