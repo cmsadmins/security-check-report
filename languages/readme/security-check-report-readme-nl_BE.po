@@ -12,14 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Domain: security-check-report\n"
 
-#. Short description.
-msgid ""
-"Read-only security audit for WordPress: 61 checks, an A to F grade, and a "
-"checklist that records what you have fixed."
-msgstr ""
-"Alleen-lezen beveiligingsaudit voor WordPress: 61 controles, een cijfer van "
-"A tot F en een checklist die bijhoudt wat je hebt opgelost."
-
 #. Plugin name.
 msgid "CMS ADMINS Security Check Report"
 msgstr "CMS ADMINS Security Check Report: beveiligingscontrole voor WordPress"
@@ -76,18 +68,6 @@ msgstr ""
 "hoeveel controles los opnieuw zijn uitgevoerd en wanneer de laatste "
 "volledige ronde was. Zo wordt het cijfer nooit voorgesteld als iets wat het "
 "niet is."
-
-#. Found in faq paragraph.
-msgid ""
-"That one check runs again, its result replaces the old one in the stored "
-"run, and the grade is recalculated from what is then stored. It takes a few "
-"seconds, so you can fix something and see the result without sitting through"
-" 61 checks."
-msgstr ""
-"Die ene controle wordt opnieuw uitgevoerd, het resultaat vervangt het oude "
-"in de opgeslagen scan en het cijfer wordt opnieuw berekend op basis van wat "
-"dan is opgeslagen. Dat duurt een paar seconden, dus je kunt iets oplossen en"
-" het resultaat zien zonder 61 controles af te wachten."
 
 #. Found in faq paragraph.
 msgid ""
@@ -260,30 +240,6 @@ msgstr ""
 " overzicht: het cijfer, een regel over waar de site bij de eerste scan stond"
 " en waar hij nu staat, één balk per vastgelegde scan, vijf taken om af te "
 "werken, wat nog openstaat en wat wanneer is opgelost."
-
-#. Found in description paragraph.
-msgid ""
-"The report opens with the five things worth doing first, not with a table of"
-" 61 rows. Every finding says what was found, why it matters and what to do "
-"about it."
-msgstr ""
-"Het rapport begint met de vijf dingen die je het eerst moet aanpakken, niet "
-"met een tabel van 61 rijen. Elke bevinding zegt wat er is gevonden, waarom "
-"het ertoe doet en wat je eraan kunt doen."
-
-#. Found in description paragraph.
-msgid ""
-"Security Check Report looks at 61 aspects of a WordPress installation and "
-"turns the findings into a graded report. It changes no setting, no file and "
-"no account. It stores its own results in the database, and it writes one "
-"temporary file in the uploads folder that is deleted again in the same "
-"request."
-msgstr ""
-"Security Check Report bekijkt 61 aspecten van een WordPress-installatie en "
-"maakt van de bevindingen een rapport met een cijfer. Het wijzigt geen "
-"instelling, geen bestand en geen account. Het bewaart zijn eigen resultaten "
-"in de database en schrijft één tijdelijk bestand in de uploads-map, dat in "
-"hetzelfde verzoek weer wordt verwijderd."
 
 #. Found in description list item.
 msgid ""
@@ -832,25 +788,6 @@ msgstr ""
 " opties, geïnjecteerde inhoud in de optietabel, back-ups, loginbeveiliging, "
 "wachtwoordbeleid."
 
-#. Found in description paragraph.
-msgid ""
-"<strong>Core, plugins and themes.</strong> WordPress version, PHP version "
-"against the published end-of-life dates, automatic core updates, core file "
-"integrity against the official checksums, files in the core directories that"
-" are not part of WordPress, pending plugin and theme updates, unused plugins"
-" and themes, plugins that look abandoned, plugins whose listing was closed, "
-"plugins whose author changed, must-use plugins and drop-ins, other WordPress"
-" installations sitting next to this one."
-msgstr ""
-"<strong>Core, plugins en thema's.</strong> WordPress-versie, PHP-versie "
-"afgezet tegen de gepubliceerde einddata van ondersteuning, automatische "
-"core-updates, integriteit van core-bestanden tegen de officiële checksums, "
-"bestanden in de core-mappen die niet bij WordPress horen, openstaande "
-"plugin- en thema-updates, ongebruikte plugins en thema's, plugins die "
-"verlaten lijken, plugins waarvan de vermelding is gesloten, plugins waarvan "
-"de auteur is veranderd, must-use plugins en drop-ins, andere WordPress-"
-"installaties naast deze."
-
 #. Found in description list item.
 msgid ""
 "<a href=\"https://github.com/cmsadmins/security-check-report\">Source code "
@@ -880,14 +817,6 @@ msgid ""
 msgstr ""
 "Geen automatische reparateur. Elke bevinding komt met instructies, en die "
 "voer jij uit."
-
-#. Found in description list item.
-msgid ""
-"Not a vulnerability database. It reports that a plugin is outdated, "
-"abandoned or delisted; it does not look up individual CVEs."
-msgstr ""
-"Geen kwetsbaarhedendatabase. Het meldt dat een plugin verouderd, verlaten of"
-" uit de directory verwijderd is; individuele CVE's zoekt het niet op."
 
 #. Found in description list item.
 msgid ""
@@ -1792,3 +1721,103 @@ msgstr ""
 #. Found in changelog list item.
 msgid "First release on the WordPress.org plugin directory"
 msgstr "Eerste release in de WordPress.org-plugindirectory"
+
+#. Short description.
+msgid ""
+"Read-only security audit for WordPress: 62 checks including PHP2Shell, an A "
+"to F grade, and a checklist that records what you have fixed."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The check never shows red, because a version number alone cannot prove that "
+"a server is vulnerable. After an update, restart PHP-FPM or the web server "
+"and run the check again. Fixed versions and the status per distribution: <a "
+"href=\"https://www.cms-admins.de/news/php2shell-kritische-php-"
+"sicherheitsluecken-cve-2026-109618/\">PHP2Shell: critical PHP flaws "
+"CVE-2026-109618/109619 (German)</a>."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"The PHP2Shell check reads the PHP version the site actually runs on and says"
+" one of two things:"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"PHP2Shell is the name for two critical flaws in the PHP core, rated CVSS "
+"9.2. A single request without a login can run code on the server, on PHP-"
+"FPM, mod_php, php-cgi, FrankenPHP and LiteSpeed alike. The PHP team "
+"published the fixes on 21 October 2026: you need PHP 8.5.12, 8.4.27, 8.3.36 "
+"or 8.2.35 or newer. PHP 8.1 and older get no official release, only "
+"backports from some distributions and vendors."
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<strong>Orange:</strong> the fix cannot be proven from the version number. "
+"Red Hat, Plesk, cPanel and self-built packages often keep the old number "
+"after a backport, so an orange result means \"update, or have your host "
+"confirm the backport\", not \"you have been hacked\"."
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"<strong>Green:</strong> the fix is proven. That is the case for PHP 8.5.12, "
+"8.4.27, 8.3.36 and 8.2.35 or newer within each branch, for PHP 8.6 or newer,"
+" and for the Ubuntu package revisions that carry the backport."
+msgstr ""
+
+#. Found in faq header.
+msgid "Is my server affected by PHP2Shell (CVE-2026-109618, CVE-2026-109619)?"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Not a vulnerability database. It reports that a plugin is outdated, "
+"abandoned or delisted; it does not look up individual CVEs. The one "
+"exception is PHP2Shell, because it hits every PHP site at once."
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
+"That one check runs again, its result replaces the old one in the stored "
+"run, and the grade is recalculated from what is then stored. It takes a few "
+"seconds, so you can fix something and see the result without sitting through"
+" 62 checks."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"The report opens with the five things worth doing first, not with a table of"
+" 62 rows. Every finding says what was found, why it matters and what to do "
+"about it."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"Security Check Report looks at 62 aspects of a WordPress installation and "
+"turns the findings into a graded report. It changes no setting, no file and "
+"no account. It stores its own results in the database, and it writes one "
+"temporary file in the uploads folder that is deleted again in the same "
+"request."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Core, plugins and themes.</strong> WordPress version, PHP version "
+"against the published end-of-life dates, whether PHP carries the fix for "
+"PHP2Shell (CVE-2026-109618 and CVE-2026-109619), automatic core updates, "
+"core file integrity against the official checksums, files in the core "
+"directories that are not part of WordPress, pending plugin and theme "
+"updates, unused plugins and themes, plugins that look abandoned, plugins "
+"whose listing was closed, plugins whose author changed, must-use plugins and"
+" drop-ins, other WordPress installations sitting next to this one."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* PHP2Shell check for CVE-2026-109618 and CVE-2026-109619: green when the running PHP is 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an Ubuntu package with the backport, orange when the fix cannot be read from the version number"
+msgstr ""
