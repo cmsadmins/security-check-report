@@ -1,7 +1,7 @@
 === CMS ADMINS Security Check Report ===
 Contributors: contexlabs
 Donate link: https://www.cms-admins.de/
-Tags: security, audit, hardening, scanner, site-health
+Tags: security, php2shell, audit, hardening, scanner
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -20,6 +20,17 @@ The report opens with the five things worth doing first, not with a table of 62 
 From the second run onwards the page no longer opens on the start button but on an overview: the grade, a line saying where the site stood on the first run and where it stands today, one bar per recorded run, five tasks to work through, what is still open, and what has been resolved and when.
 
 Each task has a button that runs that one check again and answers within seconds, so a fix is confirmed while you are still on the screen instead of at the next full pass. A single re-check writes no point into the history, and the page says as much, because a grade pieced together from several passes is not a grade measured in one.
+
+= PHP2Shell check (CVE-2026-109618, CVE-2026-109619) =
+
+PHP2Shell is the name for two critical flaws in the PHP core that let an attacker run code on the server with a single request and no login. The PHP team released the fixes on 21 October 2026, and attacks started the same day. No WordPress plugin can patch PHP itself, but this one tells you within seconds whether your server still needs the update.
+
+The PHP2Shell check reads the PHP version your site actually runs on and answers in plain words:
+
+* **Green:** PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an Ubuntu package that carries the backport. The fix is in place.
+* **Orange:** the fix cannot be read from the version number. Update PHP, or have your host confirm the backport. Red Hat, Plesk and cPanel often keep the old number after patching, so orange is a question to your host, not a verdict.
+
+Start a run on the Security Check screen or with `wp security-check run`. The check sends nothing anywhere and only looks at the running PHP.
 
 = What you get =
 
