@@ -54,6 +54,11 @@ return array(
 		__( 'Once a branch is retired, flaws found in it are never fixed. The site keeps working, which is exactly why this goes unnoticed for years.', 'security-check-report' ),
 		__( 'Ask the host to move the site to a supported branch. Test on a staging copy first: a PHP jump is the one upgrade that reliably breaks old plugins. A warning six months ahead of the date is there so the move can be planned rather than rushed.', 'security-check-report' )
 	),
+	'php2shell'                      => $cascr_doc(
+		__( 'Whether the running PHP contains the fix for PHP2Shell, the two critical flaws CVE-2026-109618 and CVE-2026-109619 in the PHP core. Only the version string is read: PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 or newer pass, as do the Ubuntu package revisions that carry the backport. Any other version is a warning, never a failure, because Red Hat, Plesk, cPanel and other vendors ship the fix under the old version number.', 'security-check-report' ),
+		__( 'Both flaws allow code execution on the server with a single request and no login, on PHP-FPM, mod_php, php-cgi, FrankenPHP and LiteSpeed alike. Attacks were observed on the day the fixes came out. No plugin and no setting inside WordPress closes the gap, only a PHP update does.', 'security-check-report' ),
+		__( 'Install the PHP update from your distribution or host and restart PHP-FPM or the web server, otherwise the old processes keep running. If the warning stays, ask the host to confirm in writing that the PHP2Shell backport is installed. PHP 8.1 and older get no official fix at all: move to PHP 8.2 or newer.', 'security-check-report' )
+	),
 	'automatic_core_updates'         => $cascr_doc(
 		__( 'Whether WordPress may install its own security releases, across all four switches: the WP_AUTO_UPDATE_CORE constant, AUTOMATIC_UPDATER_DISABLED, the ban on file modifications and the site setting for minor releases. A pre-release channel is reported as well, because it installs unfinished code on a production site.', 'security-check-report' ),
 		__( 'The window between a security release and the first attempts against it is measured in hours. Nobody updates that fast by hand.', 'security-check-report' ),

@@ -140,6 +140,42 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Green only where the version string proves the fix. A vendor build with
+	 * an old number may carry a backport, so it is a warning and never red.
+	 */
+	public function test_php2shell_is_green_only_where_the_fix_is_proven() {
+		$cases = array(
+			'8.2.35'                         => 'pass',
+			'8.3.36'                         => 'pass',
+			'8.4.27'                         => 'pass',
+			'8.5.12'                         => 'pass',
+			'8.6.0'                          => 'pass',
+			'9.0.0'                          => 'pass',
+			'8.4.99'                         => 'pass',
+			'8.2.35-1~deb12u1'               => 'pass',
+			'8.3.36-1+ubuntu22.04.1+deb.sury.org+1' => 'pass',
+			'8.3.6-0ubuntu0.24.04.13'        => 'pass',
+			'8.3.6-0ubuntu0.24.04.14'        => 'pass',
+			'7.4.3-4ubuntu2.29+esm5'         => 'pass',
+			'8.3.35'                         => '8.3.36',
+			'8.2.13'                         => '8.2.35',
+			'8.5.4-0ubuntu1.4'               => '8.5.12',
+			'8.3.6-0ubuntu0.24.04.12'        => '8.3.36',
+			'8.1.2-1ubuntu2.27'              => 'backport',
+			'7.4.3-4ubuntu2.29'              => 'backport',
+			'8.1.34'                         => 'backport',
+			'7.4.33'                         => 'backport',
+			'5.6.40'                         => 'backport',
+		);
+
+		foreach ( $cases as $version => $expected ) {
+			$this->assertSame( $expected, CASCR_Checks_Core::php2shell_status( $version ), "PHP {$version}" );
+		}
+
+		$this->assertNotSame( 'fail', CASCR_Checks_Core::php2shell()['status'] );
+	}
+
+	/**
 	 * The suggestion has to be a real second factor, otherwise the finding
 	 * points somewhere that does not solve it.
 	 */

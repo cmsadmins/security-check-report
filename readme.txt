@@ -5,17 +5,17 @@ Tags: security, audit, hardening, scanner, site-health
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.4.0
+Stable tag: 2.4.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Read-only security audit for WordPress: 61 checks, an A to F grade, and a checklist that records what you have fixed.
+Read-only security audit for WordPress: 62 checks including PHP2Shell, an A to F grade, and a checklist that records what you have fixed.
 
 == Description ==
 
-Security Check Report looks at 61 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
+Security Check Report looks at 62 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
 
-The report opens with the five things worth doing first, not with a table of 61 rows. Every finding says what was found, why it matters and what to do about it.
+The report opens with the five things worth doing first, not with a table of 62 rows. Every finding says what was found, why it matters and what to do about it.
 
 From the second run onwards the page no longer opens on the start button but on an overview: the grade, a line saying where the site stood on the first run and where it stands today, one bar per recorded run, five tasks to work through, what is still open, and what has been resolved and when.
 
@@ -37,7 +37,7 @@ Each task has a button that runs that one check again and answers within seconds
 
 = What it checks =
 
-**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other WordPress installations sitting next to this one.
+**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, whether PHP carries the fix for PHP2Shell (CVE-2026-109618 and CVE-2026-109619), automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other WordPress installations sitting next to this one.
 
 **Configuration.** Debug mode, debug log exposure, the theme and plugin editor, installing code from the dashboard, authentication keys and salts, table prefix, database user privileges, whether the scheduler actually runs, autoloaded options size, injected content in the options table, backups, login protection, password policy.
 
@@ -53,7 +53,7 @@ Each task has a button that runs that one check again and answers within seconds
 
 * Not a firewall. It blocks nothing and intercepts no requests.
 * Not a malware scanner. It compares core files against the official checksums and looks for injected content in the options table, but it does not hunt for signatures in plugin or theme code, and it removes nothing.
-* Not a vulnerability database. It reports that a plugin is outdated, abandoned or delisted; it does not look up individual CVEs.
+* Not a vulnerability database. It reports that a plugin is outdated, abandoned or delisted; it does not look up individual CVEs. The one exception is PHP2Shell, because it hits every PHP site at once.
 * Not an auto-fixer. Every finding comes with instructions, and you carry them out.
 * Not a monitor. Nothing runs in the background, nothing is scheduled, no mail is sent. A check runs when you start it.
 
@@ -78,6 +78,17 @@ The plugin talks to `api.wordpress.org` and to your own site. Nothing else, and 
 The plugin needs PHP 7.4 or newer and WordPress 7.0 or newer. Running the checks requires the `manage_options` capability, so on a normal site that means an administrator.
 
 == Frequently Asked Questions ==
+
+= Is my server affected by PHP2Shell (CVE-2026-109618, CVE-2026-109619)? =
+
+PHP2Shell is the name for two critical flaws in the PHP core, rated CVSS 9.2. A single request without a login can run code on the server, on PHP-FPM, mod_php, php-cgi, FrankenPHP and LiteSpeed alike. The PHP team published the fixes on 21 October 2026: you need PHP 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or newer. PHP 8.1 and older get no official release, only backports from some distributions and vendors.
+
+The PHP2Shell check reads the PHP version the site actually runs on and says one of two things:
+
+* **Green:** the fix is proven. That is the case for PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 or newer within each branch, for PHP 8.6 or newer, and for the Ubuntu package revisions that carry the backport.
+* **Orange:** the fix cannot be proven from the version number. Red Hat, Plesk, cPanel and self-built packages often keep the old number after a backport, so an orange result means "update, or have your host confirm the backport", not "you have been hacked".
+
+The check never shows red, because a version number alone cannot prove that a server is vulnerable. After an update, restart PHP-FPM or the web server and run the check again. Fixed versions and the status per distribution: [PHP2Shell: critical PHP flaws CVE-2026-109618/109619 (German)](https://www.cms-admins.de/news/php2shell-kritische-php-sicherheitsluecken-cve-2026-109618/).
 
 = Does the plugin change anything on my site? =
 
@@ -154,7 +165,7 @@ Monthly is a reasonable baseline, plus a run after any larger change: a migratio
 
 = What happens when I re-check a single task? =
 
-That one check runs again, its result replaces the old one in the stored run, and the grade is recalculated from what is then stored. It takes a few seconds, so you can fix something and see the result without sitting through 61 checks.
+That one check runs again, its result replaces the old one in the stored run, and the grade is recalculated from what is then stored. It takes a few seconds, so you can fix something and see the result without sitting through 62 checks.
 
 The history is left alone, because one check is not a run. As long as the stored run carries results from more than one pass, the page says how many checks were re-checked on their own and when the last full pass was, so the grade is never presented as something it is not.
 
@@ -209,6 +220,11 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 == Changelog ==
 
 Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.4.1 =
+
+**Added**
+* PHP2Shell check for CVE-2026-109618 and CVE-2026-109619: green when the running PHP is 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an Ubuntu package with the backport, orange when the fix cannot be read from the version number
 
 = 2.4.0 =
 
@@ -342,6 +358,9 @@ Every check was read against the sources it cites: php.net, the WordPress handbo
 * Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
+
+= 2.4.1 =
+Adds a check for PHP2Shell (CVE-2026-109618, CVE-2026-109619) that tells you whether the PHP on your server carries the fix.
 
 = 2.4.0 =
 The report becomes a checklist you can come back to, and a fact check over all sixty-one checks removed several findings that fired on correctly configured sites. Worth updating for either reason.

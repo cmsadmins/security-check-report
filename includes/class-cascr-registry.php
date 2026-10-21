@@ -270,6 +270,12 @@ class CASCR_Registry {
 				'severity' => self::SEVERITY_HIGH,
 				'callback' => array( $c, 'php_version' ),
 			),
+			'php2shell'                => array(
+				'label'    => __( 'PHP2Shell (CVE-2026-109618, CVE-2026-109619)', 'security-check-report' ),
+				'category' => self::CATEGORY_CORE,
+				'severity' => self::SEVERITY_CRITICAL,
+				'callback' => array( $c, 'php2shell' ),
+			),
 			'automatic_core_updates'   => array(
 				'label'    => __( 'Automatic core updates', 'security-check-report' ),
 				'category' => self::CATEGORY_CORE,

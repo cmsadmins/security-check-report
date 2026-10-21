@@ -61,6 +61,39 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	);
 
 	/**
+	 * First upstream release per branch that fixes PHP2Shell
+	 * (CVE-2026-109618, CVE-2026-109619), published 2026-10-21.
+	 *
+	 * @var array<string, int>
+	 */
+	private static $php2shell_fixed = array(
+		'8.2' => 35,
+		'8.3' => 36,
+		'8.4' => 27,
+		'8.5' => 12,
+	);
+
+	/**
+	 * Ubuntu package revisions that carry the PHP2Shell backport (USN-8948-1/-2).
+	 *
+	 * Ubuntu keeps the old upstream number and puts its package revision into
+	 * PHP_VERSION, so these are the only backports the version string proves.
+	 * Every other vendor build with an old number stays a warning.
+	 *
+	 * @var string[]
+	 */
+	private static $php2shell_ubuntu = array(
+		'8.5.9-0ubuntu2.1',
+		'8.5.4-0ubuntu1.5',
+		'8.3.6-0ubuntu0.24.04.13',
+		'8.1.2-1ubuntu2.28',
+		'7.4.3-4ubuntu2.29+esm5',
+		'7.2.24-0ubuntu0.18.04.17+esm14',
+		'7.0.33-0ubuntu0.16.04.16+esm22',
+		'5.5.9+dfsg-1ubuntu4.29+esm18',
+	);
+
+	/**
 	 * Memoised core checksums.
 	 *
 	 * @var array|false|null
@@ -188,6 +221,99 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 				$version
 			)
 		);
+	}
+
+	/**
+	 * Does the running PHP carry the PHP2Shell fix?
+	 *
+	 * Only the version string is read. A green result means the fix is proven,
+	 * anything else is a warning and never a failure: Red Hat, Plesk, cPanel and
+	 * self-built backports keep the old number, so an old number is not proof
+	 * of a vulnerable server.
+	 *
+	 * @return array
+	 */
+	public static function php2shell() {
+		$version = PHP_VERSION;
+		$status  = self::php2shell_status( $version );
+		$items   = array(
+			/* translators: %s: PHP version string as reported by the server. */
+			sprintf( __( 'PHP version: %s', 'security-check-report' ), $version ),
+			/* translators: %s: PHP server API, e.g. fpm-fcgi or apache2handler. */
+			sprintf( __( 'Server API: %s', 'security-check-report' ), PHP_SAPI ),
+		);
+
+		if ( 'pass' === $status ) {
+			return CASCR_Result::pass(
+				sprintf(
+					/* translators: %s: PHP version number. */
+					__( 'PHP %s contains the fix for PHP2Shell.', 'security-check-report' ),
+					$version
+				),
+				$items
+			);
+		}
+
+		$fix  = __( 'Install the PHP update from your distribution or host, then restart PHP-FPM or the web server and run this check again. Sites on Apache with mod_php are at the highest risk.', 'security-check-report' );
+		$link = array(
+			'url'   => 'https://www.cms-admins.de/news/php2shell-kritische-php-sicherheitsluecken-cve-2026-109618/',
+			'label' => __( 'PHP2Shell: fixed versions and status per distribution (German)', 'security-check-report' ),
+		);
+
+		if ( 'backport' === $status ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %s: PHP version number. */
+					__( 'There is no official PHP2Shell fix for PHP %s, only backports from some distributions and vendors. Whether this server has one cannot be read from the version number.', 'security-check-report' ),
+					$version
+				),
+				6,
+				$items,
+				__( 'Ask your host whether the PHP2Shell backport is installed, or move the site to PHP 8.2 or newer.', 'security-check-report' ) . ' ' . $fix,
+				$link
+			);
+		}
+
+		return CASCR_Result::warn(
+			sprintf(
+				/* translators: 1: PHP version number, 2: first fixed version of that branch. */
+				__( 'PHP %1$s does not show the PHP2Shell fix. Update to %2$s or newer, unless your host confirms a backport.', 'security-check-report' ),
+				$version,
+				$status
+			),
+			6,
+			$items,
+			$fix,
+			$link
+		);
+	}
+
+	/**
+	 * Classifies a PHP version string for PHP2Shell.
+	 *
+	 * @param string $version Value of PHP_VERSION.
+	 * @return string 'pass', 'backport' for branches without an official fix,
+	 *                or the first fixed version the branch needs.
+	 */
+	public static function php2shell_status( $version ) {
+		foreach ( self::$php2shell_ubuntu as $fixed ) {
+			preg_match( '/^(.*?)(\d+)$/', $fixed, $f );
+			if ( 0 === strpos( $version, $f[1] ) && preg_match( '/^\d+/', substr( $version, strlen( $f[1] ) ), $n ) && (int) $n[0] >= (int) $f[2] ) {
+				return 'pass';
+			}
+		}
+
+		if ( ! preg_match( '/^(\d+)\.(\d+)\.(\d+)/', $version, $m ) ) {
+			return 'backport';
+		}
+
+		$branch = $m[1] . '.' . $m[2];
+
+		if ( isset( self::$php2shell_fixed[ $branch ] ) ) {
+			return (int) $m[3] >= self::$php2shell_fixed[ $branch ] ? 'pass' : $branch . '.' . self::$php2shell_fixed[ $branch ];
+		}
+
+		return version_compare( $branch, '8.5', '>' ) ? 'pass' : 'backport';
 	}
 
 	/**

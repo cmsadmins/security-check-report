@@ -1,0 +1,1792 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Security Check Report readme 0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/security-check-report\n"
+"Last-Translator: Patrick Schlesinger <ps@cms-admins.de>\n"
+"Language-Team: es_ES\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Domain: security-check-report\n"
+
+#. Short description.
+msgid ""
+"Read-only security audit for WordPress: 61 checks, an A to F grade, and a "
+"checklist that records what you have fixed."
+msgstr ""
+"Auditoría de seguridad de solo lectura para WordPress: 61 comprobaciones, "
+"nota de la A a la F y una lista de tareas con lo que ya has corregido."
+
+#. Plugin name.
+msgid "CMS ADMINS Security Check Report"
+msgstr ""
+"CMS ADMINS Security Check Report: comprobación de seguridad para WordPress"
+
+#. Found in faq paragraph.
+msgid ""
+"The history, the checklist and the reminder belong to a single site as well."
+" Every site in the network keeps its own."
+msgstr ""
+"El historial, la lista de tareas y el recordatorio también pertenecen a un "
+"único sitio. Cada sitio de la red tiene los suyos."
+
+#. Found in faq paragraph.
+msgid ""
+"A command line run reports and stores nothing. The history, the checklist "
+"and the count on the menu entry follow the runs you start on the screen."
+msgstr ""
+"Un análisis desde la línea de comandos muestra el resultado, pero no guarda "
+"nada. El historial, la lista de tareas y el contador del menú se basan en "
+"los análisis que inicias en pantalla."
+
+#. Found in faq paragraph.
+msgid ""
+"If you already used an earlier version, the two runs it had stored become "
+"the first two points, so the display is not empty after the update."
+msgstr ""
+"Si ya usabas una versión anterior, los dos análisis que tenía guardados "
+"pasan a ser los dos primeros puntos, así que la vista no aparece vacía tras "
+"la actualización."
+
+#. Found in faq paragraph.
+msgid ""
+"The last 24 runs. When a 25th arrives, the second oldest point is dropped "
+"instead of the oldest, so the first run stays and the line about where the "
+"site started remains true. One point holds the date, the grade, the risk "
+"score and one character per check, which comes to a few kilobytes for the "
+"whole history."
+msgstr ""
+"Los últimos 24 análisis. Cuando llega el 25.º, se elimina el segundo punto "
+"más antiguo en lugar del más antiguo, de modo que el primer análisis se "
+"conserva y la frase sobre el punto de partida del sitio sigue siendo cierta."
+" Cada punto guarda la fecha, la nota, la puntuación de riesgo y un carácter "
+"por comprobación, lo que supone unos pocos kilobytes para todo el historial."
+
+#. Found in faq paragraph.
+msgid ""
+"The history is left alone, because one check is not a run. As long as the "
+"stored run carries results from more than one pass, the page says how many "
+"checks were re-checked on their own and when the last full pass was, so the "
+"grade is never presented as something it is not."
+msgstr ""
+"El historial no se toca, porque una sola comprobación no es un análisis. "
+"Mientras el análisis guardado contenga resultados de más de una pasada, la "
+"página indica cuántas comprobaciones se repitieron por separado y cuándo fue"
+" la última pasada completa, para que la nota nunca se presente como algo que"
+" no es."
+
+#. Found in faq paragraph.
+msgid ""
+"That one check runs again, its result replaces the old one in the stored "
+"run, and the grade is recalculated from what is then stored. It takes a few "
+"seconds, so you can fix something and see the result without sitting through"
+" 61 checks."
+msgstr ""
+"Esa comprobación se vuelve a ejecutar, su resultado sustituye al anterior en"
+" el análisis guardado y la nota se recalcula con lo que queda guardado. "
+"Tarda unos segundos, así que puedes corregir algo y ver el resultado sin "
+"esperar a las 61 comprobaciones."
+
+#. Found in faq paragraph.
+msgid ""
+"Monthly is a reasonable baseline, plus a run after any larger change: a "
+"migration, a new plugin, a server move. Once the last full run is more than "
+"30 days old, a notice in the dashboard says so. You can switch that notice "
+"off for good, and it is the only reminder the plugin sends anywhere."
+msgstr ""
+"Una vez al mes es una buena referencia, más un análisis tras cualquier "
+"cambio importante: una migración, un plugin nuevo, un cambio de servidor. "
+"Cuando el último análisis completo tiene más de 30 días, un aviso en el "
+"escritorio te lo indica. Puedes desactivar ese aviso para siempre, y es el "
+"único recordatorio que envía el plugin."
+
+#. Found in faq paragraph.
+msgid ""
+"Two entries go into user meta. One is a login timestamp per account, because"
+" WordPress keeps no login history of its own and the administrator check "
+"would otherwise have nothing to say about dormant accounts. The other "
+"records that somebody switched off the reminder notice, which is a decision "
+"per person rather than per site. Both are deleted on uninstall."
+msgstr ""
+"Se guardan dos entradas en los metadatos de usuario. Una es la fecha del "
+"último acceso de cada cuenta, porque WordPress no guarda ningún historial de"
+" accesos y, sin ella, la comprobación de administradores no podría decir "
+"nada sobre cuentas inactivas. La otra registra que alguien ha desactivado el"
+" aviso de recordatorio, que es una decisión de cada persona y no del sitio. "
+"Ambas se eliminan al desinstalar."
+
+#. Found in faq paragraph.
+msgid ""
+"One of those requests to your own site does not use the WordPress HTTP API. "
+"The certificate check opens a plain TLS connection to your own host name on "
+"port 443 to read the expiry date, because the HTTP API does not hand the "
+"certificate back. The target is still your own site and nothing leaves it, "
+"but <code>WP_HTTP_BLOCK_EXTERNAL</code> and the "
+"<code>pre_http_request</code> and <code>http_request_args</code> filters do "
+"not apply to that one connection."
+msgstr ""
+"Una de esas peticiones a tu propio sitio no usa la API HTTP de WordPress. La"
+" comprobación del certificado abre una conexión TLS directa a tu propio "
+"nombre de host en el puerto 443 para leer la fecha de caducidad, porque la "
+"API HTTP no devuelve el certificado. El destino sigue siendo tu propio sitio"
+" y no sale nada de él, pero <code>WP_HTTP_BLOCK_EXTERNAL</code> y los "
+"filtros <code>pre_http_request</code> y <code>http_request_args</code> no se"
+" aplican a esa conexión."
+
+#. Found in faq paragraph.
+msgid ""
+"Only to <code>api.wordpress.org</code>, to the same endpoints WordPress "
+"itself uses for its update checks:"
+msgstr ""
+"Solo a <code>api.wordpress.org</code>, a los mismos endpoints que usa el "
+"propio WordPress para buscar actualizaciones:"
+
+#. Found in faq list item.
+msgid ""
+"the moment you agreed to the run, so you are not asked again on every visit"
+msgstr ""
+"el momento en que aceptaste el análisis, para no preguntarte de nuevo en "
+"cada visita"
+
+#. Found in faq list item.
+msgid ""
+"the number of failing checks from the last run, so the count on the menu "
+"entry does not have to load a whole run on every admin page"
+msgstr ""
+"el número de comprobaciones no superadas del último análisis, para que el "
+"contador del menú no tenga que cargar un análisis completo en cada página de"
+" administración"
+
+#. Found in faq list item.
+msgid ""
+"the history of the last 24 runs, each one holding the date, the grade, the "
+"risk score and a single character per check, which is what the progress "
+"display reads"
+msgstr ""
+"el historial de los últimos 24 análisis, cada uno con la fecha, la nota, la "
+"puntuación de riesgo y un carácter por comprobación, que es lo que lee la "
+"vista de progreso"
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/info/1.2/</code> to see whether a "
+"plugin listing is still open and when it was last released. This is the one "
+"endpoint the plugin requests directly rather than through "
+"<code>plugins_api()</code>, because a closed listing is served as an HTTP "
+"404 that <code>plugins_api()</code> turns into an error, which loses the "
+"very flag the check needs. The answer is cached for twelve hours."
+msgstr ""
+"<code>https://api.wordpress.org/plugins/info/1.2/</code> para saber si la "
+"ficha de un plugin sigue abierta y cuándo se publicó su última versión. Es "
+"el único endpoint al que el plugin llama directamente y no a través de "
+"<code>plugins_api()</code>, porque una ficha cerrada se sirve como HTTP 404 "
+"y <code>plugins_api()</code> lo convierte en un error, con lo que se pierde "
+"justo el dato que necesita la comprobación. La respuesta se guarda en caché "
+"durante doce horas."
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/plugins/update-check/1.1/</code> and "
+"<code>https://api.wordpress.org/themes/update-check/1.1/</code> for pending "
+"updates, likewise read from what WordPress already holds"
+msgstr ""
+"<code>https://api.wordpress.org/plugins/update-check/1.1/</code> y "
+"<code>https://api.wordpress.org/themes/update-check/1.1/</code> para las "
+"actualizaciones pendientes, también leídas de lo que WordPress ya tiene"
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/core/version-check/1.7/</code>, read from "
+"the update information WordPress already holds, to learn the current "
+"WordPress version. The plugin never asks this endpoint itself."
+msgstr ""
+"<code>https://api.wordpress.org/core/version-check/1.7/</code>, leído de la "
+"información de actualizaciones que WordPress ya tiene, para conocer la "
+"versión actual de WordPress. El plugin nunca consulta este endpoint por su "
+"cuenta."
+
+#. Found in faq header.
+msgid "How much history is kept?"
+msgstr "¿Cuánto historial se guarda?"
+
+#. Found in faq header.
+msgid "What happens when I re-check a single task?"
+msgstr "¿Qué pasa si vuelvo a comprobar una sola tarea?"
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Transparency and disclosure.</strong> Whether AI-generated content "
+"carries a machine-readable label and whether visitors are told when they are"
+" talking to an AI system, which Article 50 of the EU AI Act has asked for "
+"since 2 August 2026. The disclosure plugins in the directory are recognised "
+"by their folder and by the settings they write, so a plugin that was "
+"installed and never set up is not mistaken for an answer. A site that "
+"publishes no AI output has nothing to label, so this one only ever warns and"
+" barely moves the grade."
+msgstr ""
+"<strong>Transparencia y divulgación.</strong> Si el contenido generado por "
+"IA lleva una etiqueta legible por máquinas y si se informa a los visitantes "
+"cuando hablan con un sistema de IA, algo que exige el artículo 50 del "
+"Reglamento de IA de la UE desde el 2 de agosto de 2026. Los plugins de "
+"divulgación del directorio se reconocen por su carpeta y por los ajustes que"
+" guardan, así que un plugin instalado pero nunca configurado no se toma por "
+"una respuesta. Un sitio que no publica contenido de IA no tiene nada que "
+"etiquetar, por eso esta comprobación solo advierte y apenas mueve la nota."
+
+#. Found in description paragraph.
+msgid ""
+"Each task has a button that runs that one check again and answers within "
+"seconds, so a fix is confirmed while you are still on the screen instead of "
+"at the next full pass. A single re-check writes no point into the history, "
+"and the page says as much, because a grade pieced together from several "
+"passes is not a grade measured in one."
+msgstr ""
+"Cada tarea tiene un botón que vuelve a ejecutar esa comprobación y responde "
+"en segundos, así que una corrección se confirma mientras sigues en la "
+"pantalla y no en la siguiente pasada completa. Una comprobación repetida por"
+" separado no añade ningún punto al historial, y la página lo dice, porque "
+"una nota compuesta a partir de varias pasadas no es una nota medida de una "
+"vez."
+
+#. Found in description paragraph.
+msgid ""
+"From the second run onwards the page no longer opens on the start button but"
+" on an overview: the grade, a line saying where the site stood on the first "
+"run and where it stands today, one bar per recorded run, five tasks to work "
+"through, what is still open, and what has been resolved and when."
+msgstr ""
+"A partir del segundo análisis, la página ya no se abre con el botón de "
+"inicio, sino con un resumen: la nota, una frase que indica dónde estaba el "
+"sitio en el primer análisis y dónde está hoy, una barra por cada análisis "
+"registrado, cinco tareas pendientes, lo que sigue abierto y lo que se ha "
+"resuelto y cuándo."
+
+#. Found in description paragraph.
+msgid ""
+"The report opens with the five things worth doing first, not with a table of"
+" 61 rows. Every finding says what was found, why it matters and what to do "
+"about it."
+msgstr ""
+"El informe empieza con las cinco cosas que conviene hacer primero, no con "
+"una tabla de 61 filas. Cada hallazgo explica qué se ha encontrado, por qué "
+"importa y qué hacer al respecto."
+
+#. Found in description paragraph.
+msgid ""
+"Security Check Report looks at 61 aspects of a WordPress installation and "
+"turns the findings into a graded report. It changes no setting, no file and "
+"no account. It stores its own results in the database, and it writes one "
+"temporary file in the uploads folder that is deleted again in the same "
+"request."
+msgstr ""
+"Security Check Report revisa 61 aspectos de una instalación de WordPress y "
+"convierte los hallazgos en un informe con nota. No cambia ningún ajuste, "
+"archivo ni cuenta. Guarda sus propios resultados en la base de datos y "
+"escribe un archivo temporal en la carpeta uploads que se elimina en la misma"
+" petición."
+
+#. Found in description list item.
+msgid ""
+"Not a monitor. Nothing runs in the background, nothing is scheduled, no mail"
+" is sent. A check runs when you start it."
+msgstr ""
+"No es un monitor. No se ejecuta nada en segundo plano, no hay nada "
+"programado y no se envían correos. Una comprobación se ejecuta cuando tú la "
+"inicias."
+
+#. Found in description list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard home and a reminder "
+"once the last run is more than 30 days old"
+msgstr ""
+"Un contador en el menú, un widget en el escritorio y un recordatorio cuando "
+"el último análisis tiene más de 30 días"
+
+#. Found in description list item.
+msgid ""
+"A history of the last 24 runs, with the very first one kept for good, so the"
+" starting point stays visible"
+msgstr ""
+"Un historial de los últimos 24 análisis que conserva siempre el primero, "
+"para que el punto de partida siga a la vista"
+
+#. Found in description list item.
+msgid ""
+"A button per task that re-runs that single check, so you see the result of a"
+" fix in seconds"
+msgstr ""
+"Un botón por tarea que vuelve a ejecutar esa comprobación, para ver en "
+"segundos el resultado de una corrección"
+
+#. Found in description list item.
+msgid ""
+"A checklist of five tasks at a time, derived from urgency and score rather "
+"than from guesswork, with the next one moving up when you finish one"
+msgstr ""
+"Una lista de cinco tareas a la vez, basada en la urgencia y la puntuación y "
+"no en suposiciones, en la que sube la siguiente cuando terminas una"
+
+#. Screenshot description.
+msgid ""
+"The overview from the second run onwards: grade, the way from the first run "
+"to today and the next five tasks"
+msgstr ""
+"El resumen a partir del segundo análisis: la nota, el camino desde el primer"
+" análisis hasta hoy y las cinco tareas siguientes"
+
+#. Found in faq paragraph.
+msgid ""
+"If a check reports something you believe is wrong, a GitHub issue with the "
+"finding text is the fastest way to get it fixed. False positives are treated"
+" as bugs."
+msgstr ""
+"Si una comprobación muestra algo que crees que es incorrecto, abrir una "
+"incidencia en GitHub con el texto del hallazgo es la forma más rápida de que"
+" se corrija. Los falsos positivos se tratan como errores."
+
+#. Found in faq paragraph.
+msgid ""
+"It is built and maintained by <a href=\"https://www.cms-admins.de/\">CMS "
+"ADMINS</a>, a Munich agency that has been looking after WordPress and Drupal"
+" installations since 2012."
+msgstr ""
+"Lo desarrolla y mantiene <a href=\"https://www.cms-admins.de/\">CMS "
+"ADMINS</a>, una agencia de Múnich que cuida instalaciones de WordPress y "
+"Drupal desde 2012."
+
+#. Found in faq paragraph.
+msgid ""
+"WordPress 7.0 and newer, PHP 7.4 through 8.5. Every release is tested "
+"against WordPress 7.0 and the current version, on single site and on "
+"multisite, and linted on all seven PHP branches in between."
+msgstr ""
+"WordPress 7.0 o posterior, PHP 7.4 a 8.5. Cada versión se prueba con "
+"WordPress 7.0 y con la versión actual, en sitio único y en multisitio, y "
+"pasa el lint en las siete ramas de PHP intermedias."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes. <code>cascr_registry</code> filters the list of checks, so you can add,"
+" remove or reweight one. <code>cascr_test_result</code> filters an "
+"individual result before it is scored. A check is a callable that returns "
+"one of the four outcomes built by <code>CASCR_Result</code>."
+msgstr ""
+"Sí. <code>cascr_registry</code> filtra la lista de comprobaciones, así que "
+"puedes añadir, quitar o cambiar el peso de cualquiera. "
+"<code>cascr_test_result</code> filtra un resultado individual antes de "
+"puntuarlo. Una comprobación es un callable que devuelve uno de los cuatro "
+"resultados construidos por <code>CASCR_Result</code>."
+
+#. Found in faq paragraph.
+msgid ""
+"The checks that look at files, permissions and server configuration "
+"necessarily report the same thing on every site in the network, because they"
+" describe one installation. There is no network-wide overview screen."
+msgstr ""
+"Las comprobaciones de archivos, permisos y configuración del servidor dan "
+"forzosamente el mismo resultado en todos los sitios de la red, porque "
+"describen una única instalación. No hay una pantalla de resumen para toda la"
+" red."
+
+#. Found in faq paragraph.
+msgid ""
+"Several things work differently on a network, and the checks account for it."
+" Registration is a network setting, so the sign-up check reads that instead "
+"of the per-site option. Network administrators hold every capability "
+"regardless of their role on the current site, so the account, password and "
+"two-factor checks include them. The table prefix check looks at the base "
+"prefix rather than the per-site one."
+msgstr ""
+"En una red hay varias cosas que funcionan de otra manera, y las "
+"comprobaciones lo tienen en cuenta. El registro es un ajuste de la red, así "
+"que la comprobación de registro lee ese ajuste y no la opción de cada sitio."
+" Los administradores de la red tienen todas las capacidades sea cual sea su "
+"perfil en el sitio actual, así que las comprobaciones de cuentas, "
+"contraseñas y doble factor los incluyen. La comprobación del prefijo de "
+"tablas revisa el prefijo base y no el de cada sitio."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes. It runs per site: anyone with <code>manage_options</code> on a site can"
+" run it there and sees that site's accounts, plugins, themes and options."
+msgstr ""
+"Sí. Funciona por sitio: cualquiera con <code>manage_options</code> en un "
+"sitio puede ejecutarlo allí y ve las cuentas, plugins, temas y opciones de "
+"ese sitio."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, and it produces the same grade as the screen because the scoring "
+"happens in PHP either way."
+msgstr ""
+"Sí, y da la misma nota que la pantalla, porque la puntuación se calcula en "
+"PHP en ambos casos."
+
+#. Found in faq paragraph.
+msgid ""
+"That is the difference between accepting a known state and going blind to "
+"it, and it is why muting is offered instead of a permanent dismissal by "
+"default."
+msgstr ""
+"Esa es la diferencia entre aceptar un estado conocido y dejar de verlo, y "
+"por eso se ofrece silenciar en lugar de descartar para siempre."
+
+#. Found in faq paragraph.
+msgid ""
+"Mute it. The plugin hides the finding and stores a fingerprint of what it "
+"was reporting. As soon as the content changes, for instance one more "
+"affected file, it comes back on its own."
+msgstr ""
+"Siléncialo. El plugin oculta el hallazgo y guarda una huella de lo que "
+"indicaba. En cuanto el contenido cambia, por ejemplo con un archivo afectado"
+" más, vuelve a aparecer solo."
+
+#. Found in faq paragraph.
+msgid ""
+"Because it could not get an answer, usually a blocked outbound request or a "
+"file it is not allowed to read. That is deliberately not treated as a "
+"finding. An unreachable endpoint says nothing about your site, and reporting"
+" it as a problem would teach you to ignore the report."
+msgstr ""
+"Porque no pudo obtener respuesta, normalmente por una petición saliente "
+"bloqueada o un archivo que no puede leer. A propósito, eso no se trata como "
+"un hallazgo. Un endpoint inaccesible no dice nada de tu sitio, y presentarlo"
+" como un problema te enseñaría a ignorar el informe."
+
+#. Found in faq paragraph.
+msgid ""
+"The score is the weighted risk as a percentage of the worst possible "
+"outcome. Checks that could not be determined are left out of both sides of "
+"that calculation, so a blocked outbound request never moves the grade in "
+"either direction. A failing critical check pulls the result down to at least"
+" a D, which is what stops one serious problem from being averaged away. A "
+"few checks are informational and carry no weight at all."
+msgstr ""
+"La puntuación es el riesgo ponderado como porcentaje del peor resultado "
+"posible. Las comprobaciones que no se pudieron determinar quedan fuera de "
+"ambos lados del cálculo, así que una petición saliente bloqueada nunca mueve"
+" la nota en ningún sentido. Una comprobación crítica no superada baja el "
+"resultado al menos a una D, lo que impide que un problema grave se diluya en"
+" la media. Algunas comprobaciones son informativas y no tienen ningún peso."
+
+#. Found in faq paragraph.
+msgid ""
+"Every check carries an urgency, and the urgency sets how much a finding "
+"weighs:"
+msgstr ""
+"Cada comprobación tiene una urgencia, y la urgencia determina cuánto pesa un"
+" hallazgo:"
+
+#. Found in faq paragraph.
+msgid ""
+"It will notice several things that point at a compromise: core files that "
+"differ from the official release, executable files in the uploads folder, "
+"must-use plugins or drop-ins that appeared out of nowhere, roles that gained"
+" administrator capabilities, injected scripts in the options table. If any "
+"of those turn up, treat it as a starting point for an investigation, not as "
+"a verdict."
+msgstr ""
+"Detecta varias señales que apuntan a una intrusión: archivos del núcleo "
+"distintos de la versión oficial, archivos ejecutables en la carpeta uploads,"
+" plugins imprescindibles o drop-ins aparecidos de la nada, perfiles que han "
+"ganado capacidades de administrador o scripts inyectados en la tabla de "
+"opciones. Si aparece alguno, tómalo como punto de partida para investigar, "
+"no como un veredicto."
+
+#. Found in faq paragraph.
+msgid ""
+"Neither. It finds configuration weaknesses and exposure, which is what most "
+"WordPress sites are actually taken over through. It does not block traffic "
+"and it does not clean an infected site."
+msgstr ""
+"Ninguna de las dos cosas. Encuentra debilidades de configuración y "
+"exposición, que es por donde se toman la mayoría de sitios WordPress. No "
+"bloquea tráfico ni limpia un sitio infectado."
+
+#. Found in faq paragraph.
+msgid ""
+"A handful of options in your database, all removed when you delete the "
+"plugin:"
+msgstr ""
+"Unas pocas opciones en tu base de datos, que se eliminan todas al borrar el "
+"plugin:"
+
+#. Found in faq paragraph.
+msgid ""
+"The remaining requests go to your own site, because several checks can only "
+"be answered from the outside: whether a file is served, whether a header is "
+"sent, whether a directory is listed. There is no telemetry and no reporting "
+"back to the plugin author."
+msgstr ""
+"El resto de peticiones van a tu propio sitio, porque varias comprobaciones "
+"solo se pueden responder desde fuera: si se sirve un archivo, si se envía "
+"una cabecera, si se lista un directorio. No hay telemetría ni se envía nada "
+"al autor del plugin."
+
+#. Found in faq paragraph.
+msgid ""
+"WordPress.org <a href=\"https://wordpress.org/about/privacy/\">privacy "
+"policy</a> and <a href=\"https://wordpress.org/about/terms-of-"
+"service/\">terms of service</a>."
+msgstr ""
+"<a href=\"https://wordpress.org/about/privacy/\">Política de privacidad</a> "
+"y <a href=\"https://wordpress.org/about/terms-of-service/\">condiciones del "
+"servicio</a> de WordPress.org."
+
+#. Found in faq paragraph.
+msgid ""
+"There is one exception, and it is deliberate. To find out whether your "
+"server would execute a PHP file dropped into the uploads folder, the plugin "
+"has to try. It writes one file with a random name, requests it once over "
+"HTTP and deletes it in the same request. A shutdown handler removes the file"
+" even if PHP dies in between, and anything left behind by an earlier "
+"interrupted run is cleaned up before the next one starts."
+msgstr ""
+"Hay una excepción, y es deliberada. Para saber si tu servidor ejecutaría un "
+"archivo PHP colocado en la carpeta uploads, el plugin tiene que probarlo. "
+"Escribe un archivo con un nombre aleatorio, lo solicita una vez por HTTP y "
+"lo elimina en la misma petición. Un manejador de cierre borra el archivo "
+"aunque PHP falle entre medias, y cualquier resto de un análisis anterior "
+"interrumpido se limpia antes de empezar el siguiente."
+
+#. Found in faq paragraph.
+msgid "No. Every check reads state and reports on it."
+msgstr "No. Cada comprobación lee el estado e informa sobre él."
+
+#. Found in faq list item.
+msgid ""
+"Background reading: our <a href=\"https://www.cms-"
+"admins.de/docs/\">documentation</a> and <a href=\"https://www.cms-"
+"admins.de/wordpress-sicherheit/\">what we do about WordPress security</a>"
+msgstr ""
+"Para saber más: nuestra <a href=\"https://www.cms-"
+"admins.de/docs/\">documentación</a> y <a href=\"https://www.cms-"
+"admins.de/wordpress-sicherheit/\">lo que hacemos por la seguridad de "
+"WordPress</a>"
+
+#. Found in faq list item.
+msgid ""
+"Questions about a finding: the <a "
+"href=\"https://wordpress.org/support/plugin/security-check-"
+"report/\">WordPress.org support forum</a>"
+msgstr ""
+"Preguntas sobre un hallazgo: el <a "
+"href=\"https://wordpress.org/support/plugin/security-check-report/\">foro de"
+" soporte de WordPress.org</a>"
+
+#. Found in faq list item.
+msgid ""
+"Bugs and feature requests: <a href=\"https://github.com/cmsadmins/security-"
+"check-report/issues\">GitHub issues</a>"
+msgstr ""
+"Errores y peticiones de funciones: <a "
+"href=\"https://github.com/cmsadmins/security-check-"
+"report/issues\">incidencias en GitHub</a>"
+
+#. Found in faq list item.
+msgid "<strong>Low</strong>, weight 1.0: fingerprinting and good practice"
+msgstr ""
+"<strong>Bajo</strong>, peso 1,0: identificación de versiones y buenas "
+"prácticas"
+
+#. Found in faq list item.
+msgid "<strong>Medium</strong>, weight 1.5: headers, permissions, policies"
+msgstr "<strong>Medio</strong>, peso 1,5: cabeceras, permisos, políticas"
+
+#. Found in faq list item.
+msgid ""
+"<strong>High</strong>, weight 2.0: updates, transport security, important "
+"configuration"
+msgstr ""
+"<strong>Alto</strong>, peso 2,0: actualizaciones, seguridad del transporte, "
+"configuración importante"
+
+#. Found in faq list item.
+msgid ""
+"<strong>Critical</strong>, weight 3.0: authentication, code execution, "
+"exposed secrets"
+msgstr ""
+"<strong>Crítico</strong>, peso 3,0: autenticación, ejecución de código, "
+"secretos expuestos"
+
+#. Found in faq list item.
+msgid "<strong>F</strong>, critical: act now"
+msgstr "<strong>F</strong>, crítico: actúa ya"
+
+#. Found in faq list item.
+msgid "<strong>D</strong>, poor: significant weaknesses, act soon"
+msgstr "<strong>D</strong>, malo: debilidades importantes, actúa pronto"
+
+#. Found in faq list item.
+msgid "<strong>C</strong>, moderate: several things worth addressing"
+msgstr "<strong>C</strong>, regular: varias cosas que conviene resolver"
+
+#. Found in faq list item.
+msgid "<strong>B</strong>, good: minor improvements available"
+msgstr "<strong>B</strong>, bueno: hay pequeñas mejoras posibles"
+
+#. Found in faq list item.
+msgid "<strong>A</strong>, excellent: nothing of substance outstanding"
+msgstr "<strong>A</strong>, excelente: no queda nada importante pendiente"
+
+#. Found in faq list item.
+msgid ""
+"a baseline recorded on the first run, holding plugin authors, role "
+"definitions and the list of must-use plugins and drop-ins, so later runs can"
+" spot changes"
+msgstr ""
+"una referencia registrada en el primer análisis, con los autores de los "
+"plugins, las definiciones de perfiles y la lista de plugins imprescindibles "
+"y drop-ins, para que los análisis posteriores detecten cambios"
+
+#. Found in faq list item.
+msgid ""
+"which findings you have muted, together with a fingerprint of what they said"
+msgstr "qué hallazgos has silenciado, junto con una huella de lo que decían"
+
+#. Found in faq list item.
+msgid ""
+"the last run and the one before it, so the report can show what changed"
+msgstr ""
+"el último análisis y el anterior, para que el informe pueda mostrar qué ha "
+"cambiado"
+
+#. Found in faq list item.
+msgid ""
+"<code>https://api.wordpress.org/core/checksums/1.0/</code> for the official "
+"core file hashes"
+msgstr ""
+"<code>https://api.wordpress.org/core/checksums/1.0/</code> para los hashes "
+"oficiales de los archivos del núcleo"
+
+#. Found in faq header.
+msgid "Who is behind this plugin, and where do I report a problem?"
+msgstr "¿Quién está detrás de este plugin y dónde informo de un problema?"
+
+#. Found in faq header.
+msgid "Which WordPress and PHP versions are supported?"
+msgstr "¿Qué versiones de WordPress y PHP son compatibles?"
+
+#. Found in faq header.
+msgid "Can I add my own checks?"
+msgstr "¿Puedo añadir mis propias comprobaciones?"
+
+#. Found in faq header.
+msgid "Does it work on multisite?"
+msgstr "¿Funciona en multisitio?"
+
+#. Found in faq header.
+msgid "Can I run it from the command line?"
+msgstr "¿Puedo ejecutarlo desde la línea de comandos?"
+
+#. Found in faq header.
+msgid "How often should I run it?"
+msgstr "¿Cada cuánto debería ejecutarlo?"
+
+#. Found in faq header.
+msgid "A finding does not apply to my setup. What now?"
+msgstr "Un hallazgo no se aplica a mi configuración. ¿Qué hago?"
+
+#. Found in faq header.
+msgid "Why does a check say \"Not determined\"?"
+msgstr "¿Por qué una comprobación dice «No determinado»?"
+
+#. Found in faq header.
+msgid "How is the grade calculated?"
+msgstr "¿Cómo se calcula la nota?"
+
+#. Found in faq header.
+msgid "What do the grades mean?"
+msgstr "¿Qué significan las notas?"
+
+#. Found in faq header.
+msgid "Is this a malware scanner or a firewall?"
+msgstr "¿Es un escáner de malware o un cortafuegos?"
+
+#. Found in faq header.
+msgid "What does the plugin store?"
+msgstr "¿Qué guarda el plugin?"
+
+#. Found in faq header.
+msgid "Does it send data anywhere?"
+msgstr "¿Envía datos a algún sitio?"
+
+#. Found in faq header.
+msgid "Does the plugin change anything on my site?"
+msgstr "¿Cambia el plugin algo en mi sitio?"
+
+#. Found in installation paragraph.
+msgid ""
+"The plugin needs PHP 7.4 or newer and WordPress 7.0 or newer. Running the "
+"checks requires the <code>manage_options</code> capability, so on a normal "
+"site that means an administrator."
+msgstr ""
+"El plugin necesita PHP 7.4 o posterior y WordPress 7.0 o posterior. Para "
+"ejecutar las comprobaciones hace falta la capacidad "
+"<code>manage_options</code>, que en un sitio normal significa un "
+"administrador."
+
+#. Found in installation list item.
+msgid "Open \"Security Check\" in the admin menu and start a run."
+msgstr ""
+"Abre «Security Check» en el menú de administración e inicia un análisis."
+
+#. Found in installation list item.
+msgid "Activate it on the Plugins screen."
+msgstr "Actívalo en la pantalla Plugins."
+
+#. Found in installation list item.
+msgid ""
+"Install the plugin from the WordPress plugin directory, or upload the folder"
+" to <code>/wp-content/plugins/security-check-report</code>."
+msgstr ""
+"Instala el plugin desde el directorio de plugins de WordPress o sube la "
+"carpeta a <code>/wp-content/plugins/security-check-report</code>."
+
+#. Found in description paragraph.
+msgid ""
+"<a href=\"https://www.cms-admins.de/\">CMS ADMINS</a> maintains, hosts and "
+"secures WordPress and Drupal sites from Munich. This plugin is the checklist"
+" we run ourselves, packaged up. It is free, it stays free, and it works the "
+"same whether or not you ever talk to us."
+msgstr ""
+"<a href=\"https://www.cms-admins.de/\">CMS ADMINS</a> mantiene, aloja y "
+"protege sitios WordPress y Drupal desde Múnich. Este plugin es la lista de "
+"comprobaciones que usamos nosotros mismos, empaquetada. Es gratuito, seguirá"
+" siéndolo y funciona igual tanto si llegas a hablar con nosotros como si no."
+
+#. Found in description paragraph.
+msgid ""
+"The plugin talks to <code>api.wordpress.org</code> and to your own site. "
+"Nothing else, and there is no telemetry. See the questions below for exactly"
+" which endpoints and what is stored locally."
+msgstr ""
+"El plugin se comunica con <code>api.wordpress.org</code> y con tu propio "
+"sitio. Con nada más, y no hay telemetría. En las preguntas de abajo se "
+"detalla qué endpoints exactamente y qué se guarda localmente."
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Network and transport.</strong> HTTPS and the redirect from http, "
+"TLS certificate expiry and negotiated protocol, the security headers and "
+"their quality rather than their mere presence, cookie attributes, CORS, "
+"exposed software versions, legacy discovery tags, XML-RPC, user enumeration,"
+" REST routes that accept writes without checking permissions, and whether "
+"the client address can be faked through forwarded headers."
+msgstr ""
+"<strong>Red y transporte.</strong> HTTPS y la redirección desde http, "
+"caducidad del certificado TLS y protocolo negociado, las cabeceras de "
+"seguridad y su calidad (no solo su presencia), atributos de las cookies, "
+"CORS, versiones de software expuestas, etiquetas de descubrimiento "
+"heredadas, XML-RPC, enumeración de usuarios, rutas REST que aceptan "
+"escrituras sin comprobar permisos y si la dirección del cliente se puede "
+"falsificar mediante cabeceras reenviadas."
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Accounts and access.</strong> Guessable passwords, predictable "
+"administrator names, how many accounts hold administrator rights and which "
+"have gone dormant, roles below administrator holding capabilities they "
+"should not have, open registration and the role it hands out, two-factor "
+"coverage per administrator, the application password inventory including "
+"when each was last used and from where."
+msgstr ""
+"<strong>Cuentas y acceso.</strong> Contraseñas fáciles de adivinar, nombres "
+"de administrador previsibles, cuántas cuentas tienen permisos de "
+"administrador y cuáles están inactivas, perfiles por debajo de administrador"
+" con capacidades que no deberían tener, registro abierto y el perfil que "
+"asigna, cobertura de doble factor por administrador, el inventario de "
+"contraseñas de aplicación con su último uso y desde dónde."
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Files and permissions.</strong> Permissions on wp-config.php, the "
+"uploads folder and the core directories, world-writable paths, executable "
+"files among the media, whether the server runs PHP from the uploads folder, "
+"configuration and backup files that the server hands out, readable .git, "
+".svn and .hg folders, database dumps in the web root, leftovers from "
+"interrupted updates, directory listing."
+msgstr ""
+"<strong>Archivos y permisos.</strong> Permisos de wp-config.php, de la "
+"carpeta uploads y de los directorios del núcleo, rutas con escritura para "
+"todos, archivos ejecutables entre los medios, si el servidor ejecuta PHP "
+"desde la carpeta uploads, archivos de configuración y copias de seguridad "
+"que el servidor entrega, carpetas .git, .svn y .hg legibles, volcados de "
+"base de datos en la raíz web, restos de actualizaciones interrumpidas, "
+"listado de directorios."
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Configuration.</strong> Debug mode, debug log exposure, the theme "
+"and plugin editor, installing code from the dashboard, authentication keys "
+"and salts, table prefix, database user privileges, whether the scheduler "
+"actually runs, autoloaded options size, injected content in the options "
+"table, backups, login protection, password policy."
+msgstr ""
+"<strong>Configuración.</strong> Modo de depuración, exposición del registro "
+"de depuración, el editor de temas y plugins, instalación de código desde el "
+"escritorio, claves y sales de autenticación, prefijo de tablas, privilegios "
+"del usuario de la base de datos, si el programador de tareas funciona de "
+"verdad, tamaño de las opciones con carga automática, contenido inyectado en "
+"la tabla de opciones, copias de seguridad, protección del acceso, política "
+"de contraseñas."
+
+#. Found in description paragraph.
+msgid ""
+"<strong>Core, plugins and themes.</strong> WordPress version, PHP version "
+"against the published end-of-life dates, automatic core updates, core file "
+"integrity against the official checksums, files in the core directories that"
+" are not part of WordPress, pending plugin and theme updates, unused plugins"
+" and themes, plugins that look abandoned, plugins whose listing was closed, "
+"plugins whose author changed, must-use plugins and drop-ins, other WordPress"
+" installations sitting next to this one."
+msgstr ""
+"<strong>Núcleo, plugins y temas.</strong> Versión de WordPress, versión de "
+"PHP frente a las fechas de fin de soporte publicadas, actualizaciones "
+"automáticas del núcleo, integridad de los archivos del núcleo frente a los "
+"checksums oficiales, archivos en los directorios del núcleo que no forman "
+"parte de WordPress, actualizaciones pendientes de plugins y temas, plugins y"
+" temas sin usar, plugins que parecen abandonados, plugins cuya ficha se ha "
+"cerrado, plugins que han cambiado de autor, plugins imprescindibles y drop-"
+"ins, otras instalaciones de WordPress junto a esta."
+
+#. Found in description list item.
+msgid ""
+"<a href=\"https://github.com/cmsadmins/security-check-report\">Source code "
+"and issues on GitHub</a>"
+msgstr ""
+"<a href=\"https://github.com/cmsadmins/security-check-report\">Código fuente"
+" e incidencias en GitHub</a>"
+
+#. Found in description list item.
+msgid "<a href=\"https://www.cms-admins.de/docs/\">Documentation and guides</a>"
+msgstr "<a href=\"https://www.cms-admins.de/docs/\">Documentación y guías</a>"
+
+#. Found in description list item.
+msgid ""
+"<a href=\"https://www.cms-admins.de/wordpress-sicherheit/\">What we do about"
+" WordPress security</a>"
+msgstr ""
+"<a href=\"https://www.cms-admins.de/wordpress-sicherheit/\">Lo que hacemos "
+"por la seguridad de WordPress</a>"
+
+#. Found in description list item.
+msgid ""
+"Not an auto-fixer. Every finding comes with instructions, and you carry them"
+" out."
+msgstr ""
+"No corrige nada automáticamente. Cada hallazgo incluye instrucciones, y eres"
+" tú quien las aplica."
+
+#. Found in description list item.
+msgid ""
+"Not a vulnerability database. It reports that a plugin is outdated, "
+"abandoned or delisted; it does not look up individual CVEs."
+msgstr ""
+"No es una base de datos de vulnerabilidades. Indica si un plugin está "
+"desactualizado, abandonado o retirado del directorio; no busca CVE "
+"concretos."
+
+#. Found in description list item.
+msgid ""
+"Not a malware scanner. It compares core files against the official checksums"
+" and looks for injected content in the options table, but it does not hunt "
+"for signatures in plugin or theme code, and it removes nothing."
+msgstr ""
+"No es un escáner de malware. Compara los archivos del núcleo con los "
+"checksums oficiales y busca contenido inyectado en la tabla de opciones, "
+"pero no busca firmas en el código de plugins o temas y no elimina nada."
+
+#. Found in description list item.
+msgid "Not a firewall. It blocks nothing and intercepts no requests."
+msgstr "No es un cortafuegos. No bloquea nada ni intercepta ninguna petición."
+
+#. Found in description list item.
+msgid "An explanation of every check, searchable, right on the page"
+msgstr ""
+"Una explicación de cada comprobación, con búsqueda, en la misma página"
+
+#. Found in description list item.
+msgid "A WP-CLI command that produces the same grade as the screen"
+msgstr "Un comando de WP-CLI que da la misma nota que la pantalla"
+
+#. Found in description list item.
+msgid "Exports as plain text, JSON and CSV"
+msgstr "Exportación en texto plano, JSON y CSV"
+
+#. Found in description list item.
+msgid ""
+"\"Not determined\" as a real outcome, so a blocked request is never reported"
+" as a problem and never moves the grade"
+msgstr ""
+"«No determinado» como resultado propio, para que una petición bloqueada "
+"nunca se presente como un problema ni mueva la nota"
+
+#. Found in description list item.
+msgid ""
+"Muting that remembers what a finding said, so an accepted finding comes back"
+" the moment it actually changes"
+msgstr ""
+"Un silenciado que recuerda lo que decía el hallazgo, para que un hallazgo "
+"aceptado vuelva en cuanto cambie de verdad"
+
+#. Found in description list item.
+msgid "A comparison with the previous run: newly failing, resolved, changed"
+msgstr ""
+"Una comparación con el análisis anterior: nuevos fallos, resueltos, "
+"cambiados"
+
+#. Found in description list item.
+msgid ""
+"A weighted grade from A to F, where one failing critical check cannot be "
+"hidden by fifty passing minor ones"
+msgstr ""
+"Una nota ponderada de la A a la F, en la que una comprobación crítica no "
+"superada no puede quedar oculta tras cincuenta menores superadas"
+
+#. Found in description header.
+msgid "Who builds it"
+msgstr "Quién lo desarrolla"
+
+#. Found in description header.
+msgid "Data and connections"
+msgstr "Datos y conexiones"
+
+#. Found in description header.
+msgid "What it is not"
+msgstr "Lo que no es"
+
+#. Found in description header.
+msgid "What it checks"
+msgstr "Qué comprueba"
+
+#. Found in description header.
+msgid "What you get"
+msgstr "Qué obtienes"
+
+#. Screenshot description.
+msgid "The built-in documentation for every check, with a search"
+msgstr "La documentación integrada de cada comprobación, con búsqueda"
+
+#. Screenshot description.
+msgid ""
+"All checks, grouped by area and filterable by outcome, with one finding "
+"expanded"
+msgstr ""
+"Todas las comprobaciones, agrupadas por área y filtrables por resultado, con"
+" un hallazgo desplegado"
+
+#. Found in changelog paragraph.
+msgid "<strong>Explanations</strong>"
+msgstr "<strong>Explicaciones</strong>"
+
+#. Found in changelog paragraph.
+msgid ""
+"Every check was read against the sources it cites: php.net, the WordPress "
+"handbook, core source, MDN, and the packages of the plugins it recognises. "
+"That turned up findings that fire on correct configurations, one that could "
+"not fire at all, and claims that stopped being true years ago."
+msgstr ""
+"Cada comprobación se ha contrastado con las fuentes que cita: php.net, el "
+"manual de WordPress, el código del núcleo, MDN y los paquetes de los plugins"
+" que reconoce. Así aparecieron hallazgos que saltaban con configuraciones "
+"correctas, uno que no podía saltar nunca y afirmaciones que dejaron de ser "
+"ciertas hace años."
+
+#. Found in changelog list item.
+msgid ""
+"The warning about the table prefix named the wrong mechanism, and the "
+"reasoning for 640 against 440 on wp-config.php was inverted. Files in the "
+"web root were called harmless as a group, although phpinfo.php prints the "
+"whole PHP environment."
+msgstr ""
+"El aviso sobre el prefijo de tablas citaba el mecanismo equivocado, y el "
+"razonamiento sobre 640 frente a 440 en wp-config.php estaba al revés. Los "
+"archivos de la raíz web se daban por inofensivos en bloque, aunque "
+"phpinfo.php muestra todo el entorno de PHP."
+
+#. Found in changelog list item.
+msgid ""
+"The entry on security headers now names the values to enter, which is the "
+"one thing it was missing. The permission entries say where to change file "
+"permissions without shell access. Roughly a dozen terms are resolved where "
+"they first appear rather than assumed."
+msgstr ""
+"La entrada sobre las cabeceras de seguridad indica ahora los valores que hay"
+" que introducir, que era lo único que le faltaba. Las entradas sobre "
+"permisos explican dónde cambiar los permisos de archivos sin acceso a la "
+"consola. Una docena de términos se explican donde aparecen por primera vez "
+"en lugar de darlos por sabidos."
+
+#. Found in changelog list item.
+msgid ""
+"Every one of the sixty-one entries was read against the method it documents."
+" Fourteen described outcomes the check does not have, or stayed silent about"
+" the ones it does."
+msgstr ""
+"Cada una de las sesenta y una entradas se ha contrastado con el método que "
+"documenta. Catorce describían resultados que la comprobación no tiene, o "
+"callaban los que sí tiene."
+
+#. Found in changelog list item.
+msgid ""
+"Scans and lookups that cannot complete now say so instead of reporting all "
+"clear: a core file scan that hit its limit, a plugin listing that could not "
+"be retrieved, a database dump whose URL did not answer."
+msgstr ""
+"Los análisis y consultas que no pueden completarse ahora lo dicen en lugar "
+"de dar todo por bueno: un análisis de archivos del núcleo que llegó a su "
+"límite, una ficha de plugin que no se pudo obtener, un volcado de base de "
+"datos cuya URL no respondió."
+
+#. Found in changelog list item.
+msgid ""
+"A run stored by 2.3.2 could raise a PHP warning on the first page view after"
+" the update, and the mute state it was saved with is now kept until a run of"
+" this version replaces it."
+msgstr ""
+"Un análisis guardado por la 2.3.2 podía provocar un aviso de PHP en la "
+"primera visita a la página tras la actualización, y el estado de silenciado "
+"con el que se guardó se conserva ahora hasta que lo sustituya un análisis de"
+" esta versión."
+
+#. Found in changelog list item.
+msgid ""
+"Installers and shell scripts among the uploads are no longer treated as code"
+" the server runs."
+msgstr ""
+"Los instaladores y scripts de consola entre los archivos subidos ya no se "
+"tratan como código que ejecuta el servidor."
+
+#. Found in changelog list item.
+msgid ""
+"A role that merely appeared since the first run, as a shop or membership "
+"plugin does, was reported as a role holding administrator-level power."
+msgstr ""
+"Un perfil que simplemente había aparecido después del primer análisis, como "
+"hace un plugin de tienda o de membresías, se mostraba como un perfil con "
+"poderes de administrador."
+
+#. Found in changelog list item.
+msgid ""
+"On IIS the check for .htaccess advised saving the permalink settings, which "
+"writes web.config there and never an .htaccess."
+msgstr ""
+"En IIS, la comprobación de .htaccess recomendaba guardar los ajustes de "
+"enlaces permanentes, que allí escribe web.config y nunca un .htaccess."
+
+#. Found in changelog list item.
+msgid ""
+".user.ini and .htpasswd were listed among files to delete. They are live "
+"configuration, and deleting the second one locks people out."
+msgstr ""
+".user.ini y .htpasswd aparecían entre los archivos que había que borrar. Son"
+" configuración activa, y borrar el segundo deja a gente sin acceso."
+
+#. Found in changelog list item.
+msgid ""
+"A server that hands out the source of a PHP file was reported as running it."
+" Those are different problems with different fixes."
+msgstr ""
+"Un servidor que entrega el código fuente de un archivo PHP se mostraba como "
+"si lo ejecutara. Son problemas distintos con soluciones distintas."
+
+#. Found in changelog list item.
+msgid ""
+"Application passwords were reported as switched off on every site without "
+"HTTPS, which is where WordPress refuses them in the first place."
+msgstr ""
+"Las contraseñas de aplicación aparecían como desactivadas en todos los "
+"sitios sin HTTPS, que es justo donde WordPress ya las rechaza."
+
+#. Found in changelog list item.
+msgid ""
+"The advice to pick a display name different from the login name does "
+"nothing, because the author slug keeps the login name it was generated from."
+msgstr ""
+"El consejo de elegir un nombre público distinto del nombre de acceso no "
+"sirve de nada, porque el slug del autor conserva el nombre de acceso a "
+"partir del cual se generó."
+
+#. Found in changelog list item.
+msgid ""
+"system.multicall has not amplified password guessing since WordPress 4.4, "
+"and the XML-RPC check now recognises the filter most security plugins use to"
+" switch the interface off."
+msgstr ""
+"system.multicall ya no multiplica los intentos de adivinar contraseñas desde"
+" WordPress 4.4, y la comprobación de XML-RPC reconoce ahora el filtro que "
+"usan la mayoría de plugins de seguridad para desactivar la interfaz."
+
+#. Found in changelog list item.
+msgid ""
+"DISALLOW_FILE_MODS closes the file editor and stops background updates. "
+"Neither check knew that, so following this plugin's own advice left one "
+"finding standing and turned another into a false all clear."
+msgstr ""
+"DISALLOW_FILE_MODS cierra el editor de archivos y detiene las "
+"actualizaciones en segundo plano. Ninguna de las dos comprobaciones lo "
+"sabía, así que seguir los consejos de este mismo plugin dejaba un hallazgo "
+"en pie y convertía otro en un falso «todo bien»."
+
+#. Found in changelog list item.
+msgid ""
+"The strict Content Security Policy from the published guidance was reported "
+"as leaving the hole it closes. Browsers that understand 'strict-dynamic' "
+"ignore the 'unsafe-inline' fallback beside it, and the check now does the "
+"same. A host wildcard is no longer mistaken for allowing scripts from "
+"anywhere."
+msgstr ""
+"La Content Security Policy estricta de las recomendaciones publicadas se "
+"mostraba como si dejara abierto el agujero que cierra. Los navegadores que "
+"entienden 'strict-dynamic' ignoran la alternativa 'unsafe-inline' que la "
+"acompaña, y la comprobación ahora hace lo mismo. Un comodín de host ya no se"
+" confunde con permitir scripts desde cualquier origen."
+
+#. Found in changelog list item.
+msgid ""
+"The WooCommerce Store API was reported as a write route left unprotected. "
+"Registering a route as public is the spelling the handbook prescribes, so a "
+"route with no permission callback at all and one that is deliberately public"
+" are now told apart."
+msgstr ""
+"La Store API de WooCommerce se mostraba como una ruta de escritura sin "
+"proteger. Registrar una ruta como pública es la forma que indica el manual, "
+"así que ahora se distingue una ruta sin ninguna función de permisos de una "
+"que es pública a propósito."
+
+#. Found in changelog list item.
+msgid ""
+"A site behind Cloudflare was reported as having a spoofable client address. "
+"The check now looks for a proxy that identifies itself and says the result "
+"is undetermined when it cannot tell, rather than warning."
+msgstr ""
+"Un sitio detrás de Cloudflare aparecía con una dirección de cliente "
+"falsificable. La comprobación busca ahora un proxy que se identifique y, "
+"cuando no puede saberlo, indica que el resultado no está determinado en "
+"lugar de advertir."
+
+#. Found in changelog list item.
+msgid ""
+"WordPress installed in its own directory was reported as an injected option "
+"value, at critical severity. Comparing the site and home addresses cannot "
+"tell that apart from a takeover, and in a real takeover both are changed "
+"together, so the comparison is gone."
+msgstr ""
+"WordPress instalado en su propio directorio se mostraba como un valor de "
+"opción inyectado, con gravedad crítica. Comparar las direcciones del sitio y"
+" de la página de inicio no permite distinguir eso de una toma de control, y "
+"en una toma de control real ambas cambian a la vez, así que esa comparación "
+"se ha eliminado."
+
+#. Found in changelog list item.
+msgid ""
+"The check for plugins removed from the directory could not fire. The API "
+"answers 404 for a closed listing, and the WordPress function turns that into"
+" an error before the \"closed\" flag is ever read, so the check reported all"
+" clear in exactly the case it was written for. It now asks the endpoint "
+"itself and tells a closed listing, a plugin that was never listed and an "
+"unreachable one apart."
+msgstr ""
+"La comprobación de plugins retirados del directorio no podía saltar nunca. "
+"La API responde 404 para una ficha cerrada, y la función de WordPress lo "
+"convierte en un error antes de leer el indicador «closed», así que la "
+"comprobación daba todo por bueno justo en el caso para el que se escribió. "
+"Ahora consulta el endpoint por su cuenta y distingue entre una ficha "
+"cerrada, un plugin que nunca estuvo en el directorio y uno inaccesible."
+
+#. Found in changelog list item.
+msgid ""
+"Sites with two-factor protection were reported as having none. The user meta"
+" key stored for iThemes, Solid and Kadence Security is not the one those "
+"plugins write, and the one for Defender does not exist in it at all. Google "
+"Authenticator stores the string \"disabled\", which counted as a second "
+"factor because it is not empty, so the one case the check exists for went "
+"unnoticed."
+msgstr ""
+"Los sitios con protección de doble factor aparecían como si no la tuvieran. "
+"La clave de metadatos de usuario guardada para iThemes, Solid y Kadence "
+"Security no es la que escriben esos plugins, y la de Defender ni siquiera "
+"existía. Google Authenticator guarda la cadena «disabled», que contaba como "
+"segundo factor por no estar vacía, así que el único caso para el que existe "
+"la comprobación pasaba desapercibido."
+
+#. Found in changelog list item.
+msgid ""
+"A run stores what each check reported, so the report can be rebuilt without "
+"running everything again."
+msgstr ""
+"Un análisis guarda lo que indicó cada comprobación, para poder reconstruir "
+"el informe sin volver a ejecutarlo todo."
+
+#. Found in changelog list item.
+msgid ""
+"A single re-check never writes a point into the history, and the page says "
+"plainly that the grade then rests partly on older measurements. A partial "
+"pass is not a run."
+msgstr ""
+"Una comprobación repetida por separado nunca añade un punto al historial, y "
+"la página dice claramente que la nota se basa entonces en parte en "
+"mediciones anteriores. Una pasada parcial no es un análisis."
+
+#. Found in changelog list item.
+msgid ""
+"The report is built on the server now. It used to be assembled in the "
+"browser, which meant the overview could not exist before a run had finished,"
+" and the same markup would have had to be written twice."
+msgstr ""
+"El informe se genera ahora en el servidor. Antes se montaba en el navegador,"
+" lo que impedía que existiera el resumen antes de terminar un análisis y "
+"habría obligado a escribir el mismo marcado dos veces."
+
+#. Found in changelog list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard, and a reminder once "
+"the last full run is older than thirty days. The reminder can be switched "
+"off for good, per user."
+msgstr ""
+"Un contador en el menú, un widget en el escritorio y un recordatorio cuando "
+"el último análisis completo tiene más de treinta días. El recordatorio se "
+"puede desactivar para siempre, por usuario."
+
+#. Found in changelog list item.
+msgid ""
+"A sixth area, transparency and disclosure, with one check in it: whether AI-"
+"generated content on the site is labelled. Article 50 of the EU AI Act has "
+"asked for a machine-readable label and a notice for AI chatbots since 2 "
+"August 2026. The disclosure plugins from the directory are recognised by "
+"their folder and by the settings they write, and the check only ever warns, "
+"because a site with no AI content has nothing to label."
+msgstr ""
+"Una sexta área, transparencia y divulgación, con una comprobación: si el "
+"contenido generado por IA del sitio está etiquetado. El artículo 50 del "
+"Reglamento de IA de la UE exige desde el 2 de agosto de 2026 una etiqueta "
+"legible por máquinas y un aviso en los chatbots de IA. Los plugins de "
+"divulgación del directorio se reconocen por su carpeta y por los ajustes que"
+" guardan, y la comprobación solo advierte, porque un sitio sin contenido de "
+"IA no tiene nada que etiquetar."
+
+#. Found in changelog list item.
+msgid ""
+"Progress per category, so it is visible which part of the site has been "
+"dealt with and which has not."
+msgstr ""
+"Progreso por categoría, para ver qué parte del sitio está resuelta y cuál "
+"no."
+
+#. Found in changelog list item.
+msgid ""
+"A history of the last 24 runs. The very first one is kept for good, so the "
+"opening line can always name where the site started. An installation "
+"upgrading from an earlier version finds its two stored runs as the first two"
+" points."
+msgstr ""
+"Un historial de los últimos 24 análisis. El primero se conserva siempre, "
+"para que la frase inicial pueda indicar de dónde partió el sitio. Una "
+"instalación que se actualiza desde una versión anterior encuentra sus dos "
+"análisis guardados como los dos primeros puntos."
+
+#. Found in changelog list item.
+msgid ""
+"Every task carries a button that re-runs that one check and answers within "
+"seconds. A fix is confirmed while you are still at the screen, and the next "
+"task moves up, instead of waiting for the next full pass."
+msgstr ""
+"Cada tarea tiene un botón que vuelve a ejecutar esa comprobación y responde "
+"en segundos. Una corrección se confirma mientras sigues en la pantalla, y "
+"sube la siguiente tarea, sin esperar a la próxima pasada completa."
+
+#. Found in changelog list item.
+msgid ""
+"A checklist instead of a one-off verdict. From the second run onwards the "
+"page opens on an overview: the grade, where the site started and where it "
+"stands today, a bar for every run, the five things to work through, what is "
+"still open, and what has been resolved and when. The guided three-step "
+"walkthrough stays for the first run."
+msgstr ""
+"Una lista de tareas en lugar de un veredicto puntual. A partir del segundo "
+"análisis, la página se abre con un resumen: la nota, de dónde partió el "
+"sitio y dónde está hoy, una barra por cada análisis, las cinco cosas que hay"
+" que resolver, lo que sigue abierto y lo que se ha resuelto y cuándo. El "
+"recorrido guiado en tres pasos se mantiene para el primer análisis."
+
+#. Found in changelog list item.
+msgid ""
+"Two-factor detection now covers ReportedIP Hive, Solid Security, Kadence "
+"Security, WP Defender and Google Authenticator. iThemes Security has been "
+"renamed twice and ships under three folder names, all of which are "
+"recognised."
+msgstr ""
+"La detección del doble factor cubre ahora ReportedIP Hive, Solid Security, "
+"Kadence Security, WP Defender y Google Authenticator. iThemes Security ha "
+"cambiado de nombre dos veces y se distribuye con tres nombres de carpeta, y "
+"se reconocen todos."
+
+#. Found in changelog list item.
+msgid ""
+"Two-factor coverage could not tell an account that never finished the setup "
+"from one it simply could not read, and called both inconclusive. Each "
+"supported plugin is now listed together with the user meta it writes, so an "
+"installed plugin nobody uses is reported as the exposure it is, naming the "
+"accounts without a second factor."
+msgstr ""
+"La cobertura de doble factor no distinguía una cuenta que nunca terminó la "
+"configuración de otra que simplemente no podía leer, y daba ambas por no "
+"determinadas. Cada plugin compatible aparece ahora junto con los metadatos "
+"de usuario que escribe, así que un plugin instalado que nadie usa se muestra"
+" como la exposición que es, con las cuentas que no tienen segundo factor."
+
+#. Found in changelog list item.
+msgid ""
+"Every reported file now carries its size and, where an index.php did not "
+"pass, the reason it was reported. A guard file runs to a few hundred bytes, "
+"so the number alone usually settles what a file is."
+msgstr ""
+"Cada archivo señalado indica ahora su tamaño y, cuando un index.php no ha "
+"superado la comprobación, el motivo. Un archivo de protección ocupa unos "
+"pocos cientos de bytes, así que el tamaño suele bastar para saber qué es."
+
+#. Found in changelog list item.
+msgid ""
+"The check for executable files in the uploads directory reported the empty "
+"index.php that WordPress and most plugins drop into every upload folder to "
+"stop directory listing. Those files are the opposite of a finding, and "
+"because the check counts as critical, a single one of them pulled an "
+"otherwise healthy site down to grade D. Across twenty sites the grade was "
+"identical for that reason alone. The check now reads such a file instead of "
+"judging it by name: an index.php passes only when it stays small and reads "
+"no request data, includes no other file, calls none of the functions a "
+"dropped shell needs and prints nothing of its own. Everything else is still "
+"reported, index.php included."
+msgstr ""
+"La comprobación de archivos ejecutables en el directorio uploads señalaba el"
+" index.php vacío que WordPress y la mayoría de plugins colocan en cada "
+"carpeta de subidas para impedir el listado de directorios. Esos archivos son"
+" justo lo contrario de un hallazgo, y como la comprobación es crítica, uno "
+"solo bajaba a la nota D un sitio por lo demás sano. En veinte sitios la nota"
+" era idéntica solo por eso. Ahora la comprobación lee el archivo en lugar de"
+" juzgarlo por el nombre: un index.php solo se da por bueno si es pequeño y "
+"no lee datos de la petición, no incluye otros archivos, no llama a ninguna "
+"de las funciones que necesita una shell colocada por un atacante y no "
+"imprime nada propio. Todo lo demás se sigue señalando, index.php incluido."
+
+#. Found in changelog list item.
+msgid ""
+"Removed three interface strings and two stylesheet rules left behind by the "
+"rebuild."
+msgstr ""
+"Se han eliminado tres textos de la interfaz y dos reglas de estilo que "
+"habían quedado tras la reconstrucción."
+
+#. Found in changelog list item.
+msgid ""
+"A finding can carry a link to further help. The two-factor finding uses it "
+"to point at the Two Factor plugin from the WordPress core team and at "
+"ReportedIP Hive, which we build ourselves and name as ours."
+msgstr ""
+"Un hallazgo puede llevar un enlace a más ayuda. El hallazgo de doble factor "
+"lo usa para remitir al plugin Two Factor del equipo del núcleo de WordPress "
+"y a ReportedIP Hive, que desarrollamos nosotros y presentamos como nuestro."
+
+#. Found in changelog list item.
+msgid ""
+"The priority list is now called what it is, a to-do list, and says to work "
+"through it in order."
+msgstr ""
+"La lista de prioridades se llama ahora por lo que es, una lista de tareas, e"
+" indica que se resuelva en orden."
+
+#. Found in changelog list item.
+msgid ""
+"The page scrolls to the result when a run finishes, instead of leaving it "
+"below the fold."
+msgstr ""
+"La página se desplaza hasta el resultado cuando termina un análisis, en "
+"lugar de dejarlo fuera de la vista."
+
+#. Found in changelog list item.
+msgid ""
+"The result opens with a plain sentence, not just a letter: how many findings"
+" need attention now, how many are worth improving, and how many checks could"
+" not be completed."
+msgstr ""
+"El resultado empieza con una frase clara, no solo con una letra: cuántos "
+"hallazgos requieren atención ya, cuántos conviene mejorar y cuántas "
+"comprobaciones no se pudieron completar."
+
+#. Found in changelog list item.
+msgid ""
+"The start button says what it does and how long it takes, and the note about"
+" the temporary file sits directly above it."
+msgstr ""
+"El botón de inicio dice qué hace y cuánto tarda, y la nota sobre el archivo "
+"temporal está justo encima."
+
+#. Found in changelog list item.
+msgid ""
+"The screen is now laid out as three steps: start the check, read the result,"
+" go through everything else. Steps two and three say what they will contain "
+"before the first run, so the page explains itself."
+msgstr ""
+"La pantalla se organiza ahora en tres pasos: iniciar la comprobación, leer "
+"el resultado y revisar todo lo demás. Los pasos dos y tres indican qué "
+"contendrán antes del primer análisis, así que la página se explica sola."
+
+#. Found in changelog paragraph.
+msgid "<strong>Changed</strong>"
+msgstr "<strong>Cambiado</strong>"
+
+#. Found in changelog paragraph.
+msgid "<strong>Fixed</strong>"
+msgstr "<strong>Corregido</strong>"
+
+#. Found in changelog paragraph.
+msgid "<strong>Added</strong>"
+msgstr "<strong>Añadido</strong>"
+
+#. Found in changelog paragraph.
+msgid "<strong>Rebuilt</strong>"
+msgstr "<strong>Reconstruido</strong>"
+
+#. Found in changelog paragraph.
+msgid "Releases before 2.2.0 are listed in changelog.txt."
+msgstr "Las versiones anteriores a la 2.2.0 aparecen en changelog.txt."
+
+#. Found in changelog list item.
+msgid "Unified the colour scheme and fixed several layout issues"
+msgstr "Esquema de colores unificado y varios problemas de diseño corregidos"
+
+#. Found in changelog list item.
+msgid ""
+"Rewrote every check description into a consistent format: what it checks, "
+"why it matters, what to do"
+msgstr ""
+"Todas las descripciones de las comprobaciones reescritas con un formato "
+"uniforme: qué comprueba, por qué importa, qué hacer"
+
+#. Found in changelog list item.
+msgid "Added a live search across the check documentation"
+msgstr "Búsqueda en vivo en la documentación de las comprobaciones"
+
+#. Found in changelog list item.
+msgid "Redesigned interface with a native details and summary accordion"
+msgstr "Interfaz rediseñada con un acordeón nativo de details y summary"
+
+#. Found in changelog list item.
+msgid "Fixed translation loading on WordPress 6.7 and newer"
+msgstr "Corregida la carga de traducciones en WordPress 6.7 y posteriores"
+
+#. Found in changelog list item.
+msgid ""
+"Removed the Spamhaus IP blacklist test, which sent the server address to a "
+"third party without asking"
+msgstr ""
+"Eliminada la prueba de la lista negra de IP de Spamhaus, que enviaba la "
+"dirección del servidor a un tercero sin preguntar"
+
+#. Found in changelog list item.
+msgid ""
+"Fixed a PHP warning in the theme and plugin update checks when a path no "
+"longer exists"
+msgstr ""
+"Corregido un aviso de PHP en las comprobaciones de actualizaciones de temas "
+"y plugins cuando una ruta ya no existe"
+
+#. Found in changelog list item.
+msgid ""
+"Added an automated test suite covering every check and the permission and "
+"nonce gates"
+msgstr ""
+"Añadido un conjunto de pruebas automáticas que cubre cada comprobación y los"
+" controles de permisos y nonce"
+
+#. Found in changelog list item.
+msgid ""
+"The test suite now runs against multisite as well, as a blocking step before"
+" every release."
+msgstr ""
+"El conjunto de pruebas se ejecuta ahora también en multisitio, como paso "
+"obligatorio antes de cada versión."
+
+#. Found in changelog list item.
+msgid ""
+"The JavaScript alert was replaced by an admin notice and a screen reader "
+"announcement."
+msgstr ""
+"La alerta de JavaScript se ha sustituido por un aviso de administración y un"
+" anuncio para lectores de pantalla."
+
+#. Found in changelog list item.
+msgid ""
+"Counts in the report use proper plural forms instead of assuming plural."
+msgstr ""
+"Los recuentos del informe usan las formas de plural correctas en lugar de "
+"suponer siempre el plural."
+
+#. Found in changelog list item.
+msgid ""
+"Every string in the interface is translatable. The report was previously "
+"hardcoded English with a German date format."
+msgstr ""
+"Todos los textos de la interfaz se pueden traducir. Antes, el informe estaba"
+" en inglés fijo con un formato de fecha alemán."
+
+#. Found in changelog list item.
+msgid ""
+"Duplicate checks merged (PHP version support, XML-RPC methods, login attempt"
+" limiting) and two dropped that could never fail (jQuery version, table "
+"storage engine)."
+msgstr ""
+"Comprobaciones duplicadas fusionadas (compatibilidad de la versión de PHP, "
+"métodos de XML-RPC, límite de intentos de acceso) y dos eliminadas que nunca"
+" podían fallar (versión de jQuery, motor de almacenamiento de las tablas)."
+
+#. Found in changelog list item.
+msgid ""
+"One request to the homepage per run instead of four, and one update lookup "
+"instead of one request per installed plugin."
+msgstr ""
+"Una petición a la página de inicio por análisis en lugar de cuatro, y una "
+"consulta de actualizaciones en lugar de una petición por cada plugin "
+"instalado."
+
+#. Found in changelog list item.
+msgid ""
+"The interface followed the operating system colour scheme and painted dark "
+"cards onto the light dashboard. It now follows the WordPress admin."
+msgstr ""
+"La interfaz seguía el esquema de colores del sistema operativo y pintaba "
+"tarjetas oscuras sobre el escritorio claro. Ahora sigue la administración de"
+" WordPress."
+
+#. Found in changelog list item.
+msgid ""
+"Security headers were all or nothing. They are now scored per header, with "
+"the cross-origin isolation headers treated as optional."
+msgstr ""
+"Las cabeceras de seguridad eran todo o nada. Ahora se puntúan una a una, y "
+"las cabeceras de aislamiento entre orígenes se tratan como opcionales."
+
+#. Found in changelog list item.
+msgid ""
+"The malware signature scan searched wp-admin and wp-includes for strings "
+"such as <code>eval(</code> and <code>$_GET[</code>, and needed a hand-"
+"maintained list of 180 core files to stay quiet. Replaced by a comparison "
+"against the official WordPress file list."
+msgstr ""
+"El análisis de firmas de malware buscaba en wp-admin y wp-includes cadenas "
+"como <code>eval(</code> y <code>$_GET[</code>, y necesitaba una lista de 180"
+" archivos del núcleo mantenida a mano para no dar falsas alarmas. Se ha "
+"sustituido por una comparación con la lista oficial de archivos de "
+"WordPress."
+
+#. Found in changelog list item.
+msgid ""
+"\"Not modified in six months\" was treated as \"outdated\", which flagged "
+"well maintained plugins. Replaced by release date, tested-up-to version and "
+"directory status."
+msgstr ""
+"«Sin cambios en seis meses» se trataba como «desactualizado», lo que marcaba"
+" plugins bien mantenidos. Se ha sustituido por la fecha de publicación, la "
+"versión con la que se ha probado y el estado en el directorio."
+
+#. Found in changelog list item.
+msgid ""
+"<code>WP_AUTO_UPDATE_CORE</code> set to true was reported as a risk, "
+"although it enables more updates than the recommended setting."
+msgstr ""
+"<code>WP_AUTO_UPDATE_CORE</code> con valor true se mostraba como un riesgo, "
+"aunque activa más actualizaciones que el ajuste recomendado."
+
+#. Found in changelog list item.
+msgid ""
+"Permission checks compared against exactly 0755 and therefore reported 0750 "
+"and the widespread setgid 2755 as insecure."
+msgstr ""
+"Las comprobaciones de permisos comparaban exactamente con 0755 y, por eso, "
+"marcaban como inseguros 0750 y el habitual setgid 2755."
+
+#. Found in changelog list item.
+msgid ""
+"A stored cross-site scripting path: findings carrying site data such as "
+"plugin names or user names were written into the summary with innerHTML."
+msgstr ""
+"Una vía de cross-site scripting almacenado: los hallazgos con datos del "
+"sitio, como nombres de plugins o de usuarios, se escribían en el resumen con"
+" innerHTML."
+
+#. Found in changelog list item.
+msgid ""
+"The table prefix check compared the per-site prefix on multisite, so every "
+"subsite looked like it had a custom one."
+msgstr ""
+"En multisitio, la comprobación del prefijo de tablas comparaba el prefijo de"
+" cada sitio, así que todos los subsitios parecían tener uno personalizado."
+
+#. Found in changelog list item.
+msgid ""
+"Network administrators were missing from the password, administrator, two-"
+"factor and application password checks. They hold every capability "
+"regardless of their role on a site, so a role query alone did not find them."
+msgstr ""
+"Los administradores de la red no se incluían en las comprobaciones de "
+"contraseñas, administradores, doble factor y contraseñas de aplicación. "
+"Tienen todas las capacidades sea cual sea su perfil en un sitio, así que una"
+" consulta por perfil no los encontraba."
+
+#. Found in changelog list item.
+msgid ""
+"Multisite reported \"registration is closed\" on a network that let anyone "
+"sign up, because the check read the per-site option that multisite ignores. "
+"It now reads the network setting."
+msgstr ""
+"En multisitio se mostraba «el registro está cerrado» en una red que permitía"
+" registrarse a cualquiera, porque la comprobación leía la opción de cada "
+"sitio, que multisitio ignora. Ahora lee el ajuste de la red."
+
+#. Found in changelog list item.
+msgid ""
+"The filters <code>cascr_registry</code> and <code>cascr_test_result</code>."
+msgstr ""
+"Los filtros <code>cascr_registry</code> y <code>cascr_test_result</code>."
+
+#. Found in changelog list item.
+msgid "Exports as plain text, JSON and CSV."
+msgstr "Exportación en texto plano, JSON y CSV."
+
+#. Found in changelog list item.
+msgid ""
+"\"Not determined\" as its own outcome, so a blocked request is no longer a "
+"finding and no longer affects the grade."
+msgstr ""
+"«No determinado» como resultado propio, para que una petición bloqueada ya "
+"no sea un hallazgo ni afecte a la nota."
+
+#. Found in changelog list item.
+msgid ""
+"Muting with a content fingerprint, so an accepted finding reappears as soon "
+"as it actually changes."
+msgstr ""
+"Silenciado con huella del contenido, para que un hallazgo aceptado vuelva a "
+"aparecer en cuanto cambie de verdad."
+
+#. Found in changelog list item.
+msgid "A comparison with the previous run: newly failing, resolved, changed."
+msgstr ""
+"Una comparación con el análisis anterior: nuevos fallos, resueltos, "
+"cambiados."
+
+#. Found in changelog list item.
+msgid ""
+"A priority list of the five things worth doing first, at the top of the "
+"report."
+msgstr ""
+"Una lista de prioridades con las cinco cosas que conviene hacer primero, al "
+"principio del informe."
+
+#. Found in changelog list item.
+msgid "<code>wp security-check run</code> as a WP-CLI command."
+msgstr "<code>wp security-check run</code> como comando de WP-CLI."
+
+#. Found in changelog list item.
+msgid ""
+"Twenty-five checks, among them publicly readable configuration files and "
+"repository folders, database dumps in the web root, must-use plugins and "
+"drop-ins, role and capability changes, the application password inventory "
+"with last use, two-factor coverage per administrator, unauthenticated REST "
+"write routes, TLS certificate expiry, HSTS and CSP quality, cookie "
+"attributes, client address spoofing and plugin ownership changes."
+msgstr ""
+"Veinticinco comprobaciones, entre ellas archivos de configuración y carpetas"
+" de repositorio legibles públicamente, volcados de base de datos en la raíz "
+"web, plugins imprescindibles y drop-ins, cambios de perfiles y capacidades, "
+"el inventario de contraseñas de aplicación con su último uso, la cobertura "
+"de doble factor por administrador, rutas REST de escritura sin "
+"autenticación, la caducidad del certificado TLS, la calidad de HSTS y CSP, "
+"los atributos de las cookies, la falsificación de la dirección del cliente y"
+" los cambios de propietario de plugins."
+
+#. Found in changelog list item.
+msgid ""
+"Results are stored, so the report can compare a run with the one before it."
+msgstr ""
+"Los resultados se guardan, así que el informe puede comparar un análisis con"
+" el anterior."
+
+#. Found in changelog list item.
+msgid ""
+"The admin-ajax endpoint was replaced by REST routes under "
+"<code>cascr/v1</code>, running three checks at a time instead of strictly "
+"one after another."
+msgstr ""
+"El endpoint admin-ajax se ha sustituido por rutas REST bajo "
+"<code>cascr/v1</code>, que ejecutan tres comprobaciones a la vez en lugar de"
+" una tras otra."
+
+#. Found in changelog list item.
+msgid ""
+"Grading moved out of the browser and into PHP, which makes the result "
+"reproducible, testable and available outside the dashboard."
+msgstr ""
+"La puntuación ha pasado del navegador a PHP, lo que hace el resultado "
+"reproducible, comprobable y disponible fuera del escritorio."
+
+#. Found in changelog list item.
+msgid ""
+"One registry is now the single source of truth for a check: identifier, "
+"label, grouping, urgency, weight, callback and documentation used to live in"
+" four separate places that nothing kept in sync. A test now enforces that "
+"they match."
+msgstr ""
+"Un único registro es ahora la fuente de verdad de cada comprobación: "
+"identificador, etiqueta, agrupación, urgencia, peso, callback y "
+"documentación estaban antes en cuatro sitios distintos que nadie mantenía "
+"sincronizados. Una prueba garantiza ahora que coincidan."
+
+#. Found in changelog list item.
+msgid ""
+"Removed unused legacy code paths and reached full WordPress Coding Standards"
+" compliance"
+msgstr ""
+"Eliminado código heredado sin uso y alcanzado el cumplimiento completo de "
+"los WordPress Coding Standards"
+
+#. Found in changelog list item.
+msgid ""
+"Continuous integration lints on seven PHP versions and runs the tests "
+"against WordPress 7.0 and the current release"
+msgstr ""
+"La integración continua pasa el lint en siete versiones de PHP y ejecuta las"
+" pruebas con WordPress 7.0 y con la versión actual"
+
+#. Found in changelog list item.
+msgid "Requires WordPress 7.0 or newer"
+msgstr "Requiere WordPress 7.0 o posterior"
+
+#. Found in changelog list item.
+msgid "Broadened PHP compatibility: the plugin runs on PHP 7.4 through 8.5"
+msgstr "Compatibilidad de PHP ampliada: el plugin funciona con PHP 7.4 a 8.5"
+
+#. Found in changelog list item.
+msgid "Enabled certificate verification for the PHP execution test request"
+msgstr ""
+"Activada la verificación del certificado en la petición de la prueba de "
+"ejecución de PHP"
+
+#. Found in changelog list item.
+msgid "Removed unused legacy code and files"
+msgstr "Eliminados código y archivos heredados sin uso"
+
+#. Found in changelog list item.
+msgid ""
+"Renamed plugin folder, main file and text domain to security-check-report"
+msgstr ""
+"Carpeta del plugin, archivo principal y dominio de texto renombrados a "
+"security-check-report"
+
+#. Found in changelog list item.
+msgid "First release on the WordPress.org plugin directory"
+msgstr "Primera versión en el directorio de plugins de WordPress.org"
