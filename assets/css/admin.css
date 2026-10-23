@@ -1288,11 +1288,13 @@
 }
 
 /* Focus lands here after a run so screen readers start at the grade. The
-   section is not interactive, so it needs no visible ring. */
+   sections are not interactive, so they need no visible ring. */
 .cascr-dash__head {
     scroll-margin-top: 50px;
 }
 
-.cascr-dash__head:focus {
+/* Any section that receives focus from an anchor after a reload. */
+.cascr-dash__head:focus,
+[id^="cascr-"][tabindex="-1"]:focus {
     outline: none;
 }

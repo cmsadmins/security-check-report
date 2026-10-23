@@ -402,6 +402,10 @@ class CASCR_Admin_Dashboard {
 		<li class="cascr-task cascr-task--<?php echo esc_attr( $task['severity'] ); ?>" data-cascr-task="<?php echo esc_attr( $task['id'] ); ?>">
 			<div class="cascr-task__head">
 				<span class="cascr-task__label" id="cascr-task-label-<?php echo esc_attr( $task['id'] ); ?>"><?php echo esc_html( $task['label'] ); ?></span>
+				<?php // Status next to severity: a critical check can be an open question, not a proven failure. ?>
+				<span class="cascr-status cascr-status--<?php echo esc_attr( $task['status'] ); ?>">
+					<?php echo esc_html( CASCR_Admin::status_label( $task['status'] ) ); ?>
+				</span>
 				<span class="cascr-badge cascr-badge--<?php echo esc_attr( $task['severity'] ); ?>">
 					<?php echo esc_html( CASCR_Admin::severity_label( $task['severity'] ) ); ?>
 				</span>
