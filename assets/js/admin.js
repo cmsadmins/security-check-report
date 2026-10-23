@@ -716,16 +716,17 @@
                 return;
             }
 
-            announce(i18n.scanFinished);
-
             // The run is stored by now, and the page is built from the stored
-            // run. Reloading is cheaper than a second renderer in here.
-            window.location.reload();
+            // run. Reloading is cheaper than a second renderer in here. An
+            // announcement made now would die with the page, so the reloaded
+            // page moves focus to the grade instead (see focusAnchor).
+            reloadTo('cascr-summary');
         }
 
         setProgress(done, total, id) {
             const percent = total ? Math.round((done / total) * 100) : 0;
             this.bar.style.width = `${percent}%`;
+            this.bar.parentNode.setAttribute('aria-valuenow', String(percent));
 
             const label = id && tests[id] ? tests[id].label : '';
             this.label.textContent = label
@@ -734,7 +735,23 @@
         }
     }
 
+    /**
+     * After a reload onto an anchor, screen readers stay at the top of the
+     * page unless focus follows the scroll position.
+     */
+    const focusAnchor = () => {
+        const target = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
+        if (!target) {
+            return;
+        }
+        if (!target.hasAttribute('tabindex')) {
+            target.setAttribute('tabindex', '-1');
+        }
+        target.focus();
+    };
+
     const boot = () => {
+        focusAnchor();
         new DocSearch();
         new Dashboard();
         new Runner();

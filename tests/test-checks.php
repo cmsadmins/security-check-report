@@ -393,6 +393,91 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Stores an update_core transient that offers the given version.
+	 *
+	 * @param string $version Offered version.
+	 */
+	private function offer_core( $version ) {
+		set_site_transient(
+			'update_core',
+			(object) array(
+				'updates'         => array(
+					(object) array(
+						'response' => 'upgrade',
+						'current'  => $version,
+						'version'  => $version,
+						'locale'   => 'en_US',
+						'packages' => (object) array(),
+					),
+				),
+				'last_checked'    => time(),
+				'version_checked' => $GLOBALS['wp_version'],
+			)
+		);
+	}
+
+	/**
+	 * A stale transient or a locale package can offer the installed version as
+	 * an upgrade. Seen in the field as "7.1.3 is outdated, 7.1.3 is available".
+	 */
+	public function test_an_offer_of_the_installed_version_is_not_an_update() {
+		$this->offer_core( $GLOBALS['wp_version'] );
+
+		$this->assertSame( 'pass', CASCR_Checks_Core::wordpress_version()['status'] );
+	}
+
+	public function test_a_newer_core_release_fails() {
+		$this->offer_core( '99.0' );
+
+		$result = CASCR_Checks_Core::wordpress_version();
+
+		$this->assertSame( 'fail', $result['status'] );
+		$this->assertStringContainsString( '99.0', $result['summary'] );
+	}
+
+	public function test_a_pending_theme_update_fails() {
+		$stylesheet = get_stylesheet();
+		set_site_transient(
+			'update_themes',
+			(object) array(
+				'last_checked' => time(),
+				'checked'      => array(),
+				'response'     => array( $stylesheet => array( 'new_version' => '99.0' ) ),
+			)
+		);
+
+		$result = CASCR_Checks_Core::outdated_themes();
+
+		$this->assertSame( 'fail', $result['status'] );
+		$this->assertStringContainsString( '99.0', implode( ' ', $result['items'] ) );
+	}
+
+	public function test_no_pending_theme_update_passes() {
+		set_site_transient(
+			'update_themes',
+			(object) array(
+				'last_checked' => time(),
+				'checked'      => array(),
+				'response'     => array(),
+			)
+		);
+
+		$this->assertSame( 'pass', CASCR_Checks_Core::outdated_themes()['status'] );
+	}
+
+	/**
+	 * Uninstall runs without the plugin loaded, so it keeps its own list. It
+	 * must name every option the store creates, or data stays behind.
+	 */
+	public function test_uninstall_removes_every_stored_option() {
+		$uninstall = file_get_contents( dirname( __DIR__ ) . '/uninstall.php' );
+
+		foreach ( CASCR_Store::option_names() as $option ) {
+			$this->assertStringContainsString( "'{$option}'", $uninstall, "uninstall.php leaves '{$option}' behind." );
+		}
+	}
+
+	/**
 	 * A script tag in an option is what an analytics or consent plugin stores
 	 * on purpose, so it is worth a look and not a critical finding.
 	 */

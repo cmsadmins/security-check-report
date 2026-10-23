@@ -78,7 +78,7 @@ class CASCR_Admin_Dashboard {
 	private static function render_head( $run, $summary ) {
 		$grade = $summary['grade'];
 		?>
-		<section class="cascr-dash__head">
+		<section class="cascr-dash__head" id="cascr-summary" tabindex="-1" aria-label="<?php esc_attr_e( 'Result of the latest run', 'security-check-report' ); ?>">
 			<div class="cascr-score__card cascr-score__card--<?php echo esc_attr( strtolower( $grade ) ); ?>">
 				<div class="cascr-score__grade">
 					<span class="cascr-score__letter"><?php echo esc_html( $grade ); ?></span>
@@ -91,6 +91,7 @@ class CASCR_Admin_Dashboard {
 						<span class="cascr-score__risk-label"><?php esc_html_e( 'Risk score', 'security-check-report' ); ?></span>
 					</div>
 					<p class="cascr-dash__journey"><?php echo wp_kses_post( self::journey( $grade, $summary['counts'] ) ); ?></p>
+					<?php self::render_since_last(); ?>
 					<?php self::render_partial_note( $run ); ?>
 				</div>
 
@@ -106,6 +107,49 @@ class CASCR_Admin_Dashboard {
 
 			<p class="cascr-score__verdict"><?php echo esc_html( $summary['verdict'] ); ?></p>
 		</section>
+		<?php
+	}
+
+	/**
+	 * What the latest run changed against the one before it. Silent when
+	 * nothing changed or there is no earlier run.
+	 */
+	private static function render_since_last() {
+		$diff = CASCR_Store::diff();
+
+		if ( null === $diff || ( empty( $diff['broken'] ) && empty( $diff['fixed'] ) ) ) {
+			return;
+		}
+
+		$parts = array();
+
+		if ( ! empty( $diff['broken'] ) ) {
+			$parts[] = sprintf(
+				/* translators: %d: number of checks that turned into a finding. */
+				_n( '%d new finding', '%d new findings', count( $diff['broken'] ), 'security-check-report' ),
+				count( $diff['broken'] )
+			);
+		}
+
+		if ( ! empty( $diff['fixed'] ) ) {
+			$parts[] = sprintf(
+				/* translators: %d: number of findings that are gone. */
+				_n( '%d resolved', '%d resolved', count( $diff['fixed'] ), 'security-check-report' ),
+				count( $diff['fixed'] )
+			);
+		}
+		?>
+		<p class="cascr-dash__journey cascr-dash__since">
+			<?php
+			echo esc_html(
+				sprintf(
+					/* translators: %s: list such as "2 new findings, 3 resolved". */
+					__( 'Since the run before: %s.', 'security-check-report' ),
+					implode( ', ', $parts )
+				)
+			);
+			?>
+		</p>
 		<?php
 	}
 
@@ -395,7 +439,7 @@ class CASCR_Admin_Dashboard {
 		?>
 		<li class="cascr-task cascr-task--<?php echo esc_attr( $task['severity'] ); ?>" data-cascr-task="<?php echo esc_attr( $task['id'] ); ?>">
 			<div class="cascr-task__head">
-				<span class="cascr-task__label"><?php echo esc_html( $task['label'] ); ?></span>
+				<span class="cascr-task__label" id="cascr-task-label-<?php echo esc_attr( $task['id'] ); ?>"><?php echo esc_html( $task['label'] ); ?></span>
 				<span class="cascr-badge cascr-badge--<?php echo esc_attr( $task['severity'] ); ?>">
 					<?php echo esc_html( CASCR_Admin::severity_label( $task['severity'] ) ); ?>
 				</span>
@@ -414,13 +458,13 @@ class CASCR_Admin_Dashboard {
 			<?php endif; ?>
 
 			<div class="cascr-task__actions">
-				<button type="button" class="button button-primary" data-cascr-recheck="<?php echo esc_attr( $task['id'] ); ?>">
+				<button type="button" class="button button-primary" data-cascr-recheck="<?php echo esc_attr( $task['id'] ); ?>" aria-describedby="cascr-task-label-<?php echo esc_attr( $task['id'] ); ?>">
 					<?php esc_html_e( 'Done, check it now', 'security-check-report' ); ?>
 				</button>
-				<button type="button" class="button button-link cascr-task__later" data-cascr-later="<?php echo esc_attr( $task['id'] ); ?>">
+				<button type="button" class="button button-link cascr-task__later" data-cascr-later="<?php echo esc_attr( $task['id'] ); ?>" aria-describedby="cascr-task-label-<?php echo esc_attr( $task['id'] ); ?>">
 					<?php esc_html_e( 'later', 'security-check-report' ); ?>
 				</button>
-				<a class="cascr-result__link" href="#cascr-doc-<?php echo esc_attr( $task['id'] ); ?>" data-cascr-doc="<?php echo esc_attr( $task['id'] ); ?>">
+				<a class="cascr-result__link" href="#cascr-doc-<?php echo esc_attr( $task['id'] ); ?>" data-cascr-doc="<?php echo esc_attr( $task['id'] ); ?>" aria-describedby="cascr-task-label-<?php echo esc_attr( $task['id'] ); ?>">
 					<?php esc_html_e( 'Read more about this check', 'security-check-report' ); ?>
 				</a>
 			</div>

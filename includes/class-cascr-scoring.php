@@ -69,8 +69,24 @@ class CASCR_Scoring {
 		foreach ( $results as $id => $result ) {
 			++$counts['total'];
 
+			$test     = CASCR_Registry::get( $id );
+			$category = $test ? $test['category'] : 'other';
+
+			if ( ! isset( $by_category[ $category ] ) ) {
+				$by_category[ $category ] = array(
+					'pass'         => 0,
+					'warn'         => 0,
+					'fail'         => 0,
+					'inconclusive' => 0,
+					'ignored'      => 0,
+				);
+			}
+
+			// Muted checks still belong to their category, otherwise the
+			// category total is lower than the number of checks it holds.
 			if ( ! empty( $result['ignored'] ) ) {
 				++$counts['ignored'];
+				++$by_category[ $category ]['ignored'];
 				continue;
 			}
 
@@ -79,19 +95,10 @@ class CASCR_Scoring {
 				++$counts[ $status ];
 			}
 
-			$test     = CASCR_Registry::get( $id );
 			$severity = $test ? $test['severity'] : CASCR_Registry::SEVERITY_MEDIUM;
 			$weight   = $test ? $test['weight'] : 1.5;
 
-			if ( ! isset( $by_category[ $test ? $test['category'] : 'other' ] ) ) {
-				$by_category[ $test ? $test['category'] : 'other' ] = array(
-					'pass'         => 0,
-					'warn'         => 0,
-					'fail'         => 0,
-					'inconclusive' => 0,
-				);
-			}
-			++$by_category[ $test ? $test['category'] : 'other' ][ $status ];
+			++$by_category[ $category ][ $status ];
 
 			// An unreachable endpoint is not a finding. It must not move the grade.
 			if ( CASCR_Result::STATUS_INCONCLUSIVE === $status || $weight <= 0 ) {
@@ -286,8 +293,9 @@ class CASCR_Scoring {
 				'fix'      => isset( $result['fix'] ) ? $result['fix'] : '',
 				'link'     => isset( $result['link'] ) ? $result['link'] : array(),
 				'rank'     => array(
-					CASCR_Result::STATUS_FAIL === $result['status'] ? 1 : 0,
+					// Severity first: a critical warning outranks a medium failure.
 					CASCR_Registry::severity_rank( $test['severity'] ),
+					CASCR_Result::STATUS_FAIL === $result['status'] ? 1 : 0,
 					$result['score'],
 				),
 			);

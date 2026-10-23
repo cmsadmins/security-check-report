@@ -131,7 +131,6 @@ class CASCR_Admin {
 					__( 'Result', 'security-check-report' ),
 				),
 				'taskChecking'   => __( 'Checking again', 'security-check-report' ),
-				'scanFinished'   => __( 'The security check finished.', 'security-check-report' ),
 			),
 		);
 	}
@@ -332,7 +331,7 @@ class CASCR_Admin {
 				<span class="cascr-progress__spinner" aria-hidden="true"></span>
 				<span class="cascr-progress__label" id="cascr-progress-label"></span>
 			</div>
-			<div class="cascr-progress__track">
+			<div class="cascr-progress__track" role="progressbar" aria-labelledby="cascr-progress-label" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 				<div class="cascr-progress__bar" id="cascr-progress-bar"></div>
 			</div>
 		</div>
@@ -456,9 +455,16 @@ class CASCR_Admin {
 		>
 			<summary class="cascr-result__summary">
 				<span class="cascr-status cascr-status--<?php echo esc_attr( $status ); ?>">
-					<?php echo esc_html( self::status_label( $data['status'] ) ); ?>
+					<?php
+					echo esc_html(
+						$muted
+							/* translators: %s: status the muted check had, for example Failed. */
+							? sprintf( __( 'Muted, was %s', 'security-check-report' ), self::status_label( $data['status'] ) )
+							: self::status_label( $data['status'] )
+					);
+					?>
 				</span>
-				<span class="cascr-result__label"><?php echo esc_html( $test['label'] ); ?></span>
+				<span class="cascr-result__label" id="cascr-label-<?php echo esc_attr( $id ); ?>"><?php echo esc_html( $test['label'] ); ?></span>
 				<span class="cascr-result__text"><?php echo esc_html( $data['summary'] ); ?></span>
 			</summary>
 
@@ -484,10 +490,10 @@ class CASCR_Admin {
 				<?php endif; ?>
 
 				<div class="cascr-result__actions">
-					<a class="cascr-result__link" href="#cascr-doc-<?php echo esc_attr( $id ); ?>" data-cascr-doc="<?php echo esc_attr( $id ); ?>">
+					<a class="cascr-result__link" href="#cascr-doc-<?php echo esc_attr( $id ); ?>" data-cascr-doc="<?php echo esc_attr( $id ); ?>" aria-describedby="cascr-label-<?php echo esc_attr( $id ); ?>">
 						<?php esc_html_e( 'Read more about this check', 'security-check-report' ); ?>
 					</a>
-					<button type="button" class="button button-link cascr-result__mute" data-cascr-mute="<?php echo esc_attr( $id ); ?>">
+					<button type="button" class="button button-link cascr-result__mute" data-cascr-mute="<?php echo esc_attr( $id ); ?>" aria-describedby="cascr-label-<?php echo esc_attr( $id ); ?>">
 						<?php echo $muted ? esc_html__( 'Unmute', 'security-check-report' ) : esc_html__( 'Mute this finding', 'security-check-report' ); ?>
 					</button>
 					<?php if ( $muted ) : ?>

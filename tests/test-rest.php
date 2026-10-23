@@ -101,8 +101,19 @@ class Test_CASCR_REST extends WP_UnitTestCase {
 	public function test_a_subscriber_is_rejected() {
 		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
 
+		$this->assertSame( 403, $this->call( 'GET', '/tests' )->get_status() );
 		$this->assertSame( 403, $this->call( 'POST', '/run/wp_debug' )->get_status() );
+		$this->assertSame( 403, $this->call( 'GET', '/report' )->get_status() );
+		$this->assertSame( 403, $this->call( 'POST', '/report', array( 'results' => array() ) )->get_status() );
+		$this->assertSame( 403, $this->call( 'POST', '/ignore', array( 'id' => 'wp_debug' ) )->get_status() );
 		$this->assertSame( 403, $this->call( 'POST', '/recheck/wp_debug' )->get_status() );
+		$this->assertSame( 403, $this->call( 'POST', '/consent' )->get_status() );
+	}
+
+	public function test_an_unknown_check_cannot_be_muted() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertSame( 400, $this->call( 'POST', '/ignore', array( 'id' => 'no_such_check' ) )->get_status() );
 	}
 
 	public function test_an_administrator_can_list_the_checks() {

@@ -46,6 +46,86 @@ class CASCR_Nudges {
 		add_action( 'wp_dashboard_setup', array( __CLASS__, 'add_widget' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'stale_notice' ) );
 		add_action( 'admin_post_' . self::DISMISS_ACTION, array( __CLASS__, 'dismiss' ) );
+		add_filter( 'site_status_tests', array( __CLASS__, 'add_site_health_test' ) );
+	}
+
+	/**
+	 * Puts the grade into Tools, Site Health, where admins look who never open
+	 * this plugin. Reads the stored run only, it never starts a scan.
+	 *
+	 * @param array $tests Site Health tests.
+	 * @return array
+	 */
+	public static function add_site_health_test( $tests ) {
+		$tests['direct']['cascr_grade'] = array(
+			'label' => __( 'Security Check Report', 'security-check-report' ),
+			'test'  => array( __CLASS__, 'site_health_result' ),
+		);
+
+		return $tests;
+	}
+
+	/**
+	 * Good for A and B, recommended for C or a stale run, critical for D and F.
+	 *
+	 * @return array Site Health test result.
+	 */
+	public static function site_health_result() {
+		$run    = CASCR_Store::last_run();
+		$result = array(
+			'label'       => __( 'The security check found nothing urgent', 'security-check-report' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Security', 'security-check-report' ),
+				'color' => 'blue',
+			),
+			'description' => '',
+			'actions'     => sprintf(
+				'<p><a href="%1$s">%2$s</a></p>',
+				esc_url( self::page_url() ),
+				esc_html__( 'Open the report', 'security-check-report' )
+			),
+			'test'        => 'cascr_grade',
+		);
+
+		if ( empty( $run['tests'] ) ) {
+			$result['status']      = 'recommended';
+			$result['label']       = __( 'This site has not been checked yet', 'security-check-report' );
+			$result['description'] = '<p>' . esc_html__( 'Run the security check once to see where the site stands.', 'security-check-report' ) . '</p>';
+
+			return $result;
+		}
+
+		$grade = isset( $run['grade'] ) ? (string) $run['grade'] : '';
+		$open  = self::open_tasks( $run );
+
+		$result['description'] = '<p>' . esc_html(
+			sprintf(
+				/* translators: 1: grade letter, 2: grade label such as Good, 3: number of open tasks. */
+				_n(
+					'Grade %1$s (%2$s), %3$d open task.',
+					'Grade %1$s (%2$s), %3$d open tasks.',
+					$open,
+					'security-check-report'
+				),
+				$grade,
+				CASCR_Scoring::grade_label( $grade ),
+				$open
+			)
+		) . '</p>';
+
+		if ( in_array( $grade, array( 'D', 'F' ), true ) ) {
+			$result['status'] = 'critical';
+			$result['label']  = __( 'The security check found serious problems', 'security-check-report' );
+		} elseif ( 'C' === $grade ) {
+			$result['status'] = 'recommended';
+			$result['label']  = __( 'The security check found problems worth fixing', 'security-check-report' );
+		} elseif ( self::is_due() ) {
+			$result['status'] = 'recommended';
+			$result['label']  = __( 'The last security check is more than a month old', 'security-check-report' );
+		}
+
+		return $result;
 	}
 
 	/**

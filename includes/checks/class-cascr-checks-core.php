@@ -121,7 +121,10 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 
 		$latest = '';
 		foreach ( $updates as $update ) {
-			if ( isset( $update->response ) && 'upgrade' === $update->response && isset( $update->current ) ) {
+			// A stale update_core transient or a locale package can offer the
+			// installed version as an "upgrade". Only a newer release counts.
+			if ( isset( $update->response ) && 'upgrade' === $update->response && isset( $update->current )
+				&& version_compare( $update->current, $wp_version, '>' ) ) {
 				$latest = $update->current;
 				break;
 			}

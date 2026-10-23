@@ -132,4 +132,23 @@ class Test_CASCR_Admin_Dashboard extends WP_UnitTestCase {
 
 		$this->assertStringContainsString( 'cascr-dash__partial', $this->render() );
 	}
+
+	public function test_the_change_since_the_run_before_is_named() {
+		$this->store(
+			array(
+				'wp_debug'  => CASCR_Result::fail( 'debug is on', 9 ),
+				'file_edit' => CASCR_Result::fail( 'editor on', 8 ),
+			)
+		);
+		$this->store( array( 'db_prefix' => CASCR_Result::warn( 'default prefix', 5 ) ) );
+
+		$this->assertStringContainsString( 'Since the run before: 1 new finding, 2 resolved.', $this->render() );
+	}
+
+	public function test_an_unchanged_run_says_nothing_about_changes() {
+		$this->store();
+		$this->store();
+
+		$this->assertStringNotContainsString( 'Since the run before', $this->render() );
+	}
 }

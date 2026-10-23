@@ -143,16 +143,54 @@ class Test_CASCR_Scoring extends WP_UnitTestCase {
 		$this->assertSame( 'fail', $priorities[0]['status'] );
 		$this->assertSame( CASCR_Registry::SEVERITY_CRITICAL, $priorities[0]['severity'] );
 
-		// No warning may appear before a failure.
-		$seen_warning = false;
-		foreach ( $priorities as $entry ) {
-			if ( 'warn' === $entry['status'] ) {
-				$seen_warning = true;
-				continue;
-			}
+		// Severity never rises down the list, and within one severity no
+		// warning comes before a failure.
+		for ( $i = 1; $i < count( $priorities ); $i++ ) {
+			$prev = CASCR_Registry::severity_rank( $priorities[ $i - 1 ]['severity'] );
+			$curr = CASCR_Registry::severity_rank( $priorities[ $i ]['severity'] );
 
-			$this->assertFalse( $seen_warning, 'A failure was listed after a warning.' );
+			$this->assertGreaterThanOrEqual( $curr, $prev, 'A more severe finding was listed further down.' );
+
+			if ( $prev === $curr ) {
+				$this->assertFalse(
+					'warn' === $priorities[ $i - 1 ]['status'] && 'fail' === $priorities[ $i ]['status'],
+					'A failure was listed after a warning of the same severity.'
+				);
+			}
 		}
+	}
+
+	/**
+	 * Seen on a live site: PHP2Shell (critical, warning) sat behind missing
+	 * security headers (medium, failure).
+	 */
+	public function test_a_critical_warning_outranks_a_medium_failure() {
+		$priorities = CASCR_Scoring::priorities(
+			$this->results(
+				array(
+					'security_headers' => CASCR_Result::fail( 'missing', 6 ),
+					'php2shell'        => CASCR_Result::warn( 'unpatched', 6 ),
+				)
+			)
+		);
+
+		$this->assertSame( array( 'php2shell', 'security_headers' ), wp_list_pluck( $priorities, 'id' ) );
+	}
+
+	public function test_muted_checks_still_count_towards_their_category() {
+		$summary = CASCR_Scoring::summarize(
+			$this->results(
+				array(
+					'wp_debug' => array_merge( CASCR_Result::fail( 'bad', 9 ), array( 'ignored' => true ) ),
+				)
+			)
+		);
+
+		$category = CASCR_Registry::get( 'wp_debug' )['category'];
+		$expected = count( wp_list_filter( CASCR_Registry::all(), array( 'category' => $category ) ) );
+
+		$this->assertSame( $expected, array_sum( $summary['categories'][ $category ] ) );
+		$this->assertSame( 1, $summary['categories'][ $category ]['ignored'] );
 	}
 
 	public function test_priorities_are_stable_across_runs() {

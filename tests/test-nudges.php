@@ -148,4 +148,36 @@ class Test_CASCR_Nudges extends WP_UnitTestCase {
 		$this->assertFalse( CASCR_Nudges::is_due() );
 		$this->assertArrayNotHasKey( CASCR_Nudges::WIDGET_ID, $this->dashboard_widgets() );
 	}
+
+	/**
+	 * @param string $grade Grade to store on the last run.
+	 * @return string Site Health status.
+	 */
+	private function site_health_status_for( $grade ) {
+		$this->store_run( array( 'fail' => 1 ) );
+		$run          = get_option( CASCR_Store::OPTION_LAST );
+		$run['grade'] = $grade;
+		update_option( CASCR_Store::OPTION_LAST, $run, false );
+
+		return CASCR_Nudges::site_health_result()['status'];
+	}
+
+	public function test_site_health_lists_the_grade_test() {
+		$tests = apply_filters( 'site_status_tests', array( 'direct' => array() ) );
+
+		$this->assertArrayHasKey( 'cascr_grade', $tests['direct'] );
+	}
+
+	public function test_site_health_follows_the_grade() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertSame( 'good', $this->site_health_status_for( 'B' ) );
+		$this->assertSame( 'recommended', $this->site_health_status_for( 'C' ) );
+		$this->assertSame( 'critical', $this->site_health_status_for( 'D' ) );
+		$this->assertSame( 'critical', $this->site_health_status_for( 'F' ) );
+	}
+
+	public function test_site_health_asks_for_a_first_run() {
+		$this->assertSame( 'recommended', CASCR_Nudges::site_health_result()['status'] );
+	}
 }
