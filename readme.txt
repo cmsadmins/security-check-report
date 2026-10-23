@@ -243,6 +243,8 @@ Releases before 2.2.0 are listed in changelog.txt.
 * The five tasks are ordered by severity first. A critical warning such as PHP2Shell no longer sits behind a medium failure.
 * Muted findings say so in their badge ("Muted, was Failed") instead of showing the old status in grey.
 * Category progress counts muted checks, so each category shows its full number of checks.
+* The progress chart shows the grade above and the date below every bar, newest run first.
+* Section headings stand out more, and the list of all checks keeps status, name and summary in aligned columns.
 * Screen readers: the progress bar is announced as one, focus moves to the grade after a run, and every task and result button names the check it belongs to. Faint text now meets the WCAG AA contrast ratio.
 
 **Fixed**

@@ -288,11 +288,12 @@
 
 .cascr-section__title {
     margin: 0 0 var(--cascr-space-3);
-    font-size: 15px;
+    padding-top: var(--cascr-space-4);
+    border-top: 1px solid var(--cascr-border);
+    font-size: 18px;
     font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    color: var(--cascr-text-soft);
+    line-height: 1.3;
+    color: var(--cascr-text);
 }
 
 .cascr-score__card {
@@ -646,10 +647,10 @@
 }
 
 .cascr-results__group-title {
-    margin: 0 0 var(--cascr-space-2);
-    font-size: 13px;
+    margin: var(--cascr-space-4) 0 var(--cascr-space-2);
+    font-size: 15px;
     font-weight: 600;
-    color: var(--cascr-text-faint);
+    color: var(--cascr-text);
 }
 
 .cascr-result {
@@ -700,8 +701,16 @@
     content: "\2212";
 }
 
+/* Fixed columns keep badge, name and summary aligned from row to row. */
+.cascr-result__summary > .cascr-status {
+    flex: 0 0 150px;
+    box-sizing: border-box;
+    text-align: center;
+    white-space: normal;
+}
+
 .cascr-result__label {
-    min-width: 190px;
+    flex: 0 0 240px;
     font-size: 14px;
     font-weight: 600;
 }
@@ -826,35 +835,65 @@
 }
 
 /*
- * The drawing carries its own width in user units, one per pixel, and the two
- * bounds here decide what that turns into. The minimum keeps the two runs of a
- * new installation from reading as a rendering fault; the maximum hands the
- * whole row back to the card as soon as there are more runs than fit, which
- * from about a dozen on is every one of them. The height is set here rather
- * than taken from the drawing: the aspect ratio is free, so the difference
- * between a bad grade and a good one is a difference anyone can see.
+ * One column per run: grade on top, bar, short date below. Bar height is the
+ * inverse of the risk score, so a better run stands taller. Many runs scroll
+ * sideways inside the card instead of shrinking the dates into nothing.
  */
-.cascr-curve__svg {
-    display: block;
-    min-width: 160px;
-    max-width: 100%;
-    height: 124px;
+.cascr-curve__list {
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: var(--cascr-space-2);
+    list-style: none;
+    overflow-x: auto;
     background: var(--cascr-bg-soft);
     border: 1px solid var(--cascr-border);
-    padding: var(--cascr-space-2);
-    box-sizing: border-box;
 }
 
-.cascr-curve__bar { fill: var(--cascr-unknown); }
-.cascr-curve__bar--a,
-.cascr-curve__bar--b { fill: var(--cascr-pass); }
-.cascr-curve__bar--c { fill: var(--cascr-warn); }
-.cascr-curve__bar--d,
-.cascr-curve__bar--f { fill: var(--cascr-fail); }
+.cascr-curve__run {
+    flex: 1 0 40px;
+    max-width: 88px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
 
-.cascr-curve__legend {
-    margin: var(--cascr-space-2) 0 0;
+/* The padding leaves room for the grade above the tallest bar. */
+.cascr-curve__plot {
+    height: 100px;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.cascr-curve__grade {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
     font-size: 12px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+    color: var(--cascr-text-soft);
+}
+
+.cascr-curve__bar { display: block; position: relative; background: var(--cascr-unknown); }
+.cascr-curve__bar--a,
+.cascr-curve__bar--b { background: var(--cascr-pass); }
+.cascr-curve__bar--c { background: var(--cascr-warn); }
+.cascr-curve__bar--d,
+.cascr-curve__bar--f { background: var(--cascr-fail); }
+
+.cascr-curve__date {
+    margin-top: 4px;
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: center;
+    white-space: nowrap;
     color: var(--cascr-text-faint);
 }
 
@@ -1231,7 +1270,6 @@
     }
 
     .cascr-result__label {
-        min-width: 0;
         flex: 1 1 100%;
     }
 

@@ -17,27 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class CASCR_Admin_Dashboard {
 
-	/**
-	 * Height of the curve in user units, and the full scale with it.
-	 *
-	 * A bar stands for how well a run came out, not for how risky it was. Drawn
-	 * the other way round the section called "Your progress" shows almost
-	 * nothing once a site is in good shape, which is exactly when it has the
-	 * most to show. Bars that grow as the site improves say the same thing and
-	 * say it the way round people read it.
-	 */
-	const CURVE_HEIGHT = 100;
 
-	/**
-	 * Width of one bar and the gap that follows it, in user units.
-	 *
-	 * The drawing carries its own width, so ten runs fill the card the way a
-	 * chart should and two runs stay a pair of bars rather than two slabs. Past
-	 * roughly a dozen runs the page is narrower than the drawing and the
-	 * stylesheet scales the whole row down, gaps included.
-	 */
-	const CURVE_BAR = 88;
-	const CURVE_GAP = 20;
 
 	/**
 	 * Prints the dashboard view.
@@ -329,7 +309,7 @@ class CASCR_Admin_Dashboard {
 	}
 
 	/**
-	 * One bar per recorded run, drawn by hand.
+	 * One bar per recorded run, with its grade above and its date below.
 	 *
 	 * A single point is not a development, so the curve stays away until there
 	 * is something to compare.
@@ -342,64 +322,46 @@ class CASCR_Admin_Dashboard {
 			return;
 		}
 
-		$width = $total * ( self::CURVE_BAR + self::CURVE_GAP ) - self::CURVE_GAP;
 		?>
 		<section class="cascr-curve">
 			<h2 class="cascr-section__title"><?php esc_html_e( 'Your progress', 'security-check-report' ); ?></h2>
+			<p class="cascr-section__lead"><?php esc_html_e( 'One bar per full run, the latest on the left. The taller the bar, the lower the risk.', 'security-check-report' ); ?></p>
 
-			<svg
-				class="cascr-curve__svg"
-				width="<?php echo esc_attr( (string) $width ); ?>"
-				height="<?php echo esc_attr( (string) self::CURVE_HEIGHT ); ?>"
-				viewBox="<?php echo esc_attr( sprintf( '0 0 %1$d %2$d', $width, self::CURVE_HEIGHT ) ); ?>"
-				preserveAspectRatio="none"
-				role="img"
-				aria-label="<?php echo esc_attr( __( 'How the site scored across the recorded runs, oldest on the left. A taller bar is a better run.', 'security-check-report' ) ); ?>"
-			>
+			<ol class="cascr-curve__list">
 				<?php
-				$index = 0;
-
-				foreach ( $points as $point ) {
-					$risk = isset( $point['r'] ) ? (float) $point['r'] : 0.0;
+				foreach ( array_reverse( $points ) as $point ) {
+					$risk  = isset( $point['r'] ) ? (float) $point['r'] : 0.0;
+					$grade = isset( $point['g'] ) && '' !== $point['g'] ? $point['g'] : 'F';
+					$time  = (int) $point['t'];
 
 					// A run with everything wrong still gets a stub, so the
 					// worst point on the chart is a bar and not a gap.
-					$height = (int) max( 3, round( ( 100 - $risk ) / 100 * self::CURVE_HEIGHT ) );
-					$grade  = isset( $point['g'] ) && '' !== $point['g'] ? $point['g'] : 'F';
+					$height = max( 4, (int) round( 100 - $risk ) );
+					$full   = sprintf(
+						/* translators: 1: date of the run, 2: grade letter. */
+						__( '%1$s: grade %2$s', 'security-check-report' ),
+						wp_date( get_option( 'date_format' ), $time ),
+						$grade
+					);
 					?>
-					<rect
-						class="cascr-curve__bar cascr-curve__bar--<?php echo esc_attr( strtolower( $grade ) ); ?>"
-						x="<?php echo esc_attr( (string) ( $index * ( self::CURVE_BAR + self::CURVE_GAP ) ) ); ?>"
-						y="<?php echo esc_attr( (string) ( self::CURVE_HEIGHT - $height ) ); ?>"
-						width="<?php echo esc_attr( (string) self::CURVE_BAR ); ?>"
-						height="<?php echo esc_attr( (string) $height ); ?>"
-					>
-						<title>
+					<li class="cascr-curve__run" title="<?php echo esc_attr( $full ); ?>">
+						<span class="screen-reader-text"><?php echo esc_html( $full ); ?></span>
+						<span class="cascr-curve__plot" aria-hidden="true">
+							<span class="cascr-curve__bar cascr-curve__bar--<?php echo esc_attr( strtolower( $grade ) ); ?>" style="height:<?php echo esc_attr( (string) $height ); ?>%">
+								<span class="cascr-curve__grade"><?php echo esc_html( $grade ); ?></span>
+							</span>
+						</span>
+						<span class="cascr-curve__date" aria-hidden="true">
 							<?php
-							printf(
-								/* translators: 1: date of the run, 2: grade letter. */
-								esc_html__( '%1$s: grade %2$s', 'security-check-report' ),
-								esc_html( wp_date( get_option( 'date_format' ), (int) $point['t'] ) ),
-								esc_html( $grade )
-							);
+							/* translators: short date under each bar of the progress chart, PHP date() format. */
+							echo esc_html( wp_date( __( 'M j', 'security-check-report' ), $time ) );
 							?>
-						</title>
-					</rect>
+						</span>
+					</li>
 					<?php
-					++$index;
 				}
 				?>
-			</svg>
-
-			<p class="cascr-curve__legend">
-				<?php
-				printf(
-					/* translators: %d: number of recorded runs. */
-					esc_html( _n( '%d recorded run. A taller bar is a better run.', '%d recorded runs, the oldest on the left. A taller bar is a better run.', $total, 'security-check-report' ) ),
-					(int) $total
-				);
-				?>
-			</p>
+			</ol>
 		</section>
 		<?php
 	}
