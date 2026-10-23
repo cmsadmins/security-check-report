@@ -52,7 +52,7 @@ msgid "Why it matters"
 msgstr "Waarom het ertoe doet"
 
 #: config/docs.php:17 includes/class-cascr-admin.php:115
-#: includes/class-cascr-admin.php:476
+#: includes/class-cascr-admin.php:482
 msgid "What to do"
 msgstr "Wat je moet doen"
 
@@ -73,7 +73,7 @@ msgid ""
 "Whether the installed WordPress release is the current one, read from the "
 "update information WordPress already holds."
 msgstr ""
-"Of de geïnstalleerde WordPress-versie de actuele is, op basis van de update-"
+"Of de geïnstalleerde WordPress versie de actuele is, op basis van de update-"
 "informatie die WordPress al heeft."
 
 #: config/docs.php:49
@@ -105,10 +105,11 @@ msgid ""
 " that date and the phase in which a branch only gets security fixes and no "
 "more bug fixes are reported separately."
 msgstr ""
-"Of de PHP-versietak waarop deze site draait nog beveiligingsfixes krijgt, "
-"gemeten aan de gepubliceerde end-of-life-data. De laatste zes maanden voor "
-"die datum en de fase waarin een tak alleen nog beveiligingsfixes en geen "
-"bugfixes meer krijgt, worden apart gemeld."
+"Of de PHP versie waarop deze site draait nog beveiligingsoplossingen "
+"ontvangt, gemeten aan de hand van de gepubliceerde einddatums. De laatste "
+"zes maanden vóór die datum en de fase waarin een versie alleen "
+"beveiligingsoplossingen en geen bugfixes meer ontvangt, worden afzonderlijk "
+"gemeld."
 
 #: config/docs.php:54
 msgid ""
@@ -502,7 +503,7 @@ msgid ""
 "The log accumulates file paths, query fragments and occasionally "
 "credentials. A publicly readable one is a slow leak that nobody watches."
 msgstr ""
-"Het log verzamelt bestandspaden, stukken query's en soms inloggegevens. Een "
+"De log verzamelt bestandspaden, stukken query's en soms referenties. Een "
 "openbaar leesbaar log is een langzaam lek waar niemand naar kijkt."
 
 #: config/docs.php:128
@@ -978,9 +979,10 @@ msgid ""
 msgstr ""
 "Bestanden en mappen met het bit voor schrijfbaar door iedereen. Er wordt op "
 "vier plekken gekeken, telkens één niveau diep: de webroot, wp-content, de "
-"pluginmap en de themamap. wp-config.php, wp-admin, wp-includes, wp-content "
-"en de uploads-map blijven buiten beschouwing: die hebben een eigen controle,"
-" en dubbel tellen zou één chmod het cijfer twee keer laten verlagen."
+"plugin map en de thema map. wp-config.php, wp-admin, wp-includes, wp-content"
+" en de uploads-map blijven buiten beschouwing: die hebben een eigen "
+"controle, en dubbel tellen zou één chmod het cijfer twee keer laten "
+"verlagen."
 
 #: config/docs.php:210
 msgid ""
@@ -988,7 +990,7 @@ msgid ""
 "it happens it is nearly always a botched chmod during troubleshooting that "
 "was never undone."
 msgstr ""
-"Niets in een WordPress-installatie hoeft voor iedereen schrijfbaar te zijn. "
+"Niets in een WordPress installatie hoeft voor iedereen schrijfbaar te zijn. "
 "Als het toch zo is, is het bijna altijd een mislukte chmod tijdens het "
 "troubleshooten die nooit is teruggedraaid."
 
@@ -1171,10 +1173,10 @@ msgid ""
 "environment variables, and on installations that pass credentials through "
 "the environment that means the database password."
 msgstr ""
-"De meeste zijn alleen informatie: welke WordPress-versie, welke buildtools, "
-"welke afhankelijkheden. phpinfo.php, info.php en test.php zijn anders: die "
-"tonen de volledige PHP-omgeving, inclusief paden en omgevingsvariabelen, en "
-"op installaties die inloggegevens via de omgeving doorgeven, betekent dat "
+"De meeste zijn alleen informatie: welke WordPress versie, welke buildtools, "
+"welke afhankelijkheden. Phpinfo.PHP, info.PHP en test.PHP zijn anders: die "
+"tonen de volledige PHP omgeving, inclusief paden en omgevingsvariabelen, en "
+"op installaties die logingegevens via de omgeving doorgeven, betekent dat "
 "het databasewachtwoord."
 
 #: config/docs.php:241
@@ -1281,7 +1283,7 @@ msgid ""
 "Password guessing is still how most WordPress sites are taken over. One weak"
 " administrator password makes every other measure on this page irrelevant."
 msgstr ""
-"Wachtwoorden raden is nog steeds de manier waarop de meeste WordPress-sites "
+"Wachtwoorden raden is nog steeds de manier waarop de meeste WordPress sites "
 "worden overgenomen. Eén zwak beheerderswachtwoord maakt elke andere "
 "maatregel op deze pagina zinloos."
 
@@ -1793,7 +1795,7 @@ msgid ""
 "The generator tag publishes the exact WordPress version. The other two point"
 " at interfaces from an era when blogging clients were a thing."
 msgstr ""
-"De generator-tag publiceert de exacte WordPress-versie. De andere twee "
+"De generator-tag publiceert de exacte WordPress versie. De andere twee "
 "verwijzen naar interfaces uit een tijd waarin blogclients nog bestonden."
 
 #: config/docs.php:342
@@ -1852,7 +1854,7 @@ msgid ""
 " are probed, not only the first one."
 msgstr ""
 "Drie manieren om accounts uit te lezen zonder ingelogd te zijn: de parameter"
-" ?author=N, het REST-endpoint voor gebruikers en het oEmbed-endpoint. Er "
+" ?author=N, het REST-endpoint voor gebruikers en het oEmbed endpoint. Er "
 "worden meerdere accounts geprobeerd, niet alleen het eerste."
 
 #: config/docs.php:351
@@ -2304,7 +2306,7 @@ msgid ""
 "Set up the second factor for those accounts, or require it for the "
 "administrator role."
 msgstr ""
-"Stel de tweede factor in voor die accounts, of maak hem verplicht voor de "
+"Stel de tweede factor in voor die accounts, of maak hem vereist voor de "
 "beheerdersrol."
 
 #: includes/checks/class-cascr-checks-accounts.php:655
@@ -2317,7 +2319,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-accounts.php:670
 msgid "This WordPress version has no application passwords."
-msgstr "Deze WordPress-versie heeft geen applicatiewachtwoorden."
+msgstr "Deze WordPress versie heeft geen applicatiewachtwoorden."
 
 #: includes/checks/class-cascr-checks-accounts.php:678
 msgid ""
@@ -2338,8 +2340,8 @@ msgstr ""
 "tijd de bestaande applicatiewachtwoorden in elk gebruikersprofiel."
 
 #: includes/checks/class-cascr-checks-accounts.php:697
-#: includes/checks/class-cascr-checks-core.php:1017
-#: includes/checks/class-cascr-checks-core.php:1026
+#: includes/checks/class-cascr-checks-core.php:1020
+#: includes/checks/class-cascr-checks-core.php:1029
 msgid "no name"
 msgstr "geen naam"
 
@@ -2930,41 +2932,41 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-core.php:117
 msgid "The latest WordPress version could not be determined."
-msgstr "De nieuwste WordPress-versie kon niet worden bepaald."
+msgstr "De nieuwste WordPress versie kon niet worden bepaald."
 
 #: includes/checks/class-cascr-checks-core.php:118
 msgid "Check that the site can reach api.wordpress.org."
 msgstr "Controleer of de site api.wordpress.org kan bereiken."
 
 #. translators: %s: WordPress version number.
-#: includes/checks/class-cascr-checks-core.php:134
+#: includes/checks/class-cascr-checks-core.php:137
 #, php-format
 msgid "WordPress %s is up to date."
 msgstr "WordPress %s is up-to-date."
 
 #. translators: 1: installed WordPress version, 2: latest available version.
-#: includes/checks/class-cascr-checks-core.php:143
+#: includes/checks/class-cascr-checks-core.php:146
 #, php-format
 msgid "WordPress %1$s is outdated, %2$s is available."
 msgstr "WordPress %1$s is verouderd, %2$s is beschikbaar."
 
-#: includes/checks/class-cascr-checks-core.php:149
+#: includes/checks/class-cascr-checks-core.php:152
 msgid "Install the update from Dashboard, Updates. Take a backup first."
 msgstr "Installeer de update via Dashboard, Updates. Maak eerst een back-up."
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:169
+#: includes/checks/class-cascr-checks-core.php:172
 #, php-format
 msgid "PHP %s is in use."
 msgstr "PHP %s wordt gebruikt."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:181
+#: includes/checks/class-cascr-checks-core.php:184
 #, php-format
 msgid "PHP %1$s stopped receiving security fixes on %2$s."
 msgstr "PHP %1$s krijgt sinds %2$s geen beveiligingsupdates meer."
 
-#: includes/checks/class-cascr-checks-core.php:187
+#: includes/checks/class-cascr-checks-core.php:190
 msgid ""
 "Ask your host to move the site to a supported PHP branch. Test on a staging "
 "copy first."
@@ -2973,17 +2975,17 @@ msgstr ""
 " zetten. Test eerst op een stagingkopie."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:195
+#: includes/checks/class-cascr-checks-core.php:198
 #, php-format
 msgid "PHP %1$s reaches end of security support on %2$s."
 msgstr "De beveiligingsondersteuning voor PHP %1$s eindigt op %2$s."
 
-#: includes/checks/class-cascr-checks-core.php:201
+#: includes/checks/class-cascr-checks-core.php:204
 msgid "Plan the upgrade to a newer PHP branch before that date."
 msgstr "Plan de upgrade naar een nieuwere PHP-versie vóór die datum."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:209
+#: includes/checks/class-cascr-checks-core.php:212
 #, php-format
 msgid ""
 "PHP %1$s only receives security fixes, no more bug fixes. Support ends on "
@@ -2993,12 +2995,12 @@ msgstr ""
 "ondersteuning eindigt op %2$s."
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:220
+#: includes/checks/class-cascr-checks-core.php:223
 #, php-format
 msgid "PHP %s is fully supported."
 msgstr "PHP %s wordt volledig ondersteund."
 
-#: includes/checks/class-cascr-checks-core.php:355
+#: includes/checks/class-cascr-checks-core.php:358
 msgid ""
 "The automatic updater cannot run, so security releases are not installed on "
 "their own."
@@ -3006,7 +3008,7 @@ msgstr ""
 "De automatische updater kan niet draaien, dus beveiligingsreleases worden "
 "niet vanzelf geïnstalleerd."
 
-#: includes/checks/class-cascr-checks-core.php:358
+#: includes/checks/class-cascr-checks-core.php:361
 msgid ""
 "Allow file modifications again, or install core updates another way, for "
 "example over WP-CLI or the hosting platform."
@@ -3014,7 +3016,7 @@ msgstr ""
 "Sta bestandswijzigingen weer toe, of installeer core-updates op een andere "
 "manier, bijvoorbeeld via WP-CLI of het hostingplatform."
 
-#: includes/checks/class-cascr-checks-core.php:371
+#: includes/checks/class-cascr-checks-core.php:374
 msgid ""
 "Automatic core updates are switched off, so security releases are not "
 "installed on their own."
@@ -3022,7 +3024,7 @@ msgstr ""
 "Automatische core-updates zijn uitgeschakeld, dus beveiligingsreleases "
 "worden niet vanzelf geïnstalleerd."
 
-#: includes/checks/class-cascr-checks-core.php:374
+#: includes/checks/class-cascr-checks-core.php:377
 msgid ""
 "Remove the WP_AUTO_UPDATE_CORE constant from wp-config.php or set it to "
 "minor."
@@ -3030,25 +3032,25 @@ msgstr ""
 "Verwijder de constante WP_AUTO_UPDATE_CORE uit wp-config.php of zet die op "
 "minor."
 
-#: includes/checks/class-cascr-checks-core.php:380
+#: includes/checks/class-cascr-checks-core.php:383
 msgid "This installation receives pre-release core updates."
 msgstr "Deze installatie krijgt pre-release core-updates."
 
-#: includes/checks/class-cascr-checks-core.php:383
+#: includes/checks/class-cascr-checks-core.php:386
 msgid "Set WP_AUTO_UPDATE_CORE to minor on production sites."
 msgstr "Zet WP_AUTO_UPDATE_CORE op productiesites op minor."
 
-#: includes/checks/class-cascr-checks-core.php:390
+#: includes/checks/class-cascr-checks-core.php:393
 msgid "All automatic core updates are enabled."
 msgstr "Alle automatische core-updates zijn ingeschakeld."
 
-#: includes/checks/class-cascr-checks-core.php:395
+#: includes/checks/class-cascr-checks-core.php:398
 msgid "Automatic minor and security updates are switched off for this site."
 msgstr ""
 "Automatische kleine updates en beveiligingsupdates zijn voor deze site "
 "uitgeschakeld."
 
-#: includes/checks/class-cascr-checks-core.php:398
+#: includes/checks/class-cascr-checks-core.php:401
 msgid ""
 "Re-enable automatic updates for maintenance and security releases under "
 "Dashboard, Updates."
@@ -3056,15 +3058,16 @@ msgstr ""
 "Schakel automatische updates voor onderhouds- en beveiligingsreleases weer "
 "in onder Dashboard, Updates."
 
-#: includes/checks/class-cascr-checks-core.php:402
+#: includes/checks/class-cascr-checks-core.php:405
 msgid "Automatic minor and security updates are enabled."
 msgstr "Automatische kleine updates en beveiligingsupdates zijn ingeschakeld."
 
-#: includes/checks/class-cascr-checks-core.php:415
+#: includes/checks/class-cascr-checks-core.php:418
 msgid "No official checksums are available for this WordPress version."
-msgstr "Voor deze WordPress-versie zijn geen officiële checksums beschikbaar."
+msgstr ""
+"Voor deze WordPress versie zijn geen officiële checksommen beschikbaar."
 
-#: includes/checks/class-cascr-checks-core.php:416
+#: includes/checks/class-cascr-checks-core.php:419
 msgid ""
 "Checksums are only published for release builds. Nightly or patched builds "
 "cannot be verified."
@@ -3073,7 +3076,7 @@ msgstr ""
 "aangepaste builds kunnen niet worden geverifieerd."
 
 #. translators: %d: number of files verified.
-#: includes/checks/class-cascr-checks-core.php:449
+#: includes/checks/class-cascr-checks-core.php:452
 #, php-format
 msgid "The %d core file matches the official checksums."
 msgid_plural "All %d core files match the official checksums."
@@ -3081,27 +3084,27 @@ msgstr[0] "Het %d core-bestand komt overeen met de officiële checksums."
 msgstr[1] "De %d core-bestanden komen overeen met de officiële checksums."
 
 #. translators: %s: file path relative to the WordPress root.
-#: includes/checks/class-cascr-checks-core.php:463
+#: includes/checks/class-cascr-checks-core.php:466
 #, php-format
 msgid "modified: %s"
 msgstr "gewijzigd: %s"
 
 #. translators: %s: file path relative to the WordPress root.
-#: includes/checks/class-cascr-checks-core.php:467
+#: includes/checks/class-cascr-checks-core.php:470
 #, php-format
 msgid "missing: %s"
 msgstr "ontbreekt: %s"
 
 #. translators: %d: number of core files that differ from the official
 #. release.
-#: includes/checks/class-cascr-checks-core.php:476
+#: includes/checks/class-cascr-checks-core.php:479
 #, php-format
 msgid "%d core file differs from the official release."
 msgid_plural "%d core files differ from the official release."
 msgstr[0] "%d core-bestand wijkt af van de officiële release."
 msgstr[1] "%d core-bestanden wijken af van de officiële release."
 
-#: includes/checks/class-cascr-checks-core.php:486
+#: includes/checks/class-cascr-checks-core.php:489
 msgid ""
 "Reinstall WordPress from Dashboard, Updates, Reinstall. If files keep "
 "changing, treat the site as compromised."
@@ -3109,18 +3112,18 @@ msgstr ""
 "Installeer WordPress opnieuw via Dashboard, Updates, Opnieuw installeren. "
 "Blijven bestanden veranderen, behandel de site dan als gecompromitteerd."
 
-#: includes/checks/class-cascr-checks-core.php:507
+#: includes/checks/class-cascr-checks-core.php:510
 msgid "No official file list is available for this WordPress version."
 msgstr ""
-"Voor deze WordPress-versie is geen officiële bestandslijst beschikbaar."
+"Voor deze WordPress versie is geen officiële bestandslijst beschikbaar."
 
-#: includes/checks/class-cascr-checks-core.php:557
+#: includes/checks/class-cascr-checks-core.php:560
 msgid "The core directories could not be read completely."
 msgstr "De core-mappen konden niet volledig worden gelezen."
 
 #. translators: %d: number of executable files that were compared before the
 #. scan stopped.
-#: includes/checks/class-cascr-checks-core.php:569
+#: includes/checks/class-cascr-checks-core.php:572
 #, php-format
 msgid ""
 "The scan stopped after %d executable files, so the core directories were "
@@ -3129,20 +3132,20 @@ msgstr ""
 "De scan stopte na %d uitvoerbare bestanden, dus de core-mappen zijn maar "
 "gedeeltelijk vergeleken."
 
-#: includes/checks/class-cascr-checks-core.php:572
+#: includes/checks/class-cascr-checks-core.php:575
 msgid ""
 "Nothing unexpected turned up in the part that was read. Compare the "
 "remaining files with a fresh copy of this WordPress release."
 msgstr ""
 "In het gelezen deel is niets onverwachts gevonden. Vergelijk de overige "
-"bestanden met een verse kopie van deze WordPress-release."
+"bestanden met een verse kopie van deze WordPress release."
 
-#: includes/checks/class-cascr-checks-core.php:577
+#: includes/checks/class-cascr-checks-core.php:580
 msgid "The core directories contain no files beyond the official release."
 msgstr "De core-mappen bevatten geen bestanden buiten de officiële release."
 
 #. translators: %d: number of unexpected executable files.
-#: includes/checks/class-cascr-checks-core.php:584
+#: includes/checks/class-cascr-checks-core.php:587
 #, php-format
 msgid "%d executable file in the core directories is not part of WordPress."
 msgid_plural ""
@@ -3151,7 +3154,7 @@ msgstr[0] "%d uitvoerbaar bestand in de core-mappen hoort niet bij WordPress."
 msgstr[1] ""
 "%d uitvoerbare bestanden in de core-mappen horen niet bij WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:594
+#: includes/checks/class-cascr-checks-core.php:597
 msgid ""
 "Inspect each file. Nothing but WordPress itself belongs in wp-admin or wp-"
 "includes."
@@ -3159,80 +3162,80 @@ msgstr ""
 "Bekijk elk bestand. In wp-admin en wp-includes hoort niets anders dan "
 "WordPress zelf."
 
-#: includes/checks/class-cascr-checks-core.php:610
+#: includes/checks/class-cascr-checks-core.php:613
 msgid "Plugin update information is not available."
 msgstr "Er is geen update-informatie voor plugins beschikbaar."
 
 #. translators: 1: plugin name, 2: installed version, 3: available version.
-#: includes/checks/class-cascr-checks-core.php:627
+#: includes/checks/class-cascr-checks-core.php:630
 #, php-format
 msgid "%1$s (%2$s to %3$s)"
 msgstr "%1$s (%2$s naar %3$s)"
 
-#: includes/checks/class-cascr-checks-core.php:635
+#: includes/checks/class-cascr-checks-core.php:638
 msgid "All active plugins are up to date."
 msgstr "Alle actieve plugins zijn up-to-date."
 
 #. translators: %d: number of active plugins with a pending update.
-#: includes/checks/class-cascr-checks-core.php:641
+#: includes/checks/class-cascr-checks-core.php:644
 #, php-format
 msgid "%d active plugin has an update waiting."
 msgid_plural "%d active plugins have updates waiting."
 msgstr[0] "%d actieve plugin heeft een update klaarstaan."
 msgstr[1] "%d actieve plugins hebben een update klaarstaan."
 
-#: includes/checks/class-cascr-checks-core.php:651
-#: includes/checks/class-cascr-checks-core.php:705
+#: includes/checks/class-cascr-checks-core.php:654
+#: includes/checks/class-cascr-checks-core.php:708
 msgid "Install the updates from Dashboard, Updates."
 msgstr "Installeer de updates via Dashboard, Updates."
 
-#: includes/checks/class-cascr-checks-core.php:670
+#: includes/checks/class-cascr-checks-core.php:673
 msgid "Theme update information is not available."
 msgstr "Er is geen update-informatie voor thema's beschikbaar."
 
 #. translators: 1: theme name, 2: available version.
-#: includes/checks/class-cascr-checks-core.php:682
+#: includes/checks/class-cascr-checks-core.php:685
 #, php-format
 msgid "%1$s (update to %2$s)"
 msgstr "%1$s (update naar %2$s)"
 
-#: includes/checks/class-cascr-checks-core.php:689
+#: includes/checks/class-cascr-checks-core.php:692
 msgid "All themes are up to date."
 msgstr "Alle thema's zijn up-to-date."
 
 #. translators: %d: number of themes with a pending update.
-#: includes/checks/class-cascr-checks-core.php:695
+#: includes/checks/class-cascr-checks-core.php:698
 #, php-format
 msgid "%d theme has an update waiting."
 msgid_plural "%d themes have updates waiting."
 msgstr[0] "%d thema heeft een update klaarstaan."
 msgstr[1] "%d thema's hebben een update klaarstaan."
 
-#: includes/checks/class-cascr-checks-core.php:736
+#: includes/checks/class-cascr-checks-core.php:739
 msgid "No inactive plugins or unused themes are installed."
 msgstr "Er zijn geen inactieve plugins of ongebruikte thema's geïnstalleerd."
 
 #. translators: %s: plugin name.
-#: includes/checks/class-cascr-checks-core.php:742
+#: includes/checks/class-cascr-checks-core.php:745
 #, php-format
 msgid "inactive plugin: %s"
 msgstr "inactieve plugin: %s"
 
 #. translators: %s: theme name.
-#: includes/checks/class-cascr-checks-core.php:746
+#: includes/checks/class-cascr-checks-core.php:749
 #, php-format
 msgid "unused theme: %s"
 msgstr "ongebruikt thema: %s"
 
 #. translators: %d: number of inactive plugins and unused themes.
-#: includes/checks/class-cascr-checks-core.php:752
+#: includes/checks/class-cascr-checks-core.php:755
 #, php-format
 msgid "%d inactive plugin or unused theme is installed."
 msgid_plural "%d inactive plugins or unused themes are installed."
 msgstr[0] "%d inactieve plugin of ongebruikt thema is geïnstalleerd."
 msgstr[1] "%d inactieve plugins of ongebruikte thema's zijn geïnstalleerd."
 
-#: includes/checks/class-cascr-checks-core.php:762
+#: includes/checks/class-cascr-checks-core.php:765
 msgid ""
 "Delete what is not needed. Deactivated code still sits on disk and stops "
 "receiving attention."
@@ -3240,44 +3243,44 @@ msgstr ""
 "Verwijder wat niet nodig is. Gedeactiveerde code staat nog steeds op de "
 "schijf en krijgt geen aandacht meer."
 
-#: includes/checks/class-cascr-checks-core.php:798
+#: includes/checks/class-cascr-checks-core.php:801
 msgid "no release in over two years"
 msgstr "al meer dan twee jaar geen release"
 
-#: includes/checks/class-cascr-checks-core.php:800
+#: includes/checks/class-cascr-checks-core.php:803
 msgid "no release in over a year"
 msgstr "al meer dan een jaar geen release"
 
 #. translators: %s: WordPress version the plugin was last tested against.
-#: includes/checks/class-cascr-checks-core.php:810
+#: includes/checks/class-cascr-checks-core.php:813
 #, php-format
 msgid "last tested against WordPress %s"
 msgstr "laatst getest met WordPress %s"
 
 #. translators: 1: plugin name, 2: comma separated list of reasons.
-#: includes/checks/class-cascr-checks-core.php:818
+#: includes/checks/class-cascr-checks-core.php:821
 #, php-format
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
 
-#: includes/checks/class-cascr-checks-core.php:827
-#: includes/checks/class-cascr-checks-core.php:913
+#: includes/checks/class-cascr-checks-core.php:830
+#: includes/checks/class-cascr-checks-core.php:916
 msgid "No plugin information could be retrieved from the directory."
 msgstr "Er kon geen plugininformatie uit de plugindirectory worden opgehaald."
 
-#: includes/checks/class-cascr-checks-core.php:832
+#: includes/checks/class-cascr-checks-core.php:835
 msgid "Every active plugin from the directory is actively maintained."
 msgstr "Elke actieve plugin uit de plugindirectory wordt actief onderhouden."
 
 #. translators: %d: number of plugins that look abandoned.
-#: includes/checks/class-cascr-checks-core.php:838
+#: includes/checks/class-cascr-checks-core.php:841
 #, php-format
 msgid "%d active plugin looks abandoned."
 msgid_plural "%d active plugins look abandoned."
 msgstr[0] "%d actieve plugin lijkt verlaten."
 msgstr[1] "%d actieve plugins lijken verlaten."
 
-#: includes/checks/class-cascr-checks-core.php:848
+#: includes/checks/class-cascr-checks-core.php:851
 msgid ""
 "Look for a maintained alternative. Abandoned plugins do not get security "
 "fixes."
@@ -3286,7 +3289,7 @@ msgstr ""
 "geen beveiligingsupdates."
 
 #. translators: %d: number of plugins whose listing could not be retrieved.
-#: includes/checks/class-cascr-checks-core.php:899
+#: includes/checks/class-cascr-checks-core.php:902
 #, php-format
 msgid ""
 "The listing of %d active plugin could not be retrieved, so the directory "
@@ -3301,19 +3304,19 @@ msgstr[1] ""
 "De vermeldingen van %d actieve plugins konden niet worden opgehaald, dus de "
 "status in de plugindirectory is nog onbekend."
 
-#: includes/checks/class-cascr-checks-core.php:907
+#: includes/checks/class-cascr-checks-core.php:910
 msgid ""
 "Run the report again once api.wordpress.org can be reached from this server."
 msgstr ""
 "Voer het rapport opnieuw uit zodra api.wordpress.org vanaf deze server "
 "bereikbaar is."
 
-#: includes/checks/class-cascr-checks-core.php:918
+#: includes/checks/class-cascr-checks-core.php:921
 msgid "No active plugin has been removed from the directory."
 msgstr "Geen enkele actieve plugin is uit de plugindirectory verwijderd."
 
 #. translators: %d: number of plugins that were removed from the directory.
-#: includes/checks/class-cascr-checks-core.php:924
+#: includes/checks/class-cascr-checks-core.php:927
 #, php-format
 msgid "%d active plugin has been removed from the WordPress directory."
 msgid_plural ""
@@ -3322,7 +3325,7 @@ msgstr[0] "%d actieve plugin is uit de WordPress-plugindirectory verwijderd."
 msgstr[1] ""
 "%d actieve plugins zijn uit de WordPress-plugindirectory verwijderd."
 
-#: includes/checks/class-cascr-checks-core.php:934
+#: includes/checks/class-cascr-checks-core.php:937
 msgid ""
 "Remove the plugin and replace it. A closed listing usually means an unfixed "
 "security problem."
@@ -3330,7 +3333,7 @@ msgstr ""
 "Verwijder de plugin en vervang hem. Een gesloten vermelding betekent meestal"
 " een onopgelost beveiligingsprobleem."
 
-#: includes/checks/class-cascr-checks-core.php:957
+#: includes/checks/class-cascr-checks-core.php:960
 msgid ""
 "The plugin authors have been recorded. Changes will be reported from the "
 "next scan on."
@@ -3339,29 +3342,29 @@ msgstr ""
 "volgende scan gemeld."
 
 #. translators: 1: plugin file, 2: previous author, 3: current author.
-#: includes/checks/class-cascr-checks-core.php:971
+#: includes/checks/class-cascr-checks-core.php:974
 #, php-format
 msgid "%1$s: %2$s became %3$s"
 msgstr "%1$s: %2$s werd %3$s"
 
-#: includes/checks/class-cascr-checks-core.php:973
-#: includes/checks/class-cascr-checks-core.php:974
+#: includes/checks/class-cascr-checks-core.php:976
+#: includes/checks/class-cascr-checks-core.php:977
 msgid "(none)"
 msgstr "(geen)"
 
-#: includes/checks/class-cascr-checks-core.php:979
+#: includes/checks/class-cascr-checks-core.php:982
 msgid "No installed plugin changed its author."
 msgstr "Geen enkele geïnstalleerde plugin is van auteur gewisseld."
 
 #. translators: %d: number of plugins whose author changed.
-#: includes/checks/class-cascr-checks-core.php:985
+#: includes/checks/class-cascr-checks-core.php:988
 #, php-format
 msgid "%d plugin changed its author."
 msgid_plural "%d plugins changed their author."
 msgstr[0] "%d plugin is van auteur gewisseld."
 msgstr[1] "%d plugins zijn van auteur gewisseld."
 
-#: includes/checks/class-cascr-checks-core.php:995
+#: includes/checks/class-cascr-checks-core.php:998
 msgid ""
 "Confirm the handover is legitimate and read the changelog of the release "
 "that came with it."
@@ -3370,24 +3373,24 @@ msgstr ""
 "erbij hoorde."
 
 #. translators: 1: file name, 2: plugin name.
-#: includes/checks/class-cascr-checks-core.php:1015
+#: includes/checks/class-cascr-checks-core.php:1018
 #, php-format
 msgid "must-use plugin %1$s (%2$s)"
-msgstr "must-use-plugin %1$s (%2$s)"
+msgstr "must-use plugin %1$s (%2$s)"
 
 #. translators: 1: file name, 2: plugin name.
-#: includes/checks/class-cascr-checks-core.php:1024
+#: includes/checks/class-cascr-checks-core.php:1027
 #, php-format
 msgid "drop-in %1$s (%2$s)"
 msgstr "drop-in %1$s (%2$s)"
 
-#: includes/checks/class-cascr-checks-core.php:1035
-#: includes/checks/class-cascr-checks-core.php:1058
+#: includes/checks/class-cascr-checks-core.php:1038
+#: includes/checks/class-cascr-checks-core.php:1061
 msgid "No must-use plugins or drop-ins are installed."
-msgstr "Er zijn geen must-use-plugins of drop-ins geïnstalleerd."
+msgstr "Er zijn geen must-use plugins of drop-ins geïnstalleerd."
 
 #. translators: %d: number of must-use plugins and drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1041
+#: includes/checks/class-cascr-checks-core.php:1044
 #, php-format
 msgid "%d must-use plugin or drop-in is installed and has been recorded."
 msgid_plural ""
@@ -3396,7 +3399,7 @@ msgstr[0] "%d must-use-plugin of drop-in is geïnstalleerd en vastgelegd."
 msgstr[1] "%d must-use-plugins of drop-ins zijn geïnstalleerd en vastgelegd."
 
 #. translators: %d: number of must-use plugins and drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1064
+#: includes/checks/class-cascr-checks-core.php:1067
 #, php-format
 msgid "%d known must-use plugin or drop-in is installed."
 msgid_plural "%d known must-use plugins or drop-ins are installed."
@@ -3404,7 +3407,7 @@ msgstr[0] "%d bekende must-use-plugin of drop-in is geïnstalleerd."
 msgstr[1] "%d bekende must-use-plugins of drop-ins zijn geïnstalleerd."
 
 #. translators: %d: number of newly appeared must-use plugins or drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1084
+#: includes/checks/class-cascr-checks-core.php:1087
 #, php-format
 msgid "%d must-use plugin or drop-in appeared since the first scan."
 msgid_plural "%d must-use plugins or drop-ins appeared since the first scan."
@@ -3412,7 +3415,7 @@ msgstr[0] "%d must-use-plugin of drop-in is sinds de eerste scan bijgekomen."
 msgstr[1] ""
 "%d must-use-plugins of drop-ins zijn sinds de eerste scan bijgekomen."
 
-#: includes/checks/class-cascr-checks-core.php:1094
+#: includes/checks/class-cascr-checks-core.php:1097
 msgid ""
 "Open each file. This code runs on every request and cannot be switched off "
 "from the dashboard."
@@ -3420,20 +3423,20 @@ msgstr ""
 "Open elk bestand. Deze code draait bij elk verzoek en kan niet via het "
 "dashboard worden uitgeschakeld."
 
-#: includes/checks/class-cascr-checks-core.php:1114
+#: includes/checks/class-cascr-checks-core.php:1117
 msgid "The parent directory could not be read."
 msgstr "De bovenliggende map kon niet worden gelezen."
 
-#: includes/checks/class-cascr-checks-core.php:1144
+#: includes/checks/class-cascr-checks-core.php:1147
 msgid "The scan for other installations could not be completed."
 msgstr "De zoektocht naar andere installaties kon niet worden afgerond."
 
-#: includes/checks/class-cascr-checks-core.php:1149
+#: includes/checks/class-cascr-checks-core.php:1152
 msgid "No other WordPress installation was found next to this one."
-msgstr "Naast deze installatie is geen andere WordPress-installatie gevonden."
+msgstr "Naast deze installatie is geen andere WordPress installatie gevonden."
 
 #. translators: %d: number of other WordPress installations found.
-#: includes/checks/class-cascr-checks-core.php:1155
+#: includes/checks/class-cascr-checks-core.php:1158
 #, php-format
 msgid "%d other WordPress installation sits in the directory above this one."
 msgid_plural ""
@@ -3441,7 +3444,7 @@ msgid_plural ""
 msgstr[0] "%d andere WordPress-installatie staat in de map boven deze."
 msgstr[1] "%d andere WordPress-installaties staan in de map boven deze."
 
-#: includes/checks/class-cascr-checks-core.php:1165
+#: includes/checks/class-cascr-checks-core.php:1168
 msgid ""
 "Keep every installation updated. A neglected one next door is an entry point"
 " into this one."
@@ -3449,9 +3452,9 @@ msgstr ""
 "Houd elke installatie up-to-date. Een verwaarloosde buur is een toegangsweg "
 "tot deze installatie."
 
-#: includes/checks/class-cascr-checks-core.php:1274
+#: includes/checks/class-cascr-checks-core.php:1277
 msgid "The plugin directory returned no usable answer."
-msgstr "De plugindirectory gaf geen bruikbaar antwoord."
+msgstr "De plugin directory gaf geen bruikbaar antwoord."
 
 #: includes/checks/class-cascr-checks-files.php:46
 msgid "wp-config.php could not be located."
@@ -4263,7 +4266,7 @@ msgstr "default-src noch object-src is ingesteld"
 
 #: includes/checks/class-cascr-checks-network.php:497
 msgid "no fallback directive"
-msgstr "geen fallback-directive"
+msgstr "geen fallback directive"
 
 #: includes/checks/class-cascr-checks-network.php:501
 msgid ""
@@ -4398,7 +4401,7 @@ msgstr "generator-tag die WordPress noemt"
 
 #: includes/checks/class-cascr-checks-network.php:704
 msgid "Windows Live Writer manifest link"
-msgstr "Windows Live Writer-manifestlink"
+msgstr "Windows Live Writer manifestlink"
 
 #: includes/checks/class-cascr-checks-network.php:708
 msgid "Really Simple Discovery link"
@@ -4426,15 +4429,15 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:740
 msgid "The XML-RPC endpoint could not be reached."
-msgstr "Het XML-RPC-endpoint was niet bereikbaar."
+msgstr "Het XML-RPC endpoint was niet bereikbaar."
 
 #: includes/checks/class-cascr-checks-network.php:747
 msgid "The XML-RPC endpoint is blocked."
-msgstr "Het XML-RPC-endpoint is geblokkeerd."
+msgstr "Het XML-RPC endpoint is geblokkeerd."
 
 #: includes/checks/class-cascr-checks-network.php:751
 msgid "The XML-RPC endpoint does not answer method calls."
-msgstr "Het XML-RPC-endpoint beantwoordt geen methodeaanroepen."
+msgstr "Het XML-RPC endpoint beantwoordt geen methodeaanroepen."
 
 #: includes/checks/class-cascr-checks-network.php:764
 msgid ""
@@ -4463,7 +4466,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:777
 msgid "The XML-RPC endpoint answers method calls."
-msgstr "Het XML-RPC-endpoint beantwoordt methodeaanroepen."
+msgstr "Het XML-RPC endpoint beantwoordt methodeaanroepen."
 
 #: includes/checks/class-cascr-checks-network.php:780
 msgid ""
@@ -4499,12 +4502,12 @@ msgstr ""
 #, php-format
 msgid "the REST endpoint /wp/v2/users lists %d account"
 msgid_plural "the REST endpoint /wp/v2/users lists %d accounts"
-msgstr[0] "het REST-endpoint /wp/v2/users toont %d account"
-msgstr[1] "het REST-endpoint /wp/v2/users toont %d accounts"
+msgstr[0] "het REST endpoint /wp/v2/users toont %d account"
+msgstr[1] "het REST endpoint /wp/v2/users toont %d accounts"
 
 #: includes/checks/class-cascr-checks-network.php:864
 msgid "the oEmbed endpoint reveals the author"
-msgstr "het oEmbed-endpoint verraadt de auteur"
+msgstr "het oEmbed endpoint verraadt de auteur"
 
 #: includes/checks/class-cascr-checks-network.php:870
 msgid "User enumeration could not be checked."
@@ -4717,13 +4720,13 @@ msgstr "TransparAI, onze eigen plugin voor transparantie over AI-content"
 msgid "Risk score"
 msgstr "Risicoscore"
 
-#: includes/class-cascr-admin-dashboard.php:100
+#: includes/class-cascr-admin-dashboard.php:101
 msgid "Re-check everything"
 msgstr "Alles opnieuw controleren"
 
 #. translators: 1: date of the first recorded run, 2: grade letter, 3: number
 #. of findings.
-#: includes/class-cascr-admin-dashboard.php:133
+#: includes/class-cascr-admin-dashboard.php:177
 #, php-format
 msgid "Started on %1$s: grade %2$s with %3$d finding."
 msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
@@ -4732,7 +4735,7 @@ msgstr[1] "Begonnen op %1$s: cijfer %2$s met %3$d bevindingen."
 
 #. translators: 1: number of checks re-checked on their own, 2: date of the
 #. last full pass.
-#: includes/class-cascr-admin-dashboard.php:200
+#: includes/class-cascr-admin-dashboard.php:244
 #, php-format
 msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
 msgid_plural ""
@@ -4745,22 +4748,22 @@ msgstr[1] ""
 "uitgevoerd."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:272
+#: includes/class-cascr-admin-dashboard.php:316
 #, php-format
 msgid "%s passed the re-check."
 msgstr "%s is bij de hercontrole geslaagd."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:275
+#: includes/class-cascr-admin-dashboard.php:319
 #, php-format
 msgid "%s is still open after the re-check."
 msgstr "%s staat na de hercontrole nog open."
 
-#: includes/class-cascr-admin-dashboard.php:304
+#: includes/class-cascr-admin-dashboard.php:348
 msgid "Your progress"
 msgstr "Je voortgang"
 
-#: includes/class-cascr-admin-dashboard.php:313
+#: includes/class-cascr-admin-dashboard.php:357
 msgid ""
 "How the site scored across the recorded runs, oldest on the left. A taller "
 "bar is a better run."
@@ -4769,13 +4772,13 @@ msgstr ""
 "balk is een betere scan."
 
 #. translators: 1: date of the run, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:337
+#: includes/class-cascr-admin-dashboard.php:381
 #, php-format
 msgid "%1$s: grade %2$s"
 msgstr "%1$s: cijfer %2$s"
 
 #. translators: %d: number of recorded runs.
-#: includes/class-cascr-admin-dashboard.php:354
+#: includes/class-cascr-admin-dashboard.php:398
 #, php-format
 msgid "%d recorded run. A taller bar is a better run."
 msgid_plural ""
@@ -4783,65 +4786,65 @@ msgid_plural ""
 msgstr[0] "%d opgeslagen scan. Een hogere balk is een betere scan."
 msgstr[1] "%d opgeslagen scans. Een hogere balk is een betere scan."
 
-#: includes/class-cascr-admin-dashboard.php:371
+#: includes/class-cascr-admin-dashboard.php:415
 msgid "Your next five"
 msgstr "Je volgende vijf"
 
-#: includes/class-cascr-admin-dashboard.php:372
+#: includes/class-cascr-admin-dashboard.php:416
 msgid "Work through these in order. Everything else can wait."
 msgstr "Werk deze in volgorde af. De rest kan wachten."
 
-#: includes/class-cascr-admin-dashboard.php:383
-#: includes/class-cascr-scoring.php:196
+#: includes/class-cascr-admin-dashboard.php:427
+#: includes/class-cascr-scoring.php:203
 msgid "Nothing needs your attention right now."
 msgstr "Er vraagt nu niets je aandacht."
 
-#: includes/class-cascr-admin-dashboard.php:418
+#: includes/class-cascr-admin-dashboard.php:462
 msgid "Done, check it now"
 msgstr "Klaar, nu controleren"
 
-#: includes/class-cascr-admin-dashboard.php:421
+#: includes/class-cascr-admin-dashboard.php:465
 msgid "later"
 msgstr "later"
 
-#: includes/class-cascr-admin-dashboard.php:424
-#: includes/class-cascr-admin.php:488
+#: includes/class-cascr-admin-dashboard.php:468
+#: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr "Meer over deze controle"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:464
+#: includes/class-cascr-admin-dashboard.php:508
 #, php-format
 msgid "Still open (%d)"
 msgstr "Nog open (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:537
+#: includes/class-cascr-admin-dashboard.php:581
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Opgelost (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:549
+#: includes/class-cascr-admin-dashboard.php:593
 msgid "after a re-check"
 msgstr "na een hercontrole"
 
-#: includes/class-cascr-admin-dashboard.php:568
+#: includes/class-cascr-admin-dashboard.php:612
 msgid "By category"
 msgstr "Per categorie"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:591
+#: includes/class-cascr-admin-dashboard.php:635
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d van %2$d geslaagd"
 
-#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:99
+#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:179
 msgid "Security Check"
-msgstr "Security Check"
+msgstr "Beveiligingscontrole"
 
 #: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:151
+#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
 
@@ -4855,27 +4858,27 @@ msgstr "Controle %1$d van %2$d"
 msgid "This check could not be completed."
 msgstr "Deze controle kon niet worden voltooid."
 
-#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:377
-#: includes/class-cascr-admin.php:589
+#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:376
+#: includes/class-cascr-admin.php:595
 msgid "Passed"
 msgstr "Geslaagd"
 
-#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:376
-#: includes/class-cascr-admin.php:590
+#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:375
+#: includes/class-cascr-admin.php:596
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:375
-#: includes/class-cascr-admin.php:591
+#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:374
+#: includes/class-cascr-admin.php:597
 msgid "Failed"
 msgstr "Mislukt"
 
-#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:378
-#: includes/class-cascr-admin.php:592
+#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:377
+#: includes/class-cascr-admin.php:598
 msgid "Not determined"
 msgstr "Niet bepaald"
 
-#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:379
+#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:378
 msgid "Muted"
 msgstr "Gedempt"
 
@@ -4895,7 +4898,7 @@ msgstr "Het rapport kon niet worden gekopieerd."
 msgid "Generated"
 msgstr "Gegenereerd"
 
-#: includes/class-cascr-admin.php:120 includes/class-cascr-cli.php:71
+#: includes/class-cascr-admin.php:120 includes/class-cascr-cli.php:109
 msgid "Grade"
 msgstr "Cijfer"
 
@@ -4935,95 +4938,91 @@ msgstr "Resultaat"
 msgid "Checking again"
 msgstr "Opnieuw controleren"
 
-#: includes/class-cascr-admin.php:134
-msgid "The security check finished."
-msgstr "De beveiligingscontrole is voltooid."
-
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:156
+#: includes/class-cascr-admin.php:155
 #, php-format
 msgid "%d check across your WordPress installation."
 msgid_plural "%d checks across your WordPress installation."
 msgstr[0] "%d controle voor je hele WordPress-installatie."
 msgstr[1] "%d controles voor je hele WordPress-installatie."
 
-#: includes/class-cascr-admin.php:173
+#: includes/class-cascr-admin.php:172
 msgid "What each check looks at"
 msgstr "Waar elke controle naar kijkt"
 
-#: includes/class-cascr-admin.php:177 includes/class-cascr-admin.php:182
+#: includes/class-cascr-admin.php:176 includes/class-cascr-admin.php:181
 msgid "Search the checks"
 msgstr "Controles doorzoeken"
 
-#: includes/class-cascr-admin.php:188
+#: includes/class-cascr-admin.php:187
 msgid "No check matches that search."
 msgstr "Geen controle komt overeen met deze zoekopdracht."
 
-#: includes/class-cascr-admin.php:196
+#: includes/class-cascr-admin.php:195
 msgid "WordPress security"
-msgstr "WordPress-beveiliging"
+msgstr "WordPress beveiliging"
 
-#: includes/class-cascr-admin.php:198
+#: includes/class-cascr-admin.php:197
 msgid "Documentation"
 msgstr "Documentatie"
 
-#: includes/class-cascr-admin.php:200
+#: includes/class-cascr-admin.php:199
 msgid "Report a false positive"
 msgstr "Vals positief melden"
 
-#: includes/class-cascr-admin.php:202
+#: includes/class-cascr-admin.php:201
 msgid "Support"
 msgstr "Ondersteuning"
 
-#: includes/class-cascr-admin.php:220
+#: includes/class-cascr-admin.php:219
 msgid "Step 1:"
 msgstr "Stap 1:"
 
-#: includes/class-cascr-admin.php:221
+#: includes/class-cascr-admin.php:220
 msgid "Start the check"
 msgstr "Start de controle"
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:227
+#: includes/class-cascr-admin.php:226
 #, php-format
 msgid "%d checks, about a minute. Nothing on your site is changed."
 msgstr ""
 "%d controles, ongeveer een minuut. Er wordt niets aan je site veranderd."
 
-#: includes/class-cascr-admin.php:238
+#: includes/class-cascr-admin.php:237
 msgid "Start the security check"
 msgstr "Beveiligingscontrole starten"
 
-#: includes/class-cascr-admin.php:249
+#: includes/class-cascr-admin.php:248
 msgid "Step 2:"
 msgstr "Stap 2:"
 
-#: includes/class-cascr-admin.php:250
+#: includes/class-cascr-admin.php:249
 msgid "Your result"
 msgstr "Je resultaat"
 
-#: includes/class-cascr-admin.php:252
+#: includes/class-cascr-admin.php:251
 msgid "A grade, what it means, and the short list to work through."
 msgstr "Een cijfer, wat het betekent en de korte lijst om af te werken."
 
-#: includes/class-cascr-admin.php:257 includes/class-cascr-admin.php:274
+#: includes/class-cascr-admin.php:256 includes/class-cascr-admin.php:273
 msgid "Appears once the check has run."
 msgstr "Verschijnt zodra de controle is uitgevoerd."
 
-#: includes/class-cascr-admin.php:266
+#: includes/class-cascr-admin.php:265
 msgid "Step 3:"
 msgstr "Stap 3:"
 
-#: includes/class-cascr-admin.php:267
+#: includes/class-cascr-admin.php:266
 msgid "Go through everything else"
 msgstr "Loop de rest door"
 
-#: includes/class-cascr-admin.php:269
+#: includes/class-cascr-admin.php:268
 msgid "Every check with its detail, filterable, and the report to take away."
 msgstr ""
 "Elke controle met details, filterbaar, en het rapport om mee te nemen."
 
-#: includes/class-cascr-admin.php:290
+#: includes/class-cascr-admin.php:289
 msgid ""
 "These checks read the site, write one temporary file to the uploads folder "
 "and delete it again. The result is an assessment rather than a guarantee."
@@ -5032,104 +5031,104 @@ msgstr ""
 "uploads-map en verwijderen het weer. Het resultaat is een inschatting, geen "
 "garantie."
 
-#: includes/class-cascr-admin.php:301
+#: includes/class-cascr-admin.php:300
 msgid "I understand."
 msgstr "Ik begrijp het."
 
-#: includes/class-cascr-admin.php:319
+#: includes/class-cascr-admin.php:318
 msgid "Tick the box above to start."
-msgstr "Vink het vakje hierboven aan om te starten."
+msgstr "Vink het vak hierboven aan om te beginnen."
 
-#: includes/class-cascr-admin.php:374
+#: includes/class-cascr-admin.php:373
 msgid "All"
 msgstr "Alle"
 
-#: includes/class-cascr-admin.php:383
+#: includes/class-cascr-admin.php:382
 msgid "All checks"
 msgstr "Alle controles"
 
-#: includes/class-cascr-admin.php:432
+#: includes/class-cascr-admin.php:431
 msgid "No check matches that filter."
 msgstr "Geen controle komt overeen met dit filter."
 
-#: includes/class-cascr-admin.php:467
+#: includes/class-cascr-admin.php:473
 msgid "Details"
 msgstr "Details"
 
-#: includes/class-cascr-admin.php:491
+#: includes/class-cascr-admin.php:497
 msgid "Unmute"
 msgstr "Weer tonen"
 
-#: includes/class-cascr-admin.php:491
+#: includes/class-cascr-admin.php:497
 msgid "Mute this finding"
 msgstr "Deze bevinding dempen"
 
-#: includes/class-cascr-admin.php:494
+#: includes/class-cascr-admin.php:500
 msgid "Muted until the finding changes."
 msgstr "Gedempt tot de bevinding verandert."
 
-#: includes/class-cascr-admin.php:507
+#: includes/class-cascr-admin.php:513
 msgid "Download as text"
 msgstr "Downloaden als tekst"
 
-#: includes/class-cascr-admin.php:508
+#: includes/class-cascr-admin.php:514
 msgid "Download as JSON"
 msgstr "Downloaden als JSON"
 
-#: includes/class-cascr-admin.php:509
+#: includes/class-cascr-admin.php:515
 msgid "Download as CSV"
 msgstr "Downloaden als CSV"
 
-#: includes/class-cascr-admin.php:510
+#: includes/class-cascr-admin.php:516
 msgid "Copy report"
 msgstr "Rapport kopiëren"
 
-#: includes/class-cascr-admin.php:514
+#: includes/class-cascr-admin.php:520
 msgid "Take the report with you"
 msgstr "Neem het rapport mee"
 
-#: includes/class-cascr-admin.php:572 includes/class-cascr-scoring.php:243
+#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:250
 msgid "Critical"
 msgstr "Kritiek"
 
-#: includes/class-cascr-admin.php:573
+#: includes/class-cascr-admin.php:579
 msgid "High"
 msgstr "Hoog"
 
-#: includes/class-cascr-admin.php:574
+#: includes/class-cascr-admin.php:580
 msgid "Medium"
 msgstr "Gemiddeld"
 
-#: includes/class-cascr-admin.php:575
+#: includes/class-cascr-admin.php:581
 msgid "Low"
 msgstr "Laag"
 
-#: includes/class-cascr-cli.php:74
+#: includes/class-cascr-cli.php:112
 msgid "risk score"
 msgstr "risicoscore"
 
-#: includes/class-cascr-cli.php:111
+#: includes/class-cascr-cli.php:150
 msgid "Nothing needs your attention."
 msgstr "Er vraagt niets je aandacht."
 
 #. translators: %s: number of failed checks.
-#: includes/class-cascr-nudges.php:76
+#: includes/class-cascr-nudges.php:156
 #, php-format
 msgid "%s failed check"
 msgid_plural "%s failed checks"
 msgstr[0] "%s mislukte controle"
 msgstr[1] "%s mislukte controles"
 
-#: includes/class-cascr-nudges.php:113
+#: includes/class-cascr-nudges.php:193
 msgid "This site has not been checked yet."
 msgstr "Deze site is nog niet gecontroleerd."
 
-#: includes/class-cascr-nudges.php:118
+#: includes/class-cascr-nudges.php:198
 msgid "Run the first check"
 msgstr "Voer de eerste controle uit"
 
 #. translators: %d: number of findings still open.
-#: includes/class-cascr-nudges.php:138
+#: includes/class-cascr-nudges.php:218
 #, php-format
 msgid "%d open task"
 msgid_plural "%d open tasks"
@@ -5137,27 +5136,28 @@ msgstr[0] "%d openstaande taak"
 msgstr[1] "%d openstaande taken"
 
 #. translators: %s: length of time, for example "2 weeks".
-#: includes/class-cascr-nudges.php:152
+#: includes/class-cascr-nudges.php:232
 #, php-format
 msgid "Last full check %s ago."
 msgstr "Laatste volledige controle %s geleden."
 
-#: includes/class-cascr-nudges.php:162 includes/class-cascr-nudges.php:195
+#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:242
+#: includes/class-cascr-nudges.php:275
 msgid "Open the report"
 msgstr "Rapport openen"
 
 #. translators: %s: length of time, for example "2 months".
-#: includes/class-cascr-nudges.php:190
+#: includes/class-cascr-nudges.php:270
 #, php-format
 msgid "The last full security check on this site ran %s ago."
 msgstr ""
 "De laatste volledige beveiligingscontrole van deze site was %s geleden."
 
-#: includes/class-cascr-nudges.php:197
+#: includes/class-cascr-nudges.php:277
 msgid "Stop reminding me"
 msgstr "Niet meer herinneren"
 
-#: includes/class-cascr-nudges.php:233
+#: includes/class-cascr-nudges.php:313
 msgid "You are not allowed to do that."
 msgstr "Je hebt geen toestemming om dat te doen."
 
@@ -5187,7 +5187,7 @@ msgstr "Transparantie en openbaarmaking"
 
 #: includes/class-cascr-registry.php:262
 msgid "WordPress version"
-msgstr "WordPress-versie"
+msgstr "WordPress versie"
 
 #: includes/class-cascr-registry.php:268
 msgid "PHP version"
@@ -5231,11 +5231,11 @@ msgstr "Eigenaarswisselingen van plugins"
 
 #: includes/class-cascr-registry.php:334
 msgid "Must-use plugins and drop-ins"
-msgstr "Must-use-plugins en drop-ins"
+msgstr "Must-use plugins en drop-ins"
 
 #: includes/class-cascr-registry.php:340
 msgid "Other WordPress installations"
-msgstr "Andere WordPress-installaties"
+msgstr "Andere WordPress installaties"
 
 #: includes/class-cascr-registry.php:356
 msgid "Debug mode"
@@ -5295,7 +5295,7 @@ msgstr "Wachtwoordbeleid"
 
 #: includes/class-cascr-registry.php:451
 msgid "wp-config.php permissions"
-msgstr "Rechten van wp-config.php"
+msgstr "wp-config.php rechten"
 
 #: includes/class-cascr-registry.php:457
 msgid "Uploads directory permissions"
@@ -5367,7 +5367,7 @@ msgstr "Open registratie"
 
 #: includes/class-cascr-registry.php:569
 msgid "Two-factor coverage"
-msgstr "Dekking van tweestapsverificatie"
+msgstr "Twee-factor dekking"
 
 #: includes/class-cascr-registry.php:575
 msgid "Application passwords"
@@ -5411,7 +5411,7 @@ msgstr "Verouderde discovery-tags"
 
 #: includes/class-cascr-registry.php:645
 msgid "XML-RPC interface"
-msgstr "XML-RPC-interface"
+msgstr "XML-RPC interface"
 
 #: includes/class-cascr-registry.php:651
 msgid "User enumeration"
@@ -5419,7 +5419,7 @@ msgstr "Gebruikersenumeratie"
 
 #: includes/class-cascr-registry.php:657
 msgid "Unauthenticated REST routes"
-msgstr "REST-routes zonder authenticatie"
+msgstr "REST routes zonder authenticatie"
 
 #: includes/class-cascr-registry.php:669
 msgid "Client IP detection"
@@ -5437,7 +5437,7 @@ msgstr ""
 
 #: includes/class-cascr-rest.php:173 includes/class-cascr-rest.php:198
 msgid "There is no check with that identifier."
-msgstr "Er bestaat geen controle met die ID."
+msgstr "Er is geen controle met die identifier."
 
 #: includes/class-cascr-rest.php:208
 msgid "There is no stored report to update. Run all checks once first."
@@ -5454,7 +5454,7 @@ msgid "The check could not be completed on this server."
 msgstr "De controle kon op deze server niet worden voltooid."
 
 #. translators: 1: grade letter, 2: number of findings.
-#: includes/class-cascr-scoring.php:145
+#: includes/class-cascr-scoring.php:152
 #, php-format
 msgid "Today: grade %1$s with %2$d finding."
 msgid_plural "Today: grade %1$s with %2$d findings."
@@ -5462,7 +5462,7 @@ msgstr[0] "Vandaag: cijfer %1$s met %2$d bevinding."
 msgstr[1] "Vandaag: cijfer %1$s met %2$d bevindingen."
 
 #. translators: %d: number of failed checks.
-#: includes/class-cascr-scoring.php:172
+#: includes/class-cascr-scoring.php:179
 #, php-format
 msgid "%d finding needs your attention now."
 msgid_plural "%d findings need your attention now."
@@ -5470,7 +5470,7 @@ msgstr[0] "%d bevinding vraagt nu je aandacht."
 msgstr[1] "%d bevindingen vragen nu je aandacht."
 
 #. translators: %d: number of warnings.
-#: includes/class-cascr-scoring.php:185
+#: includes/class-cascr-scoring.php:192
 #, php-format
 msgid "%d more is worth improving."
 msgid_plural "%d more are worth improving."
@@ -5478,26 +5478,26 @@ msgstr[0] "%d andere is het verbeteren waard."
 msgstr[1] "%d andere zijn het verbeteren waard."
 
 #. translators: %d: number of checks that could not be completed.
-#: includes/class-cascr-scoring.php:202
+#: includes/class-cascr-scoring.php:209
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
 msgstr[0] "%d controle kon niet worden voltooid en telt niet mee."
 msgstr[1] "%d controles konden niet worden voltooid en tellen niet mee."
 
-#: includes/class-cascr-scoring.php:239
+#: includes/class-cascr-scoring.php:246
 msgid "Excellent"
 msgstr "Uitstekend"
 
-#: includes/class-cascr-scoring.php:240
+#: includes/class-cascr-scoring.php:247
 msgid "Good"
 msgstr "Goed"
 
-#: includes/class-cascr-scoring.php:241
+#: includes/class-cascr-scoring.php:248
 msgid "Moderate"
 msgstr "Matig"
 
-#: includes/class-cascr-scoring.php:242
+#: includes/class-cascr-scoring.php:249
 msgid "Poor"
 msgstr "Slecht"
 
@@ -5544,24 +5544,24 @@ msgstr ""
 "geen officiële fix: stap over op PHP 8.2 of nieuwer."
 
 #. translators: %s: PHP version string as reported by the server.
-#: includes/checks/class-cascr-checks-core.php:241
+#: includes/checks/class-cascr-checks-core.php:244
 #, php-format
 msgid "PHP version: %s"
 msgstr "PHP-versie: %s"
 
 #. translators: %s: PHP server API, e.g. fpm-fcgi or apache2handler.
-#: includes/checks/class-cascr-checks-core.php:243
+#: includes/checks/class-cascr-checks-core.php:246
 #, php-format
 msgid "Server API: %s"
 msgstr "Server-API: %s"
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:250
+#: includes/checks/class-cascr-checks-core.php:253
 #, php-format
 msgid "PHP %s contains the fix for PHP2Shell."
 msgstr "PHP %s bevat de fix voor PHP2Shell."
 
-#: includes/checks/class-cascr-checks-core.php:257
+#: includes/checks/class-cascr-checks-core.php:260
 msgid ""
 "Install the PHP update from your distribution or host, then restart PHP-FPM "
 "or the web server and run this check again. Sites on Apache with mod_php are"
@@ -5571,12 +5571,12 @@ msgstr ""
 "daarna PHP-FPM of de webserver en voer deze controle opnieuw uit. Sites op "
 "Apache met mod_php lopen het grootste risico."
 
-#: includes/checks/class-cascr-checks-core.php:260
+#: includes/checks/class-cascr-checks-core.php:263
 msgid "PHP2Shell: fixed versions and status per distribution (German)"
 msgstr "PHP2Shell: versies met fix en status per distributie (Duits)"
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:267
+#: includes/checks/class-cascr-checks-core.php:270
 #, php-format
 msgid ""
 "There is no official PHP2Shell fix for PHP %s, only backports from some "
@@ -5587,7 +5587,7 @@ msgstr ""
 " distributies en leveranciers. Of deze server er een heeft, valt niet af te "
 "lezen aan het versienummer."
 
-#: includes/checks/class-cascr-checks-core.php:272
+#: includes/checks/class-cascr-checks-core.php:275
 msgid ""
 "Ask your host whether the PHP2Shell backport is installed, or move the site "
 "to PHP 8.2 or newer."
@@ -5596,7 +5596,7 @@ msgstr ""
 "de site over naar PHP 8.2 of nieuwer."
 
 #. translators: 1: PHP version number, 2: first fixed version of that branch.
-#: includes/checks/class-cascr-checks-core.php:280
+#: includes/checks/class-cascr-checks-core.php:283
 #, php-format
 msgid ""
 "PHP %1$s does not show the PHP2Shell fix. Update to %2$s or newer, unless "
@@ -5608,3 +5608,84 @@ msgstr ""
 #: includes/class-cascr-registry.php:274
 msgid "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 msgstr "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
+
+#: includes/class-cascr-admin-dashboard.php:81
+msgid "Result of the latest run"
+msgstr "Resultaat van de laatste controle"
+
+#. translators: %d: number of checks that turned into a finding.
+#: includes/class-cascr-admin-dashboard.php:129
+#, php-format
+msgid "%d new finding"
+msgid_plural "%d new findings"
+msgstr[0] "%d nieuwe bevinding"
+msgstr[1] "%d nieuwe bevindingen"
+
+#. translators: %d: number of findings that are gone.
+#: includes/class-cascr-admin-dashboard.php:137
+#, php-format
+msgid "%d resolved"
+msgid_plural "%d resolved"
+msgstr[0] "%d opgelost"
+msgstr[1] "%d opgelost"
+
+#. translators: %s: list such as "2 new findings, 3 resolved".
+#: includes/class-cascr-admin-dashboard.php:147
+#, php-format
+msgid "Since the run before: %s."
+msgstr "Sinds de vorige controle: %s."
+
+#. translators: %s: status the muted check had, for example Failed.
+#: includes/class-cascr-admin.php:462
+#, php-format
+msgid "Muted, was %s"
+msgstr "Gedempt (%s)"
+
+#. translators: 1: passed, 2: warnings, 3: failed, 4: not determined, 5: muted
+#. (all counts).
+#: includes/class-cascr-cli.php:120
+#, php-format
+msgid ""
+"%1$d passed, %2$d warnings, %3$d failed, %4$d not determined, %5$d muted"
+msgstr ""
+"%1$d geslaagd, %2$d waarschuwingen, %3$d mislukt, %4$d niet bepaald, %5$d "
+"gedempt"
+
+#: includes/class-cascr-nudges.php:76
+msgid "The security check found nothing urgent"
+msgstr "De beveiligingscontrole vond niets dringends"
+
+#: includes/class-cascr-nudges.php:79
+msgid "Security"
+msgstr "Beveiliging"
+
+#: includes/class-cascr-nudges.php:93
+msgid "This site has not been checked yet"
+msgstr "Deze site is nog niet gecontroleerd"
+
+#: includes/class-cascr-nudges.php:94
+msgid "Run the security check once to see where the site stands."
+msgstr ""
+"Voer een eerste beveiligingscontrole uit om te zien hoe de site ervoor "
+"staat."
+
+#. translators: 1: grade letter, 2: grade label such as Good, 3: number of
+#. open tasks.
+#: includes/class-cascr-nudges.php:105
+#, php-format
+msgid "Grade %1$s (%2$s), %3$d open task."
+msgid_plural "Grade %1$s (%2$s), %3$d open tasks."
+msgstr[0] "Cijfer %1$s (%2$s), %3$d openstaande taak."
+msgstr[1] "Cijfer %1$s (%2$s), %3$d openstaande taken."
+
+#: includes/class-cascr-nudges.php:119
+msgid "The security check found serious problems"
+msgstr "De beveiligingscontrole vond ernstige problemen"
+
+#: includes/class-cascr-nudges.php:122
+msgid "The security check found problems worth fixing"
+msgstr "De beveiligingscontrole vond problemen die het oplossen waard zijn"
+
+#: includes/class-cascr-nudges.php:125
+msgid "The last security check is more than a month old"
+msgstr "De laatste beveiligingscontrole is meer dan een maand oud"

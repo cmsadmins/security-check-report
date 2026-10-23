@@ -1883,3 +1883,43 @@ msgid ""
 msgstr ""
 "<strong>Neu</strong>\n"
 "* PHP2Shell-Prüfung für CVE-2026-109618 und CVE-2026-109619: grün, wenn das laufende PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 oder neuer ist oder ein Ubuntu-Paket mit dem Backport, orange, wenn sich der Fix an der Versionsnummer nicht ablesen lässt"
+
+#. Found in description paragraph.
+msgid ""
+"Start a run on the Security Check screen or with <code>wp security-check "
+"run</code>. The check sends nothing anywhere and only looks at the running "
+"PHP."
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"The PHP2Shell check reads the PHP version your site actually runs on and "
+"answers in plain words:"
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"PHP2Shell is the name for two critical flaws in the PHP core that let an "
+"attacker run code on the server with a single request and no login. The PHP "
+"team released the fixes on 21 October 2026, and attacks started the same "
+"day. No WordPress plugin can patch PHP itself, but this one tells you within"
+" seconds whether your server still needs the update."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"<strong>Orange:</strong> the fix cannot be read from the version number. "
+"Update PHP, or have your host confirm the backport. Red Hat, Plesk and "
+"cPanel often keep the old number after patching, so orange is a question to "
+"your host, not a verdict."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"<strong>Green:</strong> PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an "
+"Ubuntu package that carries the backport. The fix is in place."
+msgstr ""
+
+#. Found in description header.
+msgid "PHP2Shell check (CVE-2026-109618, CVE-2026-109619)"
+msgstr ""

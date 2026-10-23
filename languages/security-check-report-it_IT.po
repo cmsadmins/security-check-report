@@ -52,7 +52,7 @@ msgid "Why it matters"
 msgstr "Perché è importante"
 
 #: config/docs.php:17 includes/class-cascr-admin.php:115
-#: includes/class-cascr-admin.php:476
+#: includes/class-cascr-admin.php:482
 msgid "What to do"
 msgstr "Cosa fare"
 
@@ -2350,8 +2350,8 @@ msgstr ""
 "utente."
 
 #: includes/checks/class-cascr-checks-accounts.php:697
-#: includes/checks/class-cascr-checks-core.php:1017
-#: includes/checks/class-cascr-checks-core.php:1026
+#: includes/checks/class-cascr-checks-core.php:1020
+#: includes/checks/class-cascr-checks-core.php:1029
 msgid "no name"
 msgstr "senza nome"
 
@@ -2959,35 +2959,35 @@ msgid "Check that the site can reach api.wordpress.org."
 msgstr "Verifica che il sito riesca a raggiungere api.wordpress.org."
 
 #. translators: %s: WordPress version number.
-#: includes/checks/class-cascr-checks-core.php:134
+#: includes/checks/class-cascr-checks-core.php:137
 #, php-format
 msgid "WordPress %s is up to date."
 msgstr "WordPress %s è aggiornato."
 
 #. translators: 1: installed WordPress version, 2: latest available version.
-#: includes/checks/class-cascr-checks-core.php:143
+#: includes/checks/class-cascr-checks-core.php:146
 #, php-format
 msgid "WordPress %1$s is outdated, %2$s is available."
 msgstr "WordPress %1$s non è aggiornato, è disponibile la %2$s."
 
-#: includes/checks/class-cascr-checks-core.php:149
+#: includes/checks/class-cascr-checks-core.php:152
 msgid "Install the update from Dashboard, Updates. Take a backup first."
 msgstr ""
 "Installa l'aggiornamento da Bacheca, Aggiornamenti. Prima fai un backup."
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:169
+#: includes/checks/class-cascr-checks-core.php:172
 #, php-format
 msgid "PHP %s is in use."
 msgstr "È in uso PHP %s."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:181
+#: includes/checks/class-cascr-checks-core.php:184
 #, php-format
 msgid "PHP %1$s stopped receiving security fixes on %2$s."
 msgstr "PHP %1$s non riceve più correzioni di sicurezza dal %2$s."
 
-#: includes/checks/class-cascr-checks-core.php:187
+#: includes/checks/class-cascr-checks-core.php:190
 msgid ""
 "Ask your host to move the site to a supported PHP branch. Test on a staging "
 "copy first."
@@ -2996,18 +2996,18 @@ msgstr ""
 "supportato. Prima fai una prova su una copia di staging."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:195
+#: includes/checks/class-cascr-checks-core.php:198
 #, php-format
 msgid "PHP %1$s reaches end of security support on %2$s."
 msgstr "Il supporto di sicurezza di PHP %1$s termina il %2$s."
 
-#: includes/checks/class-cascr-checks-core.php:201
+#: includes/checks/class-cascr-checks-core.php:204
 msgid "Plan the upgrade to a newer PHP branch before that date."
 msgstr ""
 "Pianifica l'aggiornamento a un ramo PHP più recente prima di quella data."
 
 #. translators: 1: PHP version number, 2: end of support date.
-#: includes/checks/class-cascr-checks-core.php:209
+#: includes/checks/class-cascr-checks-core.php:212
 #, php-format
 msgid ""
 "PHP %1$s only receives security fixes, no more bug fixes. Support ends on "
@@ -3017,12 +3017,12 @@ msgstr ""
 "supporto termina il %2$s."
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:220
+#: includes/checks/class-cascr-checks-core.php:223
 #, php-format
 msgid "PHP %s is fully supported."
 msgstr "PHP %s è pienamente supportato."
 
-#: includes/checks/class-cascr-checks-core.php:355
+#: includes/checks/class-cascr-checks-core.php:358
 msgid ""
 "The automatic updater cannot run, so security releases are not installed on "
 "their own."
@@ -3030,7 +3030,7 @@ msgstr ""
 "L'aggiornamento automatico non può essere eseguito, quindi le release di "
 "sicurezza non vengono installate da sole."
 
-#: includes/checks/class-cascr-checks-core.php:358
+#: includes/checks/class-cascr-checks-core.php:361
 msgid ""
 "Allow file modifications again, or install core updates another way, for "
 "example over WP-CLI or the hosting platform."
@@ -3039,7 +3039,7 @@ msgstr ""
 "del core in altro modo, per esempio tramite WP-CLI o la piattaforma di "
 "hosting."
 
-#: includes/checks/class-cascr-checks-core.php:371
+#: includes/checks/class-cascr-checks-core.php:374
 msgid ""
 "Automatic core updates are switched off, so security releases are not "
 "installed on their own."
@@ -3047,7 +3047,7 @@ msgstr ""
 "Gli aggiornamenti automatici del core sono disattivati, quindi le release di"
 " sicurezza non vengono installate da sole."
 
-#: includes/checks/class-cascr-checks-core.php:374
+#: includes/checks/class-cascr-checks-core.php:377
 msgid ""
 "Remove the WP_AUTO_UPDATE_CORE constant from wp-config.php or set it to "
 "minor."
@@ -3055,26 +3055,26 @@ msgstr ""
 "Rimuovi la costante WP_AUTO_UPDATE_CORE da wp-config.php o impostala su "
 "minor."
 
-#: includes/checks/class-cascr-checks-core.php:380
+#: includes/checks/class-cascr-checks-core.php:383
 msgid "This installation receives pre-release core updates."
 msgstr ""
 "Questa installazione riceve aggiornamenti del core in versione preliminare."
 
-#: includes/checks/class-cascr-checks-core.php:383
+#: includes/checks/class-cascr-checks-core.php:386
 msgid "Set WP_AUTO_UPDATE_CORE to minor on production sites."
 msgstr "Sui siti in produzione imposta WP_AUTO_UPDATE_CORE su minor."
 
-#: includes/checks/class-cascr-checks-core.php:390
+#: includes/checks/class-cascr-checks-core.php:393
 msgid "All automatic core updates are enabled."
 msgstr "Tutti gli aggiornamenti automatici del core sono attivi."
 
-#: includes/checks/class-cascr-checks-core.php:395
+#: includes/checks/class-cascr-checks-core.php:398
 msgid "Automatic minor and security updates are switched off for this site."
 msgstr ""
 "Gli aggiornamenti automatici minori e di sicurezza sono disattivati per "
 "questo sito."
 
-#: includes/checks/class-cascr-checks-core.php:398
+#: includes/checks/class-cascr-checks-core.php:401
 msgid ""
 "Re-enable automatic updates for maintenance and security releases under "
 "Dashboard, Updates."
@@ -3082,16 +3082,16 @@ msgstr ""
 "Riattiva gli aggiornamenti automatici per le release di manutenzione e di "
 "sicurezza in Bacheca, Aggiornamenti."
 
-#: includes/checks/class-cascr-checks-core.php:402
+#: includes/checks/class-cascr-checks-core.php:405
 msgid "Automatic minor and security updates are enabled."
 msgstr "Gli aggiornamenti automatici minori e di sicurezza sono attivi."
 
-#: includes/checks/class-cascr-checks-core.php:415
+#: includes/checks/class-cascr-checks-core.php:418
 msgid "No official checksums are available for this WordPress version."
 msgstr ""
 "Non sono disponibili checksum ufficiali per questa versione di WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:416
+#: includes/checks/class-cascr-checks-core.php:419
 msgid ""
 "Checksums are only published for release builds. Nightly or patched builds "
 "cannot be verified."
@@ -3100,7 +3100,7 @@ msgstr ""
 "nightly o modificate non possono essere verificate."
 
 #. translators: %d: number of files verified.
-#: includes/checks/class-cascr-checks-core.php:449
+#: includes/checks/class-cascr-checks-core.php:452
 #, php-format
 msgid "The %d core file matches the official checksums."
 msgid_plural "All %d core files match the official checksums."
@@ -3108,27 +3108,27 @@ msgstr[0] "%d file del core corrisponde ai checksum ufficiali."
 msgstr[1] "I %d file del core corrispondono ai checksum ufficiali."
 
 #. translators: %s: file path relative to the WordPress root.
-#: includes/checks/class-cascr-checks-core.php:463
+#: includes/checks/class-cascr-checks-core.php:466
 #, php-format
 msgid "modified: %s"
 msgstr "modificato: %s"
 
 #. translators: %s: file path relative to the WordPress root.
-#: includes/checks/class-cascr-checks-core.php:467
+#: includes/checks/class-cascr-checks-core.php:470
 #, php-format
 msgid "missing: %s"
 msgstr "mancante: %s"
 
 #. translators: %d: number of core files that differ from the official
 #. release.
-#: includes/checks/class-cascr-checks-core.php:476
+#: includes/checks/class-cascr-checks-core.php:479
 #, php-format
 msgid "%d core file differs from the official release."
 msgid_plural "%d core files differ from the official release."
 msgstr[0] "%d file del core differisce dalla release ufficiale."
 msgstr[1] "%d file del core differiscono dalla release ufficiale."
 
-#: includes/checks/class-cascr-checks-core.php:486
+#: includes/checks/class-cascr-checks-core.php:489
 msgid ""
 "Reinstall WordPress from Dashboard, Updates, Reinstall. If files keep "
 "changing, treat the site as compromised."
@@ -3136,19 +3136,19 @@ msgstr ""
 "Reinstalla WordPress da Bacheca, Aggiornamenti, Reinstalla. Se i file "
 "continuano a cambiare, considera il sito compromesso."
 
-#: includes/checks/class-cascr-checks-core.php:507
+#: includes/checks/class-cascr-checks-core.php:510
 msgid "No official file list is available for this WordPress version."
 msgstr ""
 "Non è disponibile un elenco ufficiale dei file per questa versione di "
 "WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:557
+#: includes/checks/class-cascr-checks-core.php:560
 msgid "The core directories could not be read completely."
 msgstr "Non è stato possibile leggere completamente le directory del core."
 
 #. translators: %d: number of executable files that were compared before the
 #. scan stopped.
-#: includes/checks/class-cascr-checks-core.php:569
+#: includes/checks/class-cascr-checks-core.php:572
 #, php-format
 msgid ""
 "The scan stopped after %d executable files, so the core directories were "
@@ -3157,7 +3157,7 @@ msgstr ""
 "La scansione si è fermata dopo %d file eseguibili, quindi le directory del "
 "core sono state confrontate solo in parte."
 
-#: includes/checks/class-cascr-checks-core.php:572
+#: includes/checks/class-cascr-checks-core.php:575
 msgid ""
 "Nothing unexpected turned up in the part that was read. Compare the "
 "remaining files with a fresh copy of this WordPress release."
@@ -3165,14 +3165,14 @@ msgstr ""
 "Nella parte letta non è emerso nulla di inatteso. Confronta i file rimanenti"
 " con una copia pulita di questa release di WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:577
+#: includes/checks/class-cascr-checks-core.php:580
 msgid "The core directories contain no files beyond the official release."
 msgstr ""
 "Le directory del core non contengono file oltre a quelli della release "
 "ufficiale."
 
 #. translators: %d: number of unexpected executable files.
-#: includes/checks/class-cascr-checks-core.php:584
+#: includes/checks/class-cascr-checks-core.php:587
 #, php-format
 msgid "%d executable file in the core directories is not part of WordPress."
 msgid_plural ""
@@ -3182,87 +3182,87 @@ msgstr[0] ""
 msgstr[1] ""
 "%d file eseguibili nelle directory del core non fanno parte di WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:594
+#: includes/checks/class-cascr-checks-core.php:597
 msgid ""
 "Inspect each file. Nothing but WordPress itself belongs in wp-admin or wp-"
 "includes."
 msgstr ""
 "Esamina ogni file. In wp-admin e wp-includes deve esserci solo WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:610
+#: includes/checks/class-cascr-checks-core.php:613
 msgid "Plugin update information is not available."
 msgstr "Le informazioni sugli aggiornamenti dei plugin non sono disponibili."
 
 #. translators: 1: plugin name, 2: installed version, 3: available version.
-#: includes/checks/class-cascr-checks-core.php:627
+#: includes/checks/class-cascr-checks-core.php:630
 #, php-format
 msgid "%1$s (%2$s to %3$s)"
 msgstr "%1$s (da %2$s a %3$s)"
 
-#: includes/checks/class-cascr-checks-core.php:635
+#: includes/checks/class-cascr-checks-core.php:638
 msgid "All active plugins are up to date."
 msgstr "Tutti i plugin attivi sono aggiornati."
 
 #. translators: %d: number of active plugins with a pending update.
-#: includes/checks/class-cascr-checks-core.php:641
+#: includes/checks/class-cascr-checks-core.php:644
 #, php-format
 msgid "%d active plugin has an update waiting."
 msgid_plural "%d active plugins have updates waiting."
 msgstr[0] "%d plugin attivo ha un aggiornamento in attesa."
 msgstr[1] "%d plugin attivi hanno un aggiornamento in attesa."
 
-#: includes/checks/class-cascr-checks-core.php:651
-#: includes/checks/class-cascr-checks-core.php:705
+#: includes/checks/class-cascr-checks-core.php:654
+#: includes/checks/class-cascr-checks-core.php:708
 msgid "Install the updates from Dashboard, Updates."
 msgstr "Installa gli aggiornamenti da Bacheca, Aggiornamenti."
 
-#: includes/checks/class-cascr-checks-core.php:670
+#: includes/checks/class-cascr-checks-core.php:673
 msgid "Theme update information is not available."
 msgstr "Le informazioni sugli aggiornamenti dei temi non sono disponibili."
 
 #. translators: 1: theme name, 2: available version.
-#: includes/checks/class-cascr-checks-core.php:682
+#: includes/checks/class-cascr-checks-core.php:685
 #, php-format
 msgid "%1$s (update to %2$s)"
 msgstr "%1$s (aggiornamento a %2$s)"
 
-#: includes/checks/class-cascr-checks-core.php:689
+#: includes/checks/class-cascr-checks-core.php:692
 msgid "All themes are up to date."
 msgstr "Tutti i temi sono aggiornati."
 
 #. translators: %d: number of themes with a pending update.
-#: includes/checks/class-cascr-checks-core.php:695
+#: includes/checks/class-cascr-checks-core.php:698
 #, php-format
 msgid "%d theme has an update waiting."
 msgid_plural "%d themes have updates waiting."
 msgstr[0] "%d tema ha un aggiornamento in attesa."
 msgstr[1] "%d temi hanno un aggiornamento in attesa."
 
-#: includes/checks/class-cascr-checks-core.php:736
+#: includes/checks/class-cascr-checks-core.php:739
 msgid "No inactive plugins or unused themes are installed."
 msgstr "Non sono installati plugin inattivi o temi inutilizzati."
 
 #. translators: %s: plugin name.
-#: includes/checks/class-cascr-checks-core.php:742
+#: includes/checks/class-cascr-checks-core.php:745
 #, php-format
 msgid "inactive plugin: %s"
 msgstr "plugin inattivo: %s"
 
 #. translators: %s: theme name.
-#: includes/checks/class-cascr-checks-core.php:746
+#: includes/checks/class-cascr-checks-core.php:749
 #, php-format
 msgid "unused theme: %s"
 msgstr "tema inutilizzato: %s"
 
 #. translators: %d: number of inactive plugins and unused themes.
-#: includes/checks/class-cascr-checks-core.php:752
+#: includes/checks/class-cascr-checks-core.php:755
 #, php-format
 msgid "%d inactive plugin or unused theme is installed."
 msgid_plural "%d inactive plugins or unused themes are installed."
 msgstr[0] "%d plugin inattivo o tema inutilizzato è installato."
 msgstr[1] "%d plugin inattivi o temi inutilizzati sono installati."
 
-#: includes/checks/class-cascr-checks-core.php:762
+#: includes/checks/class-cascr-checks-core.php:765
 msgid ""
 "Delete what is not needed. Deactivated code still sits on disk and stops "
 "receiving attention."
@@ -3270,47 +3270,47 @@ msgstr ""
 "Elimina ciò che non serve. Il codice disattivato resta comunque sul disco e "
 "nessuno se ne occupa più."
 
-#: includes/checks/class-cascr-checks-core.php:798
+#: includes/checks/class-cascr-checks-core.php:801
 msgid "no release in over two years"
 msgstr "nessuna release da oltre due anni"
 
-#: includes/checks/class-cascr-checks-core.php:800
+#: includes/checks/class-cascr-checks-core.php:803
 msgid "no release in over a year"
 msgstr "nessuna release da oltre un anno"
 
 #. translators: %s: WordPress version the plugin was last tested against.
-#: includes/checks/class-cascr-checks-core.php:810
+#: includes/checks/class-cascr-checks-core.php:813
 #, php-format
 msgid "last tested against WordPress %s"
 msgstr "testato l'ultima volta con WordPress %s"
 
 #. translators: 1: plugin name, 2: comma separated list of reasons.
-#: includes/checks/class-cascr-checks-core.php:818
+#: includes/checks/class-cascr-checks-core.php:821
 #, php-format
 msgid "%1$s: %2$s"
 msgstr "%1$s: %2$s"
 
-#: includes/checks/class-cascr-checks-core.php:827
-#: includes/checks/class-cascr-checks-core.php:913
+#: includes/checks/class-cascr-checks-core.php:830
+#: includes/checks/class-cascr-checks-core.php:916
 msgid "No plugin information could be retrieved from the directory."
 msgstr ""
 "Non è stato possibile recuperare informazioni sui plugin dalla directory."
 
-#: includes/checks/class-cascr-checks-core.php:832
+#: includes/checks/class-cascr-checks-core.php:835
 msgid "Every active plugin from the directory is actively maintained."
 msgstr ""
 "Tutti i plugin attivi provenienti dalla directory sono mantenuti "
 "attivamente."
 
 #. translators: %d: number of plugins that look abandoned.
-#: includes/checks/class-cascr-checks-core.php:838
+#: includes/checks/class-cascr-checks-core.php:841
 #, php-format
 msgid "%d active plugin looks abandoned."
 msgid_plural "%d active plugins look abandoned."
 msgstr[0] "%d plugin attivo sembra abbandonato."
 msgstr[1] "%d plugin attivi sembrano abbandonati."
 
-#: includes/checks/class-cascr-checks-core.php:848
+#: includes/checks/class-cascr-checks-core.php:851
 msgid ""
 "Look for a maintained alternative. Abandoned plugins do not get security "
 "fixes."
@@ -3319,7 +3319,7 @@ msgstr ""
 " di sicurezza."
 
 #. translators: %d: number of plugins whose listing could not be retrieved.
-#: includes/checks/class-cascr-checks-core.php:899
+#: includes/checks/class-cascr-checks-core.php:902
 #, php-format
 msgid ""
 "The listing of %d active plugin could not be retrieved, so the directory "
@@ -3334,19 +3334,19 @@ msgstr[1] ""
 "Non è stato possibile recuperare la scheda di %d plugin attivi, quindi lo "
 "stato nella directory resta in sospeso."
 
-#: includes/checks/class-cascr-checks-core.php:907
+#: includes/checks/class-cascr-checks-core.php:910
 msgid ""
 "Run the report again once api.wordpress.org can be reached from this server."
 msgstr ""
 "Esegui di nuovo il report quando questo server riesce a raggiungere "
 "api.wordpress.org."
 
-#: includes/checks/class-cascr-checks-core.php:918
+#: includes/checks/class-cascr-checks-core.php:921
 msgid "No active plugin has been removed from the directory."
 msgstr "Nessun plugin attivo è stato rimosso dalla directory."
 
 #. translators: %d: number of plugins that were removed from the directory.
-#: includes/checks/class-cascr-checks-core.php:924
+#: includes/checks/class-cascr-checks-core.php:927
 #, php-format
 msgid "%d active plugin has been removed from the WordPress directory."
 msgid_plural ""
@@ -3354,7 +3354,7 @@ msgid_plural ""
 msgstr[0] "%d plugin attivo è stato rimosso dalla directory di WordPress."
 msgstr[1] "%d plugin attivi sono stati rimossi dalla directory di WordPress."
 
-#: includes/checks/class-cascr-checks-core.php:934
+#: includes/checks/class-cascr-checks-core.php:937
 msgid ""
 "Remove the plugin and replace it. A closed listing usually means an unfixed "
 "security problem."
@@ -3362,7 +3362,7 @@ msgstr ""
 "Rimuovi il plugin e sostituiscilo. Una scheda chiusa di solito indica un "
 "problema di sicurezza non risolto."
 
-#: includes/checks/class-cascr-checks-core.php:957
+#: includes/checks/class-cascr-checks-core.php:960
 msgid ""
 "The plugin authors have been recorded. Changes will be reported from the "
 "next scan on."
@@ -3371,29 +3371,29 @@ msgstr ""
 " a partire dalla prossima analisi."
 
 #. translators: 1: plugin file, 2: previous author, 3: current author.
-#: includes/checks/class-cascr-checks-core.php:971
+#: includes/checks/class-cascr-checks-core.php:974
 #, php-format
 msgid "%1$s: %2$s became %3$s"
 msgstr "%1$s: %2$s è diventato %3$s"
 
-#: includes/checks/class-cascr-checks-core.php:973
-#: includes/checks/class-cascr-checks-core.php:974
+#: includes/checks/class-cascr-checks-core.php:976
+#: includes/checks/class-cascr-checks-core.php:977
 msgid "(none)"
 msgstr "(nessuno)"
 
-#: includes/checks/class-cascr-checks-core.php:979
+#: includes/checks/class-cascr-checks-core.php:982
 msgid "No installed plugin changed its author."
 msgstr "Nessun plugin installato ha cambiato autore."
 
 #. translators: %d: number of plugins whose author changed.
-#: includes/checks/class-cascr-checks-core.php:985
+#: includes/checks/class-cascr-checks-core.php:988
 #, php-format
 msgid "%d plugin changed its author."
 msgid_plural "%d plugins changed their author."
 msgstr[0] "%d plugin ha cambiato autore."
 msgstr[1] "%d plugin hanno cambiato autore."
 
-#: includes/checks/class-cascr-checks-core.php:995
+#: includes/checks/class-cascr-checks-core.php:998
 msgid ""
 "Confirm the handover is legitimate and read the changelog of the release "
 "that came with it."
@@ -3402,24 +3402,24 @@ msgstr ""
 "release con cui è avvenuto."
 
 #. translators: 1: file name, 2: plugin name.
-#: includes/checks/class-cascr-checks-core.php:1015
+#: includes/checks/class-cascr-checks-core.php:1018
 #, php-format
 msgid "must-use plugin %1$s (%2$s)"
 msgstr "plugin must-use %1$s (%2$s)"
 
 #. translators: 1: file name, 2: plugin name.
-#: includes/checks/class-cascr-checks-core.php:1024
+#: includes/checks/class-cascr-checks-core.php:1027
 #, php-format
 msgid "drop-in %1$s (%2$s)"
 msgstr "drop-in %1$s (%2$s)"
 
-#: includes/checks/class-cascr-checks-core.php:1035
-#: includes/checks/class-cascr-checks-core.php:1058
+#: includes/checks/class-cascr-checks-core.php:1038
+#: includes/checks/class-cascr-checks-core.php:1061
 msgid "No must-use plugins or drop-ins are installed."
 msgstr "Non sono installati plugin must-use o drop-in."
 
 #. translators: %d: number of must-use plugins and drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1041
+#: includes/checks/class-cascr-checks-core.php:1044
 #, php-format
 msgid "%d must-use plugin or drop-in is installed and has been recorded."
 msgid_plural ""
@@ -3429,7 +3429,7 @@ msgstr[1] ""
 "%d plugin must-use o drop-in sono installati e sono stati registrati."
 
 #. translators: %d: number of must-use plugins and drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1064
+#: includes/checks/class-cascr-checks-core.php:1067
 #, php-format
 msgid "%d known must-use plugin or drop-in is installed."
 msgid_plural "%d known must-use plugins or drop-ins are installed."
@@ -3437,14 +3437,14 @@ msgstr[0] "%d plugin must-use o drop-in noto è installato."
 msgstr[1] "%d plugin must-use o drop-in noti sono installati."
 
 #. translators: %d: number of newly appeared must-use plugins or drop-ins.
-#: includes/checks/class-cascr-checks-core.php:1084
+#: includes/checks/class-cascr-checks-core.php:1087
 #, php-format
 msgid "%d must-use plugin or drop-in appeared since the first scan."
 msgid_plural "%d must-use plugins or drop-ins appeared since the first scan."
 msgstr[0] "%d plugin must-use o drop-in è comparso dalla prima analisi."
 msgstr[1] "%d plugin must-use o drop-in sono comparsi dalla prima analisi."
 
-#: includes/checks/class-cascr-checks-core.php:1094
+#: includes/checks/class-cascr-checks-core.php:1097
 msgid ""
 "Open each file. This code runs on every request and cannot be switched off "
 "from the dashboard."
@@ -3452,22 +3452,22 @@ msgstr ""
 "Apri ogni file. Questo codice viene eseguito a ogni richiesta e non può "
 "essere disattivato dalla bacheca."
 
-#: includes/checks/class-cascr-checks-core.php:1114
+#: includes/checks/class-cascr-checks-core.php:1117
 msgid "The parent directory could not be read."
 msgstr "Non è stato possibile leggere la directory superiore."
 
-#: includes/checks/class-cascr-checks-core.php:1144
+#: includes/checks/class-cascr-checks-core.php:1147
 msgid "The scan for other installations could not be completed."
 msgstr "Non è stato possibile completare la ricerca di altre installazioni."
 
-#: includes/checks/class-cascr-checks-core.php:1149
+#: includes/checks/class-cascr-checks-core.php:1152
 msgid "No other WordPress installation was found next to this one."
 msgstr ""
 "Non è stata trovata nessun'altra installazione di WordPress accanto a "
 "questa."
 
 #. translators: %d: number of other WordPress installations found.
-#: includes/checks/class-cascr-checks-core.php:1155
+#: includes/checks/class-cascr-checks-core.php:1158
 #, php-format
 msgid "%d other WordPress installation sits in the directory above this one."
 msgid_plural ""
@@ -3479,7 +3479,7 @@ msgstr[1] ""
 "%d altre installazioni di WordPress si trovano nella directory superiore a "
 "questa."
 
-#: includes/checks/class-cascr-checks-core.php:1165
+#: includes/checks/class-cascr-checks-core.php:1168
 msgid ""
 "Keep every installation updated. A neglected one next door is an entry point"
 " into this one."
@@ -3487,7 +3487,7 @@ msgstr ""
 "Mantieni aggiornata ogni installazione. Un'installazione trascurata qui "
 "accanto è una porta d'ingresso per questa."
 
-#: includes/checks/class-cascr-checks-core.php:1274
+#: includes/checks/class-cascr-checks-core.php:1277
 msgid "The plugin directory returned no usable answer."
 msgstr "La directory dei plugin non ha restituito una risposta utilizzabile."
 
@@ -4757,13 +4757,13 @@ msgstr ""
 msgid "Risk score"
 msgstr "Punteggio di rischio"
 
-#: includes/class-cascr-admin-dashboard.php:100
+#: includes/class-cascr-admin-dashboard.php:101
 msgid "Re-check everything"
 msgstr "Ricontrolla tutto"
 
 #. translators: 1: date of the first recorded run, 2: grade letter, 3: number
 #. of findings.
-#: includes/class-cascr-admin-dashboard.php:133
+#: includes/class-cascr-admin-dashboard.php:177
 #, php-format
 msgid "Started on %1$s: grade %2$s with %3$d finding."
 msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
@@ -4772,7 +4772,7 @@ msgstr[1] "Avviata il %1$s: voto %2$s con %3$d problemi rilevati."
 
 #. translators: 1: number of checks re-checked on their own, 2: date of the
 #. last full pass.
-#: includes/class-cascr-admin-dashboard.php:200
+#: includes/class-cascr-admin-dashboard.php:244
 #, php-format
 msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
 msgid_plural ""
@@ -4785,22 +4785,22 @@ msgstr[1] ""
 " %2$s."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:272
+#: includes/class-cascr-admin-dashboard.php:316
 #, php-format
 msgid "%s passed the re-check."
 msgstr "%s ha superato il nuovo controllo."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:275
+#: includes/class-cascr-admin-dashboard.php:319
 #, php-format
 msgid "%s is still open after the re-check."
 msgstr "%s è ancora aperto dopo il nuovo controllo."
 
-#: includes/class-cascr-admin-dashboard.php:304
+#: includes/class-cascr-admin-dashboard.php:348
 msgid "Your progress"
 msgstr "I tuoi progressi"
 
-#: includes/class-cascr-admin-dashboard.php:313
+#: includes/class-cascr-admin-dashboard.php:357
 msgid ""
 "How the site scored across the recorded runs, oldest on the left. A taller "
 "bar is a better run."
@@ -4809,13 +4809,13 @@ msgstr ""
 "Una barra più alta indica un'analisi migliore."
 
 #. translators: 1: date of the run, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:337
+#: includes/class-cascr-admin-dashboard.php:381
 #, php-format
 msgid "%1$s: grade %2$s"
 msgstr "%1$s: voto %2$s"
 
 #. translators: %d: number of recorded runs.
-#: includes/class-cascr-admin-dashboard.php:354
+#: includes/class-cascr-admin-dashboard.php:398
 #, php-format
 msgid "%d recorded run. A taller bar is a better run."
 msgid_plural ""
@@ -4825,65 +4825,65 @@ msgstr[0] ""
 msgstr[1] ""
 "%d analisi registrate. Una barra più alta indica un'analisi migliore."
 
-#: includes/class-cascr-admin-dashboard.php:371
+#: includes/class-cascr-admin-dashboard.php:415
 msgid "Your next five"
 msgstr "I tuoi prossimi cinque"
 
-#: includes/class-cascr-admin-dashboard.php:372
+#: includes/class-cascr-admin-dashboard.php:416
 msgid "Work through these in order. Everything else can wait."
 msgstr "Affrontali in quest'ordine. Tutto il resto può aspettare."
 
-#: includes/class-cascr-admin-dashboard.php:383
-#: includes/class-cascr-scoring.php:196
+#: includes/class-cascr-admin-dashboard.php:427
+#: includes/class-cascr-scoring.php:203
 msgid "Nothing needs your attention right now."
 msgstr "Al momento non c'è nulla che richieda la tua attenzione."
 
-#: includes/class-cascr-admin-dashboard.php:418
+#: includes/class-cascr-admin-dashboard.php:462
 msgid "Done, check it now"
 msgstr "Fatto, controlla ora"
 
-#: includes/class-cascr-admin-dashboard.php:421
+#: includes/class-cascr-admin-dashboard.php:465
 msgid "later"
 msgstr "più tardi"
 
-#: includes/class-cascr-admin-dashboard.php:424
-#: includes/class-cascr-admin.php:488
+#: includes/class-cascr-admin-dashboard.php:468
+#: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr "Scopri di più su questo controllo"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:464
+#: includes/class-cascr-admin-dashboard.php:508
 #, php-format
 msgid "Still open (%d)"
 msgstr "Ancora aperti (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:537
+#: includes/class-cascr-admin-dashboard.php:581
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Risolti (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:549
+#: includes/class-cascr-admin-dashboard.php:593
 msgid "after a re-check"
 msgstr "dopo un nuovo controllo"
 
-#: includes/class-cascr-admin-dashboard.php:568
+#: includes/class-cascr-admin-dashboard.php:612
 msgid "By category"
 msgstr "Per categoria"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:591
+#: includes/class-cascr-admin-dashboard.php:635
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d di %2$d superati"
 
-#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:99
+#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:179
 msgid "Security Check"
 msgstr "Security Check"
 
 #: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:151
+#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
 
@@ -4897,27 +4897,27 @@ msgstr "Controllo %1$d di %2$d"
 msgid "This check could not be completed."
 msgstr "Non è stato possibile completare questo controllo."
 
-#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:377
-#: includes/class-cascr-admin.php:589
+#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:376
+#: includes/class-cascr-admin.php:595
 msgid "Passed"
 msgstr "Superato"
 
-#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:376
-#: includes/class-cascr-admin.php:590
+#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:375
+#: includes/class-cascr-admin.php:596
 msgid "Warning"
 msgstr "Avviso"
 
-#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:375
-#: includes/class-cascr-admin.php:591
+#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:374
+#: includes/class-cascr-admin.php:597
 msgid "Failed"
 msgstr "Non superato"
 
-#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:378
-#: includes/class-cascr-admin.php:592
+#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:377
+#: includes/class-cascr-admin.php:598
 msgid "Not determined"
 msgstr "Non determinato"
 
-#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:379
+#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:378
 msgid "Muted"
 msgstr "Silenziato"
 
@@ -4937,7 +4937,7 @@ msgstr "Non è stato possibile copiare il report."
 msgid "Generated"
 msgstr "Generato"
 
-#: includes/class-cascr-admin.php:120 includes/class-cascr-cli.php:71
+#: includes/class-cascr-admin.php:120 includes/class-cascr-cli.php:109
 msgid "Grade"
 msgstr "Voto"
 
@@ -4977,96 +4977,92 @@ msgstr "Risultato"
 msgid "Checking again"
 msgstr "Nuovo controllo in corso"
 
-#: includes/class-cascr-admin.php:134
-msgid "The security check finished."
-msgstr "Il controllo di sicurezza è terminato."
-
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:156
+#: includes/class-cascr-admin.php:155
 #, php-format
 msgid "%d check across your WordPress installation."
 msgid_plural "%d checks across your WordPress installation."
 msgstr[0] "%d controllo sull'intera installazione WordPress."
 msgstr[1] "%d controlli sull'intera installazione WordPress."
 
-#: includes/class-cascr-admin.php:173
+#: includes/class-cascr-admin.php:172
 msgid "What each check looks at"
 msgstr "Cosa esamina ogni controllo"
 
-#: includes/class-cascr-admin.php:177 includes/class-cascr-admin.php:182
+#: includes/class-cascr-admin.php:176 includes/class-cascr-admin.php:181
 msgid "Search the checks"
 msgstr "Cerca nei controlli"
 
-#: includes/class-cascr-admin.php:188
+#: includes/class-cascr-admin.php:187
 msgid "No check matches that search."
 msgstr "Nessun controllo corrisponde alla ricerca."
 
-#: includes/class-cascr-admin.php:196
+#: includes/class-cascr-admin.php:195
 msgid "WordPress security"
 msgstr "Sicurezza di WordPress"
 
-#: includes/class-cascr-admin.php:198
+#: includes/class-cascr-admin.php:197
 msgid "Documentation"
 msgstr "Documentazione"
 
-#: includes/class-cascr-admin.php:200
+#: includes/class-cascr-admin.php:199
 msgid "Report a false positive"
 msgstr "Segnala un falso positivo"
 
-#: includes/class-cascr-admin.php:202
+#: includes/class-cascr-admin.php:201
 msgid "Support"
 msgstr "Supporto"
 
-#: includes/class-cascr-admin.php:220
+#: includes/class-cascr-admin.php:219
 msgid "Step 1:"
 msgstr "Passo 1:"
 
-#: includes/class-cascr-admin.php:221
+#: includes/class-cascr-admin.php:220
 msgid "Start the check"
 msgstr "Avvia il controllo"
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:227
+#: includes/class-cascr-admin.php:226
 #, php-format
 msgid "%d checks, about a minute. Nothing on your site is changed."
 msgstr ""
 "%d controlli, circa un minuto. Sul tuo sito non viene modificato nulla."
 
-#: includes/class-cascr-admin.php:238
+#: includes/class-cascr-admin.php:237
 msgid "Start the security check"
 msgstr "Avvia il controllo di sicurezza"
 
-#: includes/class-cascr-admin.php:249
+#: includes/class-cascr-admin.php:248
 msgid "Step 2:"
 msgstr "Passo 2:"
 
-#: includes/class-cascr-admin.php:250
+#: includes/class-cascr-admin.php:249
 msgid "Your result"
 msgstr "Il tuo risultato"
 
-#: includes/class-cascr-admin.php:252
+#: includes/class-cascr-admin.php:251
 msgid "A grade, what it means, and the short list to work through."
 msgstr "Un voto, cosa significa e la breve lista da affrontare."
 
-#: includes/class-cascr-admin.php:257 includes/class-cascr-admin.php:274
+#: includes/class-cascr-admin.php:256 includes/class-cascr-admin.php:273
 msgid "Appears once the check has run."
 msgstr "Compare dopo l'esecuzione del controllo."
 
-#: includes/class-cascr-admin.php:266
+#: includes/class-cascr-admin.php:265
 msgid "Step 3:"
 msgstr "Passo 3:"
 
-#: includes/class-cascr-admin.php:267
+#: includes/class-cascr-admin.php:266
 msgid "Go through everything else"
 msgstr "Passa in rassegna tutto il resto"
 
-#: includes/class-cascr-admin.php:269
+#: includes/class-cascr-admin.php:268
 msgid "Every check with its detail, filterable, and the report to take away."
 msgstr ""
 "Ogni controllo con i suoi dettagli, filtrabile, e il report da portare con "
 "te."
 
-#: includes/class-cascr-admin.php:290
+#: includes/class-cascr-admin.php:289
 msgid ""
 "These checks read the site, write one temporary file to the uploads folder "
 "and delete it again. The result is an assessment rather than a guarantee."
@@ -5075,104 +5071,104 @@ msgstr ""
 " uploads e poi lo eliminano. Il risultato è una valutazione, non una "
 "garanzia."
 
-#: includes/class-cascr-admin.php:301
+#: includes/class-cascr-admin.php:300
 msgid "I understand."
 msgstr "Ho capito."
 
-#: includes/class-cascr-admin.php:319
+#: includes/class-cascr-admin.php:318
 msgid "Tick the box above to start."
 msgstr "Spunta la casella qui sopra per iniziare."
 
-#: includes/class-cascr-admin.php:374
+#: includes/class-cascr-admin.php:373
 msgid "All"
 msgstr "Tutti"
 
-#: includes/class-cascr-admin.php:383
+#: includes/class-cascr-admin.php:382
 msgid "All checks"
 msgstr "Tutti i controlli"
 
-#: includes/class-cascr-admin.php:432
+#: includes/class-cascr-admin.php:431
 msgid "No check matches that filter."
 msgstr "Nessun controllo corrisponde al filtro."
 
-#: includes/class-cascr-admin.php:467
+#: includes/class-cascr-admin.php:473
 msgid "Details"
 msgstr "Dettagli"
 
-#: includes/class-cascr-admin.php:491
+#: includes/class-cascr-admin.php:497
 msgid "Unmute"
 msgstr "Mostra di nuovo"
 
-#: includes/class-cascr-admin.php:491
+#: includes/class-cascr-admin.php:497
 msgid "Mute this finding"
 msgstr "Silenzia questo problema rilevato"
 
-#: includes/class-cascr-admin.php:494
+#: includes/class-cascr-admin.php:500
 msgid "Muted until the finding changes."
 msgstr "Silenziato finché il problema rilevato non cambia."
 
-#: includes/class-cascr-admin.php:507
+#: includes/class-cascr-admin.php:513
 msgid "Download as text"
 msgstr "Scarica come testo"
 
-#: includes/class-cascr-admin.php:508
+#: includes/class-cascr-admin.php:514
 msgid "Download as JSON"
 msgstr "Scarica come JSON"
 
-#: includes/class-cascr-admin.php:509
+#: includes/class-cascr-admin.php:515
 msgid "Download as CSV"
 msgstr "Scarica come CSV"
 
-#: includes/class-cascr-admin.php:510
+#: includes/class-cascr-admin.php:516
 msgid "Copy report"
 msgstr "Copia il report"
 
-#: includes/class-cascr-admin.php:514
+#: includes/class-cascr-admin.php:520
 msgid "Take the report with you"
 msgstr "Porta il report con te"
 
-#: includes/class-cascr-admin.php:572 includes/class-cascr-scoring.php:243
+#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:250
 msgid "Critical"
 msgstr "Critico"
 
-#: includes/class-cascr-admin.php:573
+#: includes/class-cascr-admin.php:579
 msgid "High"
 msgstr "Alto"
 
-#: includes/class-cascr-admin.php:574
+#: includes/class-cascr-admin.php:580
 msgid "Medium"
 msgstr "Medio"
 
-#: includes/class-cascr-admin.php:575
+#: includes/class-cascr-admin.php:581
 msgid "Low"
 msgstr "Basso"
 
-#: includes/class-cascr-cli.php:74
+#: includes/class-cascr-cli.php:112
 msgid "risk score"
 msgstr "punteggio di rischio"
 
-#: includes/class-cascr-cli.php:111
+#: includes/class-cascr-cli.php:150
 msgid "Nothing needs your attention."
 msgstr "Non c'è nulla che richieda la tua attenzione."
 
 #. translators: %s: number of failed checks.
-#: includes/class-cascr-nudges.php:76
+#: includes/class-cascr-nudges.php:156
 #, php-format
 msgid "%s failed check"
 msgid_plural "%s failed checks"
 msgstr[0] "%s controllo non superato"
 msgstr[1] "%s controlli non superati"
 
-#: includes/class-cascr-nudges.php:113
+#: includes/class-cascr-nudges.php:193
 msgid "This site has not been checked yet."
 msgstr "Questo sito non è ancora stato controllato."
 
-#: includes/class-cascr-nudges.php:118
+#: includes/class-cascr-nudges.php:198
 msgid "Run the first check"
 msgstr "Esegui il primo controllo"
 
 #. translators: %d: number of findings still open.
-#: includes/class-cascr-nudges.php:138
+#: includes/class-cascr-nudges.php:218
 #, php-format
 msgid "%d open task"
 msgid_plural "%d open tasks"
@@ -5180,28 +5176,29 @@ msgstr[0] "%d attività aperta"
 msgstr[1] "%d attività aperte"
 
 #. translators: %s: length of time, for example "2 weeks".
-#: includes/class-cascr-nudges.php:152
+#: includes/class-cascr-nudges.php:232
 #, php-format
 msgid "Last full check %s ago."
 msgstr "Ultimo controllo completo %s fa."
 
-#: includes/class-cascr-nudges.php:162 includes/class-cascr-nudges.php:195
+#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:242
+#: includes/class-cascr-nudges.php:275
 msgid "Open the report"
 msgstr "Apri il report"
 
 #. translators: %s: length of time, for example "2 months".
-#: includes/class-cascr-nudges.php:190
+#: includes/class-cascr-nudges.php:270
 #, php-format
 msgid "The last full security check on this site ran %s ago."
 msgstr ""
 "L'ultimo controllo di sicurezza completo su questo sito è stato eseguito %s "
 "fa."
 
-#: includes/class-cascr-nudges.php:197
+#: includes/class-cascr-nudges.php:277
 msgid "Stop reminding me"
 msgstr "Non ricordarmelo più"
 
-#: includes/class-cascr-nudges.php:233
+#: includes/class-cascr-nudges.php:313
 msgid "You are not allowed to do that."
 msgstr "Non hai i permessi per farlo."
 
@@ -5497,7 +5494,7 @@ msgid "The check could not be completed on this server."
 msgstr "Non è stato possibile completare il controllo su questo server."
 
 #. translators: 1: grade letter, 2: number of findings.
-#: includes/class-cascr-scoring.php:145
+#: includes/class-cascr-scoring.php:152
 #, php-format
 msgid "Today: grade %1$s with %2$d finding."
 msgid_plural "Today: grade %1$s with %2$d findings."
@@ -5505,7 +5502,7 @@ msgstr[0] "Oggi: voto %1$s con %2$d problema rilevato."
 msgstr[1] "Oggi: voto %1$s con %2$d problemi rilevati."
 
 #. translators: %d: number of failed checks.
-#: includes/class-cascr-scoring.php:172
+#: includes/class-cascr-scoring.php:179
 #, php-format
 msgid "%d finding needs your attention now."
 msgid_plural "%d findings need your attention now."
@@ -5513,7 +5510,7 @@ msgstr[0] "%d problema rilevato richiede subito la tua attenzione."
 msgstr[1] "%d problemi rilevati richiedono subito la tua attenzione."
 
 #. translators: %d: number of warnings.
-#: includes/class-cascr-scoring.php:185
+#: includes/class-cascr-scoring.php:192
 #, php-format
 msgid "%d more is worth improving."
 msgid_plural "%d more are worth improving."
@@ -5521,26 +5518,26 @@ msgstr[0] "%d altro merita di essere migliorato."
 msgstr[1] "Altri %d meritano di essere migliorati."
 
 #. translators: %d: number of checks that could not be completed.
-#: includes/class-cascr-scoring.php:202
+#: includes/class-cascr-scoring.php:209
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
 msgstr[0] "%d controllo non è stato completato e non viene conteggiato."
 msgstr[1] "%d controlli non sono stati completati e non vengono conteggiati."
 
-#: includes/class-cascr-scoring.php:239
+#: includes/class-cascr-scoring.php:246
 msgid "Excellent"
 msgstr "Eccellente"
 
-#: includes/class-cascr-scoring.php:240
+#: includes/class-cascr-scoring.php:247
 msgid "Good"
 msgstr "Buono"
 
-#: includes/class-cascr-scoring.php:241
+#: includes/class-cascr-scoring.php:248
 msgid "Moderate"
 msgstr "Discreto"
 
-#: includes/class-cascr-scoring.php:242
+#: includes/class-cascr-scoring.php:249
 msgid "Poor"
 msgstr "Scarso"
 
@@ -5590,24 +5587,24 @@ msgstr ""
 "successivo."
 
 #. translators: %s: PHP version string as reported by the server.
-#: includes/checks/class-cascr-checks-core.php:241
+#: includes/checks/class-cascr-checks-core.php:244
 #, php-format
 msgid "PHP version: %s"
 msgstr "Versione di PHP: %s"
 
 #. translators: %s: PHP server API, e.g. fpm-fcgi or apache2handler.
-#: includes/checks/class-cascr-checks-core.php:243
+#: includes/checks/class-cascr-checks-core.php:246
 #, php-format
 msgid "Server API: %s"
 msgstr "API del server: %s"
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:250
+#: includes/checks/class-cascr-checks-core.php:253
 #, php-format
 msgid "PHP %s contains the fix for PHP2Shell."
 msgstr "PHP %s contiene la correzione per PHP2Shell."
 
-#: includes/checks/class-cascr-checks-core.php:257
+#: includes/checks/class-cascr-checks-core.php:260
 msgid ""
 "Install the PHP update from your distribution or host, then restart PHP-FPM "
 "or the web server and run this check again. Sites on Apache with mod_php are"
@@ -5617,12 +5614,12 @@ msgstr ""
 "di hosting, poi riavvia PHP-FPM o il server web ed esegui di nuovo questo "
 "controllo. I siti su Apache con mod_php sono i più a rischio."
 
-#: includes/checks/class-cascr-checks-core.php:260
+#: includes/checks/class-cascr-checks-core.php:263
 msgid "PHP2Shell: fixed versions and status per distribution (German)"
 msgstr "PHP2Shell: versioni corrette e stato per distribuzione (in tedesco)"
 
 #. translators: %s: PHP version number.
-#: includes/checks/class-cascr-checks-core.php:267
+#: includes/checks/class-cascr-checks-core.php:270
 #, php-format
 msgid ""
 "There is no official PHP2Shell fix for PHP %s, only backports from some "
@@ -5633,7 +5630,7 @@ msgstr ""
 "di alcune distribuzioni e fornitori. Dal numero di versione non si capisce "
 "se questo server ne ha uno."
 
-#: includes/checks/class-cascr-checks-core.php:272
+#: includes/checks/class-cascr-checks-core.php:275
 msgid ""
 "Ask your host whether the PHP2Shell backport is installed, or move the site "
 "to PHP 8.2 or newer."
@@ -5642,7 +5639,7 @@ msgstr ""
 "oppure passa il sito a PHP 8.2 o successivo."
 
 #. translators: 1: PHP version number, 2: first fixed version of that branch.
-#: includes/checks/class-cascr-checks-core.php:280
+#: includes/checks/class-cascr-checks-core.php:283
 #, php-format
 msgid ""
 "PHP %1$s does not show the PHP2Shell fix. Update to %2$s or newer, unless "
@@ -5654,3 +5651,83 @@ msgstr ""
 #: includes/class-cascr-registry.php:274
 msgid "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 msgstr "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
+
+#: includes/class-cascr-admin-dashboard.php:81
+msgid "Result of the latest run"
+msgstr "Risultato dell’ultima scansione"
+
+#. translators: %d: number of checks that turned into a finding.
+#: includes/class-cascr-admin-dashboard.php:129
+#, php-format
+msgid "%d new finding"
+msgid_plural "%d new findings"
+msgstr[0] "%d nuovo problema rilevato"
+msgstr[1] "%d nuovi problemi rilevati"
+
+#. translators: %d: number of findings that are gone.
+#: includes/class-cascr-admin-dashboard.php:137
+#, php-format
+msgid "%d resolved"
+msgid_plural "%d resolved"
+msgstr[0] "%d risolto"
+msgstr[1] "%d risolti"
+
+#. translators: %s: list such as "2 new findings, 3 resolved".
+#: includes/class-cascr-admin-dashboard.php:147
+#, php-format
+msgid "Since the run before: %s."
+msgstr "Dalla scansione precedente: %s."
+
+#. translators: %s: status the muted check had, for example Failed.
+#: includes/class-cascr-admin.php:462
+#, php-format
+msgid "Muted, was %s"
+msgstr "Silenziato (%s)"
+
+#. translators: 1: passed, 2: warnings, 3: failed, 4: not determined, 5: muted
+#. (all counts).
+#: includes/class-cascr-cli.php:120
+#, php-format
+msgid ""
+"%1$d passed, %2$d warnings, %3$d failed, %4$d not determined, %5$d muted"
+msgstr ""
+"%1$d superati, %2$d avvisi, %3$d non superati, %4$d non determinati, %5$d "
+"silenziati"
+
+#: includes/class-cascr-nudges.php:76
+msgid "The security check found nothing urgent"
+msgstr "Il controllo di sicurezza non ha trovato nulla di urgente"
+
+#: includes/class-cascr-nudges.php:79
+msgid "Security"
+msgstr "Sicurezza"
+
+#: includes/class-cascr-nudges.php:93
+msgid "This site has not been checked yet"
+msgstr "Questo sito non è ancora stato controllato"
+
+#: includes/class-cascr-nudges.php:94
+msgid "Run the security check once to see where the site stands."
+msgstr ""
+"Esegui un primo controllo di sicurezza per sapere a che punto è il sito."
+
+#. translators: 1: grade letter, 2: grade label such as Good, 3: number of
+#. open tasks.
+#: includes/class-cascr-nudges.php:105
+#, php-format
+msgid "Grade %1$s (%2$s), %3$d open task."
+msgid_plural "Grade %1$s (%2$s), %3$d open tasks."
+msgstr[0] "Voto %1$s (%2$s), %3$d attività aperta."
+msgstr[1] "Voto %1$s (%2$s), %3$d attività aperte."
+
+#: includes/class-cascr-nudges.php:119
+msgid "The security check found serious problems"
+msgstr "Il controllo di sicurezza ha trovato problemi gravi"
+
+#: includes/class-cascr-nudges.php:122
+msgid "The security check found problems worth fixing"
+msgstr "Il controllo di sicurezza ha trovato problemi da correggere"
+
+#: includes/class-cascr-nudges.php:125
+msgid "The last security check is more than a month old"
+msgstr "L’ultimo controllo di sicurezza risale a più di un mese fa"
