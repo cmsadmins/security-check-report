@@ -5,7 +5,7 @@ Tags: security, php2shell, audit, hardening, scanner
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.4.1
+Stable tag: 2.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,10 +38,10 @@ Start a run on the Security Check screen or with `wp security-check run`. The ch
 * A checklist of five tasks at a time, derived from urgency and score rather than from guesswork, with the next one moving up when you finish one
 * A button per task that re-runs that single check, so you see the result of a fix in seconds
 * A history of the last 24 runs, with the very first one kept for good, so the starting point stays visible
-* A comparison with the previous run: newly failing, resolved, changed
+* A comparison with the previous run, right under the grade: how many findings are new and how many were resolved
 * Muting that remembers what a finding said, so an accepted finding comes back the moment it actually changes
 * "Not determined" as a real outcome, so a blocked request is never reported as a problem and never moves the grade
-* A count on the menu entry, a widget on the dashboard home and a reminder once the last run is more than 30 days old
+* A count on the menu entry, a widget on the dashboard home, the grade in Tools, Site Health, and a reminder once the last run is more than 30 days old
 * Exports as plain text, JSON and CSV
 * A WP-CLI command that produces the same grade as the screen
 * An explanation of every check, searchable, right on the page
@@ -190,9 +190,9 @@ If you already used an earlier version, the two runs it had stored become the fi
 
 Yes, and it produces the same grade as the screen because the scoring happens in PHP either way.
 
-`wp security-check run` for a table, `wp security-check run --format=json` for the full result, `wp security-check run --failed-only` for just what needs attention.
+`wp security-check run` for a table, `wp security-check run --format=json` for the full result, `wp security-check run --failed-only` for just what needs attention. Add `--fail-below=B` and the command exits with status 1 when the grade is worse than B, which is what a deployment pipeline or a monitoring job needs.
 
-A command line run reports and stores nothing. The history, the checklist and the count on the menu entry follow the runs you start on the screen.
+A command line run is stored like a run from the screen, so the history, the checklist and the count on the menu entry include it.
 
 = Does it work on multisite? =
 
@@ -231,6 +231,23 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 == Changelog ==
 
 Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.5.0 =
+
+**Added**
+* The grade appears in Tools, Site Health: good for A and B, recommended for C or a run older than a month, critical for D and F. It reads the stored run and never starts a scan.
+* A line under the grade says what changed since the run before: how many findings are new and how many were resolved.
+* `wp security-check run --fail-below=<grade>` exits with status 1 when the grade is worse, for pipelines and monitoring.
+
+**Changed**
+* The five tasks are ordered by severity first. A critical warning such as PHP2Shell no longer sits behind a medium failure.
+* Muted findings say so in their badge ("Muted, was Failed") instead of showing the old status in grey.
+* Category progress counts muted checks, so each category shows its full number of checks.
+* Screen readers: the progress bar is announced as one, focus moves to the grade after a run, and every task and result button names the check it belongs to. Faint text now meets the WCAG AA contrast ratio.
+
+**Fixed**
+* "WordPress 7.1.3 is outdated, 7.1.3 is available": an update offer for the installed version no longer counts as an update.
+* The readme said a command line run stores nothing. It does, and now the readme says so.
 
 = 2.4.1 =
 
@@ -369,6 +386,9 @@ Every check was read against the sources it cites: php.net, the WordPress handbo
 * Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
+
+= 2.5.0 =
+Shows the grade in Site Health, puts critical findings first, and fixes a false "WordPress is outdated" finding.
 
 = 2.4.1 =
 Adds a check for PHP2Shell (CVE-2026-109618, CVE-2026-109619) that tells you whether the PHP on your server carries the fix.
