@@ -4849,42 +4849,42 @@ msgstr "Arbeite diese Punkte der Reihe nach ab. Alles andere kann warten."
 msgid "Nothing needs your attention right now."
 msgstr "Im Moment braucht nichts deine Aufmerksamkeit."
 
-#: includes/class-cascr-admin-dashboard.php:424
+#: includes/class-cascr-admin-dashboard.php:428
 msgid "Done, check it now"
 msgstr "Erledigt, jetzt prüfen"
 
-#: includes/class-cascr-admin-dashboard.php:427
+#: includes/class-cascr-admin-dashboard.php:431
 msgid "later"
 msgstr "später"
 
-#: includes/class-cascr-admin-dashboard.php:430
+#: includes/class-cascr-admin-dashboard.php:434
 #: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr "Mehr zu dieser Prüfung"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:470
+#: includes/class-cascr-admin-dashboard.php:474
 #, php-format
 msgid "Still open (%d)"
 msgstr "Noch offen (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:543
+#: includes/class-cascr-admin-dashboard.php:547
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Behoben (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:555
+#: includes/class-cascr-admin-dashboard.php:559
 msgid "after a re-check"
 msgstr "nach erneuter Prüfung"
 
-#: includes/class-cascr-admin-dashboard.php:574
+#: includes/class-cascr-admin-dashboard.php:578
 msgid "By category"
 msgstr "Nach Kategorie"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:597
+#: includes/class-cascr-admin-dashboard.php:601
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d von %2$d bestanden"

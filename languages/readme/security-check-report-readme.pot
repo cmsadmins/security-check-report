@@ -17,6 +17,25 @@ msgstr ""
 msgid "CMS ADMINS Security Check Report"
 msgstr ""
 
+#. Found in faq paragraph.
+msgid ""
+"A command line run is stored like a run from the screen, so the history, the"
+" checklist and the count on the menu entry include it."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard home, the grade in "
+"Tools, Site Health, and a reminder once the last run is more than 30 days "
+"old"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new and how many were resolved"
+msgstr ""
+
 #. Found in description paragraph.
 msgid ""
 "Start a run on the Security Check screen or with <code>wp security-check "
@@ -113,12 +132,6 @@ msgstr ""
 msgid ""
 "The history, the checklist and the reminder belong to a single site as well."
 " Every site in the network keeps its own."
-msgstr ""
-
-#. Found in faq paragraph.
-msgid ""
-"A command line run reports and stores nothing. The history, the checklist "
-"and the count on the menu entry follow the runs you start on the screen."
 msgstr ""
 
 #. Found in faq paragraph.
@@ -285,12 +298,6 @@ msgstr ""
 msgid ""
 "Not a monitor. Nothing runs in the background, nothing is scheduled, no mail"
 " is sent. A check runs when you start it."
-msgstr ""
-
-#. Found in description list item.
-msgid ""
-"A count on the menu entry, a widget on the dashboard home and a reminder "
-"once the last run is more than 30 days old"
 msgstr ""
 
 #. Found in description list item.
@@ -749,10 +756,6 @@ msgid ""
 msgstr ""
 
 #. Found in description list item.
-msgid "A comparison with the previous run: newly failing, resolved, changed"
-msgstr ""
-
-#. Found in description list item.
 msgid ""
 "A weighted grade from A to F, where one failing critical check cannot be "
 "hidden by fifty passing minor ones"
@@ -786,6 +789,33 @@ msgstr ""
 msgid ""
 "All checks, grouped by area and filterable by outcome, with one finding "
 "expanded"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* \"WordPress 7.1.3 is outdated, 7.1.3 is available\": an update offer for the installed version no longer counts as an update.\n"
+"* The readme said a command line run stores nothing. It does, and now the readme says so."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* The five tasks are ordered by severity first. A critical warning such as PHP2Shell no longer sits behind a medium failure.\n"
+"* Each task shows its status next to its severity, so a critical check that is only a warning reads as one.\n"
+"* Muted findings say so in their badge (\"Muted, was Failed\") instead of showing the old status in grey.\n"
+"* Category progress counts muted checks, so each category shows its full number of checks.\n"
+"* The progress chart shows the grade above and the date below every bar, newest run first.\n"
+"* Section headings stand out more, and the list of all checks keeps status, name and summary in aligned columns.\n"
+"* Screen readers: the progress bar is announced as one, focus moves to the grade after a run, and every task and result button names the check it belongs to. Faint text now meets the WCAG AA contrast ratio."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The grade appears in Tools, Site Health: good for A and B, recommended for C or a run older than a month, critical for D and F. It reads the stored run and never starts a scan.\n"
+"* A line under the grade says what changed since the run before: how many findings are new and how many were resolved.\n"
+"* <code>wp security-check run --fail-below=&lt;grade&gt;</code> exits with status 1 when the grade is worse, for pipelines and monitoring."
 msgstr ""
 
 #. Found in changelog paragraph.

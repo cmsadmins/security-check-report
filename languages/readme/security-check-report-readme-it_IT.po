@@ -27,15 +27,6 @@ msgstr ""
 
 #. Found in faq paragraph.
 msgid ""
-"A command line run reports and stores nothing. The history, the checklist "
-"and the count on the menu entry follow the runs you start on the screen."
-msgstr ""
-"Un'analisi avviata da riga di comando non registra né salva nulla. La "
-"cronologia, la checklist e il contatore nella voce di menu seguono le "
-"analisi che avvii dalla schermata."
-
-#. Found in faq paragraph.
-msgid ""
 "If you already used an earlier version, the two runs it had stored become "
 "the first two points, so the display is not empty after the update."
 msgstr ""
@@ -252,14 +243,6 @@ msgstr ""
 "Non è un sistema di monitoraggio. Nulla gira in background, nulla è "
 "pianificato, non parte nessuna email. Un controllo viene eseguito quando lo "
 "avvii tu."
-
-#. Found in description list item.
-msgid ""
-"A count on the menu entry, a widget on the dashboard home and a reminder "
-"once the last run is more than 30 days old"
-msgstr ""
-"Un contatore nella voce di menu, un widget nella home della bacheca e un "
-"promemoria quando l'ultima analisi ha più di 30 giorni"
 
 #. Found in description list item.
 msgid ""
@@ -856,12 +839,6 @@ msgid ""
 msgstr ""
 "Un silenziamento che ricorda cosa diceva un problema rilevato, così un "
 "problema accettato ricompare appena cambia davvero"
-
-#. Found in description list item.
-msgid "A comparison with the previous run: newly failing, resolved, changed"
-msgstr ""
-"Un confronto con l'analisi precedente: nuovi controlli non superati, "
-"risolti, cambiati"
 
 #. Found in description list item.
 msgid ""
@@ -1882,12 +1859,17 @@ msgid ""
 "run</code>. The check sends nothing anywhere and only looks at the running "
 "PHP."
 msgstr ""
+"Avvia una scansione dalla schermata Security Check o con <code>wp security-"
+"check run</code>. Il controllo non invia nulla e guarda solo il PHP in "
+"esecuzione."
 
 #. Found in description paragraph.
 msgid ""
 "The PHP2Shell check reads the PHP version your site actually runs on and "
 "answers in plain words:"
 msgstr ""
+"Il controllo PHP2Shell legge la versione di PHP su cui gira davvero il tuo "
+"sito e risponde in modo chiaro:"
 
 #. Found in description paragraph.
 msgid ""
@@ -1897,6 +1879,12 @@ msgid ""
 "day. No WordPress plugin can patch PHP itself, but this one tells you within"
 " seconds whether your server still needs the update."
 msgstr ""
+"PHP2Shell è il nome di due falle critiche nel core di PHP che permettono a "
+"un attaccante di eseguire codice sul server con una sola richiesta e senza "
+"login. Il team di PHP ha rilasciato le correzioni il 21 ottobre 2026 e gli "
+"attacchi sono iniziati lo stesso giorno. Nessun plugin WordPress può "
+"correggere PHP, ma questo ti dice in pochi secondi se il tuo server ha "
+"ancora bisogno dell’aggiornamento."
 
 #. Found in description list item.
 msgid ""
@@ -1905,13 +1893,89 @@ msgid ""
 "cPanel often keep the old number after patching, so orange is a question to "
 "your host, not a verdict."
 msgstr ""
+"<strong>Arancione:</strong> la correzione non si legge dal numero di "
+"versione. Aggiorna PHP o fatti confermare il backport dal tuo hosting. Red "
+"Hat, Plesk e cPanel spesso mantengono il vecchio numero dopo la patch, "
+"quindi l’arancione è una domanda per il tuo hosting, non un verdetto."
 
 #. Found in description list item.
 msgid ""
 "<strong>Green:</strong> PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an "
 "Ubuntu package that carries the backport. The fix is in place."
 msgstr ""
+"<strong>Verde:</strong> PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 o successivo, "
+"oppure un pacchetto Ubuntu che contiene il backport. La correzione è "
+"installata."
 
 #. Found in description header.
 msgid "PHP2Shell check (CVE-2026-109618, CVE-2026-109619)"
+msgstr "Controllo PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
+
+#. Found in faq paragraph.
+msgid ""
+"A command line run is stored like a run from the screen, so the history, the"
+" checklist and the count on the menu entry include it."
 msgstr ""
+"Una scansione da riga di comando viene salvata come una scansione avviata "
+"dalla schermata, quindi la cronologia, la checklist e il contatore nel menu "
+"la includono."
+
+#. Found in description list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard home, the grade in "
+"Tools, Site Health, and a reminder once the last run is more than 30 days "
+"old"
+msgstr ""
+"Un contatore sulla voce di menu, un widget nella bacheca, il voto in "
+"Strumenti, Salute del sito, e un promemoria quando l’ultima scansione ha più"
+" di 30 giorni"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new and how many were resolved"
+msgstr ""
+"Un confronto con la scansione precedente, subito sotto il voto: quanti "
+"problemi sono nuovi e quanti sono stati risolti"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* \"WordPress 7.1.3 is outdated, 7.1.3 is available\": an update offer for the installed version no longer counts as an update.\n"
+"* The readme said a command line run stores nothing. It does, and now the readme says so."
+msgstr ""
+"<strong>Corretto</strong>\n"
+"* «WordPress 7.1.3 is outdated, 7.1.3 is available»: un’offerta di aggiornamento per la versione installata non conta più come aggiornamento.\n"
+"* Il readme diceva che una scansione da riga di comando non salva nulla. Invece salva, e ora il readme lo dice."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* The five tasks are ordered by severity first. A critical warning such as PHP2Shell no longer sits behind a medium failure.\n"
+"* Each task shows its status next to its severity, so a critical check that is only a warning reads as one.\n"
+"* Muted findings say so in their badge (\"Muted, was Failed\") instead of showing the old status in grey.\n"
+"* Category progress counts muted checks, so each category shows its full number of checks.\n"
+"* The progress chart shows the grade above and the date below every bar, newest run first.\n"
+"* Section headings stand out more, and the list of all checks keeps status, name and summary in aligned columns.\n"
+"* Screen readers: the progress bar is announced as one, focus moves to the grade after a run, and every task and result button names the check it belongs to. Faint text now meets the WCAG AA contrast ratio."
+msgstr ""
+"<strong>Modificato</strong>\n"
+"* Le cinque attività sono ordinate prima per gravità. Un avviso critico come PHP2Shell non finisce più dietro un errore di gravità media.\n"
+"* Ogni attività mostra il suo stato accanto alla gravità, quindi un controllo critico che è solo un avviso si legge come tale.\n"
+"* I problemi silenziati lo dicono nel loro badge («Silenziato (Non superato)») invece di mostrare il vecchio stato in grigio.\n"
+"* L’avanzamento per categoria conta i controlli silenziati, quindi ogni categoria mostra il numero completo di controlli.\n"
+"* Il grafico dei progressi mostra il voto sopra e la data sotto ogni barra, con la scansione più recente per prima.\n"
+"* I titoli delle sezioni risaltano di più e l’elenco di tutti i controlli mantiene stato, nome e riepilogo in colonne allineate.\n"
+"* Screen reader: la barra di avanzamento viene annunciata come tale, dopo una scansione il focus passa al voto e ogni pulsante di attività e risultati nomina il controllo a cui appartiene. Il testo chiaro ora rispetta il contrasto WCAG AA."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The grade appears in Tools, Site Health: good for A and B, recommended for C or a run older than a month, critical for D and F. It reads the stored run and never starts a scan.\n"
+"* A line under the grade says what changed since the run before: how many findings are new and how many were resolved.\n"
+"* <code>wp security-check run --fail-below=&lt;grade&gt;</code> exits with status 1 when the grade is worse, for pipelines and monitoring."
+msgstr ""
+"<strong>Aggiunto</strong>\n"
+"* Il voto compare in Strumenti, Salute del sito: buono per A e B, consigliato per C o una scansione più vecchia di un mese, critico per D e F. Legge la scansione salvata e non ne avvia mai una.\n"
+"* Una riga sotto il voto dice cosa è cambiato dalla scansione precedente: quanti problemi sono nuovi e quanti sono stati risolti.\n"
+"* <code>wp security-check run --fail-below=&lt;grade&gt;</code> termina con stato 1 se il voto è peggiore, per pipeline e monitoraggio."

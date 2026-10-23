@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-23T14:35:37+00:00\n"
+"POT-Creation-Date: 2026-10-23T15:07:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: security-check-report\n"
@@ -2922,41 +2922,41 @@ msgstr ""
 msgid "Nothing needs your attention right now."
 msgstr ""
 
-#: includes/class-cascr-admin-dashboard.php:424
+#: includes/class-cascr-admin-dashboard.php:428
 msgid "Done, check it now"
 msgstr ""
 
-#: includes/class-cascr-admin-dashboard.php:427
+#: includes/class-cascr-admin-dashboard.php:431
 msgid "later"
 msgstr ""
 
-#: includes/class-cascr-admin-dashboard.php:430
+#: includes/class-cascr-admin-dashboard.php:434
 #: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr ""
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:470
+#: includes/class-cascr-admin-dashboard.php:474
 #, php-format
 msgid "Still open (%d)"
 msgstr ""
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:543
+#: includes/class-cascr-admin-dashboard.php:547
 #, php-format
 msgid "Resolved (%d)"
 msgstr ""
 
-#: includes/class-cascr-admin-dashboard.php:555
+#: includes/class-cascr-admin-dashboard.php:559
 msgid "after a re-check"
 msgstr ""
 
-#: includes/class-cascr-admin-dashboard.php:574
+#: includes/class-cascr-admin-dashboard.php:578
 msgid "By category"
 msgstr ""
 
 #. translators: 1: number of passed checks, 2: number of checks in the category.
-#: includes/class-cascr-admin-dashboard.php:597
+#: includes/class-cascr-admin-dashboard.php:601
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr ""

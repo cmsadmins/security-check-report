@@ -26,15 +26,6 @@ msgstr ""
 
 #. Found in faq paragraph.
 msgid ""
-"A command line run reports and stores nothing. The history, the checklist "
-"and the count on the menu entry follow the runs you start on the screen."
-msgstr ""
-"Een scan via de opdrachtregel rapporteert en bewaart niets. De geschiedenis,"
-" de checklist en het getal bij het menu-item volgen de scans die je op het "
-"scherm start."
-
-#. Found in faq paragraph.
-msgid ""
 "If you already used an earlier version, the two runs it had stored become "
 "the first two points, so the display is not empty after the update."
 msgstr ""
@@ -248,14 +239,6 @@ msgid ""
 msgstr ""
 "Geen monitor. Er draait niets op de achtergrond, er wordt niets ingepland en"
 " er gaat geen e-mail uit. Een controle draait wanneer jij die start."
-
-#. Found in description list item.
-msgid ""
-"A count on the menu entry, a widget on the dashboard home and a reminder "
-"once the last run is more than 30 days old"
-msgstr ""
-"Een getal bij het menu-item, een widget op de dashboardpagina en een "
-"herinnering zodra de laatste scan meer dan 30 dagen oud is"
 
 #. Found in description list item.
 msgid ""
@@ -860,11 +843,6 @@ msgid ""
 msgstr ""
 "Dempen dat onthoudt wat een bevinding zei, zodat een geaccepteerde bevinding"
 " terugkomt zodra die echt verandert"
-
-#. Found in description list item.
-msgid "A comparison with the previous run: newly failing, resolved, changed"
-msgstr ""
-"Een vergelijking met de vorige scan: nieuw mislukt, opgelost, gewijzigd"
 
 #. Found in description list item.
 msgid ""
@@ -1880,12 +1858,17 @@ msgid ""
 "run</code>. The check sends nothing anywhere and only looks at the running "
 "PHP."
 msgstr ""
+"Start een controle op het scherm Security Check of met <code>wp security-"
+"check run</code>. De controle verstuurt nergens iets naartoe en kijkt alleen"
+" naar de draaiende PHP."
 
 #. Found in description paragraph.
 msgid ""
 "The PHP2Shell check reads the PHP version your site actually runs on and "
 "answers in plain words:"
 msgstr ""
+"De PHP2Shell-controle leest de PHP-versie waarop je site echt draait en "
+"antwoordt in duidelijke taal:"
 
 #. Found in description paragraph.
 msgid ""
@@ -1895,6 +1878,12 @@ msgid ""
 "day. No WordPress plugin can patch PHP itself, but this one tells you within"
 " seconds whether your server still needs the update."
 msgstr ""
+"PHP2Shell is de naam voor twee kritieke lekken in de PHP-kern waarmee een "
+"aanvaller met één verzoek en zonder inloggen code op de server kan "
+"uitvoeren. Het PHP-team bracht de fixes uit op 21 oktober 2026 en de "
+"aanvallen begonnen dezelfde dag. Geen WordPress-plugin kan PHP zelf patchen,"
+" maar deze vertelt je binnen enkele seconden of je server de update nog "
+"nodig heeft."
 
 #. Found in description list item.
 msgid ""
@@ -1903,13 +1892,88 @@ msgid ""
 "cPanel often keep the old number after patching, so orange is a question to "
 "your host, not a verdict."
 msgstr ""
+"<strong>Oranje:</strong> de fix is niet af te lezen aan het versienummer. "
+"Werk PHP bij of laat je host de backport bevestigen. Red Hat, Plesk en "
+"cPanel houden na het patchen vaak het oude nummer, dus oranje is een vraag "
+"aan je host, geen oordeel."
 
 #. Found in description list item.
 msgid ""
 "<strong>Green:</strong> PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an "
 "Ubuntu package that carries the backport. The fix is in place."
 msgstr ""
+"<strong>Groen:</strong> PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 of nieuwer, of "
+"een Ubuntu-pakket met de backport. De fix is aanwezig."
 
 #. Found in description header.
 msgid "PHP2Shell check (CVE-2026-109618, CVE-2026-109619)"
+msgstr "PHP2Shell-controle (CVE-2026-109618, CVE-2026-109619)"
+
+#. Found in faq paragraph.
+msgid ""
+"A command line run is stored like a run from the screen, so the history, the"
+" checklist and the count on the menu entry include it."
 msgstr ""
+"Een controle via de opdrachtregel wordt opgeslagen zoals een controle vanaf "
+"het scherm, dus de geschiedenis, de checklist en de teller in het menu nemen"
+" hem mee."
+
+#. Found in description list item.
+msgid ""
+"A count on the menu entry, a widget on the dashboard home, the grade in "
+"Tools, Site Health, and a reminder once the last run is more than 30 days "
+"old"
+msgstr ""
+"Een teller bij het menu-item, een widget op het dashboard, het cijfer onder "
+"Gereedschap, Sitediagnose, en een herinnering zodra de laatste controle meer"
+" dan 30 dagen oud is"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new and how many were resolved"
+msgstr ""
+"Een vergelijking met de vorige controle, direct onder het cijfer: hoeveel "
+"bevindingen nieuw zijn en hoeveel zijn opgelost"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* \"WordPress 7.1.3 is outdated, 7.1.3 is available\": an update offer for the installed version no longer counts as an update.\n"
+"* The readme said a command line run stores nothing. It does, and now the readme says so."
+msgstr ""
+"<strong>Opgelost</strong>\n"
+"* \"WordPress 7.1.3 is outdated, 7.1.3 is available\": een update-aanbod voor de geïnstalleerde versie telt niet meer als update.\n"
+"* De readme zei dat een controle via de opdrachtregel niets opslaat. Dat doet hij wel, en nu staat dat ook in de readme."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* The five tasks are ordered by severity first. A critical warning such as PHP2Shell no longer sits behind a medium failure.\n"
+"* Each task shows its status next to its severity, so a critical check that is only a warning reads as one.\n"
+"* Muted findings say so in their badge (\"Muted, was Failed\") instead of showing the old status in grey.\n"
+"* Category progress counts muted checks, so each category shows its full number of checks.\n"
+"* The progress chart shows the grade above and the date below every bar, newest run first.\n"
+"* Section headings stand out more, and the list of all checks keeps status, name and summary in aligned columns.\n"
+"* Screen readers: the progress bar is announced as one, focus moves to the grade after a run, and every task and result button names the check it belongs to. Faint text now meets the WCAG AA contrast ratio."
+msgstr ""
+"<strong>Gewijzigd</strong>\n"
+"* De vijf taken worden eerst op ernst gesorteerd. Een kritieke waarschuwing zoals PHP2Shell staat niet meer achter een middelzware fout.\n"
+"* Elke taak toont haar status naast de ernst, zodat een kritieke controle die alleen een waarschuwing is ook zo leest.\n"
+"* Gedempte bevindingen zeggen dat in hun label (\"Gedempt (Mislukt)\") in plaats van de oude status in grijs te tonen.\n"
+"* De voortgang per categorie telt gedempte controles mee, dus elke categorie toont haar volledige aantal controles.\n"
+"* De voortgangsgrafiek toont het cijfer boven en de datum onder elke balk, de nieuwste controle eerst.\n"
+"* Sectiekoppen vallen meer op, en de lijst met alle controles houdt status, naam en samenvatting in uitgelijnde kolommen.\n"
+"* Schermlezers: de voortgangsbalk wordt als zodanig aangekondigd, na een controle gaat de focus naar het cijfer en elke knop bij taken en resultaten noemt de controle waar hij bij hoort. Lichte tekst voldoet nu aan het WCAG AA-contrast."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The grade appears in Tools, Site Health: good for A and B, recommended for C or a run older than a month, critical for D and F. It reads the stored run and never starts a scan.\n"
+"* A line under the grade says what changed since the run before: how many findings are new and how many were resolved.\n"
+"* <code>wp security-check run --fail-below=&lt;grade&gt;</code> exits with status 1 when the grade is worse, for pipelines and monitoring."
+msgstr ""
+"<strong>Toegevoegd</strong>\n"
+"* Het cijfer verschijnt onder Gereedschap, Sitediagnose: goed bij A en B, aanbevolen bij C of een controle ouder dan een maand, kritiek bij D en F. Het leest de opgeslagen controle en start zelf nooit een scan.\n"
+"* Een regel onder het cijfer zegt wat er sinds de vorige controle veranderd is: hoeveel bevindingen nieuw zijn en hoeveel zijn opgelost.\n"
+"* <code>wp security-check run --fail-below=&lt;grade&gt;</code> eindigt met status 1 als het cijfer slechter is, voor pipelines en monitoring."
