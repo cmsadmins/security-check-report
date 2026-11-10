@@ -5,7 +5,7 @@ Tags: security, php2shell, audit, hardening, scanner
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.5.0
+Stable tag: 2.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,8 @@ Read-only security audit for WordPress: 62 checks including PHP2Shell, an A to F
 Security Check Report looks at 62 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
 
 The report opens with the five things worth doing first, not with a table of 62 rows. Every finding says what was found, why it matters and what to do about it.
+
+There is no Pro version, no licence key, no account and no usage tracking. Apart from api.wordpress.org and your own site the plugin contacts nobody. Before a release the checks run against real sites, and a finding that turns out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms.
 
 From the second run onwards the page no longer opens on the start button but on an overview: the grade, a line saying where the site stood on the first run and where it stands today, one bar per recorded run, five tasks to work through, what is still open, and what has been resolved and when.
 
@@ -208,6 +210,12 @@ The history, the checklist and the reminder belong to a single site as well. Eve
 
 Yes. `cascr_registry` filters the list of checks, so you can add, remove or reweight one. `cascr_test_result` filters an individual result before it is scored. A check is a callable that returns one of the four outcomes built by `CASCR_Result`.
 
+`cascr_run_completed` fires after every full run, from the screen and from WP-CLI alike, with the stored run and its summary. A re-check of a single task does not fire it.
+
+= Can AI assistants and other tools read the report? =
+
+Yes, through the Abilities API in WordPress 7.0. The ability `security-check-report/get-report` returns the grade of the last full run, the counts, the five tasks and every open finding with its fix. It reads the stored run only and never starts a scan. User names, paths and the other raw details of a finding stay out, so an assistant learns that dormant administrators exist but not who they are. Only users who may manage options can call it, the same rule as for the report itself.
+
 = Which WordPress and PHP versions are supported? =
 
 WordPress 7.0 and newer, PHP 7.4 through 8.5. Every release is tested against WordPress 7.0 and the current version, on single site and on multisite, and linted on all seven PHP branches in between.
@@ -227,10 +235,22 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 1. The overview from the second run onwards: grade, the way from the first run to today and the next five tasks
 2. All checks, grouped by area and filterable by outcome, with one finding expanded
 3. The built-in documentation for every check, with a search
+4. The dashboard widget with the grade and the number of open tasks
+5. The grade in Tools, Site Health
+6. A task checked again on its own, with the result at the top of the page
 
 == Changelog ==
 
 Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.5.1 =
+
+**Added**
+* The ability `security-check-report/get-report` for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.
+* The action `cascr_run_completed`, fired after every full run with the stored run and its summary.
+
+**Changed**
+* Three more screenshots: the dashboard widget, Site Health and a single re-check.
 
 = 2.5.0 =
 
@@ -389,6 +409,9 @@ Every check was read against the sources it cites: php.net, the WordPress handbo
 * Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
+
+= 2.5.1 =
+Lets AI assistants read the stored report through the WordPress Abilities API, without raw findings, and adds an action after every full run.
 
 = 2.5.0 =
 Shows the grade in Site Health, puts critical findings first, and fixes a false "WordPress is outdated" finding.

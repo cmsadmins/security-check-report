@@ -2527,8 +2527,9 @@ msgstr ""
 "abdecken. Fangen Sie mit X-Content-Type-Options und Referrer-Policy an, die "
 "machen nie etwas kaputt."
 
-#: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
+#: includes/class-cascr-abilities.php:52 includes/class-cascr-admin.php:27
+#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:150
+#: includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
 
@@ -5773,3 +5774,22 @@ msgid ""
 msgstr ""
 "Ein Balken je vollständigem Durchlauf, der neueste links. Je höher der "
 "Balken, desto geringer das Risiko."
+
+#: includes/class-cascr-abilities.php:53
+msgid "Read the results of the security check."
+msgstr "Die Ergebnisse der Sicherheitsprüfung lesen."
+
+#: includes/class-cascr-abilities.php:81
+msgid "Get the security report"
+msgstr "Sicherheitsbericht abrufen"
+
+#: includes/class-cascr-abilities.php:82
+msgid ""
+"Returns the grade of the last full security check, how many checks passed, "
+"warned or failed, the five tasks worth doing first and every open finding. "
+"Starts no scan and leaves out user names, paths and other raw findings."
+msgstr ""
+"Liefert die Note des letzten vollständigen Durchlaufs, wie viele Prüfungen "
+"bestanden, gewarnt oder nicht bestanden haben, die fünf Aufgaben, die zuerst"
+" anstehen, und jeden offenen Befund. Startet keinen Durchlauf und lässt "
+"Benutzernamen, Pfade und andere Rohdaten der Befunde weg."

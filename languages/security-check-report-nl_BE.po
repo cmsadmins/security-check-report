@@ -4823,8 +4823,9 @@ msgstr "%1$d van %2$d geslaagd"
 msgid "Security Check"
 msgstr "Security Check"
 
-#: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
+#: includes/class-cascr-abilities.php:52 includes/class-cascr-admin.php:27
+#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:150
+#: includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
 
@@ -5683,3 +5684,22 @@ msgid ""
 msgstr ""
 "Eén balk per volledige controle, de nieuwste links. Hoe hoger de balk, hoe "
 "lager het risico."
+
+#: includes/class-cascr-abilities.php:53
+msgid "Read the results of the security check."
+msgstr "De resultaten van de beveiligingscontrole lezen."
+
+#: includes/class-cascr-abilities.php:81
+msgid "Get the security report"
+msgstr "Beveiligingsrapport ophalen"
+
+#: includes/class-cascr-abilities.php:82
+msgid ""
+"Returns the grade of the last full security check, how many checks passed, "
+"warned or failed, the five tasks worth doing first and every open finding. "
+"Starts no scan and leaves out user names, paths and other raw findings."
+msgstr ""
+"Geeft het cijfer van de laatste volledige controle, hoeveel controles "
+"geslaagd zijn, een waarschuwing gaven of mislukt zijn, de vijf taken die als"
+" eerste aandacht verdienen en elke openstaande bevinding. Start geen scan en"
+" laat gebruikersnamen, paden en andere ruwe gegevens van de bevindingen weg."

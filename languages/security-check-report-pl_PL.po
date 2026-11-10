@@ -4927,8 +4927,9 @@ msgstr "%1$d z %2$d zaliczone"
 msgid "Security Check"
 msgstr "Kontrola zabezpieczeń"
 
-#: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
+#: includes/class-cascr-abilities.php:52 includes/class-cascr-admin.php:27
+#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:150
+#: includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Raport z kontroli zabezpieczeń"
 
@@ -5794,3 +5795,22 @@ msgid ""
 msgstr ""
 "Jeden słupek na każde pełne skanowanie, najnowsze po lewej. Im wyższy "
 "słupek, tym mniejsze ryzyko."
+
+#: includes/class-cascr-abilities.php:53
+msgid "Read the results of the security check."
+msgstr "Odczytaj wyniki kontroli bezpieczeństwa."
+
+#: includes/class-cascr-abilities.php:81
+msgid "Get the security report"
+msgstr "Pobierz raport bezpieczeństwa"
+
+#: includes/class-cascr-abilities.php:82
+msgid ""
+"Returns the grade of the last full security check, how many checks passed, "
+"warned or failed, the five tasks worth doing first and every open finding. "
+"Starts no scan and leaves out user names, paths and other raw findings."
+msgstr ""
+"Zwraca ocenę ostatniej pełnej kontroli, liczbę testów zaliczonych, z "
+"ostrzeżeniem i niezaliczonych, pięć zadań do wykonania w pierwszej "
+"kolejności oraz każde otwarte ustalenie. Nie uruchamia skanowania i pomija "
+"nazwy użytkowników, ścieżki oraz inne surowe dane ustaleń."

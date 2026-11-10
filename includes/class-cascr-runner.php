@@ -88,6 +88,19 @@ class CASCR_Runner {
 
 		$summary['diff'] = CASCR_Store::diff( $run, CASCR_Store::previous_run() );
 
+		/**
+		 * Fires once a full run has been scored and stored.
+		 *
+		 * Both the browser and WP-CLI end up here. A re-check of a single test
+		 * does not, because it is not a run and writes nothing into the history.
+		 *
+		 * @since 2.5.1
+		 *
+		 * @param array $run     The stored run: generated, version, grade, risk, counts, tests.
+		 * @param array $summary Output of CASCR_Scoring::summarize() plus the diff.
+		 */
+		do_action( 'cascr_run_completed', $run, $summary );
+
 		return $summary;
 	}
 

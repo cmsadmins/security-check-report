@@ -4966,8 +4966,9 @@ msgstr "%1$d sur %2$d réussies"
 msgid "Security Check"
 msgstr "Security Check"
 
-#: includes/class-cascr-admin.php:27 includes/class-cascr-admin.php:118
-#: includes/class-cascr-admin.php:150 includes/class-cascr-nudges.php:61
+#: includes/class-cascr-abilities.php:52 includes/class-cascr-admin.php:27
+#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:150
+#: includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
 
@@ -5828,3 +5829,22 @@ msgid ""
 msgstr ""
 "Une barre par analyse complète, la plus récente à gauche. Plus la barre est "
 "haute, plus le risque est faible."
+
+#: includes/class-cascr-abilities.php:53
+msgid "Read the results of the security check."
+msgstr "Lire les résultats du contrôle de sécurité."
+
+#: includes/class-cascr-abilities.php:81
+msgid "Get the security report"
+msgstr "Obtenir le rapport de sécurité"
+
+#: includes/class-cascr-abilities.php:82
+msgid ""
+"Returns the grade of the last full security check, how many checks passed, "
+"warned or failed, the five tasks worth doing first and every open finding. "
+"Starts no scan and leaves out user names, paths and other raw findings."
+msgstr ""
+"Renvoie la note du dernier contrôle complet, le nombre de vérifications "
+"réussies, en avertissement ou en échec, les cinq tâches à traiter en premier"
+" et chaque constat ouvert. Ne lance aucun contrôle et omet les noms "
+"d’utilisateur, les chemins et les autres données brutes des constats."

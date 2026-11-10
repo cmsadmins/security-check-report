@@ -551,4 +551,20 @@ class Test_CASCR_Store extends WP_UnitTestCase {
 	public function test_baseline_returns_the_default_when_nothing_was_recorded() {
 		$this->assertSame( 'fallback', CASCR_Store::baseline( 'never_set', 'fallback' ) );
 	}
+
+	public function test_a_full_run_announces_itself_and_a_recheck_does_not() {
+		$seen = array();
+		$spy  = function ( $run ) use ( &$seen ) {
+			$seen[] = $run['grade'];
+		};
+		add_action( 'cascr_run_completed', $spy );
+
+		CASCR_Runner::finish( $this->results( array( 'wp_debug' => CASCR_Result::fail( 'debug is on', 8 ) ) ) );
+		CASCR_Store::patch_test( 'wp_debug', CASCR_Result::pass( 'ok' ) );
+
+		remove_action( 'cascr_run_completed', $spy );
+
+		$this->assertCount( 1, $seen );
+		$this->assertSame( CASCR_Store::last_run()['grade'], $seen[0] );
+	}
 }
