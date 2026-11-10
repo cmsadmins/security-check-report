@@ -40,7 +40,9 @@ Start a run on the Security Check screen or with `wp security-check run`. The ch
 * A checklist of five tasks at a time, derived from urgency and score rather than from guesswork, with the next one moving up when you finish one
 * A button per task that re-runs that single check, so you see the result of a fix in seconds
 * A history of the last 24 runs, with the very first one kept for good, so the starting point stays visible
-* A comparison with the previous run, right under the grade: how many findings are new and how many were resolved
+* A comparison with the previous run, right under the grade: how many findings are new, how many were resolved and whether the grade moved
+* The shortest way to the next grade: how many tasks it takes and which ones, worked out from the same scoring as the grade itself
+* Milestones with the date you reached them, such as the first grade A or 25 findings resolved, and a count of the months in a row with a full run. Muting a finding never counts towards any of them
 * Muting that remembers what a finding said, so an accepted finding comes back the moment it actually changes
 * "Not determined" as a real outcome, so a blocked request is never reported as a problem and never moves the grade
 * A count on the menu entry, a widget on the dashboard home, the grade in Tools, Site Health, and a reminder once the last run is more than 30 days old
@@ -134,6 +136,7 @@ A handful of options in your database, all removed when you delete the plugin:
 * a baseline recorded on the first run, holding plugin authors, role definitions and the list of must-use plugins and drop-ins, so later runs can spot changes
 * the number of failing checks from the last run, so the count on the menu entry does not have to load a whole run on every admin page
 * the moment you agreed to the run, so you are not asked again on every visit
+* the milestones you have reached with their dates, the number of findings resolved so far and the months that saw a full run
 
 Two entries go into user meta. One is a login timestamp per account, because WordPress keeps no login history of its own and the administrator check would otherwise have nothing to say about dormant accounts. The other records that somebody switched off the reminder notice, which is a decision per person rather than per site. Both are deleted on uninstall.
 
@@ -248,9 +251,15 @@ Releases before 2.2.0 are listed in changelog.txt.
 **Added**
 * The ability `security-check-report/get-report` for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.
 * The action `cascr_run_completed`, fired after every full run with the stored run and its summary.
+* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a "Raises the grade" label.
+* A line when the grade moved since the run before.
+* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened.
 
 **Changed**
 * Three more screenshots: the dashboard widget, Site Health and a single re-check.
+
+**Fixed**
+* Site Health said "nothing urgent" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical.
 
 = 2.5.0 =
 
@@ -411,7 +420,7 @@ Every check was read against the sources it cites: php.net, the WordPress handbo
 == Upgrade Notice ==
 
 = 2.5.1 =
-Lets AI assistants read the stored report through the WordPress Abilities API, without raw findings, and adds an action after every full run.
+Shows the way to the next grade and the milestones reached, lets AI assistants read the stored report, and stops Site Health from calling an open critical finding harmless.
 
 = 2.5.0 =
 Shows the grade in Site Health, puts critical findings first, and fixes a false "WordPress is outdated" finding.

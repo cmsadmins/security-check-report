@@ -564,6 +564,12 @@
     background: var(--cascr-pass-bg);
 }
 
+/* Marks the tasks on the shortest way to the next grade. */
+.cascr-badge--goal {
+    color: var(--cascr-primary);
+    background: var(--cascr-bg);
+}
+
 .cascr-status--inconclusive,
 .cascr-status--ignored {
     color: var(--cascr-unknown);
@@ -827,6 +833,11 @@
     color: var(--cascr-text-faint);
 }
 
+/* The way to the next grade, the streak and new milestones: goals, not news. */
+.cascr-dash__goal {
+    color: var(--cascr-text);
+}
+
 .cascr-consent-note {
     margin: 0;
     font-size: 12.5px;
@@ -1043,6 +1054,17 @@
 .cascr-archive__mark {
     font-size: 12px;
     color: var(--cascr-text-faint);
+}
+
+/* Long milestone names, the progress column stays aligned. */
+.cascr-milestones .cascr-archive__label {
+    min-width: 280px;
+}
+
+/* Milestones still ahead read lighter than the ones reached. */
+.cascr-milestones__open .cascr-archive__label {
+    font-weight: 400;
+    color: var(--cascr-text-soft);
 }
 
 .cascr-archive__date {

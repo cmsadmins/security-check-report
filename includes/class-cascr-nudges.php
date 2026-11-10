@@ -125,6 +125,15 @@ class CASCR_Nudges {
 			$result['label']  = __( 'The last security check is more than a month old', 'security-check-report' );
 		}
 
+		// A good grade must not read "nothing urgent" while a critical check
+		// is open. PHP2Shell as a warning leaves a site at B, and Site Health
+		// is the one place many admins look.
+		$critical = CASCR_Scoring::open_critical( $run['tests'] );
+		if ( 'critical' !== $result['status'] && null !== $critical ) {
+			$result['status'] = CASCR_Result::STATUS_FAIL === $critical ? 'critical' : 'recommended';
+			$result['label']  = __( 'The security check found a critical finding', 'security-check-report' );
+		}
+
 		return $result;
 	}
 

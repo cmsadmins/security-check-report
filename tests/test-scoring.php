@@ -279,4 +279,58 @@ class Test_CASCR_Scoring extends WP_UnitTestCase {
 			$this->assertNotEmpty( CASCR_Scoring::grade_label( $grade ) );
 		}
 	}
+
+	public function test_an_a_has_no_next_grade() {
+		$this->assertNull( CASCR_Scoring::next_grade( $this->results() ) );
+	}
+
+	/**
+	 * The critical floor holds the grade down no matter what else is fixed,
+	 * so the critical check has to be the first and only step.
+	 */
+	public function test_a_failing_critical_check_is_the_way_up() {
+		$next = CASCR_Scoring::next_grade(
+			$this->results(
+				array(
+					'php2shell' => CASCR_Result::fail( 'unpatched', 9 ),
+					'db_prefix' => CASCR_Result::warn( 'default prefix', 4 ),
+				)
+			)
+		);
+
+		$this->assertSame( array( 'php2shell' ), $next['ids'] );
+		$this->assertSame( 'A', $next['grade'] );
+	}
+
+	public function test_a_muted_finding_is_never_suggested() {
+		$muted            = CASCR_Result::fail( 'unpatched', 9 );
+		$muted['ignored'] = true;
+
+		// Fail checks one by one until the site sits at B, the muted critical
+		// check included from the start. Fixing it would be the cheapest way up.
+		// Other critical checks stay clean, their floor would jump straight to C.
+		$results = $this->results( array( 'php2shell' => $muted ) );
+		foreach ( array_keys( $results ) as $id ) {
+			if ( 'B' === CASCR_Scoring::summarize( $results )['grade'] ) {
+				break;
+			}
+			if ( CASCR_Registry::SEVERITY_CRITICAL !== CASCR_Registry::get( $id )['severity'] ) {
+				$results[ $id ] = CASCR_Result::fail( 'bad', 10 );
+			}
+		}
+
+		$next = CASCR_Scoring::next_grade( $results );
+
+		$this->assertNotNull( $next );
+		$this->assertNotContains( 'php2shell', $next['ids'] );
+	}
+
+	public function test_a_grade_out_of_reach_is_not_offered() {
+		$results = array();
+		foreach ( CASCR_Registry::all() as $id => $test ) {
+			$results[ $id ] = CASCR_Result::fail( 'bad', 10 );
+		}
+
+		$this->assertNull( CASCR_Scoring::next_grade( $results ) );
+	}
 }

@@ -151,4 +151,20 @@ class Test_CASCR_Admin_Dashboard extends WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'Since the run before', $this->render() );
 	}
+
+	public function test_the_way_to_the_next_grade_is_named() {
+		$this->store( array( 'php2shell' => CASCR_Result::fail( 'unpatched', 9 ) ) );
+
+		$html = $this->render();
+
+		$this->assertStringContainsString( '1 task away from grade A.', $html );
+		$this->assertStringContainsString( 'cascr-badge--goal', $html );
+	}
+
+	public function test_a_grade_that_moved_is_named() {
+		$this->store( array( 'php2shell' => CASCR_Result::fail( 'unpatched', 9 ) ) );
+		$this->store();
+
+		$this->assertStringContainsString( 'Grade up from D to A.', $this->render() );
+	}
 }

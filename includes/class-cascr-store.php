@@ -637,6 +637,7 @@ class CASCR_Store {
 			self::OPTION_CONSENT,
 			self::OPTION_BADGE,
 			CASCR_History::OPTION,
+			CASCR_Milestones::OPTION,
 		);
 	}
 }

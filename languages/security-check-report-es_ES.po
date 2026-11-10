@@ -4789,18 +4789,18 @@ msgid "TransparAI, our own plugin for AI content disclosure"
 msgstr ""
 "TransparAI, nuestro propio plugin para la transparencia del contenido de IA"
 
-#: includes/class-cascr-admin-dashboard.php:71
+#: includes/class-cascr-admin-dashboard.php:74
 #: includes/class-cascr-admin.php:113
 msgid "Risk score"
 msgstr "Puntuación de riesgo"
 
-#: includes/class-cascr-admin-dashboard.php:81
+#: includes/class-cascr-admin-dashboard.php:85
 msgid "Re-check everything"
 msgstr "Volver a comprobar todo"
 
 #. translators: 1: date of the first recorded run, 2: grade letter, 3: number
 #. of findings.
-#: includes/class-cascr-admin-dashboard.php:157
+#: includes/class-cascr-admin-dashboard.php:246
 #, php-format
 msgid "Started on %1$s: grade %2$s with %3$d finding."
 msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
@@ -4809,7 +4809,7 @@ msgstr[1] "Iniciado el %1$s: nota %2$s con %3$d hallazgos."
 
 #. translators: 1: number of checks re-checked on their own, 2: date of the
 #. last full pass.
-#: includes/class-cascr-admin-dashboard.php:224
+#: includes/class-cascr-admin-dashboard.php:313
 #, php-format
 msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
 msgid_plural ""
@@ -4822,81 +4822,81 @@ msgstr[1] ""
 "completo del %2$s."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:296
+#: includes/class-cascr-admin-dashboard.php:385
 #, php-format
 msgid "%s passed the re-check."
 msgstr "%s ha superado la nueva comprobación."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:299
+#: includes/class-cascr-admin-dashboard.php:388
 #, php-format
 msgid "%s is still open after the re-check."
 msgstr "%s sigue pendiente tras la nueva comprobación."
 
-#: includes/class-cascr-admin-dashboard.php:327
+#: includes/class-cascr-admin-dashboard.php:416
 msgid "Your progress"
 msgstr "Tu progreso"
 
 #. translators: 1: date of the run, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:342
+#: includes/class-cascr-admin-dashboard.php:431
 #, php-format
 msgid "%1$s: grade %2$s"
 msgstr "%1$s: nota %2$s"
 
-#: includes/class-cascr-admin-dashboard.php:377
+#: includes/class-cascr-admin-dashboard.php:468
 msgid "Your next five"
 msgstr "Tus cinco siguientes pasos"
 
-#: includes/class-cascr-admin-dashboard.php:378
+#: includes/class-cascr-admin-dashboard.php:469
 msgid "Work through these in order. Everything else can wait."
 msgstr "Resuélvelos en este orden. Todo lo demás puede esperar."
 
-#: includes/class-cascr-admin-dashboard.php:389
-#: includes/class-cascr-scoring.php:203
+#: includes/class-cascr-admin-dashboard.php:480
+#: includes/class-cascr-scoring.php:208
 msgid "Nothing needs your attention right now."
 msgstr "Ahora mismo no hay nada que requiera tu atención."
 
-#: includes/class-cascr-admin-dashboard.php:428
+#: includes/class-cascr-admin-dashboard.php:523
 msgid "Done, check it now"
 msgstr "Hecho, compruébalo ahora"
 
-#: includes/class-cascr-admin-dashboard.php:431
+#: includes/class-cascr-admin-dashboard.php:526
 msgid "later"
 msgstr "más tarde"
 
-#: includes/class-cascr-admin-dashboard.php:434
+#: includes/class-cascr-admin-dashboard.php:529
 #: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr "Más información sobre esta comprobación"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:474
+#: includes/class-cascr-admin-dashboard.php:569
 #, php-format
 msgid "Still open (%d)"
 msgstr "Pendientes (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:547
+#: includes/class-cascr-admin-dashboard.php:642
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Resueltos (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:559
+#: includes/class-cascr-admin-dashboard.php:654
 msgid "after a re-check"
 msgstr "tras una nueva comprobación"
 
-#: includes/class-cascr-admin-dashboard.php:578
+#: includes/class-cascr-admin-dashboard.php:740
 msgid "By category"
 msgstr "Por categoría"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:601
+#: includes/class-cascr-admin-dashboard.php:763
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d de %2$d superadas"
 
-#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:179
+#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:188
 msgid "Security Check"
 msgstr "Security Check"
 
@@ -5146,7 +5146,7 @@ msgstr "Copiar informe"
 msgid "Take the report with you"
 msgstr "Llévate el informe"
 
-#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:250
+#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:356
 msgid "Critical"
 msgstr "Crítico"
 
@@ -5171,23 +5171,23 @@ msgid "Nothing needs your attention."
 msgstr "No hay nada que requiera tu atención."
 
 #. translators: %s: number of failed checks.
-#: includes/class-cascr-nudges.php:156
+#: includes/class-cascr-nudges.php:165
 #, php-format
 msgid "%s failed check"
 msgid_plural "%s failed checks"
 msgstr[0] "%s comprobación no superada"
 msgstr[1] "%s comprobaciones no superadas"
 
-#: includes/class-cascr-nudges.php:193
+#: includes/class-cascr-nudges.php:202
 msgid "This site has not been checked yet."
 msgstr "Este sitio aún no se ha comprobado."
 
-#: includes/class-cascr-nudges.php:198
+#: includes/class-cascr-nudges.php:207
 msgid "Run the first check"
 msgstr "Ejecutar la primera comprobación"
 
 #. translators: %d: number of findings still open.
-#: includes/class-cascr-nudges.php:218
+#: includes/class-cascr-nudges.php:227
 #, php-format
 msgid "%d open task"
 msgid_plural "%d open tasks"
@@ -5195,29 +5195,29 @@ msgstr[0] "%d tarea pendiente"
 msgstr[1] "%d tareas pendientes"
 
 #. translators: %s: length of time, for example "2 weeks".
-#: includes/class-cascr-nudges.php:232
+#: includes/class-cascr-nudges.php:241
 #, php-format
 msgid "Last full check %s ago."
 msgstr "Última comprobación completa hace %s."
 
-#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:242
-#: includes/class-cascr-nudges.php:275
+#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:251
+#: includes/class-cascr-nudges.php:284
 msgid "Open the report"
 msgstr "Abrir el informe"
 
 #. translators: %s: length of time, for example "2 months".
-#: includes/class-cascr-nudges.php:270
+#: includes/class-cascr-nudges.php:279
 #, php-format
 msgid "The last full security check on this site ran %s ago."
 msgstr ""
 "La última comprobación de seguridad completa de este sitio se ejecutó hace "
 "%s."
 
-#: includes/class-cascr-nudges.php:277
+#: includes/class-cascr-nudges.php:286
 msgid "Stop reminding me"
 msgstr "Dejar de recordármelo"
 
-#: includes/class-cascr-nudges.php:313
+#: includes/class-cascr-nudges.php:322
 msgid "You are not allowed to do that."
 msgstr "No tienes permiso para hacer eso."
 
@@ -5513,7 +5513,7 @@ msgid "The check could not be completed on this server."
 msgstr "No se ha podido completar la comprobación en este servidor."
 
 #. translators: 1: grade letter, 2: number of findings.
-#: includes/class-cascr-scoring.php:152
+#: includes/class-cascr-scoring.php:157
 #, php-format
 msgid "Today: grade %1$s with %2$d finding."
 msgid_plural "Today: grade %1$s with %2$d findings."
@@ -5521,7 +5521,7 @@ msgstr[0] "Hoy: nota %1$s con %2$d hallazgo."
 msgstr[1] "Hoy: nota %1$s con %2$d hallazgos."
 
 #. translators: %d: number of failed checks.
-#: includes/class-cascr-scoring.php:179
+#: includes/class-cascr-scoring.php:184
 #, php-format
 msgid "%d finding needs your attention now."
 msgid_plural "%d findings need your attention now."
@@ -5529,7 +5529,7 @@ msgstr[0] "%d hallazgo requiere tu atención ahora."
 msgstr[1] "%d hallazgos requieren tu atención ahora."
 
 #. translators: %d: number of warnings.
-#: includes/class-cascr-scoring.php:192
+#: includes/class-cascr-scoring.php:197
 #, php-format
 msgid "%d more is worth improving."
 msgid_plural "%d more are worth improving."
@@ -5537,7 +5537,7 @@ msgstr[0] "Vale la pena mejorar %d más."
 msgstr[1] "Vale la pena mejorar %d más."
 
 #. translators: %d: number of checks that could not be completed.
-#: includes/class-cascr-scoring.php:209
+#: includes/class-cascr-scoring.php:214
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
@@ -5545,19 +5545,19 @@ msgstr[0] "%d comprobación no se ha podido completar y no se tiene en cuenta."
 msgstr[1] ""
 "%d comprobaciones no se han podido completar y no se tienen en cuenta."
 
-#: includes/class-cascr-scoring.php:246
+#: includes/class-cascr-scoring.php:352
 msgid "Excellent"
 msgstr "Excelente"
 
-#: includes/class-cascr-scoring.php:247
+#: includes/class-cascr-scoring.php:353
 msgid "Good"
 msgstr "Bueno"
 
-#: includes/class-cascr-scoring.php:248
+#: includes/class-cascr-scoring.php:354
 msgid "Moderate"
 msgstr "Regular"
 
-#: includes/class-cascr-scoring.php:249
+#: includes/class-cascr-scoring.php:355
 msgid "Poor"
 msgstr "Malo"
 
@@ -5673,12 +5673,12 @@ msgstr ""
 msgid "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 msgstr "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 
-#: includes/class-cascr-admin-dashboard.php:61
+#: includes/class-cascr-admin-dashboard.php:64
 msgid "Result of the latest run"
 msgstr "Resultado del último análisis"
 
 #. translators: %d: number of checks that turned into a finding.
-#: includes/class-cascr-admin-dashboard.php:109
+#: includes/class-cascr-admin-dashboard.php:121
 #, php-format
 msgid "%d new finding"
 msgid_plural "%d new findings"
@@ -5686,7 +5686,7 @@ msgstr[0] "%d hallazgo nuevo"
 msgstr[1] "%d hallazgos nuevos"
 
 #. translators: %d: number of findings that are gone.
-#: includes/class-cascr-admin-dashboard.php:117
+#: includes/class-cascr-admin-dashboard.php:129
 #, php-format
 msgid "%d resolved"
 msgid_plural "%d resolved"
@@ -5694,7 +5694,7 @@ msgstr[0] "%d resuelto"
 msgstr[1] "%d resueltos"
 
 #. translators: %s: list such as "2 new findings, 3 resolved".
-#: includes/class-cascr-admin-dashboard.php:127
+#: includes/class-cascr-admin-dashboard.php:140
 #, php-format
 msgid "Since the run before: %s."
 msgstr "Desde el análisis anterior: %s."
@@ -5757,11 +5757,11 @@ msgstr "La última comprobación de seguridad tiene más de un mes"
 
 #. translators: short date under each bar of the progress chart, PHP date()
 #. format.
-#: includes/class-cascr-admin-dashboard.php:357
+#: includes/class-cascr-admin-dashboard.php:446
 msgid "M j"
 msgstr "j M"
 
-#: includes/class-cascr-admin-dashboard.php:328
+#: includes/class-cascr-admin-dashboard.php:417
 msgid ""
 "One bar per full run, the latest on the left. The taller the bar, the lower "
 "the risk."
@@ -5787,3 +5787,103 @@ msgstr ""
 "superado, han dado aviso o han fallado, las cinco tareas que conviene hacer "
 "primero y cada hallazgo abierto. No inicia ningún análisis y omite nombres "
 "de usuario, rutas y otros datos en bruto de los hallazgos."
+
+#. translators: 1: grade before, 2: grade now.
+#: includes/class-cascr-admin-dashboard.php:167
+#, php-format
+msgid "Grade up from %1$s to %2$s."
+msgstr "La nota ha subido de %1$s a %2$s."
+
+#. translators: 1: grade before, 2: grade now.
+#: includes/class-cascr-admin-dashboard.php:171
+#, php-format
+msgid "Grade down from %1$s to %2$s."
+msgstr "La nota ha bajado de %1$s a %2$s."
+
+#. translators: 1: number of tasks, 2: grade letter.
+#: includes/class-cascr-admin-dashboard.php:188
+#, php-format
+msgid "%1$d task away from grade %2$s."
+msgid_plural "%1$d tasks away from grade %2$s."
+msgstr[0] "Falta %1$d tarea para la nota %2$s."
+msgstr[1] "Faltan %1$d tareas para la nota %2$s."
+
+#. translators: %s: comma separated names of checks.
+#: includes/class-cascr-admin-dashboard.php:200
+#, php-format
+msgid "Fix: %s."
+msgstr "Corrige: %s."
+
+#. translators: %d: number of months in a row with a full run.
+#: includes/class-cascr-admin-dashboard.php:209
+#, php-format
+msgid "Checked every month for %d month."
+msgid_plural "Checked every month for %d months."
+msgstr[0] "Comprobado cada mes desde hace %d mes."
+msgstr[1] "Comprobado cada mes desde hace %d meses."
+
+#. translators: %s: name of a milestone.
+#: includes/class-cascr-admin-dashboard.php:216
+#, php-format
+msgid "Reached with this run: %s."
+msgstr "Alcanzado con este análisis: %s."
+
+#: includes/class-cascr-admin-dashboard.php:505
+msgid "Raises the grade"
+msgstr "Sube la nota"
+
+#. translators: 1: milestones reached, 2: milestones in total.
+#: includes/class-cascr-admin-dashboard.php:687
+#, php-format
+msgid "Milestones (%1$d of %2$d)"
+msgstr "Hitos (%1$d de %2$d)"
+
+#: includes/class-cascr-admin-dashboard.php:717
+msgid "not yet"
+msgstr "todavía no"
+
+#. translators: 1: progress so far, 2: goal.
+#: includes/class-cascr-admin-dashboard.php:720
+#, php-format
+msgid "%1$d of %2$d"
+msgstr "%1$d de %2$d"
+
+#: includes/class-cascr-milestones.php:46
+msgid "No open critical finding"
+msgstr "Ningún hallazgo crítico abierto"
+
+#: includes/class-cascr-milestones.php:47
+msgid "No failed check"
+msgstr "Ninguna prueba fallida"
+
+#: includes/class-cascr-milestones.php:48
+msgid "Grade A for the first time"
+msgstr "Nota A por primera vez"
+
+#: includes/class-cascr-milestones.php:49
+msgid "10 findings resolved"
+msgstr "10 hallazgos resueltos"
+
+#: includes/class-cascr-milestones.php:50
+msgid "25 findings resolved"
+msgstr "25 hallazgos resueltos"
+
+#: includes/class-cascr-milestones.php:51
+msgid "50 findings resolved"
+msgstr "50 hallazgos resueltos"
+
+#: includes/class-cascr-milestones.php:52
+msgid "Checked every month for 3 months"
+msgstr "Comprobado cada mes durante 3 meses"
+
+#: includes/class-cascr-milestones.php:53
+msgid "Checked every month for 6 months"
+msgstr "Comprobado cada mes durante 6 meses"
+
+#: includes/class-cascr-milestones.php:54
+msgid "Checked every month for 12 months"
+msgstr "Comprobado cada mes durante 12 meses"
+
+#: includes/class-cascr-nudges.php:134
+msgid "The security check found a critical finding"
+msgstr "La comprobación de seguridad ha encontrado un hallazgo crítico"

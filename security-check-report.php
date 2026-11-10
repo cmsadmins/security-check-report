@@ -48,6 +48,7 @@ class CASCR_SecurityCheck {
 		'includes/class-cascr-admin-dashboard.php',
 		'includes/class-cascr-nudges.php',
 		'includes/class-cascr-abilities.php',
+		'includes/class-cascr-milestones.php',
 		'includes/checks/class-cascr-checks-base.php',
 		'includes/checks/class-cascr-checks-core.php',
 		'includes/checks/class-cascr-checks-config.php',
@@ -71,6 +72,7 @@ class CASCR_SecurityCheck {
 
 		CASCR_Nudges::register();
 		CASCR_Abilities::register();
+		CASCR_Milestones::register();
 
 		// WordPress keeps no login history. Recording it from here is what lets
 		// the account check say anything about dormant administrators.

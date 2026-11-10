@@ -46,6 +46,11 @@ class CASCR_Scoring {
 	const PRIORITY_LIMIT = 5;
 
 	/**
+	 * Beyond this many tasks the next grade is too far away to be a goal.
+	 */
+	const NEXT_GRADE_LIMIT = 10;
+
+	/**
 	 * Builds the full report from raw results.
 	 *
 	 * @param array $results Results keyed by test identifier.
@@ -233,6 +238,107 @@ class CASCR_Scoring {
 		}
 
 		return 'F';
+	}
+
+	/**
+	 * The fewest open findings that would lift the site to the next grade.
+	 *
+	 * Greedy: each round tries every open finding as fixed and keeps the one
+	 * that lowers the risk most, until the grade improves. Trying each finding
+	 * rather than ranking by score is what gets the critical floor right, where
+	 * a single critical check holds the grade down no matter what else is fixed.
+	 * Muted and inconclusive checks are never suggested, fixing is the only way.
+	 *
+	 * ponytail: up to NEXT_GRADE_LIMIT rounds over 62 checks, each a full
+	 * summarize(); a few hundred passes over a small array, measured in
+	 * milliseconds. Cache it only if the registry grows by an order of magnitude.
+	 *
+	 * @param array $results Results keyed by test identifier.
+	 * @return array|null Keys grade and ids, or null at A or when it takes too many.
+	 */
+	public static function next_grade( $results ) {
+		$letters = array_keys( self::$grades );
+		$current = self::summarize( $results )['grade'];
+		$index   = array_search( $current, $letters, true );
+
+		if ( 0 === $index || false === $index ) {
+			return null;
+		}
+
+		$open = array();
+		foreach ( $results as $id => $result ) {
+			$test = CASCR_Registry::get( $id );
+			if ( empty( $result['ignored'] ) && $test && $test['weight'] > 0
+				&& in_array( $result['status'], array( CASCR_Result::STATUS_FAIL, CASCR_Result::STATUS_WARN ), true ) ) {
+				$open[] = $id;
+			}
+		}
+		sort( $open );
+
+		$fixed = array();
+
+		for ( $round = 0; $round < self::NEXT_GRADE_LIMIT && ! empty( $open ); $round++ ) {
+			$best = null;
+
+			foreach ( $open as $id ) {
+				$trial        = $results;
+				$trial[ $id ] = CASCR_Result::pass( '' );
+				$risk         = self::summarize( $trial )['risk'];
+
+				// Strictly lower only, so equal candidates keep their id order.
+				if ( null === $best || $risk < $best['risk'] ) {
+					$best = array(
+						'id'   => $id,
+						'risk' => $risk,
+					);
+				}
+			}
+
+			$results[ $best['id'] ] = CASCR_Result::pass( '' );
+			$fixed[]                = $best['id'];
+			$open                   = array_values( array_diff( $open, array( $best['id'] ) ) );
+
+			$grade = self::grade( $best['risk'] );
+			if ( array_search( $grade, $letters, true ) < $index ) {
+				return array(
+					'grade' => $grade,
+					'ids'   => $fixed,
+				);
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * The worst status among open checks of critical severity.
+	 *
+	 * Site Health respects a mute, the owner has accepted that finding. A
+	 * milestone does not: muting must never earn one.
+	 *
+	 * @param array $tests         Stored tests or results, keyed by identifier.
+	 * @param bool  $include_muted Whether muted checks count as open.
+	 * @return string|null 'fail', 'warn' or null when none is open.
+	 */
+	public static function open_critical( $tests, $include_muted = false ) {
+		$worst = null;
+
+		foreach ( $tests as $id => $test ) {
+			$meta = CASCR_Registry::get( $id );
+			if ( ! $meta || CASCR_Registry::SEVERITY_CRITICAL !== $meta['severity'] || ( ! $include_muted && ! empty( $test['ignored'] ) ) ) {
+				continue;
+			}
+
+			if ( CASCR_Result::STATUS_FAIL === $test['status'] ) {
+				return CASCR_Result::STATUS_FAIL;
+			}
+
+			if ( CASCR_Result::STATUS_WARN === $test['status'] ) {
+				$worst = CASCR_Result::STATUS_WARN;
+			}
+		}
+
+		return $worst;
 	}
 
 	/**

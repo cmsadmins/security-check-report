@@ -36,13 +36,15 @@ class CASCR_Admin_Dashboard {
 		CASCR_History::migrate();
 
 		$summary = CASCR_Scoring::summarize( $run['tests'] );
+		$next    = CASCR_Scoring::next_grade( $run['tests'] );
 
-		self::render_head( $run, $summary );
+		self::render_head( $run, $summary, $next );
 		self::render_curve();
 		self::render_recheck( $run );
-		self::render_tasks( $summary['priorities'] );
+		self::render_tasks( $summary['priorities'], $next );
 		self::render_open( $run, $summary['priorities'] );
 		self::render_archive( $run );
+		self::render_milestones();
 		self::render_categories( $summary['categories'] );
 
 		CASCR_Admin::render_results( $run );
@@ -52,10 +54,11 @@ class CASCR_Admin_Dashboard {
 	/**
 	 * Grade, the line from the first run to today, and the way to start again.
 	 *
-	 * @param array $run     The stored run.
-	 * @param array $summary Output of CASCR_Scoring::summarize().
+	 * @param array      $run     The stored run.
+	 * @param array      $summary Output of CASCR_Scoring::summarize().
+	 * @param array|null $next    Output of CASCR_Scoring::next_grade().
 	 */
-	private static function render_head( $run, $summary ) {
+	private static function render_head( $run, $summary, $next ) {
 		$grade = $summary['grade'];
 		?>
 		<section class="cascr-dash__head" id="cascr-summary" tabindex="-1" aria-label="<?php esc_attr_e( 'Result of the latest run', 'security-check-report' ); ?>">
@@ -72,6 +75,7 @@ class CASCR_Admin_Dashboard {
 					</div>
 					<p class="cascr-dash__journey"><?php echo wp_kses_post( self::journey( $grade, $summary['counts'] ) ); ?></p>
 					<?php self::render_since_last(); ?>
+					<?php self::render_goals( $run, $next ); ?>
 					<?php self::render_partial_note( $run ); ?>
 				</div>
 
@@ -97,7 +101,15 @@ class CASCR_Admin_Dashboard {
 	private static function render_since_last() {
 		$diff = CASCR_Store::diff();
 
-		if ( null === $diff || ( empty( $diff['broken'] ) && empty( $diff['fixed'] ) ) ) {
+		if ( null === $diff ) {
+			return;
+		}
+
+		// A grade can move without any check changing sides, when a score
+		// inside a finding grows or shrinks. That alone is worth the line.
+		$moved = self::grade_move( $diff['grade']['before'], $diff['grade']['after'] );
+
+		if ( '' === $moved && empty( $diff['broken'] ) && empty( $diff['fixed'] ) ) {
 			return;
 		}
 
@@ -122,15 +134,92 @@ class CASCR_Admin_Dashboard {
 		<p class="cascr-dash__journey cascr-dash__since">
 			<?php
 			echo esc_html(
-				sprintf(
-					/* translators: %s: list such as "2 new findings, 3 resolved". */
-					__( 'Since the run before: %s.', 'security-check-report' ),
-					implode( ', ', $parts )
+				trim(
+					$moved . ' ' . ( empty( $parts ) ? '' : sprintf(
+						/* translators: %s: list such as "2 new findings, 3 resolved". */
+						__( 'Since the run before: %s.', 'security-check-report' ),
+						implode( ', ', $parts )
+					) )
 				)
 			);
 			?>
 		</p>
 		<?php
+	}
+
+	/**
+	 * One sentence when the grade moved between two runs, empty otherwise.
+	 *
+	 * @param string $before Grade of the run before.
+	 * @param string $after  Grade of the latest run.
+	 * @return string
+	 */
+	private static function grade_move( $before, $after ) {
+		$order = 'ABCDF';
+
+		if ( '' === $before || '' === $after || $before === $after
+			|| false === strpos( $order, $before ) || false === strpos( $order, $after ) ) {
+			return '';
+		}
+
+		if ( strpos( $order, $after ) < strpos( $order, $before ) ) {
+			/* translators: 1: grade before, 2: grade now. */
+			return sprintf( __( 'Grade up from %1$s to %2$s.', 'security-check-report' ), $before, $after );
+		}
+
+		/* translators: 1: grade before, 2: grade now. */
+		return sprintf( __( 'Grade down from %1$s to %2$s.', 'security-check-report' ), $before, $after );
+	}
+
+	/**
+	 * The distance to the next grade, the monthly streak and what this run
+	 * reached for the first time. Each line only when it has something to say.
+	 *
+	 * @param array      $run  The stored run.
+	 * @param array|null $next Output of CASCR_Scoring::next_grade().
+	 */
+	private static function render_goals( $run, $next ) {
+		$lines = array();
+
+		if ( null !== $next ) {
+			$count = count( $next['ids'] );
+			$line  = sprintf(
+				/* translators: 1: number of tasks, 2: grade letter. */
+				_n( '%1$d task away from grade %2$s.', '%1$d tasks away from grade %2$s.', $count, 'security-check-report' ),
+				$count,
+				$next['grade']
+			);
+
+			if ( $count <= 3 ) {
+				$names = array();
+				foreach ( $next['ids'] as $id ) {
+					$test    = CASCR_Registry::get( $id );
+					$names[] = $test ? $test['label'] : $id;
+				}
+				/* translators: %s: comma separated names of checks. */
+				$line .= ' ' . sprintf( __( 'Fix: %s.', 'security-check-report' ), implode( ', ', $names ) );
+			}
+
+			$lines[] = $line;
+		}
+
+		$streak = CASCR_Milestones::streak();
+		if ( $streak >= 2 ) {
+			/* translators: %d: number of months in a row with a full run. */
+			$lines[] = sprintf( _n( 'Checked every month for %d month.', 'Checked every month for %d months.', $streak, 'security-check-report' ), $streak );
+		}
+
+		$labels = CASCR_Milestones::labels();
+		foreach ( CASCR_Milestones::new_in( $run ) as $key ) {
+			if ( isset( $labels[ $key ] ) ) {
+				/* translators: %s: name of a milestone. */
+				$lines[] = sprintf( __( 'Reached with this run: %s.', 'security-check-report' ), $labels[ $key ] );
+			}
+		}
+
+		foreach ( $lines as $line ) {
+			echo '<p class="cascr-dash__journey cascr-dash__goal">' . esc_html( $line ) . '</p>';
+		}
 	}
 
 	/**
@@ -369,9 +458,11 @@ class CASCR_Admin_Dashboard {
 	/**
 	 * The short list, as tasks rather than as a report.
 	 *
-	 * @param array $priorities Output of CASCR_Scoring::priorities().
+	 * @param array      $priorities Output of CASCR_Scoring::priorities().
+	 * @param array|null $next       Output of CASCR_Scoring::next_grade().
 	 */
-	private static function render_tasks( $priorities ) {
+	private static function render_tasks( $priorities, $next = null ) {
+		$lifts = null === $next ? array() : $next['ids'];
 		?>
 		<section class="cascr-tasks" id="cascr-tasks">
 			<h2 class="cascr-section__title"><?php esc_html_e( 'Your next five', 'security-check-report' ); ?></h2>
@@ -380,7 +471,7 @@ class CASCR_Admin_Dashboard {
 			<ol class="cascr-tasks__list">
 				<?php
 				foreach ( $priorities as $task ) {
-					self::render_task( $task );
+					self::render_task( $task, in_array( $task['id'], $lifts, true ) );
 				}
 				?>
 			</ol>
@@ -395,9 +486,10 @@ class CASCR_Admin_Dashboard {
 	/**
 	 * One task card.
 	 *
-	 * @param array $task One entry of the priority list.
+	 * @param array $task  One entry of the priority list.
+	 * @param bool  $lifts Whether fixing it is part of the way to the next grade.
 	 */
-	private static function render_task( $task ) {
+	private static function render_task( $task, $lifts = false ) {
 		?>
 		<li class="cascr-task cascr-task--<?php echo esc_attr( $task['severity'] ); ?>" data-cascr-task="<?php echo esc_attr( $task['id'] ); ?>">
 			<div class="cascr-task__head">
@@ -409,6 +501,9 @@ class CASCR_Admin_Dashboard {
 				<span class="cascr-badge cascr-badge--<?php echo esc_attr( $task['severity'] ); ?>">
 					<?php echo esc_html( CASCR_Admin::severity_label( $task['severity'] ) ); ?>
 				</span>
+				<?php if ( $lifts ) : ?>
+					<span class="cascr-badge cascr-badge--goal"><?php esc_html_e( 'Raises the grade', 'security-check-report' ); ?></span>
+				<?php endif; ?>
 			</div>
 
 			<p class="cascr-task__summary"><?php echo esc_html( $task['summary'] ); ?></p>
@@ -559,6 +654,73 @@ class CASCR_Admin_Dashboard {
 							<span class="cascr-archive__mark"><?php esc_html_e( 'after a re-check', 'security-check-report' ); ?></span>
 						<?php endif; ?>
 						<span class="cascr-archive__date"><?php echo esc_html( wp_date( get_option( 'date_format' ), $entry['time'] ) ); ?></span>
+					</li>
+				<?php endforeach; ?>
+			</ul>
+		</details>
+		<?php
+	}
+
+	/**
+	 * Milestones reached, with their date, and the ones still ahead.
+	 *
+	 * The open ones carry how far along the site is, so they read as a goal
+	 * rather than as something missing.
+	 */
+	private static function render_milestones() {
+		$state   = CASCR_Milestones::get();
+		$labels  = CASCR_Milestones::labels();
+		$streak  = CASCR_Milestones::streak();
+		$reached = array_intersect_key( $state['reached'], $labels );
+
+		if ( empty( $state['months'] ) ) {
+			return;
+		}
+
+		arsort( $reached );
+		?>
+		<details class="cascr-archive cascr-milestones">
+			<summary class="cascr-archive__summary">
+				<?php
+				printf(
+					/* translators: 1: milestones reached, 2: milestones in total. */
+					esc_html__( 'Milestones (%1$d of %2$d)', 'security-check-report' ),
+					count( $reached ),
+					count( $labels )
+				);
+				?>
+			</summary>
+
+			<ul class="cascr-archive__list">
+				<?php foreach ( $reached as $key => $time ) : ?>
+					<li class="cascr-archive__item">
+						<span class="cascr-archive__label"><?php echo esc_html( $labels[ $key ] ); ?></span>
+						<span class="cascr-archive__date"><?php echo esc_html( wp_date( get_option( 'date_format' ), (int) $time ) ); ?></span>
+					</li>
+				<?php endforeach; ?>
+
+				<?php foreach ( array_diff_key( $labels, $reached ) as $key => $label ) : ?>
+					<?php
+					$goal = (int) substr( $key, strrpos( $key, '_' ) + 1 );
+					$have = null;
+					if ( 0 === strpos( $key, 'resolved_' ) ) {
+						$have = $state['resolved'];
+					} elseif ( 0 === strpos( $key, 'streak_' ) ) {
+						$have = $streak;
+					}
+					?>
+					<li class="cascr-archive__item cascr-milestones__open">
+						<span class="cascr-archive__label"><?php echo esc_html( $label ); ?></span>
+						<span class="cascr-archive__mark">
+							<?php
+							if ( null === $have ) {
+								esc_html_e( 'not yet', 'security-check-report' );
+							} else {
+								/* translators: 1: progress so far, 2: goal. */
+								echo esc_html( sprintf( __( '%1$d of %2$d', 'security-check-report' ), min( $have, $goal ), $goal ) );
+							}
+							?>
+						</span>
 					</li>
 				<?php endforeach; ?>
 			</ul>

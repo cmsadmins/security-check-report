@@ -4812,18 +4812,18 @@ msgstr ""
 msgid "TransparAI, our own plugin for AI content disclosure"
 msgstr "TransparAI, nasza własna wtyczka do oznaczania treści AI"
 
-#: includes/class-cascr-admin-dashboard.php:71
+#: includes/class-cascr-admin-dashboard.php:74
 #: includes/class-cascr-admin.php:113
 msgid "Risk score"
 msgstr "Ocena ryzyka"
 
-#: includes/class-cascr-admin-dashboard.php:81
+#: includes/class-cascr-admin-dashboard.php:85
 msgid "Re-check everything"
 msgstr "Sprawdź wszystko ponownie"
 
 #. translators: 1: date of the first recorded run, 2: grade letter, 3: number
 #. of findings.
-#: includes/class-cascr-admin-dashboard.php:157
+#: includes/class-cascr-admin-dashboard.php:246
 #, php-format
 msgid "Started on %1$s: grade %2$s with %3$d finding."
 msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
@@ -4833,7 +4833,7 @@ msgstr[2] "Rozpoczęto %1$s: ocena %2$s z %3$d znaleziskami."
 
 #. translators: 1: number of checks re-checked on their own, 2: date of the
 #. last full pass.
-#: includes/class-cascr-admin-dashboard.php:224
+#: includes/class-cascr-admin-dashboard.php:313
 #, php-format
 msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
 msgid_plural ""
@@ -4849,81 +4849,81 @@ msgstr[2] ""
 "sprawdzenia w dniu %2$s."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:296
+#: includes/class-cascr-admin-dashboard.php:385
 #, php-format
 msgid "%s passed the re-check."
 msgstr "%s zaliczyło ponowne sprawdzenie."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:299
+#: includes/class-cascr-admin-dashboard.php:388
 #, php-format
 msgid "%s is still open after the re-check."
 msgstr "%s jest nadal otwarte po ponownym sprawdzeniu."
 
-#: includes/class-cascr-admin-dashboard.php:327
+#: includes/class-cascr-admin-dashboard.php:416
 msgid "Your progress"
 msgstr "Twój postęp"
 
 #. translators: 1: date of the run, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:342
+#: includes/class-cascr-admin-dashboard.php:431
 #, php-format
 msgid "%1$s: grade %2$s"
 msgstr "%1$s: ocena %2$s"
 
-#: includes/class-cascr-admin-dashboard.php:377
+#: includes/class-cascr-admin-dashboard.php:468
 msgid "Your next five"
 msgstr "Twoje następne pięć"
 
-#: includes/class-cascr-admin-dashboard.php:378
+#: includes/class-cascr-admin-dashboard.php:469
 msgid "Work through these in order. Everything else can wait."
 msgstr "Przejdź przez te po kolei. Wszystko inne może poczekać."
 
-#: includes/class-cascr-admin-dashboard.php:389
-#: includes/class-cascr-scoring.php:203
+#: includes/class-cascr-admin-dashboard.php:480
+#: includes/class-cascr-scoring.php:208
 msgid "Nothing needs your attention right now."
 msgstr "Nic nie wymaga twojej uwagi w tej chwili."
 
-#: includes/class-cascr-admin-dashboard.php:428
+#: includes/class-cascr-admin-dashboard.php:523
 msgid "Done, check it now"
 msgstr "Gotowe, sprawdź teraz"
 
-#: includes/class-cascr-admin-dashboard.php:431
+#: includes/class-cascr-admin-dashboard.php:526
 msgid "later"
 msgstr "później"
 
-#: includes/class-cascr-admin-dashboard.php:434
+#: includes/class-cascr-admin-dashboard.php:529
 #: includes/class-cascr-admin.php:494
 msgid "Read more about this check"
 msgstr "Czytaj więcej o tej kontroli"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:474
+#: includes/class-cascr-admin-dashboard.php:569
 #, php-format
 msgid "Still open (%d)"
 msgstr "Nadal otwarte (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:547
+#: includes/class-cascr-admin-dashboard.php:642
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Rozwiązane (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:559
+#: includes/class-cascr-admin-dashboard.php:654
 msgid "after a re-check"
 msgstr "po ponownym sprawdzeniu"
 
-#: includes/class-cascr-admin-dashboard.php:578
+#: includes/class-cascr-admin-dashboard.php:740
 msgid "By category"
 msgstr "Według kategorii"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:601
+#: includes/class-cascr-admin-dashboard.php:763
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d z %2$d zaliczone"
 
-#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:179
+#: includes/class-cascr-admin.php:24 includes/class-cascr-nudges.php:188
 msgid "Security Check"
 msgstr "Kontrola zabezpieczeń"
 
@@ -5173,7 +5173,7 @@ msgstr "Kopiuj raport"
 msgid "Take the report with you"
 msgstr "Zabierz raport ze sobą"
 
-#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:250
+#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:356
 msgid "Critical"
 msgstr "Krytyczny"
 
@@ -5198,7 +5198,7 @@ msgid "Nothing needs your attention."
 msgstr "Nic nie wymaga Twojej uwagi."
 
 #. translators: %s: number of failed checks.
-#: includes/class-cascr-nudges.php:156
+#: includes/class-cascr-nudges.php:165
 #, php-format
 msgid "%s failed check"
 msgid_plural "%s failed checks"
@@ -5206,16 +5206,16 @@ msgstr[0] "%s niezaliczony test"
 msgstr[1] "%s niezaliczone testy"
 msgstr[2] "%s niezaliczonych testów"
 
-#: includes/class-cascr-nudges.php:193
+#: includes/class-cascr-nudges.php:202
 msgid "This site has not been checked yet."
 msgstr "Ta witryna nie była jeszcze sprawdzana."
 
-#: includes/class-cascr-nudges.php:198
+#: includes/class-cascr-nudges.php:207
 msgid "Run the first check"
 msgstr "Uruchom pierwszy test"
 
 #. translators: %d: number of findings still open.
-#: includes/class-cascr-nudges.php:218
+#: includes/class-cascr-nudges.php:227
 #, php-format
 msgid "%d open task"
 msgid_plural "%d open tasks"
@@ -5224,27 +5224,27 @@ msgstr[1] "%d otwarte zadania"
 msgstr[2] "%d otwartych zadań"
 
 #. translators: %s: length of time, for example "2 weeks".
-#: includes/class-cascr-nudges.php:232
+#: includes/class-cascr-nudges.php:241
 #, php-format
 msgid "Last full check %s ago."
 msgstr "Ostatnie pełne sprawdzenie: %s temu."
 
-#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:242
-#: includes/class-cascr-nudges.php:275
+#: includes/class-cascr-nudges.php:86 includes/class-cascr-nudges.php:251
+#: includes/class-cascr-nudges.php:284
 msgid "Open the report"
 msgstr "Otwórz raport"
 
 #. translators: %s: length of time, for example "2 months".
-#: includes/class-cascr-nudges.php:270
+#: includes/class-cascr-nudges.php:279
 #, php-format
 msgid "The last full security check on this site ran %s ago."
 msgstr "Ostatni pełny test bezpieczeństwa tej witryny odbył się %s temu."
 
-#: includes/class-cascr-nudges.php:277
+#: includes/class-cascr-nudges.php:286
 msgid "Stop reminding me"
 msgstr "Nie przypominaj więcej"
 
-#: includes/class-cascr-nudges.php:313
+#: includes/class-cascr-nudges.php:322
 msgid "You are not allowed to do that."
 msgstr "Nie masz uprawnień, aby to zrobić."
 
@@ -5540,7 +5540,7 @@ msgid "The check could not be completed on this server."
 msgstr "Kontroli nie można było ukończyć na tym serwerze."
 
 #. translators: 1: grade letter, 2: number of findings.
-#: includes/class-cascr-scoring.php:152
+#: includes/class-cascr-scoring.php:157
 #, php-format
 msgid "Today: grade %1$s with %2$d finding."
 msgid_plural "Today: grade %1$s with %2$d findings."
@@ -5549,7 +5549,7 @@ msgstr[1] "Dziś: ocena %1$s z %2$d wynikami."
 msgstr[2] "Dziś: ocena %1$s z %2$d wynikami."
 
 #. translators: %d: number of failed checks.
-#: includes/class-cascr-scoring.php:179
+#: includes/class-cascr-scoring.php:184
 #, php-format
 msgid "%d finding needs your attention now."
 msgid_plural "%d findings need your attention now."
@@ -5558,7 +5558,7 @@ msgstr[1] "%d znalezisk potrzebuje twojej uwagi teraz."
 msgstr[2] "%d znalezisk potrzebuje twojej uwagi teraz."
 
 #. translators: %d: number of warnings.
-#: includes/class-cascr-scoring.php:192
+#: includes/class-cascr-scoring.php:197
 #, php-format
 msgid "%d more is worth improving."
 msgid_plural "%d more are worth improving."
@@ -5567,7 +5567,7 @@ msgstr[1] "%d więcej warto poprawić."
 msgstr[2] "%d więcej warto poprawić."
 
 #. translators: %d: number of checks that could not be completed.
-#: includes/class-cascr-scoring.php:209
+#: includes/class-cascr-scoring.php:214
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
@@ -5575,19 +5575,19 @@ msgstr[0] "%d sprawdzenia nie można było dokończyć i nie jest ono zliczane."
 msgstr[1] "%d sprawdzeń nie można było dokończyć i nie są one zliczane."
 msgstr[2] "%d sprawdzeń nie można było dokończyć i nie są one zliczane."
 
-#: includes/class-cascr-scoring.php:246
+#: includes/class-cascr-scoring.php:352
 msgid "Excellent"
 msgstr "Doskonale"
 
-#: includes/class-cascr-scoring.php:247
+#: includes/class-cascr-scoring.php:353
 msgid "Good"
 msgstr "Dobrze"
 
-#: includes/class-cascr-scoring.php:248
+#: includes/class-cascr-scoring.php:354
 msgid "Moderate"
 msgstr "Umiarkowanie"
 
-#: includes/class-cascr-scoring.php:249
+#: includes/class-cascr-scoring.php:355
 msgid "Poor"
 msgstr "Słabo"
 
@@ -5699,12 +5699,12 @@ msgstr ""
 msgid "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 msgstr "PHP2Shell (CVE-2026-109618, CVE-2026-109619)"
 
-#: includes/class-cascr-admin-dashboard.php:61
+#: includes/class-cascr-admin-dashboard.php:64
 msgid "Result of the latest run"
 msgstr "Wynik ostatniego skanowania"
 
 #. translators: %d: number of checks that turned into a finding.
-#: includes/class-cascr-admin-dashboard.php:109
+#: includes/class-cascr-admin-dashboard.php:121
 #, php-format
 msgid "%d new finding"
 msgid_plural "%d new findings"
@@ -5713,7 +5713,7 @@ msgstr[1] "%d nowe znaleziska"
 msgstr[2] "%d nowych znalezisk"
 
 #. translators: %d: number of findings that are gone.
-#: includes/class-cascr-admin-dashboard.php:117
+#: includes/class-cascr-admin-dashboard.php:129
 #, php-format
 msgid "%d resolved"
 msgid_plural "%d resolved"
@@ -5722,7 +5722,7 @@ msgstr[1] "%d rozwiązane"
 msgstr[2] "%d rozwiązanych"
 
 #. translators: %s: list such as "2 new findings, 3 resolved".
-#: includes/class-cascr-admin-dashboard.php:127
+#: includes/class-cascr-admin-dashboard.php:140
 #, php-format
 msgid "Since the run before: %s."
 msgstr "Od poprzedniego skanowania: %s."
@@ -5784,11 +5784,11 @@ msgstr "Ostatnia kontrola zabezpieczeń jest starsza niż miesiąc"
 
 #. translators: short date under each bar of the progress chart, PHP date()
 #. format.
-#: includes/class-cascr-admin-dashboard.php:357
+#: includes/class-cascr-admin-dashboard.php:446
 msgid "M j"
 msgstr "j M"
 
-#: includes/class-cascr-admin-dashboard.php:328
+#: includes/class-cascr-admin-dashboard.php:417
 msgid ""
 "One bar per full run, the latest on the left. The taller the bar, the lower "
 "the risk."
@@ -5814,3 +5814,105 @@ msgstr ""
 "ostrzeżeniem i niezaliczonych, pięć zadań do wykonania w pierwszej "
 "kolejności oraz każde otwarte ustalenie. Nie uruchamia skanowania i pomija "
 "nazwy użytkowników, ścieżki oraz inne surowe dane ustaleń."
+
+#. translators: 1: grade before, 2: grade now.
+#: includes/class-cascr-admin-dashboard.php:167
+#, php-format
+msgid "Grade up from %1$s to %2$s."
+msgstr "Ocena wzrosła z %1$s do %2$s."
+
+#. translators: 1: grade before, 2: grade now.
+#: includes/class-cascr-admin-dashboard.php:171
+#, php-format
+msgid "Grade down from %1$s to %2$s."
+msgstr "Ocena spadła z %1$s do %2$s."
+
+#. translators: 1: number of tasks, 2: grade letter.
+#: includes/class-cascr-admin-dashboard.php:188
+#, php-format
+msgid "%1$d task away from grade %2$s."
+msgid_plural "%1$d tasks away from grade %2$s."
+msgstr[0] "Jeszcze %1$d zadanie do oceny %2$s."
+msgstr[1] "Jeszcze %1$d zadania do oceny %2$s."
+msgstr[2] "Jeszcze %1$d zadań do oceny %2$s."
+
+#. translators: %s: comma separated names of checks.
+#: includes/class-cascr-admin-dashboard.php:200
+#, php-format
+msgid "Fix: %s."
+msgstr "Do naprawy: %s."
+
+#. translators: %d: number of months in a row with a full run.
+#: includes/class-cascr-admin-dashboard.php:209
+#, php-format
+msgid "Checked every month for %d month."
+msgid_plural "Checked every month for %d months."
+msgstr[0] "Sprawdzane co miesiąc od %d miesiąca."
+msgstr[1] "Sprawdzane co miesiąc od %d miesięcy."
+msgstr[2] "Sprawdzane co miesiąc od %d miesięcy."
+
+#. translators: %s: name of a milestone.
+#: includes/class-cascr-admin-dashboard.php:216
+#, php-format
+msgid "Reached with this run: %s."
+msgstr "Osiągnięte w tym skanowaniu: %s."
+
+#: includes/class-cascr-admin-dashboard.php:505
+msgid "Raises the grade"
+msgstr "Podnosi ocenę"
+
+#. translators: 1: milestones reached, 2: milestones in total.
+#: includes/class-cascr-admin-dashboard.php:687
+#, php-format
+msgid "Milestones (%1$d of %2$d)"
+msgstr "Kamienie milowe (%1$d z %2$d)"
+
+#: includes/class-cascr-admin-dashboard.php:717
+msgid "not yet"
+msgstr "jeszcze nie"
+
+#. translators: 1: progress so far, 2: goal.
+#: includes/class-cascr-admin-dashboard.php:720
+#, php-format
+msgid "%1$d of %2$d"
+msgstr "%1$d z %2$d"
+
+#: includes/class-cascr-milestones.php:46
+msgid "No open critical finding"
+msgstr "Brak otwartych ustaleń krytycznych"
+
+#: includes/class-cascr-milestones.php:47
+msgid "No failed check"
+msgstr "Brak niezaliczonych testów"
+
+#: includes/class-cascr-milestones.php:48
+msgid "Grade A for the first time"
+msgstr "Pierwsza ocena A"
+
+#: includes/class-cascr-milestones.php:49
+msgid "10 findings resolved"
+msgstr "10 rozwiązanych ustaleń"
+
+#: includes/class-cascr-milestones.php:50
+msgid "25 findings resolved"
+msgstr "25 rozwiązanych ustaleń"
+
+#: includes/class-cascr-milestones.php:51
+msgid "50 findings resolved"
+msgstr "50 rozwiązanych ustaleń"
+
+#: includes/class-cascr-milestones.php:52
+msgid "Checked every month for 3 months"
+msgstr "Sprawdzane co miesiąc przez 3 miesiące"
+
+#: includes/class-cascr-milestones.php:53
+msgid "Checked every month for 6 months"
+msgstr "Sprawdzane co miesiąc przez 6 miesięcy"
+
+#: includes/class-cascr-milestones.php:54
+msgid "Checked every month for 12 months"
+msgstr "Sprawdzane co miesiąc przez 12 miesięcy"
+
+#: includes/class-cascr-nudges.php:134
+msgid "The security check found a critical finding"
+msgstr "Kontrola bezpieczeństwa znalazła krytyczne ustalenie"

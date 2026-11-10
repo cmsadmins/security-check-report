@@ -12,7 +12,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 
 global $wpdb;
 
-foreach ( array( 'cascr_last_scan', 'cascr_previous_scan', 'cascr_ignored', 'cascr_baseline', 'cascr_consent', 'cascr_badge', 'cascr_history' ) as $cascr_option ) {
+foreach ( array( 'cascr_last_scan', 'cascr_previous_scan', 'cascr_ignored', 'cascr_baseline', 'cascr_consent', 'cascr_badge', 'cascr_history', 'cascr_milestones' ) as $cascr_option ) {
 	delete_option( $cascr_option );
 }
 

@@ -180,4 +180,30 @@ class Test_CASCR_Nudges extends WP_UnitTestCase {
 	public function test_site_health_asks_for_a_first_run() {
 		$this->assertSame( 'recommended', CASCR_Nudges::site_health_result()['status'] );
 	}
+
+	/**
+	 * PHP2Shell as a warning leaves a site at B. Site Health used to call
+	 * that "nothing urgent".
+	 */
+	public function test_site_health_does_not_call_an_open_critical_finding_good() {
+		$this->store_run( array( 'warn' => 1 ) );
+		$run          = get_option( CASCR_Store::OPTION_LAST );
+		$run['grade'] = 'B';
+		$run['tests'] = array(
+			'php2shell' => array(
+				'status'  => CASCR_Result::STATUS_WARN,
+				'score'   => 6,
+				'summary' => '',
+				'ignored' => false,
+			),
+		);
+		update_option( CASCR_Store::OPTION_LAST, $run, false );
+
+		$this->assertSame( 'recommended', CASCR_Nudges::site_health_result()['status'] );
+
+		$run['tests']['php2shell']['status'] = CASCR_Result::STATUS_FAIL;
+		update_option( CASCR_Store::OPTION_LAST, $run, false );
+
+		$this->assertSame( 'critical', CASCR_Nudges::site_health_result()['status'] );
+	}
 }
