@@ -1919,14 +1919,6 @@ msgstr ""
 "Saúde do site, e um lembrete quando a última verificação tiver mais de 30 "
 "dias"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Uma comparação com a verificação anterior, logo abaixo da nota: quantos "
-"achados são novos e quantos foram resolvidos"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1968,3 +1960,122 @@ msgstr ""
 "* A nota aparece em Ferramentas, Saúde do site: bom para A e B, recomendado para C ou uma verificação com mais de um mês, crítico para D e F. Ela lê a verificação salva e nunca inicia uma.\n"
 "* Uma linha abaixo da nota diz o que mudou desde a verificação anterior: quantos achados são novos e quantos foram resolvidos.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> termina com status 1 quando a nota é pior, para pipelines e monitoramento."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Sim, pela Abilities API do WordPress 7.0. A habilidade <code>security-check-"
+"report/get-report</code> retorna a nota da última análise completa, as "
+"contagens, as cinco tarefas e cada achado em aberto com a sua correção. Ela "
+"só lê a análise salva e nunca inicia uma verificação. Nomes de usuário, "
+"caminhos e os demais detalhes brutos de um achado ficam de fora, então um "
+"assistente fica sabendo que existem administradores inativos, mas não quem "
+"são. Só usuários que podem gerenciar opções conseguem chamá-la, a mesma "
+"regra que vale para o próprio relatório."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"os marcos que você alcançou com as datas, o número de achados resolvidos até"
+" agora e os meses em que houve uma análise completa"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Assistentes de IA e outras ferramentas podem ler o relatório?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Não existe versão Pro, chave de licença, conta nem rastreamento de uso. Além"
+" de api.wordpress.org e do seu próprio site, o plugin não se conecta a "
+"ninguém. Antes de cada lançamento, as verificações rodam em sites reais, e "
+"um achado que se revela errado é corrigido como bug: só a 2.4.0 removeu sete"
+" alarmes falsos."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Marcos com a data em que foram alcançados, como a primeira nota A ou 25 "
+"achados resolvidos, e a contagem de meses seguidos com uma análise completa."
+" Silenciar um achado nunca conta para nenhum deles"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"O caminho mais curto até a próxima nota: quantas tarefas são necessárias e "
+"quais, calculado com a mesma pontuação da própria nota"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Uma comparação com a análise anterior, logo abaixo da nota: quantos achados "
+"são novos, quantos foram resolvidos e se a nota mudou"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Uma tarefa verificada novamente de forma isolada, com o resultado no topo da"
+" página"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "A nota em Ferramentas, Saúde do site"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "O widget do painel com a nota e o número de tarefas em aberto"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Corrigido</strong>\n"
+"* A Saúde do site dizia “nada urgente” para um site com nota A ou B enquanto uma verificação crítica estava em aberto, por exemplo PHP2Shell como aviso. Agora ela recomenda uma revisão quando há um aviso crítico e informa uma falha crítica como crítica."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Alterado</strong>\n"
+"* Mais três capturas de tela: o widget do painel, a Saúde do site e uma nova verificação de uma única tarefa.\n"
+"* A caixa no topo mostra nota, números e ação lado a lado, com o botão no alto da sua coluna e as metas em uma linha própria logo abaixo. O cabeçalho da página traz a marca do plugin."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Adicionado</strong>\n"
+"* A habilidade <code>security-check-report/get-report</code> para a Abilities API do WordPress 7.0. Assistentes de IA e outras ferramentas podem ler a última análise sem iniciar uma nova, e sem nomes de usuário, caminhos ou outros dados brutos dos achados.\n"
+"* A ação <code>cascr_run_completed</code>, disparada após cada análise completa com a análise salva e o seu resumo.\n"
+"* Abaixo da nota: quantas tarefas separam o site da próxima nota, e quais são. Essas tarefas recebem o rótulo “Aumenta a nota”.\n"
+"* Uma linha quando a nota mudou desde a análise anterior.\n"
+"* Marcos com a data: nenhum achado crítico em aberto, nenhuma verificação reprovada, a primeira nota A, 10, 25 e 50 achados resolvidos, 3, 6 e 12 meses seguidos com uma análise completa. Achados silenciados nunca contam. Um site que já foi verificado antes começa com o que o seu histórico já mostra, com a data em que aconteceu."

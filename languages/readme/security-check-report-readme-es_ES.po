@@ -1929,14 +1929,6 @@ msgstr ""
 "Herramientas, Salud del sitio, y un recordatorio cuando el último análisis "
 "tiene más de 30 días"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Una comparación con el análisis anterior, justo debajo de la nota: cuántos "
-"hallazgos son nuevos y cuántos se han resuelto"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1978,3 +1970,122 @@ msgstr ""
 "* La nota aparece en Herramientas, Salud del sitio: buena para A y B, recomendada para C o un análisis de más de un mes, crítica para D y F. Lee el análisis guardado y nunca inicia uno.\n"
 "* Una línea bajo la nota indica qué ha cambiado desde el análisis anterior: cuántos hallazgos son nuevos y cuántos se han resuelto.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> termina con estado 1 cuando la nota es peor, para pipelines y monitorización."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Sí, a través de la Abilities API de WordPress 7.0. La habilidad "
+"<code>security-check-report/get-report</code> devuelve la nota del último "
+"análisis completo, los recuentos, las cinco tareas y cada hallazgo abierto "
+"con su solución. Solo lee el análisis guardado y nunca inicia uno. Los "
+"nombres de usuario, las rutas y los demás datos en bruto de un hallazgo "
+"quedan fuera, así que un asistente sabe que hay administradores inactivos, "
+"pero no quiénes son. Solo pueden llamarla los usuarios que pueden gestionar "
+"opciones, la misma regla que para el propio informe."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"los hitos que has alcanzado con sus fechas, el número de hallazgos resueltos"
+" hasta ahora y los meses en los que hubo un análisis completo"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "¿Pueden los asistentes de IA y otras herramientas leer el informe?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"No hay versión Pro, ni clave de licencia, ni cuenta, ni seguimiento de uso. "
+"Aparte de api.wordpress.org y tu propio sitio, el plugin no contacta con "
+"nadie. Antes de cada versión, las comprobaciones se ejecutan en sitios "
+"reales, y un hallazgo que resulta ser erróneo se corrige como un fallo: solo"
+" la 2.4.0 eliminó siete falsas alarmas."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Hitos con la fecha en que los alcanzaste, como la primera nota A o 25 "
+"hallazgos resueltos, y la cuenta de meses seguidos con un análisis completo."
+" Silenciar un hallazgo nunca cuenta para ninguno de ellos"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"El camino más corto hacia la siguiente nota: cuántas tareas hacen falta y "
+"cuáles, calculado con la misma puntuación que la propia nota"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Una comparación con el análisis anterior, justo debajo de la nota: cuántos "
+"hallazgos son nuevos, cuántos se resolvieron y si la nota cambió"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Una tarea comprobada de nuevo por separado, con el resultado en la parte "
+"superior de la página"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "La nota en Herramientas, Salud del sitio"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "El widget del escritorio con la nota y el número de tareas abiertas"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Corregido</strong>\n"
+"* Salud del sitio decía «nada urgente» para un sitio con nota A o B mientras una comprobación crítica seguía abierta, por ejemplo PHP2Shell como advertencia. Ahora recomienda revisarlo ante una advertencia crítica e informa de un fallo crítico como crítico."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Cambiado</strong>\n"
+"* Tres capturas de pantalla más: el widget del escritorio, Salud del sitio y una comprobación repetida por separado.\n"
+"* El recuadro superior muestra la nota, las cifras y la acción una al lado de otra, con el botón arriba en su columna y los objetivos en una fila propia debajo. La cabecera de la página lleva el logotipo del plugin."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Añadido</strong>\n"
+"* La habilidad <code>security-check-report/get-report</code> para la Abilities API de WordPress 7.0. Los asistentes de IA y otras herramientas pueden leer el último análisis sin iniciar uno, y sin nombres de usuario, rutas ni otros hallazgos en bruto.\n"
+"* La acción <code>cascr_run_completed</code>, que se dispara tras cada análisis completo con el análisis guardado y su resumen.\n"
+"* Debajo de la nota: cuántas tareas separan el sitio de la siguiente nota, y cuáles. Esas tareas llevan la etiqueta «Sube la nota».\n"
+"* Una línea cuando la nota ha cambiado desde el análisis anterior.\n"
+"* Hitos con su fecha: ningún hallazgo crítico abierto, ninguna comprobación no superada, la primera nota A, 10, 25 y 50 hallazgos resueltos, 3, 6 y 12 meses seguidos con un análisis completo. Los hallazgos silenciados nunca cuentan. Un sitio que ya se había comprobado empieza con lo que su historial ya muestra, con la fecha en que ocurrió."

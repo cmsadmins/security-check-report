@@ -1928,14 +1928,6 @@ msgstr ""
 "Gereedschap, Sitediagnose, en een herinnering zodra de laatste controle meer"
 " dan 30 dagen oud is"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Een vergelijking met de vorige controle, direct onder het cijfer: hoeveel "
-"bevindingen nieuw zijn en hoeveel zijn opgelost"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1977,3 +1969,123 @@ msgstr ""
 "* Het cijfer verschijnt onder Gereedschap, Sitediagnose: goed bij A en B, aanbevolen bij C of een controle ouder dan een maand, kritiek bij D en F. Het leest de opgeslagen controle en start zelf nooit een scan.\n"
 "* Een regel onder het cijfer zegt wat er sinds de vorige controle veranderd is: hoeveel bevindingen nieuw zijn en hoeveel zijn opgelost.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> eindigt met status 1 als het cijfer slechter is, voor pipelines en monitoring."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Ja, via de Abilities API in WordPress 7.0. De ability <code>security-check-"
+"report/get-report</code> geeft het cijfer van de laatste volledige scan, de "
+"aantallen, de vijf taken en elke openstaande bevinding met de oplossing. Hij"
+" leest alleen de opgeslagen scan en start nooit zelf een scan. "
+"Gebruikersnamen, paden en de andere ruwe details van een bevinding blijven "
+"erbuiten, dus een assistent weet dat er slapende beheerders zijn, maar niet "
+"wie het zijn. Alleen gebruikers die opties mogen beheren kunnen hem "
+"aanroepen, dezelfde regel als voor het rapport zelf."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"de mijlpalen die je hebt bereikt met hun datum, het aantal tot nu toe "
+"opgeloste bevindingen en de maanden waarin een volledige scan is gedaan"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Kunnen AI-assistenten en andere tools het rapport lezen?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Er is geen Pro-versie, geen licentiesleutel, geen account en geen "
+"gebruikstracking. Behalve api.wordpress.org en je eigen site neemt de plugin"
+" met niemand contact op. Voor een release draaien de controles op echte "
+"sites, en een bevinding die onjuist blijkt, wordt als bug opgelost: alleen "
+"al 2.4.0 haalde zeven valse meldingen weg."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Mijlpalen met de datum waarop je ze bereikte, zoals het eerste cijfer A of "
+"25 opgeloste bevindingen, en het aantal maanden op rij met een volledige "
+"scan. Een bevinding dempen telt nooit mee"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"De kortste weg naar het volgende cijfer: hoeveel taken het kost en welke, "
+"berekend met dezelfde scoring als het cijfer zelf"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Een vergelijking met de vorige scan, direct onder het cijfer: hoeveel "
+"bevindingen nieuw zijn, hoeveel er zijn opgelost en of het cijfer is "
+"veranderd"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Een taak die apart opnieuw is gecontroleerd, met het resultaat bovenaan de "
+"pagina"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "Het cijfer in Gereedschap, Sitediagnose"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "De dashboardwidget met het cijfer en het aantal openstaande taken"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Opgelost</strong>\n"
+"* Sitediagnose meldde \"niets dringends\" voor een site met cijfer A of B terwijl er een kritieke controle openstond, bijvoorbeeld PHP2Shell als waarschuwing. Nu raadt het bij een kritieke waarschuwing aan om even te kijken en meldt het een kritieke mislukking als kritiek."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Gewijzigd</strong>\n"
+"* Drie extra screenshots: de dashboardwidget, Sitediagnose en een losse hercontrole.\n"
+"* Het blok bovenaan toont cijfer, aantallen en actie naast elkaar, met de knop bovenaan zijn kolom en de doelen in een eigen rij eronder. De paginakop draagt het pluginlogo."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Toegevoegd</strong>\n"
+"* De ability <code>security-check-report/get-report</code> voor de Abilities API in WordPress 7.0. AI-assistenten en andere tools kunnen de laatste scan lezen zonder er een te starten, en zonder gebruikersnamen, paden of andere ruwe bevindingen.\n"
+"* De action <code>cascr_run_completed</code>, die na elke volledige scan wordt uitgevoerd met de opgeslagen scan en de samenvatting ervan.\n"
+"* Onder het cijfer: hoeveel taken er tussen de site en het volgende cijfer staan, en welke. Die taken krijgen het label \"Verhoogt het cijfer\".\n"
+"* Een regel als het cijfer is veranderd sinds de vorige scan.\n"
+"* Mijlpalen met hun datum: geen openstaande kritieke bevinding, geen mislukte controle, het eerste cijfer A, 10, 25 en 50 opgeloste bevindingen, 3, 6 en 12 maanden op rij met een volledige scan. Gedempte bevindingen tellen nooit mee. Een site die al eerder is gecontroleerd, begint met wat de geschiedenis al laat zien, gedateerd op het moment dat het gebeurde."

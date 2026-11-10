@@ -19,6 +19,67 @@ msgstr ""
 
 #. Found in faq paragraph.
 msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr ""
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr ""
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr ""
+
+#. Found in faq paragraph.
+msgid ""
 "A command line run is stored like a run from the screen, so the history, the"
 " checklist and the count on the menu entry include it."
 msgstr ""
@@ -28,12 +89,6 @@ msgid ""
 "A count on the menu entry, a widget on the dashboard home, the grade in "
 "Tools, Site Health, and a reminder once the last run is more than 30 days "
 "old"
-msgstr ""
-
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
 msgstr ""
 
 #. Found in description paragraph.
@@ -789,6 +844,29 @@ msgstr ""
 msgid ""
 "All checks, grouped by area and filterable by outcome, with one finding "
 "expanded"
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
 msgstr ""
 
 #. Found in changelog paragraph.

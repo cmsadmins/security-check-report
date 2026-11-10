@@ -1930,14 +1930,6 @@ msgstr ""
 "Strumenti, Salute del sito, e un promemoria quando l’ultima scansione ha più"
 " di 30 giorni"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Un confronto con la scansione precedente, subito sotto il voto: quanti "
-"problemi sono nuovi e quanti sono stati risolti"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1979,3 +1971,122 @@ msgstr ""
 "* Il voto compare in Strumenti, Salute del sito: buono per A e B, consigliato per C o una scansione più vecchia di un mese, critico per D e F. Legge la scansione salvata e non ne avvia mai una.\n"
 "* Una riga sotto il voto dice cosa è cambiato dalla scansione precedente: quanti problemi sono nuovi e quanti sono stati risolti.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> termina con stato 1 se il voto è peggiore, per pipeline e monitoraggio."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Sì, tramite la Abilities API di WordPress 7.0. L'abilità <code>security-"
+"check-report/get-report</code> restituisce il voto dell'ultima analisi "
+"completa, i conteggi, le cinque attività e ogni problema rilevato ancora "
+"aperto con la relativa correzione. Legge solo l'analisi salvata e non avvia "
+"mai una scansione. Nomi utente, percorsi e gli altri dettagli grezzi di un "
+"problema rilevato restano esclusi: un assistente viene a sapere che esistono"
+" amministratori inattivi, ma non chi sono. Possono chiamarla solo gli utenti"
+" autorizzati a gestire le opzioni, la stessa regola che vale per il report."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"i traguardi raggiunti con le relative date, il numero di problemi rilevati "
+"risolti finora e i mesi in cui è stata eseguita un'analisi completa"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Gli assistenti IA e altri strumenti possono leggere il report?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Non esiste una versione Pro, nessuna chiave di licenza, nessun account e "
+"nessun tracciamento dell'utilizzo. Oltre ad api.wordpress.org e al tuo sito,"
+" il plugin non contatta nessuno. Prima di ogni rilascio i controlli vengono "
+"eseguiti su siti reali, e un problema rilevato che si rivela sbagliato viene"
+" corretto come un bug: solo la 2.4.0 ha eliminato sette falsi allarmi."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Traguardi con la data in cui li hai raggiunti, come il primo voto A o 25 "
+"problemi rilevati risolti, e il conteggio dei mesi consecutivi con "
+"un'analisi completa. Silenziare un problema rilevato non conta mai per "
+"nessuno di essi"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"La via più breve verso il voto successivo: quante attività servono e quali, "
+"calcolate con lo stesso punteggio del voto"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Un confronto con l'analisi precedente, subito sotto il voto: quanti problemi"
+" rilevati sono nuovi, quanti sono stati risolti e se il voto è cambiato"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Un'attività ricontrollata da sola, con il risultato in cima alla pagina"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "Il voto in Strumenti, Salute del sito"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "Il widget della bacheca con il voto e il numero di attività aperte"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Corretto</strong>\n"
+"* Salute del sito indicava \"niente di urgente\" per un sito con voto A o B mentre un controllo critico era aperto, per esempio PHP2Shell come avviso. Ora consiglia di dare un'occhiata in caso di avviso critico e segnala come critico un fallimento critico."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Modificato</strong>\n"
+"* Tre nuovi screenshot: il widget della bacheca, Salute del sito e un singolo ricontrollo.\n"
+"* Il riquadro in alto mostra voto, numeri e azione affiancati, con il pulsante in cima alla sua colonna e gli obiettivi in una riga a sé sotto. L'intestazione della pagina riporta il marchio del plugin."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Aggiunto</strong>\n"
+"* L'abilità <code>security-check-report/get-report</code> per la Abilities API di WordPress 7.0. Assistenti IA e altri strumenti possono leggere l'ultima analisi senza avviarne una, e senza nomi utente, percorsi o altri dati grezzi dei problemi rilevati.\n"
+"* L'azione <code>cascr_run_completed</code>, eseguita dopo ogni analisi completa con l'analisi salvata e il suo riepilogo.\n"
+"* Sotto il voto: quante attività separano il sito dal voto successivo, e quali. Queste attività riportano l'etichetta \"Alza il voto\".\n"
+"* Una riga quando il voto è cambiato rispetto all'analisi precedente.\n"
+"* Traguardi con la loro data: nessun problema critico aperto, nessun controllo non superato, il primo voto A, 10, 25 e 50 problemi rilevati risolti, 3, 6 e 12 mesi consecutivi con un'analisi completa. I problemi silenziati non contano mai. Un sito già controllato in passato parte da ciò che la sua cronologia mostra già, con la data in cui è avvenuto."

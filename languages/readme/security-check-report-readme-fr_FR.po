@@ -1970,14 +1970,6 @@ msgstr ""
 "dans Outils, Santé du site, et un rappel dès que la dernière analyse a plus "
 "de 30 jours"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Une comparaison avec l’analyse précédente, juste sous la note : combien de "
-"constats sont nouveaux et combien ont été résolus"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -2019,3 +2011,122 @@ msgstr ""
 "* La note apparaît dans Outils, Santé du site : bon pour A et B, recommandé pour C ou une analyse de plus d’un mois, critique pour D et F. Elle lit l’analyse enregistrée et ne lance jamais d’analyse.\n"
 "* Une ligne sous la note indique ce qui a changé depuis l’analyse précédente : combien de constats sont nouveaux et combien ont été résolus.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> se termine avec le statut 1 si la note est moins bonne, pour les pipelines et la supervision."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Oui, via l’Abilities API de WordPress 7.0. La capacité <code>security-check-"
+"report/get-report</code> renvoie la note de la dernière analyse complète, "
+"les compteurs, les cinq tâches et chaque constat ouvert avec sa correction. "
+"Elle lit uniquement l’analyse enregistrée et ne lance jamais d’analyse. Les "
+"noms d’utilisateur, les chemins et les autres détails bruts d’un constat "
+"restent à l’écart : un assistant apprend qu’il existe des administrateurs "
+"inactifs, mais pas lesquels. Seuls les utilisateurs autorisés à gérer les "
+"options peuvent l’appeler, comme pour le rapport lui-même."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"les étapes franchies avec leur date, le nombre de constats résolus jusqu’ici"
+" et les mois qui ont connu une analyse complète"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Les assistants d’IA et d’autres outils peuvent-ils lire le rapport ?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Pas de version Pro, pas de clé de licence, pas de compte et aucun suivi "
+"d’utilisation. En dehors d’api.wordpress.org et de votre propre site, "
+"l’extension ne contacte personne. Avant chaque version, les vérifications "
+"tournent sur de vrais sites, et un constat qui se révèle faux est corrigé "
+"comme un bug : la 2.4.0 a supprimé à elle seule sept fausses alertes."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Des étapes datées du jour où vous les avez franchies, comme la première note"
+" A ou 25 constats résolus, et le nombre de mois consécutifs avec une analyse"
+" complète. Masquer un constat ne compte jamais pour aucune d’entre elles"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"Le chemin le plus court vers la note suivante : combien de tâches il faut et"
+" lesquelles, calculé avec le même barème que la note elle-même"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Une comparaison avec l’analyse précédente, juste sous la note : combien de "
+"constats sont nouveaux, combien ont été résolus et si la note a changé"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Une tâche vérifiée à nouveau séparément, avec le résultat en haut de la page"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "La note dans Outils, Santé du site"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr ""
+"Le widget du tableau de bord avec la note et le nombre de tâches ouvertes"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Corrigé</strong>\n"
+"* Santé du site indiquait « rien d’urgent » pour un site noté A ou B alors qu’une vérification critique restait ouverte, par exemple PHP2Shell en avertissement. Elle recommande désormais un examen pour un avertissement critique et signale un échec critique comme critique."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Modifié</strong>\n"
+"* Trois captures d’écran de plus : le widget du tableau de bord, Santé du site et une vérification refaite seule.\n"
+"* L’encadré du haut présente côte à côte la note, les chiffres et l’action, avec le bouton en haut de sa colonne et les objectifs sur une ligne à part en dessous. L’en-tête de la page porte le logo de l’extension."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Ajouté</strong>\n"
+"* La capacité <code>security-check-report/get-report</code> pour l’Abilities API de WordPress 7.0. Les assistants d’IA et d’autres outils peuvent lire la dernière analyse sans en lancer une, et sans noms d’utilisateur, chemins ni autres constats bruts.\n"
+"* L’action <code>cascr_run_completed</code>, déclenchée après chaque analyse complète avec l’analyse enregistrée et son résumé.\n"
+"* Sous la note : combien de tâches séparent le site de la note suivante, et lesquelles. Ces tâches portent la mention « Améliore la note ».\n"
+"* Une ligne quand la note a changé depuis l’analyse précédente.\n"
+"* Des étapes datées : aucun constat critique ouvert, aucune vérification échouée, la première note A, 10, 25 et 50 constats résolus, 3, 6 et 12 mois consécutifs avec une analyse complète. Les constats masqués ne comptent jamais. Un site déjà vérifié auparavant démarre avec ce que son historique montre déjà, daté du moment où c’est arrivé."

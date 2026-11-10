@@ -1923,14 +1923,6 @@ msgstr ""
 "Licznik przy pozycji menu, widżet w kokpicie, ocena w Narzędzia, Kondycja "
 "witryny i przypomnienie, gdy ostatnie skanowanie jest starsze niż 30 dni"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Porównanie z poprzednim skanowaniem tuż pod oceną: ile znalezisk jest "
-"nowych, a ile rozwiązano"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1972,3 +1964,120 @@ msgstr ""
 "* Ocena pojawia się w Narzędzia, Kondycja witryny: dobra dla A i B, zalecana dla C lub skanowania starszego niż miesiąc, krytyczna dla D i F. Odczytuje zapisane skanowanie i nigdy go nie uruchamia.\n"
 "* Wiersz pod oceną mówi, co zmieniło się od poprzedniego skanowania: ile znalezisk jest nowych, a ile rozwiązano.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> kończy się statusem 1, gdy ocena jest gorsza, na potrzeby pipeline'ów i monitoringu."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Tak, przez Abilities API w WordPress 7.0. Zdolność <code>security-check-"
+"report/get-report</code> zwraca ocenę ostatniego pełnego skanowania, "
+"liczniki, pięć zadań i każde otwarte ustalenie wraz z poprawką. Odczytuje "
+"wyłącznie zapisane skanowanie i nigdy nie uruchamia nowego. Nazwy "
+"użytkowników, ścieżki i inne surowe szczegóły ustaleń zostają pominięte, "
+"więc asystent dowie się, że istnieją nieaktywni administratorzy, ale nie "
+"pozna ich nazw. Wywołać ją mogą tylko użytkownicy uprawnieni do zarządzania "
+"opcjami, czyli obowiązuje ta sama zasada co dla samego raportu."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"osiągnięte kamienie milowe z datami, liczba dotychczas rozwiązanych ustaleń "
+"i miesiące, w których przeprowadzono pełne skanowanie"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Czy asystenci AI i inne narzędzia mogą odczytać raport?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Nie ma wersji Pro, klucza licencyjnego, konta ani śledzenia użycia. Poza "
+"api.wordpress.org i własną witryną wtyczka nie łączy się z nikim. Przed "
+"wydaniem testy są uruchamiane na prawdziwych witrynach, a ustalenie, które "
+"okaże się błędne, jest poprawiane jak każdy błąd: sama wersja 2.4.0 usunęła "
+"siedem fałszywych alarmów."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Kamienie milowe z datą ich osiągnięcia, na przykład pierwsza ocena A lub 25 "
+"rozwiązanych ustaleń, oraz liczba kolejnych miesięcy z pełnym skanowaniem. "
+"Wyciszenie ustalenia nigdy nie wlicza się do żadnego z nich"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"Najkrótsza droga do następnej oceny: ile zadań trzeba wykonać i które, "
+"wyliczona według tej samej punktacji co sama ocena"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Porównanie z poprzednim skanowaniem tuż pod oceną: ile ustaleń jest nowych, "
+"ile rozwiązano i czy ocena się zmieniła"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr "Pojedyncze zadanie sprawdzone ponownie, z wynikiem na górze strony"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "Ocena w Narzędzia, Kondycja witryny"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "Widżet w kokpicie z oceną i liczbą otwartych zadań"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Naprawiono</strong>\n"
+"* Kondycja witryny zgłaszała „nic pilnego” dla witryny z oceną A lub B, choć otwarty był krytyczny test, na przykład PHP2Shell jako ostrzeżenie. Teraz przy krytycznym ostrzeżeniu zaleca przyjrzenie się sprawie, a krytyczny błąd zgłasza jako krytyczny."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Zmieniono</strong>\n"
+"* Trzy nowe zrzuty ekranu: widżet w kokpicie, Kondycja witryny i pojedyncze ponowne sprawdzenie.\n"
+"* Pole na górze układa ocenę, liczby i akcję obok siebie, z przyciskiem na górze jego kolumny i celami w osobnym wierszu pod spodem. Nagłówek strony zawiera znak wtyczki."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Dodano</strong>\n"
+"* Zdolność <code>security-check-report/get-report</code> dla Abilities API w WordPress 7.0. Asystenci AI i inne narzędzia mogą odczytać ostatnie skanowanie bez uruchamiania nowego, i to bez nazw użytkowników, ścieżek ani innych surowych danych ustaleń.\n"
+"* Akcja <code>cascr_run_completed</code>, wywoływana po każdym pełnym skanowaniu z zapisanym skanowaniem i jego podsumowaniem.\n"
+"* Pod oceną: ile zadań dzieli witrynę od następnej oceny i które to są. Te zadania mają etykietę „Podnosi ocenę”.\n"
+"* Wiersz informujący, że ocena zmieniła się od poprzedniego skanowania.\n"
+"* Kamienie milowe z datą: brak otwartych krytycznych ustaleń, brak niezaliczonych testów, pierwsza ocena A, 10, 25 i 50 rozwiązanych ustaleń, 3, 6 i 12 kolejnych miesięcy z pełnym skanowaniem. Wyciszone ustalenia nigdy się nie liczą. Witryna sprawdzana już wcześniej zaczyna od tego, co pokazuje jej historia, z datą, kiedy to nastąpiło."

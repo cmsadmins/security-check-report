@@ -1934,14 +1934,6 @@ msgstr ""
 "Werkzeuge, Website-Zustand, und eine Erinnerung, sobald der letzte Durchlauf"
 " älter als 30 Tage ist"
 
-#. Found in description list item.
-msgid ""
-"A comparison with the previous run, right under the grade: how many findings"
-" are new and how many were resolved"
-msgstr ""
-"Einen Vergleich mit dem vorigen Durchlauf direkt unter der Note: wie viele "
-"Befunde neu sind und wie viele behoben wurden"
-
 #. Found in changelog paragraph.
 msgid ""
 "<strong>Fixed</strong>\n"
@@ -1983,3 +1975,122 @@ msgstr ""
 "* Die Note erscheint unter Werkzeuge, Website-Zustand: gut bei A und B, empfohlen bei C oder einem Durchlauf, der älter als einen Monat ist, kritisch bei D und F. Sie liest den gespeicherten Durchlauf und startet nie selbst einen Scan.\n"
 "* Eine Zeile unter der Note sagt, was sich seit dem vorigen Durchlauf geändert hat: wie viele Befunde neu sind und wie viele behoben wurden.\n"
 "* <code>wp security-check run --fail-below=&lt;grade&gt;</code> endet mit Status 1, wenn die Note schlechter ist, für Pipelines und Monitoring."
+
+#. Found in faq paragraph.
+msgid ""
+"Yes, through the Abilities API in WordPress 7.0. The ability <code>security-"
+"check-report/get-report</code> returns the grade of the last full run, the "
+"counts, the five tasks and every open finding with its fix. It reads the "
+"stored run only and never starts a scan. User names, paths and the other raw"
+" details of a finding stay out, so an assistant learns that dormant "
+"administrators exist but not who they are. Only users who may manage options"
+" can call it, the same rule as for the report itself."
+msgstr ""
+"Ja, über die Abilities API in WordPress 7.0. Die Ability <code>security-"
+"check-report/get-report</code> liefert die Note des letzten vollständigen "
+"Durchlaufs, die Zähler, die fünf Aufgaben und jeden offenen Befund mit "
+"seiner Lösung. Sie liest nur den gespeicherten Durchlauf und startet nie "
+"einen Scan. Benutzernamen, Pfade und die übrigen Rohdaten eines Befunds "
+"bleiben draussen: Ein Assistent erfährt, dass es ungenutzte "
+"Administratorkonten gibt, aber nicht, welche. Aufrufen dürfen sie nur "
+"Benutzer, die Optionen verwalten dürfen, dieselbe Regel wie für den Bericht "
+"selbst."
+
+#. Found in faq list item.
+msgid ""
+"the milestones you have reached with their dates, the number of findings "
+"resolved so far and the months that saw a full run"
+msgstr ""
+"die erreichten Meilensteine mit Datum, die Zahl der bisher behobenen Befunde"
+" und die Monate, in denen ein vollständiger Durchlauf lief"
+
+#. Found in faq header.
+msgid "Can AI assistants and other tools read the report?"
+msgstr "Können KI-Assistenten und andere Werkzeuge den Bericht lesen?"
+
+#. Found in description paragraph.
+msgid ""
+"There is no Pro version, no licence key, no account and no usage tracking. "
+"Apart from api.wordpress.org and your own site the plugin contacts nobody. "
+"Before a release the checks run against real sites, and a finding that turns"
+" out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms."
+msgstr ""
+"Es gibt keine Pro-Version, keinen Lizenzschlüssel, kein Konto und kein "
+"Nutzungs-Tracking. Ausser api.wordpress.org und deiner eigenen Website "
+"kontaktiert das Plugin niemanden. Vor jedem Release laufen die Prüfungen auf"
+" echten Websites, und ein Befund, der sich als falsch herausstellt, wird wie"
+" ein Fehler behoben: Allein 2.4.0 hat sieben Fehlalarme entfernt."
+
+#. Found in description list item.
+msgid ""
+"Milestones with the date you reached them, such as the first grade A or 25 "
+"findings resolved, and a count of the months in a row with a full run. "
+"Muting a finding never counts towards any of them"
+msgstr ""
+"Meilensteine mit dem Datum, an dem du sie erreicht hast, etwa die erste Note"
+" A oder 25 behobene Befunde, und einen Zähler der Monate in Folge mit einem "
+"vollständigen Durchlauf. Stummschalten zählt für keinen davon"
+
+#. Found in description list item.
+msgid ""
+"The shortest way to the next grade: how many tasks it takes and which ones, "
+"worked out from the same scoring as the grade itself"
+msgstr ""
+"Den kürzesten Weg zur nächsten Note: wie viele Aufgaben es braucht und "
+"welche, berechnet nach derselben Bewertung wie die Note selbst"
+
+#. Found in description list item.
+msgid ""
+"A comparison with the previous run, right under the grade: how many findings"
+" are new, how many were resolved and whether the grade moved"
+msgstr ""
+"Einen Vergleich mit dem vorigen Durchlauf direkt unter der Note: wie viele "
+"Befunde neu sind, wie viele behoben wurden und ob sich die Note bewegt hat"
+
+#. Screenshot description.
+msgid ""
+"A task checked again on its own, with the result at the top of the page"
+msgstr ""
+"Eine einzeln neu geprüfte Aufgabe, mit dem Ergebnis oben auf der Seite"
+
+#. Screenshot description.
+msgid "The grade in Tools, Site Health"
+msgstr "Die Note unter Werkzeuge, Website-Zustand"
+
+#. Screenshot description.
+msgid "The dashboard widget with the grade and the number of open tasks"
+msgstr "Das Dashboard-Widget mit der Note und der Zahl der offenen Aufgaben"
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Fixed</strong>\n"
+"* Site Health said \"nothing urgent\" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical."
+msgstr ""
+"<strong>Behoben</strong>\n"
+"* Der Website-Zustand meldete „nichts Dringendes“ für eine Website mit Note A oder B, obwohl eine kritische Prüfung offen war, etwa PHP2Shell als Warnung. Jetzt empfiehlt er bei einer kritischen Warnung einen Blick und meldet einen kritischen Fehler als kritisch."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Changed</strong>\n"
+"* Three more screenshots: the dashboard widget, Site Health and a single re-check.\n"
+"* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark."
+msgstr ""
+"<strong>Geändert</strong>\n"
+"* Drei Screenshots mehr: das Dashboard-Widget, der Website-Zustand und eine einzelne Neuprüfung.\n"
+"* Der Kasten oben zeigt Note, Zahlen und Aktion nebeneinander, mit dem Button oben in seiner Spalte und den Zielen in einer eigenen Zeile darunter. Der Seitenkopf trägt das Plugin-Logo."
+
+#. Found in changelog paragraph.
+msgid ""
+"<strong>Added</strong>\n"
+"* The ability <code>security-check-report/get-report</code> for the Abilities API in WordPress 7.0. AI assistants and other tools can read the last run without starting one, and without user names, paths or other raw findings.\n"
+"* The action <code>cascr_run_completed</code>, fired after every full run with the stored run and its summary.\n"
+"* Under the grade: how many tasks stand between the site and the next grade, and which ones. Those tasks carry a \"Raises the grade\" label.\n"
+"* A line when the grade moved since the run before.\n"
+"* Milestones with their date: no open critical finding, no failed check, the first grade A, 10, 25 and 50 findings resolved, 3, 6 and 12 months in a row with a full run. Muted findings never count. A site that was checked before starts with what its history already shows, dated when it happened."
+msgstr ""
+"<strong>Neu</strong>\n"
+"* Die Ability <code>security-check-report/get-report</code> für die Abilities API in WordPress 7.0. KI-Assistenten und andere Werkzeuge können den letzten Durchlauf lesen, ohne einen zu starten, und ohne Benutzernamen, Pfade oder andere Rohdaten der Befunde.\n"
+"* Die Action <code>cascr_run_completed</code>, ausgelöst nach jedem vollständigen Durchlauf, mit dem gespeicherten Durchlauf und seiner Zusammenfassung.\n"
+"* Unter der Note: wie viele Aufgaben zwischen der Website und der nächsten Note stehen, und welche. Diese Aufgaben tragen die Plakette „Hebt die Note“.\n"
+"* Eine Zeile, wenn sich die Note seit dem vorigen Durchlauf bewegt hat.\n"
+"* Meilensteine mit Datum: kein offener kritischer Befund, keine nicht bestandene Prüfung, die erste Note A, 10, 25 und 50 behobene Befunde, 3, 6 und 12 Monate in Folge mit vollständigem Durchlauf. Stummgeschaltete Befunde zählen nie. Eine Website, die schon geprüft wurde, startet mit dem, was ihr Verlauf bereits zeigt, datiert auf den Tag, an dem es geschah."
