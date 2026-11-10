@@ -93,7 +93,18 @@
    ========================================================================== */
 
 .cascr-header {
+    display: flex;
+    align-items: center;
+    gap: var(--cascr-space-4);
     padding: var(--cascr-space-5) 0 var(--cascr-space-4);
+}
+
+/* The directory icon as the page mark, so the screen and the listing match. */
+.cascr-header__logo {
+    flex: none;
+    display: block;
+    width: 48px;
+    height: 48px;
 }
 
 .cascr-header h1 {
@@ -820,6 +831,68 @@
     max-width: 44ch;
 }
 
+/*
+ * The returning view: grade, numbers and the action side by side, all from
+ * the top edge, and the goals as a row of their own underneath. A flex row
+ * centred everything vertically, so the button slid down and to the right as
+ * soon as the middle column grew a line.
+ */
+.cascr-score__card--dash {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) minmax(220px, 280px);
+    grid-template-areas:
+        "grade meta actions"
+        "goals goals goals";
+    align-items: start;
+    gap: var(--cascr-space-4) var(--cascr-space-6);
+}
+
+.cascr-score__card--dash .cascr-score__grade { grid-area: grade; }
+.cascr-score__card--dash .cascr-score__meta { grid-area: meta; gap: var(--cascr-space-2); }
+
+.cascr-score__card--dash .cascr-dash__actions {
+    grid-area: actions;
+    margin-left: 0;
+    max-width: none;
+}
+
+.cascr-score__card--dash .cascr-launch__button.button-hero {
+    width: 100%;
+    text-align: center;
+}
+
+.cascr-goals {
+    grid-area: goals;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--cascr-space-3) var(--cascr-space-5);
+    margin: 0;
+    padding: var(--cascr-space-4) 0 0;
+    list-style: none;
+    border-top: 1px solid var(--cascr-border-soft);
+}
+
+.cascr-goal {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin: 0;
+}
+
+.cascr-goal__label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--cascr-primary);
+}
+
+.cascr-goal__text {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--cascr-text);
+}
+
 .cascr-dash__journey,
 .cascr-dash__partial {
     margin: 0;
@@ -833,10 +906,6 @@
     color: var(--cascr-text-faint);
 }
 
-/* The way to the next grade, the streak and new milestones: goals, not news. */
-.cascr-dash__goal {
-    color: var(--cascr-text);
-}
 
 .cascr-consent-note {
     margin: 0;
@@ -1302,6 +1371,14 @@
     .cascr-dash__actions {
         margin-left: 0;
         max-width: none;
+    }
+
+    .cascr-score__card--dash {
+        grid-template-columns: auto minmax(0, 1fr);
+        grid-template-areas:
+            "grade meta"
+            "actions actions"
+            "goals goals";
     }
 
     .cascr-cat__label {

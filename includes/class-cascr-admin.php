@@ -147,17 +147,28 @@ class CASCR_Admin {
 		<div class="wrap cascr" id="cascr-app">
 
 			<header class="cascr-header">
-				<h1><?php esc_html_e( 'Security Check Report', 'security-check-report' ); ?></h1>
-				<p class="cascr-header__subtitle">
-					<?php
-					printf(
-						/* translators: %d: number of checks the plugin runs. */
-						esc_html( _n( '%d check across your WordPress installation.', '%d checks across your WordPress installation.', count( CASCR_Registry::ids() ), 'security-check-report' ) ),
-						count( CASCR_Registry::ids() )
-					);
-					?>
-				</p>
+				<?php // Same mark as the directory icon: white shield, blue check, on the plugin blue. ?>
+				<svg class="cascr-header__logo" viewBox="0 0 48 48" width="48" height="48" aria-hidden="true" focusable="false">
+					<rect width="48" height="48" fill="#0073aa" />
+					<rect y="42" width="48" height="6" fill="#005a87" />
+					<path d="M11.7 9h24.6v10.5Q36.3 29.25 24 39Q11.7 29.25 11.7 19.5Z" fill="#fff" />
+					<path d="M18.6 23.4l4.2 5.4 7.6-10.8" fill="none" stroke="#0073aa" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+				</svg>
+				<div class="cascr-header__text">
+					<h1><?php esc_html_e( 'Security Check Report', 'security-check-report' ); ?></h1>
+					<p class="cascr-header__subtitle">
+						<?php
+						printf(
+							/* translators: %d: number of checks the plugin runs. */
+							esc_html( _n( '%d check across your WordPress installation.', '%d checks across your WordPress installation.', count( CASCR_Registry::ids() ), 'security-check-report' ) ),
+							count( CASCR_Registry::ids() )
+						);
+						?>
+					</p>
+				</div>
 			</header>
+			<?php // Admin notices land here instead of inside the header next to the logo. ?>
+			<hr class="wp-header-end">
 
 			<?php
 			if ( empty( $run['tests'] ) ) {

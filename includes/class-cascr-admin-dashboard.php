@@ -62,7 +62,7 @@ class CASCR_Admin_Dashboard {
 		$grade = $summary['grade'];
 		?>
 		<section class="cascr-dash__head" id="cascr-summary" tabindex="-1" aria-label="<?php esc_attr_e( 'Result of the latest run', 'security-check-report' ); ?>">
-			<div class="cascr-score__card cascr-score__card--<?php echo esc_attr( strtolower( $grade ) ); ?>">
+			<div class="cascr-score__card cascr-score__card--dash cascr-score__card--<?php echo esc_attr( strtolower( $grade ) ); ?>">
 				<div class="cascr-score__grade">
 					<span class="cascr-score__letter"><?php echo esc_html( $grade ); ?></span>
 					<span class="cascr-score__label"><?php echo esc_html( CASCR_Scoring::grade_label( $grade ) ); ?></span>
@@ -75,16 +75,25 @@ class CASCR_Admin_Dashboard {
 					</div>
 					<p class="cascr-dash__journey"><?php echo wp_kses_post( self::journey( $grade, $summary['counts'] ) ); ?></p>
 					<?php self::render_since_last(); ?>
-					<?php self::render_goals( $run, $next ); ?>
 					<?php self::render_partial_note( $run ); ?>
 				</div>
 
 				<div class="cascr-dash__actions">
 					<?php
-					CASCR_Admin::render_consent();
-					CASCR_Admin::render_launch( __( 'Re-check everything', 'security-check-report' ) );
+					// The button belongs at the top of its column. The consent
+					// checkbox has to come first while it is still unticked,
+					// because the hint under the button points up at it.
+					if ( CASCR_Store::consent() ) {
+						CASCR_Admin::render_launch( __( 'Re-check everything', 'security-check-report' ) );
+						CASCR_Admin::render_consent();
+					} else {
+						CASCR_Admin::render_consent();
+						CASCR_Admin::render_launch( __( 'Re-check everything', 'security-check-report' ) );
+					}
 					?>
 				</div>
+
+				<?php self::render_goals( $run, $next ); ?>
 			</div>
 
 			<?php CASCR_Admin::render_progress(); ?>
@@ -173,13 +182,14 @@ class CASCR_Admin_Dashboard {
 
 	/**
 	 * The distance to the next grade, the monthly streak and what this run
-	 * reached for the first time. Each line only when it has something to say.
+	 * reached for the first time, as a row of its own under the grade. Each
+	 * entry only when it has something to say, the row only when one does.
 	 *
 	 * @param array      $run  The stored run.
 	 * @param array|null $next Output of CASCR_Scoring::next_grade().
 	 */
 	private static function render_goals( $run, $next ) {
-		$lines = array();
+		$goals = array();
 
 		if ( null !== $next ) {
 			$count = count( $next['ids'] );
@@ -200,26 +210,42 @@ class CASCR_Admin_Dashboard {
 				$line .= ' ' . sprintf( __( 'Fix: %s.', 'security-check-report' ), implode( ', ', $names ) );
 			}
 
-			$lines[] = $line;
+			$goals[] = array( __( 'Next grade', 'security-check-report' ), $line );
 		}
 
 		$streak = CASCR_Milestones::streak();
 		if ( $streak >= 2 ) {
-			/* translators: %d: number of months in a row with a full run. */
-			$lines[] = sprintf( _n( 'Checked every month for %d month.', 'Checked every month for %d months.', $streak, 'security-check-report' ), $streak );
+			$goals[] = array(
+				__( 'Streak', 'security-check-report' ),
+				/* translators: %d: number of months in a row with a full run. */
+				sprintf( _n( 'Checked every month for %d month.', 'Checked every month for %d months.', $streak, 'security-check-report' ), $streak ),
+			);
 		}
 
 		$labels = CASCR_Milestones::labels();
 		foreach ( CASCR_Milestones::new_in( $run ) as $key ) {
 			if ( isset( $labels[ $key ] ) ) {
-				/* translators: %s: name of a milestone. */
-				$lines[] = sprintf( __( 'Reached with this run: %s.', 'security-check-report' ), $labels[ $key ] );
+				$goals[] = array(
+					__( 'Milestone', 'security-check-report' ),
+					/* translators: %s: name of a milestone. */
+					sprintf( __( 'Reached with this run: %s.', 'security-check-report' ), $labels[ $key ] ),
+				);
 			}
 		}
 
-		foreach ( $lines as $line ) {
-			echo '<p class="cascr-dash__journey cascr-dash__goal">' . esc_html( $line ) . '</p>';
+		if ( empty( $goals ) ) {
+			return;
 		}
+		?>
+		<ul class="cascr-goals">
+			<?php foreach ( $goals as $goal ) : ?>
+				<li class="cascr-goal">
+					<span class="cascr-goal__label"><?php echo esc_html( $goal[0] ); ?></span>
+					<span class="cascr-goal__text"><?php echo esc_html( $goal[1] ); ?></span>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		<?php
 	}
 
 	/**

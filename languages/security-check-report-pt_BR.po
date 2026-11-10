@@ -52,7 +52,7 @@ msgid "Why it matters"
 msgstr "Por que importa"
 
 #: config/docs.php:17 includes/class-cascr-admin.php:115
-#: includes/class-cascr-admin.php:482
+#: includes/class-cascr-admin.php:493
 msgid "What to do"
 msgstr "O que fazer"
 
@@ -4726,13 +4726,14 @@ msgstr "TransparAI, nosso próprio plugin para divulgação de conteúdo de IA"
 msgid "Risk score"
 msgstr "Pontuação de risco"
 
-#: includes/class-cascr-admin-dashboard.php:85
+#: includes/class-cascr-admin-dashboard.php:87
+#: includes/class-cascr-admin-dashboard.php:91
 msgid "Re-check everything"
 msgstr "Verificar tudo novamente"
 
 #. translators: 1: date of the first recorded run, 2: grade letter, 3: number
 #. of findings.
-#: includes/class-cascr-admin-dashboard.php:246
+#: includes/class-cascr-admin-dashboard.php:272
 #, php-format
 msgid "Started on %1$s: grade %2$s with %3$d finding."
 msgid_plural "Started on %1$s: grade %2$s with %3$d findings."
@@ -4741,7 +4742,7 @@ msgstr[1] "Iniciada em %1$s: nota %2$s com %3$d achados."
 
 #. translators: 1: number of checks re-checked on their own, 2: date of the
 #. last full pass.
-#: includes/class-cascr-admin-dashboard.php:313
+#: includes/class-cascr-admin-dashboard.php:339
 #, php-format
 msgid "%1$d check has been re-checked on its own since the full pass on %2$s."
 msgid_plural ""
@@ -4754,76 +4755,76 @@ msgstr[1] ""
 " %2$s."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:385
+#: includes/class-cascr-admin-dashboard.php:411
 #, php-format
 msgid "%s passed the re-check."
 msgstr "%s foi aprovado na nova verificação."
 
 #. translators: %s: name of the check.
-#: includes/class-cascr-admin-dashboard.php:388
+#: includes/class-cascr-admin-dashboard.php:414
 #, php-format
 msgid "%s is still open after the re-check."
 msgstr "%s continua pendente após a nova verificação."
 
-#: includes/class-cascr-admin-dashboard.php:416
+#: includes/class-cascr-admin-dashboard.php:442
 msgid "Your progress"
 msgstr "Seu progresso"
 
 #. translators: 1: date of the run, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:431
+#: includes/class-cascr-admin-dashboard.php:457
 #, php-format
 msgid "%1$s: grade %2$s"
 msgstr "%1$s: nota %2$s"
 
-#: includes/class-cascr-admin-dashboard.php:468
+#: includes/class-cascr-admin-dashboard.php:494
 msgid "Your next five"
 msgstr "Seus próximos cinco"
 
-#: includes/class-cascr-admin-dashboard.php:469
+#: includes/class-cascr-admin-dashboard.php:495
 msgid "Work through these in order. Everything else can wait."
 msgstr "Resolva estes na ordem. O resto pode esperar."
 
-#: includes/class-cascr-admin-dashboard.php:480
+#: includes/class-cascr-admin-dashboard.php:506
 #: includes/class-cascr-scoring.php:208
 msgid "Nothing needs your attention right now."
 msgstr "Nada precisa da sua atenção agora."
 
-#: includes/class-cascr-admin-dashboard.php:523
+#: includes/class-cascr-admin-dashboard.php:549
 msgid "Done, check it now"
 msgstr "Feito, verificar agora"
 
-#: includes/class-cascr-admin-dashboard.php:526
+#: includes/class-cascr-admin-dashboard.php:552
 msgid "later"
 msgstr "depois"
 
-#: includes/class-cascr-admin-dashboard.php:529
-#: includes/class-cascr-admin.php:494
+#: includes/class-cascr-admin-dashboard.php:555
+#: includes/class-cascr-admin.php:505
 msgid "Read more about this check"
 msgstr "Saiba mais sobre esta verificação"
 
 #. translators: %d: number of findings that are not on the short list.
-#: includes/class-cascr-admin-dashboard.php:569
+#: includes/class-cascr-admin-dashboard.php:595
 #, php-format
 msgid "Still open (%d)"
 msgstr "Ainda pendentes (%d)"
 
 #. translators: %d: number of checks that were a finding once and pass now.
-#: includes/class-cascr-admin-dashboard.php:642
+#: includes/class-cascr-admin-dashboard.php:668
 #, php-format
 msgid "Resolved (%d)"
 msgstr "Resolvidos (%d)"
 
-#: includes/class-cascr-admin-dashboard.php:654
+#: includes/class-cascr-admin-dashboard.php:680
 msgid "after a re-check"
 msgstr "após uma nova verificação"
 
-#: includes/class-cascr-admin-dashboard.php:740
+#: includes/class-cascr-admin-dashboard.php:766
 msgid "By category"
 msgstr "Por categoria"
 
 #. translators: 1: number of passed checks, 2: number of checks in the
 #. category.
-#: includes/class-cascr-admin-dashboard.php:763
+#: includes/class-cascr-admin-dashboard.php:789
 #, php-format
 msgid "%1$d of %2$d passed"
 msgstr "%1$d de %2$d aprovadas"
@@ -4833,7 +4834,7 @@ msgid "Security Check"
 msgstr "Security Check"
 
 #: includes/class-cascr-abilities.php:52 includes/class-cascr-admin.php:27
-#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:150
+#: includes/class-cascr-admin.php:118 includes/class-cascr-admin.php:158
 #: includes/class-cascr-nudges.php:61
 msgid "Security Check Report"
 msgstr "Security Check Report"
@@ -4848,27 +4849,27 @@ msgstr "Verificação %1$d de %2$d"
 msgid "This check could not be completed."
 msgstr "Não foi possível concluir esta verificação."
 
-#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:376
-#: includes/class-cascr-admin.php:595
+#: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:387
+#: includes/class-cascr-admin.php:606
 msgid "Passed"
 msgstr "Aprovado"
 
-#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:375
-#: includes/class-cascr-admin.php:596
+#: includes/class-cascr-admin.php:106 includes/class-cascr-admin.php:386
+#: includes/class-cascr-admin.php:607
 msgid "Warning"
 msgstr "Aviso"
 
-#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:374
-#: includes/class-cascr-admin.php:597
+#: includes/class-cascr-admin.php:107 includes/class-cascr-admin.php:385
+#: includes/class-cascr-admin.php:608
 msgid "Failed"
 msgstr "Reprovado"
 
-#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:377
-#: includes/class-cascr-admin.php:598
+#: includes/class-cascr-admin.php:108 includes/class-cascr-admin.php:388
+#: includes/class-cascr-admin.php:609
 msgid "Not determined"
 msgstr "Não determinado"
 
-#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:378
+#: includes/class-cascr-admin.php:112 includes/class-cascr-admin.php:389
 msgid "Muted"
 msgstr "Silenciado"
 
@@ -4929,90 +4930,90 @@ msgid "Checking again"
 msgstr "Verificando novamente"
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:155
+#: includes/class-cascr-admin.php:163
 #, php-format
 msgid "%d check across your WordPress installation."
 msgid_plural "%d checks across your WordPress installation."
 msgstr[0] "%d verificação em toda a sua instalação do WordPress."
 msgstr[1] "%d verificações em toda a sua instalação do WordPress."
 
-#: includes/class-cascr-admin.php:172
+#: includes/class-cascr-admin.php:183
 msgid "What each check looks at"
 msgstr "O que cada verificação analisa"
 
-#: includes/class-cascr-admin.php:176 includes/class-cascr-admin.php:181
+#: includes/class-cascr-admin.php:187 includes/class-cascr-admin.php:192
 msgid "Search the checks"
 msgstr "Pesquisar verificações"
 
-#: includes/class-cascr-admin.php:187
+#: includes/class-cascr-admin.php:198
 msgid "No check matches that search."
 msgstr "Nenhuma verificação corresponde a essa pesquisa."
 
-#: includes/class-cascr-admin.php:195
+#: includes/class-cascr-admin.php:206
 msgid "WordPress security"
 msgstr "Segurança do WordPress"
 
-#: includes/class-cascr-admin.php:197
+#: includes/class-cascr-admin.php:208
 msgid "Documentation"
 msgstr "Documentação"
 
-#: includes/class-cascr-admin.php:199
+#: includes/class-cascr-admin.php:210
 msgid "Report a false positive"
 msgstr "Informar um falso positivo"
 
-#: includes/class-cascr-admin.php:201
+#: includes/class-cascr-admin.php:212
 msgid "Support"
 msgstr "Suporte"
 
-#: includes/class-cascr-admin.php:219
+#: includes/class-cascr-admin.php:230
 msgid "Step 1:"
 msgstr "Passo 1:"
 
-#: includes/class-cascr-admin.php:220
+#: includes/class-cascr-admin.php:231
 msgid "Start the check"
 msgstr "Iniciar a verificação"
 
 #. translators: %d: number of checks the plugin runs.
-#: includes/class-cascr-admin.php:226
+#: includes/class-cascr-admin.php:237
 #, php-format
 msgid "%d checks, about a minute. Nothing on your site is changed."
 msgstr "%d verificações, cerca de um minuto. Nada é alterado no seu site."
 
-#: includes/class-cascr-admin.php:237
+#: includes/class-cascr-admin.php:248
 msgid "Start the security check"
 msgstr "Iniciar a verificação de segurança"
 
-#: includes/class-cascr-admin.php:248
+#: includes/class-cascr-admin.php:259
 msgid "Step 2:"
 msgstr "Passo 2:"
 
-#: includes/class-cascr-admin.php:249
+#: includes/class-cascr-admin.php:260
 msgid "Your result"
 msgstr "Seu resultado"
 
-#: includes/class-cascr-admin.php:251
+#: includes/class-cascr-admin.php:262
 msgid "A grade, what it means, and the short list to work through."
 msgstr "Uma nota, o que ela significa e a lista curta para resolver."
 
-#: includes/class-cascr-admin.php:256 includes/class-cascr-admin.php:273
+#: includes/class-cascr-admin.php:267 includes/class-cascr-admin.php:284
 msgid "Appears once the check has run."
 msgstr "Aparece depois que a verificação for executada."
 
-#: includes/class-cascr-admin.php:265
+#: includes/class-cascr-admin.php:276
 msgid "Step 3:"
 msgstr "Passo 3:"
 
-#: includes/class-cascr-admin.php:266
+#: includes/class-cascr-admin.php:277
 msgid "Go through everything else"
 msgstr "Revisar todo o resto"
 
-#: includes/class-cascr-admin.php:268
+#: includes/class-cascr-admin.php:279
 msgid "Every check with its detail, filterable, and the report to take away."
 msgstr ""
 "Todas as verificações com seus detalhes, filtráveis, e o relatório para "
 "levar."
 
-#: includes/class-cascr-admin.php:289
+#: includes/class-cascr-admin.php:300
 msgid ""
 "These checks read the site, write one temporary file to the uploads folder "
 "and delete it again. The result is an assessment rather than a guarantee."
@@ -5021,75 +5022,75 @@ msgstr ""
 "uploads e o excluem em seguida. O resultado é uma avaliação, não uma "
 "garantia."
 
-#: includes/class-cascr-admin.php:300
+#: includes/class-cascr-admin.php:311
 msgid "I understand."
 msgstr "Entendi."
 
-#: includes/class-cascr-admin.php:318
+#: includes/class-cascr-admin.php:329
 msgid "Tick the box above to start."
 msgstr "Marque a caixa acima para começar."
 
-#: includes/class-cascr-admin.php:373
+#: includes/class-cascr-admin.php:384
 msgid "All"
 msgstr "Todos"
 
-#: includes/class-cascr-admin.php:382
+#: includes/class-cascr-admin.php:393
 msgid "All checks"
 msgstr "Todas as verificações"
 
-#: includes/class-cascr-admin.php:431
+#: includes/class-cascr-admin.php:442
 msgid "No check matches that filter."
 msgstr "Nenhuma verificação corresponde a esse filtro."
 
-#: includes/class-cascr-admin.php:473
+#: includes/class-cascr-admin.php:484
 msgid "Details"
 msgstr "Detalhes"
 
-#: includes/class-cascr-admin.php:497
+#: includes/class-cascr-admin.php:508
 msgid "Unmute"
 msgstr "Mostrar novamente"
 
-#: includes/class-cascr-admin.php:497
+#: includes/class-cascr-admin.php:508
 msgid "Mute this finding"
 msgstr "Silenciar este achado"
 
-#: includes/class-cascr-admin.php:500
+#: includes/class-cascr-admin.php:511
 msgid "Muted until the finding changes."
 msgstr "Silenciado até o achado mudar."
 
-#: includes/class-cascr-admin.php:513
+#: includes/class-cascr-admin.php:524
 msgid "Download as text"
 msgstr "Baixar como texto"
 
-#: includes/class-cascr-admin.php:514
+#: includes/class-cascr-admin.php:525
 msgid "Download as JSON"
 msgstr "Baixar como JSON"
 
-#: includes/class-cascr-admin.php:515
+#: includes/class-cascr-admin.php:526
 msgid "Download as CSV"
 msgstr "Baixar como CSV"
 
-#: includes/class-cascr-admin.php:516
+#: includes/class-cascr-admin.php:527
 msgid "Copy report"
 msgstr "Copiar relatório"
 
-#: includes/class-cascr-admin.php:520
+#: includes/class-cascr-admin.php:531
 msgid "Take the report with you"
 msgstr "Leve o relatório com você"
 
-#: includes/class-cascr-admin.php:578 includes/class-cascr-scoring.php:356
+#: includes/class-cascr-admin.php:589 includes/class-cascr-scoring.php:356
 msgid "Critical"
 msgstr "Crítico"
 
-#: includes/class-cascr-admin.php:579
+#: includes/class-cascr-admin.php:590
 msgid "High"
 msgstr "Alto"
 
-#: includes/class-cascr-admin.php:580
+#: includes/class-cascr-admin.php:591
 msgid "Medium"
 msgstr "Médio"
 
-#: includes/class-cascr-admin.php:581
+#: includes/class-cascr-admin.php:592
 msgid "Low"
 msgstr "Baixo"
 
@@ -5604,7 +5605,7 @@ msgid "Result of the latest run"
 msgstr "Resultado da última verificação"
 
 #. translators: %d: number of checks that turned into a finding.
-#: includes/class-cascr-admin-dashboard.php:121
+#: includes/class-cascr-admin-dashboard.php:130
 #, php-format
 msgid "%d new finding"
 msgid_plural "%d new findings"
@@ -5612,7 +5613,7 @@ msgstr[0] "%d novo achado"
 msgstr[1] "%d novos achados"
 
 #. translators: %d: number of findings that are gone.
-#: includes/class-cascr-admin-dashboard.php:129
+#: includes/class-cascr-admin-dashboard.php:138
 #, php-format
 msgid "%d resolved"
 msgid_plural "%d resolved"
@@ -5620,13 +5621,13 @@ msgstr[0] "%d resolvido"
 msgstr[1] "%d resolvidos"
 
 #. translators: %s: list such as "2 new findings, 3 resolved".
-#: includes/class-cascr-admin-dashboard.php:140
+#: includes/class-cascr-admin-dashboard.php:149
 #, php-format
 msgid "Since the run before: %s."
 msgstr "Desde a verificação anterior: %s."
 
 #. translators: %s: status the muted check had, for example Failed.
-#: includes/class-cascr-admin.php:462
+#: includes/class-cascr-admin.php:473
 #, php-format
 msgid "Muted, was %s"
 msgstr "Silenciado (%s)"
@@ -5682,11 +5683,11 @@ msgstr "A última verificação de segurança tem mais de um mês"
 
 #. translators: short date under each bar of the progress chart, PHP date()
 #. format.
-#: includes/class-cascr-admin-dashboard.php:446
+#: includes/class-cascr-admin-dashboard.php:472
 msgid "M j"
 msgstr "j M"
 
-#: includes/class-cascr-admin-dashboard.php:417
+#: includes/class-cascr-admin-dashboard.php:443
 msgid ""
 "One bar per full run, the latest on the left. The taller the bar, the lower "
 "the risk."
@@ -5714,19 +5715,19 @@ msgstr ""
 " outros dados brutos dos achados."
 
 #. translators: 1: grade before, 2: grade now.
-#: includes/class-cascr-admin-dashboard.php:167
+#: includes/class-cascr-admin-dashboard.php:176
 #, php-format
 msgid "Grade up from %1$s to %2$s."
 msgstr "Nota subiu de %1$s para %2$s."
 
 #. translators: 1: grade before, 2: grade now.
-#: includes/class-cascr-admin-dashboard.php:171
+#: includes/class-cascr-admin-dashboard.php:180
 #, php-format
 msgid "Grade down from %1$s to %2$s."
 msgstr "Nota caiu de %1$s para %2$s."
 
 #. translators: 1: number of tasks, 2: grade letter.
-#: includes/class-cascr-admin-dashboard.php:188
+#: includes/class-cascr-admin-dashboard.php:198
 #, php-format
 msgid "%1$d task away from grade %2$s."
 msgid_plural "%1$d tasks away from grade %2$s."
@@ -5734,13 +5735,13 @@ msgstr[0] "Falta %1$d tarefa para a nota %2$s."
 msgstr[1] "Faltam %1$d tarefas para a nota %2$s."
 
 #. translators: %s: comma separated names of checks.
-#: includes/class-cascr-admin-dashboard.php:200
+#: includes/class-cascr-admin-dashboard.php:210
 #, php-format
 msgid "Fix: %s."
 msgstr "Corrija: %s."
 
 #. translators: %d: number of months in a row with a full run.
-#: includes/class-cascr-admin-dashboard.php:209
+#: includes/class-cascr-admin-dashboard.php:221
 #, php-format
 msgid "Checked every month for %d month."
 msgid_plural "Checked every month for %d months."
@@ -5748,27 +5749,27 @@ msgstr[0] "Verificado todo mês há %d mês."
 msgstr[1] "Verificado todo mês há %d meses."
 
 #. translators: %s: name of a milestone.
-#: includes/class-cascr-admin-dashboard.php:216
+#: includes/class-cascr-admin-dashboard.php:231
 #, php-format
 msgid "Reached with this run: %s."
 msgstr "Alcançado com esta verificação: %s."
 
-#: includes/class-cascr-admin-dashboard.php:505
+#: includes/class-cascr-admin-dashboard.php:531
 msgid "Raises the grade"
 msgstr "Aumenta a nota"
 
 #. translators: 1: milestones reached, 2: milestones in total.
-#: includes/class-cascr-admin-dashboard.php:687
+#: includes/class-cascr-admin-dashboard.php:713
 #, php-format
 msgid "Milestones (%1$d of %2$d)"
 msgstr "Marcos (%1$d de %2$d)"
 
-#: includes/class-cascr-admin-dashboard.php:717
+#: includes/class-cascr-admin-dashboard.php:743
 msgid "not yet"
 msgstr "ainda não"
 
 #. translators: 1: progress so far, 2: goal.
-#: includes/class-cascr-admin-dashboard.php:720
+#: includes/class-cascr-admin-dashboard.php:746
 #, php-format
 msgid "%1$d of %2$d"
 msgstr "%1$d de %2$d"
@@ -5812,3 +5813,15 @@ msgstr "Verificado todo mês por 12 meses"
 #: includes/class-cascr-nudges.php:134
 msgid "The security check found a critical finding"
 msgstr "A verificação de segurança encontrou um achado crítico"
+
+#: includes/class-cascr-admin-dashboard.php:213
+msgid "Next grade"
+msgstr "Próxima nota"
+
+#: includes/class-cascr-admin-dashboard.php:219
+msgid "Streak"
+msgstr "Sequência"
+
+#: includes/class-cascr-admin-dashboard.php:229
+msgid "Milestone"
+msgstr "Marco"

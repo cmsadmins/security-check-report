@@ -257,6 +257,7 @@ Releases before 2.2.0 are listed in changelog.txt.
 
 **Changed**
 * Three more screenshots: the dashboard widget, Site Health and a single re-check.
+* The box at the top is laid out as grade, numbers and action side by side, with the button at the top of its column and the goals in a row of their own underneath. The page header carries the plugin mark.
 
 **Fixed**
 * Site Health said "nothing urgent" for a site at grade A or B while a critical check was open, for instance PHP2Shell as a warning. It now recommends a look for a critical warning and reports a critical failure as critical.
