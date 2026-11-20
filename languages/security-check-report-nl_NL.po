@@ -29,9 +29,9 @@ msgid ""
 "installation and turns the findings into a graded report with a short list "
 "of what to fix first."
 msgstr ""
-"Voert een reeks alleen-lezen beveiligingscontroles uit op je WordPress-"
-"installatie en maakt van de bevindingen een rapport met cijfer en een korte "
-"lijst van wat je als eerste moet oplossen."
+"Een plugin die een reeks alleen-lezen beveiligingscontroles op je WordPress-"
+"installatie uitvoert en van de bevindingen een rapport met cijfer maakt, met"
+" een korte lijst van wat je als eerste moet oplossen."
 
 #. Author of the plugin
 #: security-check-report.php
@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Geen shell nodig: elk hostingpaneel heeft een bestandsbeheerder en elke FTP-"
 "client een venster voor rechten. Zoek naar \"Rechten wijzigen\", \"CHMOD\" "
-"of \"Bestandskenmerken\" en vul daar het getal in. De drie cijfers staan "
+"of \"Bestandsattributen\" en vul daar het getal in. De drie cijfers staan "
 "voor eigenaar, groep en iedereen, in die volgorde."
 
 #: config/docs.php:48
@@ -84,7 +84,7 @@ msgid ""
 msgstr ""
 "Beveiligingsreleases verschijnen samen met een beschrijving van wat ze "
 "oplossen. Daarmee weet iedereen precies wat hij kan proberen op sites die "
-"nog niet zijn bijgewerkt."
+"nog niet zijn geüpdatet."
 
 #: config/docs.php:50
 msgid ""
@@ -95,8 +95,9 @@ msgid ""
 msgstr ""
 "Installeer de update. Laat automatische kleine updates aanstaan, zodat "
 "beveiligingsreleases binnenkomen zonder dat iemand ze hoeft op te merken. "
-"Kan de site api.wordpress.org niet bereiken, dan meldt de controle dat de "
-"versie niet bepaald kon worden, in plaats van de site actueel te noemen."
+"Kan de site api.wordpress.org niet bereiken, dan geeft de controle de "
+"melding dat de versie niet bepaald kon worden, in plaats van de site actueel"
+" te noemen."
 
 #: config/docs.php:53
 msgid ""
@@ -105,11 +106,11 @@ msgid ""
 " that date and the phase in which a branch only gets security fixes and no "
 "more bug fixes are reported separately."
 msgstr ""
-"Of de PHP versie waarop deze site draait nog beveiligingsoplossingen "
+"Of de PHP-versie die deze site uitvoert nog beveiligingsoplossingen "
 "ontvangt, gemeten aan de hand van de gepubliceerde einddatums. De laatste "
 "zes maanden vóór die datum en de fase waarin een versie alleen "
-"beveiligingsoplossingen en geen bugfixes meer ontvangt, worden afzonderlijk "
-"gemeld."
+"beveiligingsoplossingen en geen bug-fixes meer ontvangt, worden afzonderlijk"
+" gemeld."
 
 #: config/docs.php:54
 msgid ""
@@ -143,7 +144,7 @@ msgstr ""
 " de schakelaars: de constante WP_AUTO_UPDATE_CORE, "
 "AUTOMATIC_UPDATER_DISABLED, het verbod op bestandswijzigingen en de site-"
 "instelling voor kleine releases. Een pre-releasekanaal wordt ook gemeld, "
-"omdat dat onafgemaakte code op een productiesite installeert."
+"omdat dat onafgemaakte code op een site in productie installeert."
 
 #: config/docs.php:69
 msgid ""
@@ -151,7 +152,7 @@ msgid ""
 "measured in hours. Nobody updates that fast by hand."
 msgstr ""
 "Tussen een beveiligingsrelease en de eerste aanvallen erop zitten uren. "
-"Niemand werkt met de hand zo snel bij."
+"Niemand installeert updates zo snel met de hand."
 
 #: config/docs.php:70
 msgid ""
@@ -173,7 +174,7 @@ msgid ""
 msgstr ""
 "Elk core-bestand, vergeleken met de checksums die WordPress.org voor precies"
 " deze release publiceert. Een checksum is een korte vingerafdruk van een "
-"bestand: twee bestanden met dezelfde vingerafdruk hebben dezelfde inhoud."
+"bestand: twee bestanden met dezelfde vingerafdruk hebben dezelfde content."
 
 #: config/docs.php:74
 msgid ""
@@ -209,8 +210,8 @@ msgid ""
 "Nothing but WordPress itself belongs in those two directories. A file that "
 "is not on the official list was put there by something else."
 msgstr ""
-"In die twee mappen hoort niets anders dan WordPress zelf. Een bestand dat "
-"niet op de officiële lijst staat, is daar door iets anders neergezet."
+"In die twee directory's hoort niets anders dan WordPress zelf. Een bestand "
+"dat niet op de officiële lijst staat, is daar door iets anders neergezet."
 
 #: config/docs.php:80
 msgid ""
@@ -220,9 +221,9 @@ msgid ""
 "clear."
 msgstr ""
 "Open elk bestand voordat je het verwijdert. Let op: een paar "
-"hostingproviders zetten hun eigen hulpbestanden in deze mappen. Bij heel "
-"grote installaties stopt de scan na een vast aantal bestanden en meldt dat "
-"ook; zo'n resultaat is geen vrijbrief."
+"hostingproviders zetten hun eigen hulpbestanden in deze directory's. Bij "
+"heel grote installaties stopt de scan na een vast aantal bestanden en meldt "
+"dat ook; zo'n resultaat is geen vrijbrief."
 
 #: config/docs.php:83
 msgid ""
@@ -266,9 +267,9 @@ msgid ""
 " where a direct request can reach its files."
 msgstr ""
 "Thema's krijgen minder aandacht dan plugins en bevatten hetzelfde soort "
-"code. Het actieve thema draait bij elke paginaweergave, en een inactief "
-"thema staat nog steeds op schijf, waar een direct verzoek zijn bestanden kan"
-" bereiken."
+"code. Het actieve thema komt bij elke paginaweergave tot uitvoering, en een "
+"inactief thema staat nog steeds op schijf, waar een directe aanvraag zijn "
+"bestanden kan bereiken."
 
 #: config/docs.php:90
 msgid ""
@@ -281,7 +282,7 @@ msgstr ""
 "Installeer de updates onder Weergave, Thema's en verwijder de thema's die de"
 " site niet gebruikt. Houd één ongewijzigd standaardthema over, zodat je een "
 "kapot thema kunt vervangen, en zet daarvoor automatische updates aan. Een "
-"thema dat buiten de directory is gekocht, wordt alleen bijgewerkt als de "
+"thema dat buiten de directory is gekocht, krijgt alleen updates als de "
 "licentiesleutel is ingevuld, dus controleer dat ook."
 
 #: config/docs.php:93
@@ -298,9 +299,9 @@ msgid ""
 " in some setups. It also stops being updated the moment people forget about "
 "it."
 msgstr ""
-"Gedeactiveerde code staat nog op schijf en is in sommige configuraties nog "
-"via een direct verzoek bereikbaar. Bovendien wordt ze niet meer bijgewerkt "
-"zodra iedereen haar vergeten is."
+"Gedeactiveerde code staat nog op schijf en is in sommige setups nog via een "
+"directe aanvraag bereikbaar. Bovendien wordt ze niet meer geüpdatet zodra "
+"iedereen haar vergeten is."
 
 #: config/docs.php:95
 msgid ""
@@ -346,9 +347,9 @@ msgid ""
 " the site could not retrieve is reported as undetermined rather than as "
 "fine."
 msgstr ""
-"Of een actieve plugin uit de WordPress plugin-directory is verwijderd. "
-"Plugins die daar nooit stonden, blijven buiten beschouwing, en een "
-"vermelding die de site niet kon ophalen wordt gemeld als niet bepaald en "
+"Of de vermelding van een actieve plugin in de WordPress plugin-directory is "
+"gesloten. Plugins die daar nooit stonden, blijven buiten beschouwing, en een"
+" vermelding die de site niet kon ophalen wordt gemeld als niet bepaald en "
 "niet als in orde."
 
 #: config/docs.php:104
@@ -373,8 +374,8 @@ msgid ""
 "second run on."
 msgstr ""
 "Of de auteursregel van een geïnstalleerde plugin is veranderd sinds de "
-"eerste scan. De eerste scan legt alleen de auteurs vast, dus wijzigingen "
-"worden vanaf de tweede scan gemeld."
+"eerste scan. De eerste uitvoering legt alleen de auteurs vast, dus "
+"wijzigingen worden vanaf de tweede uitvoering gemeld."
 
 #: config/docs.php:109
 msgid ""
@@ -384,7 +385,7 @@ msgid ""
 msgstr ""
 "Een gevestigde plugin kopen en de bestaande gebruikers een kwaadaardige "
 "update sturen is een gangbare manier geworden om binnen te komen. De "
-"auteursregel is het eerste wat een site zelf kan opmerken."
+"auteursregel is het eerste waarvan een site zelf melding kan maken."
 
 #: config/docs.php:110
 msgid ""
@@ -412,9 +413,9 @@ msgid ""
 "dashboard. That combination makes them a favourite hiding place for code "
 "that is meant to stay."
 msgstr ""
-"Beide laden bij elk verzoek en geen van beide is vanuit het dashboard uit te"
-" schakelen. Die combinatie maakt ze een geliefde schuilplaats voor code die "
-"moet blijven."
+"Beide laden bij elke aanvraag en geen van beide is vanuit het dashboard uit "
+"te schakelen. Die combinatie maakt ze een geliefde schuilplaats voor code "
+"die moet blijven."
 
 #: config/docs.php:115
 msgid ""
@@ -423,18 +424,18 @@ msgid ""
 " to open first. Managed hosts legitimately place their own caching drop-ins "
 "here."
 msgstr ""
-"De eerste scan legt vast wat er is en toont dat ter informatie. Alleen wat "
-"daarna verschijnt, wordt als bevinding gemeld, en dat open je als eerste. "
-"Managed hostingproviders zetten hier terecht hun eigen caching-drop-ins "
-"neer."
+"De eerste uitvoering legt vast wat er is en toont dat ter informatie. Alleen"
+" wat daarna verschijnt, wordt als bevinding gemeld, en dat open je als "
+"eerste. Managed hostingproviders zetten hier terecht hun eigen caching-drop-"
+"ins neer."
 
 #: config/docs.php:118
 msgid ""
 "Whether other WordPress installations sit in the directory above this one, "
 "down to two levels."
 msgstr ""
-"Of er andere WordPress-installaties in de map boven deze staan, tot twee "
-"niveaus diep."
+"Of er andere WordPress-installaties in de directory boven deze staan, tot "
+"twee niveaus diep."
 
 #: config/docs.php:119
 msgid ""
@@ -451,7 +452,7 @@ msgid ""
 "only sees what is next to this installation, not the rest of the hosting "
 "account."
 msgstr ""
-"Houd elke installatie bijgewerkt, of verwijder de installaties die niemand "
+"Houd elke installatie geüpdatet, of verwijder de installaties die niemand "
 "gebruikt. De controle ziet alleen wat naast deze installatie staat, niet de "
 "rest van het hostingaccount."
 
@@ -461,7 +462,7 @@ msgid ""
 " page. SCRIPT_DEBUG and SAVEQUERIES are listed along with it when they are "
 "set."
 msgstr ""
-"Of debuguitvoer aanstaat en of fouten in de pagina worden weergegeven. "
+"Of debuguitvoer aanstaat en of een fout in de pagina wordt weergegeven. "
 "SCRIPT_DEBUG en SAVEQUERIES worden erbij vermeld als ze zijn ingesteld."
 
 #: config/docs.php:127
@@ -471,10 +472,10 @@ msgid ""
 "Debug mode with the output switched off is the milder case and is reported "
 "as such."
 msgstr ""
-"Foutuitvoer noemt bestandspaden, databasegegevens en interne details van "
-"plugins. Het is een gratis plattegrond van de installatie voor iedereen die "
-"met opzet een fout veroorzaakt. Debugmodus met uitgeschakelde uitvoer is het"
-" mildere geval en wordt ook zo gemeld."
+"De uitvoer bij een fout noemt bestandspaden, databasegegevens en interne "
+"details van plugins. Het is een gratis plattegrond van de installatie voor "
+"iedereen die met opzet een fout veroorzaakt. Debugmodus met uitgeschakelde "
+"uitvoer is het mildere geval en wordt ook zo gemeld."
 
 #: config/docs.php:128
 msgid ""
@@ -493,10 +494,10 @@ msgid ""
 " above the web root it is out of reach and the check passes, below it the "
 "same download test runs as for the default location."
 msgstr ""
-"Of er een debuglog bestaat en of de webserver het uitlevert. Voor een log op"
-" een zelfgekozen pad bepaalt de controle waar dat pad ligt: boven de webroot"
-" is het onbereikbaar en slaagt de controle, eronder draait dezelfde "
-"downloadtest als voor de standaardlocatie."
+"Of er een debug-log bestaat en of de webserver het uitlevert. Voor een log "
+"op een pad dat je zelf kiest, bepaalt de controle waar dat pad ligt: boven "
+"de webroot is het onbereikbaar en slaagt de controle, eronder komt dezelfde "
+"downloadtest tot uitvoering als voor de standaardlocatie."
 
 #: config/docs.php:132
 msgid ""
@@ -512,9 +513,10 @@ msgid ""
 "WP_DEBUG_LOG to a path above it. A log that exists but is not served is "
 "still worth deleting once the problem is solved."
 msgstr ""
-"Verwijder het bestand en houd het log buiten de webroot door WP_DEBUG_LOG op"
-" een pad daarboven te zetten. Een log dat bestaat maar niet wordt "
-"uitgeleverd, kun je ook beter verwijderen zodra het probleem is opgelost."
+"Verwijder het log-bestand en houd het log buiten de webroot door "
+"WP_DEBUG_LOG op een pad daarboven te zetten. Een log dat bestaat maar niet "
+"wordt uitgeleverd, kun je ook beter verwijderen zodra het probleem is "
+"opgelost."
 
 #: config/docs.php:136
 msgid "Whether the built-in theme and plugin editor is available."
@@ -527,8 +529,9 @@ msgid ""
 "shortest path there is from a stolen login to running code."
 msgstr ""
 "De editor maakt van één gestolen beheerderswachtwoord willekeurige code-"
-"uitvoering, zonder upload en zonder kwetsbaarheid. Korter wordt de weg van "
-"een gestolen login naar draaiende code niet."
+"uitvoering, zonder dat een upload of een kwetsbaarheid vereist is. Een "
+"kortere weg van een gestolen login naar code die wordt uitgevoerd bestaat er"
+" niet."
 
 #: config/docs.php:138
 msgid ""
@@ -537,7 +540,7 @@ msgid ""
 "DISALLOW_FILE_EDIT does it directly, DISALLOW_FILE_MODS does it as a side "
 "effect of blocking installs."
 msgstr ""
-"Voeg define( 'DISALLOW_FILE_EDIT', true ); toe aan wp-config.php. Niemand "
+"Toevoegen aan wp-config.php: define( 'DISALLOW_FILE_EDIT', true );. Niemand "
 "bewerkt productiecode in een tekstvak in de browser. Beide constanten "
 "sluiten het af: DISALLOW_FILE_EDIT doet het direct, DISALLOW_FILE_MODS doet "
 "het als bijeffect van het blokkeren van installaties."
@@ -552,8 +555,8 @@ msgid ""
 "Blocking the editor still leaves the installer. Uploading a zip is the other"
 " way from a stolen login to running code."
 msgstr ""
-"Als de editor geblokkeerd is, blijft de installer over. Een zip uploaden is "
-"de andere weg van een gestolen login naar draaiende code."
+"Het blokkeren van de editor laat de installer nog over. Een zip uploaden is "
+"de andere weg van een gestolen login naar code die wordt uitgevoerd."
 
 #: config/docs.php:143
 msgid ""
@@ -562,10 +565,10 @@ msgid ""
 "automatic updates and closes the editor, so the deployment has to cover the "
 "updates."
 msgstr ""
-"Op sites waar code wordt uitgerold in plaats van aangeklikt, voeg je define("
-" 'DISALLOW_FILE_MODS', true ); toe aan wp-config.php. Let op: dit stopt ook "
-"automatische updates en sluit de editor, dus de deployment moet de updates "
-"afhandelen."
+"Op sites waar code wordt uitgerold in plaats van aangeklikt, kun je define( "
+"'DISALLOW_FILE_MODS', true ); aan wp-config.php toevoegen. Let op: dit stopt"
+" ook automatische updates en sluit de editor, dus de deployment moet de "
+"updates afhandelen."
 
 #: config/docs.php:146
 msgid ""
@@ -587,7 +590,7 @@ msgid ""
 msgstr ""
 "Deze waarden ondertekenen elke logincookie en elke nonce, het eenmalige "
 "token dat WordPress in zijn formulieren en links zet zodat een andere site "
-"ze niet namens jou kan versturen. Zwakke of dubbele waarden maken een "
+"ze niet namens je kan versturen. Zwakke of dubbele waarden maken een "
 "gestolen cookie makkelijker te vervalsen en moeilijker ongeldig te maken."
 
 #: config/docs.php:148
@@ -602,7 +605,7 @@ msgstr ""
 "die over het blok in wp-config.php. Iedereen wordt één keer uitgelogd, en zo"
 " zet je ook een gestolen sessie buiten de deur. Nergens wordt vastgelegd "
 "wanneer de sleutels voor het laatst zijn gewijzigd, dus de leeftijd die hier"
-" staat is die van wp-config.php, en elke andere bewerking zet die terug."
+" staat is die van wp-config.php, en elke andere bewerking reset die."
 
 #: config/docs.php:151
 msgid ""
@@ -634,7 +637,8 @@ msgstr ""
 "Verander het tijdens een migratie en niet als losse stap op een live site. "
 "Alleen de tabellen hernoemen is niet genoeg: het voorvoegsel staat ook in de"
 " optienaam wp_user_roles en in de gebruikersmeta-sleutels wp_capabilities en"
-" wp_user_level, en wie die vergeet, laat elk account zonder rol achter."
+" wp_user_level, en wie die vergeet, laat elk account zonder rol en zonder "
+"rechten achter."
 
 #: config/docs.php:156
 msgid ""
@@ -643,8 +647,8 @@ msgid ""
 "reported as undetermined."
 msgstr ""
 "Of het databaseaccount dat WordPress gebruikt rechten heeft buiten zijn "
-"eigen database. Een account dat zijn eigen rechten niet mag bekijken, wordt "
-"gemeld als niet bepaald."
+"eigen database. Als het een account niet is toegestaan zijn eigen rechten te"
+" bekijken, wordt het gemeld als niet bepaald."
 
 #: config/docs.php:157
 msgid ""
@@ -652,10 +656,10 @@ msgid ""
 "those same rights on. Full rights on every database, or the right to hand "
 "out rights on every database, means one injection reaches past this site."
 msgstr ""
-"Volledige rechten op de sitedatabase zijn normaal, inclusief het recht om "
-"diezelfde rechten door te geven. Volledige rechten op elke database, of het "
-"recht om rechten op elke database uit te delen, betekent dat één injectie "
-"verder reikt dan deze site."
+"Volledige rechten op de database van de site zijn normaal, inclusief het "
+"recht om diezelfde rechten door te geven. Volledige rechten op elke "
+"database, of het recht om rechten op elke database uit te delen, betekent "
+"dat één injectie verder reikt dan deze site."
 
 #: config/docs.php:158
 msgid ""
@@ -663,17 +667,17 @@ msgid ""
 "config.php. Most hosting panels have a form for exactly that under the "
 "database section."
 msgstr ""
-"Maak een apart account aan dat beperkt is tot deze database en werk wp-"
-"config.php bij. De meeste hostingpanelen hebben daar in het databasegedeelte"
-" precies een formulier voor."
+"Maak een apart account aan dat beperkt is tot deze database en update wp-"
+"config.php. De meeste hostingpanelen hebben daar in het databasegedeelte "
+"precies een formulier voor."
 
 #: config/docs.php:161
 msgid ""
 "Whether scheduled events actually run, and whether anything is scheduled "
 "that no code listens to."
 msgstr ""
-"Of geplande taken echt draaien, en of er iets gepland staat waar geen code "
-"naar luistert."
+"Of geplande taken echt worden uitgevoerd, en of er iets gepland staat waar "
+"geen code naar luistert."
 
 #: config/docs.php:162
 msgid ""
@@ -699,8 +703,8 @@ msgstr ""
 "cron.php aanroept. Verwijder anders de constante. WordPress heeft geen "
 "scherm met geplande taken, dus gebruik wp cron event list of een planner-"
 "plugin om ze te bekijken. Een hook die hier zonder listener staat, was "
-"tijdens dit verzoek gewoon niet geregistreerd. Dat gebeurt bij plugins die "
-"zich alleen aan de voorkant aanhaken."
+"tijdens deze aanvraag gewoon niet geregistreerd. Dat gebeurt bij plugins die"
+" zich alleen aan de voorkant aanhaken."
 
 #: config/docs.php:166
 msgid ""
@@ -708,7 +712,7 @@ msgid ""
 " to autoload are read before anything else happens, whether the page needs "
 "them or not."
 msgstr ""
-"Hoeveel optiedata WordPress bij elk verzoek laadt. Opties die op autoload "
+"Hoeveel optiedata WordPress bij elke aanvraag laadt. Opties die op autoload "
 "staan, worden gelezen voordat er iets anders gebeurt, of de pagina ze nu "
 "nodig heeft of niet."
 
@@ -728,10 +732,10 @@ msgid ""
 "plugins legitimately store a lot. WordPress itself starts warning at roughly"
 " 800 KB of autoloaded options, and this check uses the same mark."
 msgstr ""
-"Kijk wat de grootste items bevatten voordat je iets verwijdert. Sommige "
-"plugins slaan terecht veel op. WordPress zelf begint te waarschuwen bij "
-"ongeveer 800 KB aan autoload-opties, en deze controle hanteert dezelfde "
-"grens."
+"Kijk wat de grootste vermeldingen bevatten voordat je iets verwijdert. "
+"Sommige plugins slaan terecht veel op. WordPress zelf begint te waarschuwen "
+"bij ongeveer 800 KB aan autoloaded opties, en deze controle hanteert "
+"dezelfde grens."
 
 #: config/docs.php:171
 msgid ""
@@ -823,14 +827,14 @@ msgstr ""
 
 #: config/docs.php:191
 msgid "Whether anything limits repeated login attempts."
-msgstr "Of iets herhaalde inlogpogingen beperkt."
+msgstr "Of iets herhaalde loginpogingen beperkt."
 
 #: config/docs.php:192
 msgid ""
 "Without a limit, passwords can be guessed at whatever rate the server will "
 "answer. Combined with readable user names, that is the most common way in."
 msgstr ""
-"Zonder limiet kunnen wachtwoorden geraden worden in elk tempo waarin de "
+"Zonder beperking kunnen wachtwoorden geraden worden in elk tempo waarin de "
 "server antwoordt. Samen met leesbare gebruikersnamen is dat de meest "
 "voorkomende weg naar binnen."
 
@@ -841,10 +845,10 @@ msgid ""
 "plugins, so if the limit already sits in the server or in front of the site,"
 " mute it."
 msgstr ""
-"Installeer een loginbegrenzer, of beperk het aantal verzoeken op wp-"
-"login.php en xmlrpc.php in de webserver, wat goedkoper en moeilijker te "
-"omzeilen is. Deze controle ziet alleen plugins, dus zit de limiet al in de "
-"server of vóór de site, demp hem dan."
+"Installeer een plugin die loginpogingen beperkt, of beperk het aantal "
+"aanvragen op wp-login.php en xmlrpc.php in de webserver, wat goedkoper en "
+"moeilijker te omzeilen is. Deze controle ziet alleen plugins, dus zit de "
+"beperking al in de server of vóór de site, demp die dan."
 
 #: config/docs.php:196
 msgid ""
@@ -898,7 +902,7 @@ msgstr ""
 "Het bestand bevat de databasegegevens en de authenticatiesleutels. Op shared"
 " hosting betekent leesbaar voor iedereen: leesbaar voor elk ander account op"
 " de machine. En een schrijfbaar wp-config.php betekent dat iemand anders "
-"code kan toevoegen die vóór WordPress draait."
+"code kan toevoegen die vóór WordPress tot uitvoering komt."
 
 #: config/docs.php:206
 msgid ""
@@ -911,14 +915,15 @@ msgid ""
 msgstr ""
 "Ontneem alle anderen het leesrecht: 640 houdt het leesbaar voor eigenaar en "
 "groep, 440 doet hetzelfde zonder schrijfrecht voor de eigenaar. Beide werken"
-" alleen zolang PHP als het eigenaarsaccount of in de eigenaarsgroep draait, "
-"wat de normale opzet is met suEXEC of een PHP-FPM-pool per account. Wordt de"
-" site na de wijziging leeg, dan draait PHP als een ander account en moet het"
-" groepseigendom worden aangepast, niet de modus. Nooit 777."
+" alleen zolang PHP zijn werk als het eigenaarsaccount of in de "
+"eigenaarsgroep uitvoert, wat de normale setup is met suEXEC of een PHP-FPM-"
+"pool per account. Wordt de site na de wijziging leeg, dan voert een ander "
+"account PHP uit (PHP uitvoeren onder het juiste account is de oplossing) en "
+"moet het groepseigendom worden aangepast, niet de modus. Nooit 777."
 
 #: config/docs.php:209
 msgid "Whether the uploads directory is writable by everyone on the server."
-msgstr "Of de uploads-map schrijfbaar is voor iedereen op de server."
+msgstr "Of de uploads directory schrijfbaar is voor iedereen op de server."
 
 #: config/docs.php:210
 msgid ""
@@ -926,8 +931,8 @@ msgid ""
 "every other account on the machine, and on shared hosting those are not the "
 "same thing."
 msgstr ""
-"De map moet schrijfbaar zijn voor PHP. Ze hoeft niet schrijfbaar te zijn "
-"voor elk ander account op de machine, en op shared hosting is dat niet "
+"De directory moet schrijfbaar zijn voor PHP. Die hoeft niet schrijfbaar te "
+"zijn voor elk ander account op de machine, en op shared hosting is dat niet "
 "hetzelfde."
 
 #: config/docs.php:211
@@ -952,10 +957,10 @@ msgid ""
 "that WordPress will then execute. On shared hosting that is not a "
 "theoretical neighbour, it is every other customer on the same machine."
 msgstr ""
-"Een core-map die voor iedereen schrijfbaar is, laat elk account op de server"
-" een bestand neerzetten dat WordPress vervolgens uitvoert. Op shared hosting"
-" is dat geen theoretische buurman, maar elke andere klant op dezelfde "
-"machine."
+"Een core-directory die voor iedereen schrijfbaar is, laat elk account op de "
+"server een bestand neerzetten dat WordPress vervolgens uitvoert. Op shared "
+"hosting is dat geen theoretische buurman, maar elke andere klant op dezelfde"
+" machine."
 
 #: config/docs.php:216
 msgid ""
@@ -964,10 +969,10 @@ msgid ""
 " below end up executable too. Where the permissions cannot be read at all "
 "the check says so rather than reporting them as fine."
 msgstr ""
-"Zet de mappen op 755, of 750 als de groep klopt. Pas het toe op de map zelf,"
-" niet recursief op alles erin, anders worden de bestanden eronder ook "
-"uitvoerbaar. Kunnen de rechten helemaal niet gelezen worden, dan meldt de "
-"controle dat in plaats van ze in orde te noemen."
+"Zet de directory's op 755, of 750 als de groep klopt. Pas het toe op de "
+"directory zelf, niet recursief op alles erin, anders worden de bestanden "
+"eronder ook uitvoerbaar. Kunnen de rechten helemaal niet gelezen worden, dan"
+" meldt de controle dat in plaats van ze in orde te noemen."
 
 #: config/docs.php:219
 msgid ""
@@ -978,11 +983,11 @@ msgid ""
 "them twice would let one chmod lower the grade twice."
 msgstr ""
 "Bestanden en mappen met het bit voor schrijfbaar door iedereen. Er wordt op "
-"vier plekken gekeken, telkens één niveau diep: de webroot, wp-content, de "
-"plugin map en de thema map. wp-config.php, wp-admin, wp-includes, wp-content"
-" en de uploads-map blijven buiten beschouwing: die hebben een eigen "
-"controle, en dubbel tellen zou één chmod het cijfer twee keer laten "
-"verlagen."
+"vier plekken gekeken, telkens één niveau diep: de webroot, de map wp-"
+"content, de plugin-map en de thema-map. wp-config.php, wp-admin, wp-"
+"includes, wp-content en de uploads-map blijven buiten beschouwing: die "
+"hebben een eigen controle, en dubbel tellen zou één chmod het cijfer twee "
+"keer laten verlagen."
 
 #: config/docs.php:220
 msgid ""
@@ -1000,9 +1005,9 @@ msgid ""
 "belongs at 640 or 440. If something only works at 777, the ownership is "
 "wrong and that is the thing to fix."
 msgstr ""
-"Zet bestanden op 644 en mappen op 755. wp-config.php is de uitzondering, dat"
-" hoort op 640 of 440. Werkt iets alleen met 777, dan klopt het eigendom "
-"niet, en dat moet je oplossen."
+"Zet bestanden op 644 en directory's op 755. wp-config.php is de "
+"uitzondering, dat hoort op 640 of 440. Werkt iets alleen met 777, dan klopt "
+"het eigendom niet, en dat moet je oplossen."
 
 #: config/docs.php:224
 msgid ""
@@ -1019,8 +1024,8 @@ msgid ""
 "Media never needs to be executable. A script in this directory is either a "
 "leftover or a shell that someone uploaded through a flaw elsewhere."
 msgstr ""
-"Media hoeft nooit uitvoerbaar te zijn. Een script in deze map is óf een "
-"restant, óf een shell die iemand via een lek elders heeft geüpload."
+"Media hoeft nooit uitvoerbaar te zijn. Een script in deze directory is óf "
+"een restant, óf een shell die iemand via een lek elders heeft geüpload."
 
 #: config/docs.php:226
 msgid ""
@@ -1032,19 +1037,20 @@ msgid ""
 "reading request data or calling another file."
 msgstr ""
 "Open elk bestand voordat je het verwijdert, en vergelijk de uploaddatum met "
-"het serverlog. Een beveiligend .htaccess in deze map is geen bevinding en "
-"wordt hier niet gemeld. Kleine index.php-bestanden die alleen voorkomen dat "
-"de map wordt getoond, worden gelezen en doorgelaten; wordt er toch een "
-"gemeld, dan noemt de bevinding wat het doet dat een plaatshouder niet zou "
-"doen, bijvoorbeeld verzoekdata lezen of een ander bestand aanroepen."
+"het log van de server. Een beveiligend .htaccess in deze directory is geen "
+"bevinding en wordt hier niet gemeld. Kleine index.php-bestanden die alleen "
+"voorkomen dat de map wordt getoond, worden gelezen en doorgelaten; wordt er "
+"toch een gemeld, dan noemt de bevinding wat het doet dat een plaatshouder "
+"niet zou doen, bijvoorbeeld gegevens uit de aanvraag lezen of een ander "
+"bestand aanroepen."
 
 #: config/docs.php:229
 msgid ""
 "Whether the server actually runs a PHP file placed in the uploads directory."
 " A file is written, requested once and deleted again."
 msgstr ""
-"Of de server een PHP-bestand in de uploads-map echt uitvoert. Er wordt een "
-"bestand geschreven, één keer opgevraagd en weer verwijderd."
+"Of de server een PHP-bestand in de uploads directory echt uitvoert. Er wordt"
+" een bestand geschreven, één keer opgevraagd en weer verwijderd."
 
 #: config/docs.php:230
 msgid ""
@@ -1065,11 +1071,11 @@ msgid ""
 "file comes back as text, deny access to it rather than only switching the "
 "interpreter off."
 msgstr ""
-"Weiger .php-bestanden in de uploads-map. Op Apache en LiteSpeed doet een "
-".htaccess in die map dat, zolang AllowOverride de regel toestaat; op nginx "
-"en Caddy hoort het in de serverconfiguratie. Komt het bestand als tekst "
-"terug, weiger dan de toegang ertoe in plaats van alleen de interpreter uit "
-"te zetten."
+"Weiger .php-bestanden in de uploads directory. Op Apache en LiteSpeed doet "
+"een .htaccess in die directory dat, zolang AllowOverride die regel kan "
+"toestaan; op nginx en Caddy hoort het in de serverconfiguratie. Komt het "
+"bestand als tekst terug, weiger dan de toegang ertoe in plaats van alleen de"
+" interpreter uit te zetten."
 
 #: config/docs.php:234
 msgid ""
@@ -1088,8 +1094,8 @@ msgid ""
 "the server, which is why both questions get asked."
 msgstr ""
 "Een bestand met de naam wp-config.php.bak wordt niet als PHP verwerkt, dus "
-"de server levert de inhoud als tekst uit, inloggegevens en al. Of dat "
-"gebeurt, hangt van de server af, daarom worden beide vragen gesteld."
+"de server levert de content ervan als tekst uit, inloggegevens en al. Of dat"
+" gebeurt, hangt van de server af, daarom worden beide vragen gesteld."
 
 #: config/docs.php:236
 msgid ""
@@ -1100,11 +1106,12 @@ msgid ""
 "authentication. Deny access to those at the server instead of deleting them."
 msgstr ""
 "Verwijder de bestanden. Was er een bereikbaar, ga er dan van uit dat de "
-"inhoud bekend is: vervang het databasewachtwoord en de "
-"authenticatiesleutels. Twee op de lijst zijn uitzonderingen: .user.ini is de"
-" PHP-configuratie per map van de CGI- en FastCGI-builds en .htpasswd bevat "
-"de inloggegevens van een actieve HTTP-authenticatie. Weiger de toegang "
-"daartoe in de server in plaats van ze te verwijderen."
+"content bekend is: dan moet je het databasewachtwoord en de "
+"authenticatiesleutels roteren. Twee op de lijst zijn uitzonderingen: "
+".user.ini is de PHP-configuratie per directory van de CGI- en FastCGI-builds"
+" en .htpasswd bevat de inloggegevens van een HTTP-authenticatie die wordt "
+"uitgevoerd. Weiger de toegang daartoe in de server in plaats van ze te "
+"verwijderen."
 
 #: config/docs.php:239
 msgid ""
@@ -1112,9 +1119,9 @@ msgid ""
 "working folders of a version control system, the tool developers use to keep"
 " a history of every change."
 msgstr ""
-"Of .git-, .svn- of .hg-mappen via HTTP leesbaar zijn. Dat zijn de werkmappen"
-" van een versiebeheersysteem, het hulpmiddel waarmee ontwikkelaars een "
-"geschiedenis van elke wijziging bijhouden."
+"Of de directory's .git, .svn of .hg via HTTP leesbaar zijn. Dat zijn de "
+"mappen waarin een versiebeheersysteem werkt, de tool waarmee ontwikkelaars "
+"een geschiedenis van elke wijziging bijhouden."
 
 #: config/docs.php:240
 msgid ""
@@ -1122,7 +1129,7 @@ msgid ""
 " were committed once and deleted later. Credentials are found this way "
 "regularly."
 msgstr ""
-"Een leesbare .git-map is de volledige broncodegeschiedenis, inclusief "
+"Een leesbare .git-directory is de volledige broncodegeschiedenis, inclusief "
 "bestanden die ooit zijn gecommit en later verwijderd. Inloggegevens worden "
 "op deze manier regelmatig gevonden."
 
@@ -1131,7 +1138,7 @@ msgid ""
 "Block the directory at the web server, and preferably deploy without the "
 "repository metadata in the first place."
 msgstr ""
-"Blokkeer de map in de webserver, en rol bij voorkeur uit zonder de "
+"Laat de webserver de directory blokkeren, en rol bij voorkeur uit zonder de "
 "repository-metadata."
 
 #: config/docs.php:244
@@ -1139,8 +1146,8 @@ msgid ""
 "Database dumps and archives in the web root or in wp-content, and whether "
 "they can be downloaded."
 msgstr ""
-"Databasedumps en archieven in de webroot of in wp-content, en of ze te "
-"downloaden zijn."
+"Databasedumps en archieven in de webroot of in wp-content, en of ze "
+"gedownload kunnen worden."
 
 #: config/docs.php:245
 msgid ""
@@ -1156,14 +1163,15 @@ msgid ""
 "authentication keys, and treat the user data as disclosed. When the request "
 "for the file fails, the check says so instead of calling the file safe."
 msgstr ""
-"Verwijder hem. Was hij bereikbaar, vervang dan het databasewachtwoord en de "
-"authenticatiesleutels, en beschouw de gebruikersgegevens als uitgelekt. "
-"Mislukt het verzoek om het bestand, dan meldt de controle dat in plaats van "
-"het bestand veilig te noemen."
+"Verwijder hem. Was hij bereikbaar, dan moet je het databasewachtwoord en de "
+"authenticatiesleutels roteren en de gebruikersgegevens als uitgelekt "
+"beschouwen. Mislukt de aanvraag van het bestand, dan meldt de controle dat "
+"in plaats van het bestand veilig te noemen."
 
 #: config/docs.php:249
 msgid "Files in the web root that give away version and tooling details."
-msgstr "Bestanden in de webroot die versie- en toolinggegevens prijsgeven."
+msgstr ""
+"Bestanden in de webroot die details over versie en tooling prijsgeven."
 
 #: config/docs.php:250
 msgid ""
@@ -1188,8 +1196,8 @@ msgid ""
 msgstr ""
 "Verwijder eerst phpinfo.php, info.php en test.php. De rest mag ook weg, maar"
 " houd composer.json en package.json als de site met Composer of npm wordt "
-"uitgerold. WordPress zet readme.html, license.txt en wp-config-sample.php "
-"bij elke core-update terug."
+"uitgerold. Bij elke core-update zal WordPress readme.html, license.txt en "
+"wp-config-sample.php terugzetten."
 
 #: config/docs.php:254
 msgid ""
@@ -1205,15 +1213,16 @@ msgid ""
 "the old vulnerable version, and it stays reachable by direct request."
 msgstr ""
 "Een onderbroken update laat een uitgepakte kopie van een plugin achter, soms"
-" de oude kwetsbare versie, en die blijft via een direct verzoek bereikbaar."
+" de oude kwetsbare versie, en die blijft via een directe aanvraag "
+"bereikbaar."
 
 #: config/docs.php:256
 msgid ""
 "Delete the contents of both folders. WordPress recreates them when it needs "
 "them."
 msgstr ""
-"Verwijder de inhoud van beide mappen. WordPress maakt ze opnieuw aan wanneer"
-" het ze nodig heeft."
+"Verwijder de content van beide mappen. WordPress maakt elke map opnieuw aan "
+"wanneer het die nodig heeft."
 
 #: config/docs.php:259
 msgid ""
@@ -1221,15 +1230,15 @@ msgid ""
 "uploads folder, the upgrade folder and wp-includes instead of refusing the "
 "request."
 msgstr ""
-"Of de server de inhoud van wp-content, de pluginmap, de uploads-map, de "
-"upgrade-map en wp-includes toont in plaats van het verzoek te weigeren."
+"Of de server de content van wp-content, de plugin-map, de uploads-map, de "
+"upgrade-map en wp-includes toont in plaats van de aanvraag te weigeren."
 
 #: config/docs.php:260
 msgid ""
 "A listing names every installed plugin and its folder structure, which is a "
 "ready-made list of things to look up vulnerabilities for."
 msgstr ""
-"Een mapweergave noemt elke geïnstalleerde plugin en de mappenstructuur "
+"Zo'n overzicht noemt elke geïnstalleerde plugin en de indeling van de map "
 "ervan, en dat is een kant-en-klare lijst om kwetsbaarheden bij op te zoeken."
 
 #: config/docs.php:261 includes/checks/class-cascr-checks-files.php:969
@@ -1237,8 +1246,8 @@ msgid ""
 "Switch off autoindex in the server configuration, or add Options -Indexes to"
 " .htaccess."
 msgstr ""
-"Schakel autoindex uit in de serverconfiguratie, of voeg Options -Indexes toe"
-" aan .htaccess."
+"Autoindex uitschakelen in de serverconfiguratie, of Options -Indexes "
+"toevoegen aan .htaccess."
 
 #: config/docs.php:264
 msgid ""
@@ -1263,7 +1272,7 @@ msgid ""
 "of judging: the rules live in the server configuration and cannot be read "
 "from here."
 msgstr ""
-"Sla de permalinkinstellingen één keer op en WordPress schrijft een "
+"De permalinkinstellingen één keer opslaan en WordPress schrijft een "
 "basisbestand. Op nginx, Caddy en IIS bestaat geen .htaccess, en deze "
 "controle meldt dat in plaats van te oordelen: de regels staan in de "
 "serverconfiguratie en kunnen van hieruit niet gelezen worden."
@@ -1276,7 +1285,7 @@ msgid ""
 msgstr ""
 "Of een account dat kan publiceren of beheren een wachtwoord uit de lijst met"
 " veelgebruikte wachtwoorden gebruikt, of een variatie op de eigen loginnaam."
-" De opgeslagen hash wordt vergeleken, er wordt niet ingelogd."
+" De opgeslagen hash wordt vergeleken, er wordt geen login geprobeerd."
 
 #: config/docs.php:273
 msgid ""
@@ -1296,10 +1305,11 @@ msgid ""
 " how many it got through."
 msgstr ""
 "Reset die wachtwoorden nu en kijk daarna wat de accounts recent hebben "
-"gedaan. Hashes vergelijken laat geen spoor na in het loginlog en veroorzaakt"
-" geen blokkering, dus deze controle kan veilig herhaald worden. Alleen "
-"accounts die kunnen publiceren of beheren worden bekeken, en op een site met"
-" honderden daarvan meldt de controle hoeveel ze er heeft gedaan."
+"gedaan. Hashes vergelijken laat geen vermelding achter in het login-log en "
+"veroorzaakt geen blokkering, dus deze controle kan veilig herhaaldelijk "
+"uitgevoerd worden. Alleen accounts die kunnen publiceren of beheren worden "
+"bekeken, en op een site met honderden daarvan meldt de controle hoeveel ze "
+"er heeft gedaan."
 
 #: config/docs.php:277
 msgid ""
@@ -1315,7 +1325,7 @@ msgid ""
 "problem for the attacker."
 msgstr ""
 "Om een wachtwoord te raden heb je ook de naam nodig. Een voorspelbare naam "
-"lost voor de aanvaller de helft van het probleem op."
+"verwijdert voor de aanvaller de helft van het probleem."
 
 #: config/docs.php:279
 msgid ""
@@ -1323,7 +1333,7 @@ msgid ""
 " delete the old account. Renaming in place is not possible from the "
 "dashboard."
 msgstr ""
-"Maak een nieuwe beheerder met een andere naam aan, wijs de inhoud aan hem "
+"Maak een nieuwe beheerder met een andere naam aan, wijs de content aan hem "
 "toe en verwijder dan het oude account. Hernoemen is vanuit het dashboard "
 "niet mogelijk."
 
@@ -1341,7 +1351,8 @@ msgid ""
 "dangerous, because nobody would notice them being used."
 msgstr ""
 "Elk beheerdersaccount is een aparte weg naar binnen. Slapende accounts zijn "
-"het gevaarlijkst, omdat niemand zou merken dat ze gebruikt worden."
+"het gevaarlijkst, omdat niemand een melding zou krijgen als ze gebruikt "
+"worden."
 
 #: config/docs.php:284
 msgid ""
@@ -1351,7 +1362,7 @@ msgid ""
 msgstr ""
 "Geef mensen de laagste rol waarmee ze kunnen werken, en verwijder accounts "
 "die niemand gebruikt. Inlogtijden zijn pas bekend vanaf het moment dat deze "
-"plugin is geïnstalleerd, omdat WordPress zelf geen inloggeschiedenis "
+"plugin is geïnstalleerd, omdat WordPress zelf geen logingeschiedenis "
 "bijhoudt."
 
 #: config/docs.php:287
@@ -1375,10 +1386,10 @@ msgid ""
 "does exactly that."
 msgstr ""
 "Een abonnee met install_plugins is een beheerder met een vriendelijker "
-"label. Gecompromitteerde plugins voegen zulke rechten toe, omdat dat een "
-"wachtwoordreset overleeft. Een rol die sinds de eerste scan alleen maar is "
-"bijgekomen, wordt los van een escalatie gemeld, omdat het installeren van "
-"een webwinkel- of lidmaatschapsplugin precies dat doet."
+"label. Het is typisch dat gecompromitteerde plugins zulke rechten toevoegen,"
+" omdat dat een wachtwoordreset overleeft. Een rol die sinds de eerste scan "
+"alleen maar is bijgekomen, wordt los van een escalatie gemeld, omdat het "
+"installeren van een webwinkel- of lidmaatschapsplugin precies dat doet."
 
 #: config/docs.php:289
 msgid ""
@@ -1394,18 +1405,18 @@ msgid ""
 "updated, so muting the check is the only way to acknowledge it, and it hides"
 " the capability findings along with it."
 msgstr ""
-"Sommige plugins voegen bewust rechten toe, vooral webwinkel- en "
+"Er zijn plugins die bewust rechten toevoegen, vooral webwinkel- en "
 "lidmaatschapsplugins. Voor al het andere geldt: met unfiltered_html kan een "
 "account ruwe HTML en JavaScript opslaan in berichten, pagina's en widgets, "
 "en dat is opgeslagen cross-site scripting tegen elke bezoeker en tegen de "
 "volgende beheerder die de editor opent. WordPress heeft geen scherm om een "
-"recht weer in te trekken, dus daarvoor is een plugin voor rolbeheer nodig, "
+"recht weer te verwijderen, dus daarvoor is een plugin als rol-editor nodig, "
 "of één regel code in een plugin: remove_cap op de rol. De plugin deactiveren"
-" die het recht toevoegde, maakt het niet ongedaan; het recht blijft in de "
-"database staan. Een rol die om een bekende reden is veranderd, blijft gemeld"
-" worden: de vergelijkingsbasis wordt één keer vastgelegd en niet bijgewerkt,"
-" dus de controle dempen is de enige manier om het te accepteren, en dan "
-"verdwijnen ook de bevindingen over rechten."
+" die het recht heeft toegevoegd, maakt het niet ongedaan; het recht blijft "
+"in de database staan. Een rol die om een bekende reden is veranderd, blijft "
+"gemeld worden: de vergelijkingsbasis wordt één keer vastgelegd en niet "
+"geüpdatet, dus de controle dempen is de enige manier om het te accepteren, "
+"en dan verdwijnen ook de bevindingen over rechten."
 
 #: config/docs.php:292
 msgid ""
@@ -1526,8 +1537,8 @@ msgid ""
 "Whether the site address uses https, whether the dashboard is forced onto "
 "it, and whether the http address redirects permanently."
 msgstr ""
-"Of het siteadres https gebruikt, of het dashboard daarop wordt afgedwongen, "
-"en of het http-adres permanent doorverwijst."
+"Of het site-adres https gebruikt, of het dashboard daarop wordt afgedwongen,"
+" en of het http-adres een permanente omleiding heeft."
 
 #: config/docs.php:311
 msgid ""
@@ -1542,9 +1553,8 @@ msgid ""
 "Set the site and home addresses to https, add define( 'FORCE_SSL_ADMIN', "
 "true ); to wp-config.php and redirect http with a 301."
 msgstr ""
-"Zet het siteadres en het home-adres op https, voeg define( "
-"'FORCE_SSL_ADMIN', true ); toe aan wp-config.php en verwijs http door met "
-"een 301."
+"Het site-adres en het home-adres op https zetten, define( 'FORCE_SSL_ADMIN',"
+" true ); aan wp-config.php toevoegen en http met een 301 omleiden."
 
 #: config/docs.php:315
 msgid ""
@@ -1579,8 +1589,8 @@ msgstr ""
 "Verleng het en controleer daarna of de verlengingstaak echt heeft gedraaid, "
 "in plaats van ervan uit te gaan. Gebruik een browser of een externe test als"
 " je ook de vertrouwensketen wilt laten controleren. Een verbinding via TLS "
-"1.0 of 1.1 wordt ook gemeld; vraag je hostingprovider om alleen 1.2 en 1.3 "
-"toe te staan."
+"1.0 of 1.1 wordt ook gemeld; vraag je hostingprovider of hij alleen 1.2 en "
+"1.3 wil toestaan."
 
 #: config/docs.php:320
 msgid ""
@@ -1590,19 +1600,19 @@ msgid ""
 " is not asked for once the Content Security Policy sets frame-ancestors, "
 "which does the same job."
 msgstr ""
-"Welke van de aanbevolen responsheaders de site meestuurt. Een responsheader "
-"is een regel die de server samen met een pagina verstuurt en die de browser "
-"vertelt hoe hij ermee om moet gaan. Elke ontbrekende header telt apart, "
-"behalve dat X-Frame-Options niet meer gevraagd wordt zodra de Content "
-"Security Policy frame-ancestors instelt, wat hetzelfde doet."
+"Welke van de aanbevolen reactie-headers de site meestuurt. Een reactie-"
+"header is een regel die de server samen met een pagina verstuurt en die de "
+"browser vertelt hoe hij ermee om moet gaan. Elke ontbrekende header telt "
+"apart, behalve dat X-Frame-Options niet meer gevraagd wordt zodra de Content"
+" Security Policy frame-ancestors instelt, wat hetzelfde doet."
 
 #: config/docs.php:321
 msgid ""
 "These headers are what limits the damage of a flaw elsewhere. They are cheap"
 " to add and nothing else on this page substitutes for them."
 msgstr ""
-"Deze headers beperken de schade van een lek elders. Ze zijn goedkoop toe te "
-"voegen en niets anders op deze pagina kan ze vervangen."
+"Deze headers beperken de schade van een lek elders. Het toevoegen ervan is "
+"goedkoop en niets anders op deze pagina kan ze vervangen."
 
 #: config/docs.php:322
 msgid ""
@@ -1623,8 +1633,8 @@ msgstr ""
 "Transport-Security: max-age=31536000; includeSubDomains. De eerste twee "
 "komen overeen met wat browsers al doen en veranderen niets op een gewone "
 "site. Een Content Security Policy moet voor de site geschreven worden en "
-"heeft een eigen punt. De headers voor cross-origin-isolatie gelden hier als "
-"optioneel, omdat ze op gewone sites embeds kapotmaken."
+"heeft een eigen vermelding. De headers voor cross-origin-isolatie gelden "
+"hier als optioneel, omdat ze op gewone sites embeds kapotmaken."
 
 #: config/docs.php:325
 msgid ""
@@ -1654,8 +1664,8 @@ msgid ""
 " is hard to undo."
 msgstr ""
 "Gebruik max-age=31536000, dat is een jaar, met includeSubDomains zodra de "
-"hele site betrouwbaar op HTTPS draait. Voeg preload pas toe als je zeker "
-"bent, want dat is moeilijk terug te draaien."
+"hele site betrouwbaar op HTTPS draait. Preload kun je pas toevoegen als je "
+"zeker bent, want dat is moeilijk terug te draaien."
 
 #: config/docs.php:330
 msgid ""
@@ -1664,11 +1674,11 @@ msgid ""
 "opens script loading to every host. A Content Security Policy, CSP for "
 "short, is a header that names which scripts a page is allowed to run."
 msgstr ""
-"Of een Content Security Policy wordt afgedwongen, en of een directive "
-"'unsafe-inline' toestaat zonder nonce ernaast, 'unsafe-eval' toestaat of het"
-" laden van scripts openzet voor elke host. Een Content Security Policy, "
-"kortweg CSP, is een header die bepaalt welke scripts een pagina mag "
-"uitvoeren."
+"Of een Content Security Policy wordt afgedwongen, en of er directives zijn "
+"die 'unsafe-inline' zonder nonce ernaast toestaan, 'unsafe-eval' toestaan of"
+" het laden van scripts openzetten voor elke host. Een Content Security "
+"Policy, kortweg CSP, is een header die vastlegt welke scripts op een pagina "
+"toegestaan zijn en uitgevoerd mogen worden."
 
 #: config/docs.php:331
 msgid ""
@@ -1679,12 +1689,12 @@ msgid ""
 "strict policy keeps it as a fallback for older browsers and is not reported "
 "here."
 msgstr ""
-"Een policy die inline scripts toestaat zonder iets anders in de directive, "
-"staat precies toe wat een policy moet voorkomen. Report-only-modus blokkeert"
-" helemaal niets. 'unsafe-inline' naast een nonce of 'strict-dynamic' is iets"
-" anders: browsers die een van beide begrijpen, negeren het, dus de strenge "
-"policy houdt het als terugvaloptie voor oudere browsers en het wordt hier "
-"niet gemeld."
+"Een policy met niets anders in de directive dan het toestaan van inline "
+"scripts, staat precies toe wat een policy juist moet voorkomen. Report-only-"
+"modus blokkeert helemaal niets. 'unsafe-inline' naast een nonce of 'strict-"
+"dynamic' is iets anders: browsers die een van beide begrijpen, negeren het, "
+"dus de strenge policy houdt het als fallback voor oudere browsers en het "
+"wordt hier niet gemeld."
 
 #: config/docs.php:332
 msgid ""
@@ -1696,9 +1706,9 @@ msgid ""
 msgstr ""
 "Begin met Content-Security-Policy-Report-Only, volg de rapporten tot ze stil"
 " zijn en stuur dan dezelfde policy als afdwingende header. Geef de inline "
-"scripts een nonce per verzoek in de scripttag, een willekeurige waarde die "
-"de policy noemt, in plaats van ze allemaal toe te staan. Die nonce is iets "
-"anders dan de nonce die WordPress in zijn formulieren zet."
+"scripts een nonce per aanvraag in de scripttag, een willekeurige waarde die "
+"de policy noemt, in plaats van het toestaan van alle inline scripts. Die "
+"nonce is iets anders dan de nonce die WordPress in zijn formulieren zet."
 
 #: config/docs.php:335
 msgid ""
@@ -1719,11 +1729,12 @@ msgid ""
 "the attributes on the cookie measured here usually drops them on the session"
 " cookies too."
 msgstr ""
-"Zonder SameSite stuurt een browser cookies mee met verzoeken die door andere"
+"Zonder SameSite stuurt een browser cookies mee met aanvragen die door andere"
 " sites zijn gestart, en dat is het ingrediënt dat een cross-site request "
-"forgery nodig heeft. Zonder HttpOnly kan elk script op de pagina ze lezen. "
-"Een server die de attributen weglaat bij de cookie die hier wordt gemeten, "
-"laat ze meestal ook weg bij de sessiecookies."
+"forgery nodig heeft, een vervalste aanvraag vanaf een andere site. Zonder "
+"HttpOnly kan elk script op de pagina ze lezen. Een server die de attributen "
+"weglaat bij de cookie die hier wordt gemeten, laat ze meestal ook weg bij de"
+" sessiecookies."
 
 #: config/docs.php:337
 msgid ""
@@ -1741,18 +1752,18 @@ msgid ""
 "Cross-origin resource sharing, CORS, is the rule set that decides which "
 "other websites may read what this one answers."
 msgstr ""
-"Of de site browsers vertelt dat elke origin zijn antwoorden mag lezen. "
-"Cross-origin resource sharing, CORS, is de set regels die bepaalt welke "
-"andere websites mogen lezen wat deze site antwoordt."
+"Of de site browsers vertelt dat elke origin zijn reacties mag lezen. Cross-"
+"origin resource sharing, CORS, is de set regels die bepaalt welke andere "
+"websites mogen lezen wat deze site antwoordt."
 
 #: config/docs.php:341
 msgid ""
 "A wildcard origin combined with credentials lets any website read logged-in "
 "responses from this one. It is a rare misconfiguration and a severe one."
 msgstr ""
-"Een wildcard-origin in combinatie met credentials laat elke website "
-"ingelogde antwoorden van deze site lezen. Het is een zeldzame en ernstige "
-"misconfiguratie."
+"Een wildcard-origin in combinatie met credentials laat elke website reacties"
+" voor ingelogde gebruikers van deze site lezen. Het is een zeldzame en "
+"ernstige misconfiguratie."
 
 #: config/docs.php:342
 msgid ""
@@ -1764,7 +1775,7 @@ msgstr ""
 
 #: config/docs.php:345
 msgid "Whether the response headers name the exact PHP or server version."
-msgstr "Of de responsheaders de exacte PHP- of serverversie noemen."
+msgstr "Of de reactie-headers de exacte PHP- of serverversie noemen."
 
 #: config/docs.php:346
 msgid ""
@@ -1825,11 +1836,11 @@ msgid ""
 "multiplies password guesses, but one request still does the work of many. "
 "pingback.ping lets the site be used to probe other hosts."
 msgstr ""
-"system.multicall bundelt veel aanroepen in één verzoek. Sinds WordPress 4.4 "
-"beëindigt de eerste mislukte login de rest van de batch, dus het "
-"vermenigvuldigt het raden van wachtwoorden niet meer, maar één verzoek doet "
-"nog steeds het werk van vele. Met pingback.ping kan de site gebruikt worden "
-"om andere hosts af te tasten."
+"system.multicall bundelt veel aanroepen in één aanvraag. Sinds WordPress 4.4"
+" beëindigt de eerste mislukte login de rest van de batch, dus het "
+"vermenigvuldigt het raden van wachtwoorden niet meer, maar één aanvraag doet"
+" nog steeds het werk van vele. Met pingback.ping kan de site gebruikt worden"
+" om andere hosts af te tasten."
 
 #: config/docs.php:357
 msgid ""
@@ -1840,12 +1851,13 @@ msgid ""
 "still reports it. Jetpack and the mobile apps are the usual reasons to keep "
 "it."
 msgstr ""
-"Gebruikt niets XML-RPC, blokkeer xmlrpc.php dan in de webserver, de enige "
-"plek die de verzoeken tegenhoudt voordat WordPress ze verwerkt. Het filter "
-"xmlrpc_enabled, dat de meeste beveiligingsplugins instellen, weigert alleen "
-"de methodes waarvoor een login nodig is en laat het endpoint gewoon "
-"antwoorden, dus deze controle meldt het nog steeds. Jetpack en de mobiele "
-"apps zijn de gebruikelijke redenen om het te houden."
+"Als niets XML-RPC gebruikt, kun je xmlrpc.php het beste blokkeren in de "
+"webserver, de enige plek die de aanvragen tegenhoudt voordat WordPress ze "
+"verwerkt. Het filter xmlrpc_enabled, dat de meeste beveiligingsplugins "
+"instellen, weigert alleen de methodes waarvoor een login nodig is en laat "
+"het endpoint gewoon antwoorden, dus deze controle rapporteert het nog "
+"steeds. Jetpack en de mobiele apps zijn de gebruikelijke redenen om het te "
+"houden."
 
 #: config/docs.php:360
 msgid ""
@@ -1866,7 +1878,7 @@ msgid ""
 msgstr ""
 "Voor het raden van een wachtwoord heb je een naam en een wachtwoord nodig. "
 "Leesbare namen maken daar één onbekende van in plaats van twee. Met mooie "
-"permalinks geeft de ?author-doorverwijzing de loginnaam zelf prijs; zonder "
+"permalinks geeft de ?author-omleiding de loginnaam zelf prijs; zonder "
 "bevestigt het auteursarchief nog altijd welke account-ID's bestaan."
 
 #: config/docs.php:362
@@ -1876,10 +1888,11 @@ msgid ""
 "name it was generated from, and that is what the redirect and the REST "
 "answer carry. Change user_nicename itself if the name must not be public."
 msgstr ""
-"Vereis authenticatie op het users-endpoint en stop de auteursdoorverwijzing."
-" Een andere weergavenaam verandert niets: de auteursslug houdt de loginnaam "
-"waaruit hij is gegenereerd, en die zit in de doorverwijzing en in het REST-"
-"antwoord. Pas user_nicename zelf aan als de naam niet openbaar mag zijn."
+"Vereis authenticatie op het users-endpoint en stop de auteursomleiding. Een "
+"andere weergavenaam verandert niets: de slug van de auteur houdt de "
+"loginnaam waaruit hij is gegenereerd, en die zit in de omleiding en in het "
+"REST-antwoord. Pas user_nicename zelf aan als de naam niet openbaar mag "
+"zijn."
 
 #: config/docs.php:365
 msgid ""
@@ -1925,7 +1938,7 @@ msgid ""
 "Whether forwarded address headers arrive with the current request, and "
 "whether anything can confirm that a proxy in front of the site wrote them."
 msgstr ""
-"Of er doorgestuurde adresheaders met het huidige verzoek meekomen, en of "
+"Of er doorgestuurde adresheaders met de huidige aanvraag meekomen, en of "
 "iets kan bevestigen dat een proxy vóór de site ze heeft geschreven."
 
 #: config/docs.php:371
@@ -1937,13 +1950,13 @@ msgid ""
 "REMOTE_ADDR or a Cloudflare edge that identifies itself counts as confirmed,"
 " everything else stays undecided."
 msgstr ""
-"Alles wat voor rate limiting of blokkeren op een doorgestuurde header "
-"vertrouwt, is te omzeilen door één header te veranderen, tenzij een proxy "
-"hem overschrijft. Vanuit PHP zien een header van een edge-server en een "
-"header die een bezoeker meestuurde er precies hetzelfde uit, dus deze "
-"controle zegt dat in plaats van te gokken: een privé REMOTE_ADDR of een "
-"Cloudflare-edge die zich identificeert telt als bevestigd, al het andere "
-"blijft onbeslist."
+"Alles wat voor het beperken van het aantal aanvragen of voor blokkeren op "
+"een doorgestuurde header vertrouwt, is te omzeilen door één header te "
+"veranderen, tenzij een proxy hem overschrijft. Vanuit PHP zien een header "
+"van een edge-server en een header die een bezoeker zelf heeft verzonden er "
+"precies hetzelfde uit, dus deze controle zegt dat in plaats van te gokken: "
+"een privé REMOTE_ADDR of een Cloudflare-edge die zich identificeert telt als"
+" bevestigd, al het andere blijft onbeslist."
 
 #: config/docs.php:372
 msgid ""
@@ -1954,9 +1967,9 @@ msgid ""
 msgstr ""
 "Staat er niets vóór de site, laat de beveiligingsplugins dan REMOTE_ADDR "
 "lezen. Staat er wel een proxy, zorg dan dat die deze headers overschrijft in"
-" plaats van door te geven wat er binnenkwam. Het rapport in de browser "
-"draaien in plaats van op de opdrachtregel geeft deze controle een verzoek om"
-" naar te kijken."
+" plaats van door te geven wat er binnenkwam. Wordt het rapport in de browser"
+" uitgevoerd in plaats van op de opdrachtregel, dan krijgt deze controle een "
+"aanvraag om naar te kijken."
 
 #: config/docs.php:378
 msgid ""
@@ -1967,7 +1980,7 @@ msgstr ""
 "Of er een plugin actief is die AI-gegenereerde content labelt en AI-systemen"
 " aan bezoekers bekendmaakt, en of de instellingen ervan echt zijn "
 "opgeslagen. Alleen de lokale status wordt gelezen; er wordt nergens iets "
-"naartoe gestuurd."
+"naartoe verzonden."
 
 #: config/docs.php:379
 msgid ""
@@ -1997,7 +2010,7 @@ msgid ""
 " saved counts as nothing, so the check reads those settings rather than "
 "trusting the folder on disk."
 msgstr ""
-"Publiceert de site AI-gegenereerde content of draait er een chatbot, "
+"Als de site AI-gegenereerde content publiceert of een chatbot uitvoert, "
 "installeer dan een van de openbaarmakingsplugins uit de directory en zet het"
 " labelen aan. EU AI Label en EU AI Act Ready zijn gratis en bieden "
 "medialabels en een melding voor bezoekers. TransparAI, dat we zelf bouwen, "
@@ -2071,7 +2084,7 @@ msgid ""
 "Create a new administrator with a different name, move the content over and "
 "delete the old account."
 msgstr ""
-"Maak een nieuwe beheerder met een andere naam aan, zet de inhoud over en "
+"Maak een nieuwe beheerder met een andere naam aan, zet de content over en "
 "verwijder het oude account."
 
 #. translators: %d: number of administrator accounts.
@@ -2144,7 +2157,7 @@ msgstr "de rol %1$s heeft %2$s"
 #: includes/checks/class-cascr-checks-accounts.php:441
 #, php-format
 msgid "the role %s may post unfiltered HTML"
-msgstr "de rol %s mag ongefilterde HTML plaatsen"
+msgstr "de rol %s mag ongefilterde HTML in berichten plaatsen"
 
 #. translators: %s: role slug.
 #: includes/checks/class-cascr-checks-accounts.php:454
@@ -2169,8 +2182,8 @@ msgid ""
 "Some plugins add these on purpose. Anything you cannot account for should be"
 " removed."
 msgstr ""
-"Sommige plugins voegen die bewust toe. Alles wat je niet kunt verklaren, "
-"moet weg."
+"Er zijn plugins die deze bewust toevoegen. Alles wat je niet kunt verklaren,"
+" moet verwijderd worden."
 
 #: includes/checks/class-cascr-checks-accounts.php:482
 msgid ""
@@ -2185,8 +2198,9 @@ msgid ""
 "Plugins add and adjust roles when they are installed. Match the list against"
 " what was installed, and remove what nobody asked for."
 msgstr ""
-"Plugins voegen rollen toe en passen ze aan bij de installatie. Vergelijk de "
-"lijst met wat er is geïnstalleerd en verwijder wat niemand heeft gevraagd."
+"Plugins kunnen bij de installatie rollen toevoegen en aanpassen. Vergelijk "
+"de lijst met wat er is geïnstalleerd en verwijder wat niemand heeft "
+"gevraagd."
 
 #: includes/checks/class-cascr-checks-accounts.php:489
 msgid "No role below administrator holds administrator-level capabilities."
@@ -2288,10 +2302,10 @@ msgid ""
 " its Full Edition; the copy in the plugin directory is Hive Light and brings"
 " login protection only."
 msgstr ""
-"Rond de instelling af voor elke beheerder en maak de tweede factor verplicht"
-" voor de rol. ReportedIP Hive, dat we zelf bouwen, dwingt dit in de Full "
-"Edition per rol af; de versie in de plugin-directory is Hive Light en biedt "
-"alleen loginbescherming."
+"Rond de setup af voor elke beheerder en maak de tweede factor verplicht voor"
+" de rol. ReportedIP Hive, dat we zelf bouwen, dwingt dit in de Full Edition "
+"per rol af; de versie in de plugin-directory is Hive Light en biedt alleen "
+"loginbescherming."
 
 #. translators: %d: number of administrators without a second factor.
 #: includes/checks/class-cascr-checks-accounts.php:630
@@ -2336,8 +2350,9 @@ msgid ""
 "Serve the site over HTTPS and run the check again. Until then, review the "
 "existing application passwords in each user profile."
 msgstr ""
-"Lever de site via HTTPS uit en voer de controle opnieuw uit. Bekijk tot die "
-"tijd de bestaande applicatiewachtwoorden in elk gebruikersprofiel."
+"Lever de site via HTTPS uit en laat de controle daarna opnieuw uitvoeren. "
+"Beoordeel tot die tijd de bestaande applicatiewachtwoorden in elk "
+"gebruikersprofiel."
 
 #: includes/checks/class-cascr-checks-accounts.php:697
 #: includes/checks/class-cascr-checks-core.php:1223
@@ -2463,7 +2478,7 @@ msgstr "Debugmodus is uitgeschakeld."
 
 #: includes/checks/class-cascr-checks-config.php:43
 msgid "Debug mode is on and errors are printed into the page."
-msgstr "Debugmodus staat aan en fouten worden in de pagina weergegeven."
+msgstr "Debugmodus staat aan en elke fout wordt in de pagina weergegeven."
 
 #: includes/checks/class-cascr-checks-config.php:46
 msgid "Set WP_DEBUG to false in wp-config.php, or at least WP_DEBUG_DISPLAY."
@@ -2480,7 +2495,7 @@ msgstr "Zet WP_DEBUG op false in wp-config.php op productiesites."
 
 #: includes/checks/class-cascr-checks-config.php:69
 msgid "No debug log exists."
-msgstr "Er bestaat geen debuglog."
+msgstr "Er bestaat geen debug-log."
 
 #. translators: 1: file path, 2: human readable file size.
 #. translators: 1: option name, 2: human readable size.
@@ -2495,14 +2510,14 @@ msgstr "%1$s (%2$s)"
 msgid ""
 "A debug log exists, but it sits outside everything the web server hands out."
 msgstr ""
-"Er is een debuglog, maar die staat buiten alles wat de webserver uitlevert."
+"Er is een debug-log, maar dat staat buiten alles wat de webserver uitlevert."
 
 #: includes/checks/class-cascr-checks-config.php:93
 msgid ""
 "A debug log exists, but it could not be checked whether it is publicly "
 "readable."
 msgstr ""
-"Er is een debuglog, maar er kon niet worden gecontroleerd of die openbaar "
+"Er is een debug-log, maar er kon niet worden gecontroleerd of dat openbaar "
 "leesbaar is."
 
 #: includes/checks/class-cascr-checks-config.php:99
@@ -2510,17 +2525,18 @@ msgid ""
 "The debug log is readable from the web and exposes error details, file paths"
 " and sometimes credentials."
 msgstr ""
-"De debuglog is via het web leesbaar en toont foutdetails, bestandspaden en "
-"soms referenties."
+"Het debug-log is via het web leesbaar en toont de details van elke fout, "
+"bestandspaden en soms referenties."
 
 #: includes/checks/class-cascr-checks-config.php:102
 msgid "Delete the file and block access to it in the server configuration."
 msgstr ""
-"Verwijder het bestand en blokkeer de toegang ertoe in de serverconfiguratie."
+"Verwijder het bestand en zet in de serverconfiguratie een blokkering op de "
+"toegang ertoe."
 
 #: includes/checks/class-cascr-checks-config.php:107
 msgid "A debug log exists but is not publicly readable."
-msgstr "Er is een debuglog, maar die is niet openbaar leesbaar."
+msgstr "Er is een debug-log, maar die is niet openbaar leesbaar."
 
 #: includes/checks/class-cascr-checks-config.php:110
 msgid "Delete the file once the problem is solved."
@@ -2546,7 +2562,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-config.php:139
 msgid "Add define( 'DISALLOW_FILE_EDIT', true ); to wp-config.php."
-msgstr "Voeg define( 'DISALLOW_FILE_EDIT', true ); toe aan wp-config.php."
+msgstr "Toevoegen aan wp-config.php: define( 'DISALLOW_FILE_EDIT', true );"
 
 #: includes/checks/class-cascr-checks-config.php:150
 msgid "Installing plugins and themes from the dashboard is disabled."
@@ -2566,9 +2582,9 @@ msgid ""
 "'DISALLOW_FILE_MODS', true ); to wp-config.php. Note that this also stops "
 "automatic updates."
 msgstr ""
-"Voeg op sites waar code wordt uitgerold in plaats van geïnstalleerd define( "
-"'DISALLOW_FILE_MODS', true ); toe aan wp-config.php. Let op: dit stopt ook "
-"automatische updates."
+"Op sites waar code wordt uitgerold in plaats van geïnstalleerd kun je "
+"define( 'DISALLOW_FILE_MODS', true ); toevoegen aan wp-config.php. Let op: "
+"dit stopt ook automatische updates."
 
 #. translators: %s: name of the wp-config.php constant.
 #: includes/checks/class-cascr-checks-config.php:185
@@ -2580,7 +2596,7 @@ msgstr "%s is niet gedefinieerd"
 #: includes/checks/class-cascr-checks-config.php:196
 #, php-format
 msgid "%s is a placeholder or too short"
-msgstr "%s is een placeholder of te kort"
+msgstr "%s is een plaatshouder of te kort"
 
 #. translators: %s: name of the wp-config.php constant.
 #: includes/checks/class-cascr-checks-config.php:205
@@ -2611,8 +2627,8 @@ msgid ""
 "either."
 msgstr ""
 "De authenticatiesleutels zijn correct ingesteld. wp-config.php is al meer "
-"dan een jaar niet gewijzigd, wat meestal betekent dat de sleutels ook niet "
-"zijn vernieuwd."
+"dan een jaar niet gewijzigd, wat meestal betekent dat ook het roteren van de"
+" sleutels is uitgebleven."
 
 #. translators: %s: human readable time difference, for instance "14 months".
 #: includes/checks/class-cascr-checks-config.php:237
@@ -2632,7 +2648,7 @@ msgid ""
 "once."
 msgstr ""
 "Genereer een nieuwe set via api.wordpress.org/secret-key/1.1/salt/ en "
-"vervang het blok in wp-config.php. Vernieuwen maakt elke opgeslagen sessie "
+"vervang het blok in wp-config.php. Roteren maakt elke opgeslagen sessie "
 "ongeldig, de snelste manier om een gestolen cookie buiten te sluiten. "
 "Iedereen wordt één keer uitgelogd."
 
@@ -2665,7 +2681,8 @@ msgstr "Er wordt een eigen tabelvoorvoegsel (%s) gebruikt."
 
 #: includes/checks/class-cascr-checks-config.php:293
 msgid "The database account is not allowed to inspect its own privileges."
-msgstr "Het databaseaccount mag zijn eigen rechten niet inzien."
+msgstr ""
+"Het is het databaseaccount niet toegestaan zijn eigen rechten in te zien."
 
 #: includes/checks/class-cascr-checks-config.php:308
 msgid "all privileges on every database"
@@ -2698,8 +2715,8 @@ msgid ""
 "Create a dedicated account with rights on this database only and update wp-"
 "config.php."
 msgstr ""
-"Maak een apart account aan met alleen rechten op deze database en werk wp-"
-"config.php bij."
+"Maak een apart account aan met alleen rechten op deze database en update wp-"
+"config.php."
 
 #. translators: 1: number of overdue events, 2: human readable time
 #. difference.
@@ -2707,8 +2724,8 @@ msgstr ""
 #, php-format
 msgid "%1$d scheduled event is overdue by %2$s"
 msgid_plural "%1$d scheduled events are overdue, the oldest by %2$s"
-msgstr[0] "%1$d geplande taak is %2$s te laat"
-msgstr[1] "%1$d geplande taken zijn %2$s te laat"
+msgstr[0] "%1$d gepland event is %2$s te laat"
+msgstr[1] "%1$d geplande events zijn te laat, het oudste %2$s"
 
 #. translators: 1: number of overdue events, 2: human readable time
 #. difference.
@@ -2716,8 +2733,8 @@ msgstr[1] "%1$d geplande taken zijn %2$s te laat"
 #, php-format
 msgid "%1$d scheduled event is overdue by %2$s."
 msgid_plural "%1$d scheduled events are overdue, the oldest by %2$s."
-msgstr[0] "%1$d geplande taak is %2$s te laat."
-msgstr[1] "%1$d geplande taken zijn %2$s te laat."
+msgstr[0] "%1$d gepland event is %2$s te laat."
+msgstr[1] "%1$d geplande events zijn te laat, het oudste %2$s."
 
 #: includes/checks/class-cascr-checks-config.php:401
 msgid "ALTERNATE_WP_CRON is enabled."
@@ -2729,24 +2746,24 @@ msgid ""
 "doing_wp_cron in the address, which defeats page caching for that request "
 "and leaves the parameter in access logs and in referrers sent to other sites"
 msgstr ""
-"ALTERNATE_WP_CRON is ingeschakeld: het plant via een doorverwijzing met "
-"doing_wp_cron in het adres, waardoor paginacaching voor dat verzoek niet "
-"werkt en de parameter in toegangslogs terechtkomt en in referrers die naar "
-"andere sites gaan"
+"ALTERNATE_WP_CRON is ingeschakeld: het plant via een omleiding met "
+"doing_wp_cron in het adres, waardoor paginacaching voor die aanvraag niet "
+"werkt en de parameter terechtkomt in de access-logs en in referrers die naar"
+" andere sites worden verzonden"
 
 #. translators: %s: name of a scheduled hook with no listener in this request.
 #: includes/checks/class-cascr-checks-config.php:412
 #, php-format
 msgid "scheduled hook with no listener registered in this request: %s"
-msgstr "geplande hook zonder geregistreerde listener in dit verzoek: %s"
+msgstr "geplande hook zonder geregistreerde listener in deze aanvraag: %s"
 
 #. translators: %d: number of scheduled hooks with no listener.
 #: includes/checks/class-cascr-checks-config.php:419
 #, php-format
 msgid "%d scheduled hook has no listener in this request."
 msgid_plural "%d scheduled hooks have no listener in this request."
-msgstr[0] "%d geplande hook heeft geen listener in dit verzoek."
-msgstr[1] "%d geplande hooks hebben geen listener in dit verzoek."
+msgstr[0] "%d geplande hook heeft geen listener in deze aanvraag."
+msgstr[1] "%d geplande hooks hebben geen listener in deze aanvraag."
 
 #: includes/checks/class-cascr-checks-config.php:436
 msgid "WP-Cron is handled by a server cron job and nothing is overdue."
@@ -2755,7 +2772,8 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-config.php:437
 msgid "WP-Cron runs on page loads and nothing is overdue."
-msgstr "WP-Cron draait bij het laden van pagina's en niets is te laat."
+msgstr ""
+"WP-Cron komt bij het laden van pagina's tot uitvoering en niets is te laat."
 
 #: includes/checks/class-cascr-checks-config.php:442
 msgid ""
@@ -2777,13 +2795,13 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-config.php:463
 msgid "The autoloaded options could not be read."
-msgstr "De automatisch geladen opties konden niet worden gelezen."
+msgstr "De autoloaded opties konden niet worden gelezen."
 
 #. translators: %s: human readable size.
 #: includes/checks/class-cascr-checks-config.php:492
 #, php-format
 msgid "%s of options is loaded on every request."
-msgstr "%s aan opties wordt bij elk verzoek geladen."
+msgstr "%s aan opties wordt bij elke aanvraag geladen."
 
 #. translators: %s: human readable size.
 #: includes/checks/class-cascr-checks-config.php:501
@@ -2792,12 +2810,13 @@ msgid ""
 "%s of options is loaded on every request. Bloated autoloaded options are "
 "often forgotten logs or planted payloads."
 msgstr ""
-"%s aan opties wordt bij elk verzoek geladen. Opgeblazen automatisch geladen "
-"opties zijn vaak vergeten logs of ingeplante payloads."
+"%s aan opties wordt bij elke aanvraag geladen. Opgeblazen autoloaded opties "
+"zijn vaak vergeten logs of ingeplante payloads."
 
 #: includes/checks/class-cascr-checks-config.php:506
 msgid "Look at what the largest entries contain before deleting anything."
-msgstr "Bekijk wat de grootste items bevatten voordat je iets verwijdert."
+msgstr ""
+"Bekijk wat de grootste vermeldingen bevatten voordat je iets verwijdert."
 
 #. translators: 1: option name, 2: the suspicious code fragment.
 #: includes/checks/class-cascr-checks-config.php:543
@@ -2816,16 +2835,16 @@ msgstr "optie %1$s laadt een script van %2$s"
 #, php-format
 msgid "%d option entry contains a code fragment."
 msgid_plural "%d option entries contain code fragments."
-msgstr[0] "%d optie bevat een codefragment."
-msgstr[1] "%d opties bevatten een codefragment."
+msgstr[0] "%d optie-vermelding bevat een codefragment."
+msgstr[1] "%d optie-vermeldingen bevatten codefragmenten."
 
 #: includes/checks/class-cascr-checks-config.php:583
 msgid ""
 "Look at each entry before removing it. An option that stores PHP is worth "
 "tracing back to the plugin that wrote it."
 msgstr ""
-"Bekijk elk item voordat je het verwijdert. Bij een optie die PHP opslaat "
-"loont het om na te gaan welke plugin die heeft geschreven."
+"Bekijk elke vermelding voordat je die verwijdert. Bij een optie die PHP "
+"opslaat loont het om na te gaan welke plugin die heeft geschreven."
 
 #. translators: %d: number of option entries loading a script from another
 #. host.
@@ -2833,8 +2852,8 @@ msgstr ""
 #, php-format
 msgid "%d option entry loads a script from another host."
 msgid_plural "%d option entries load a script from another host."
-msgstr[0] "%d optie laadt een script van een andere host."
-msgstr[1] "%d opties laden een script van een andere host."
+msgstr[0] "%d optie-vermelding laadt een script van een andere host."
+msgstr[1] "%d optie-vermeldingen laden een script van een andere host."
 
 #: includes/checks/class-cascr-checks-config.php:601
 msgid ""
@@ -2884,7 +2903,7 @@ msgstr[1] "%d beveiligingsplugins zijn actief."
 
 #: includes/checks/class-cascr-checks-config.php:712
 msgid "Repeated login attempts are being limited."
-msgstr "Herhaalde inlogpogingen worden beperkt."
+msgstr "Herhaalde loginpogingen worden beperkt."
 
 #: includes/checks/class-cascr-checks-config.php:721
 msgid ""
@@ -2892,8 +2911,8 @@ msgid ""
 " see plugins, so a limit in the web server or in front of the site does not "
 "show up here."
 msgstr ""
-"Er is geen plugin actief die herhaalde inlogpogingen beperkt. Deze controle "
-"ziet alleen plugins, dus een limiet in de webserver of vóór de site "
+"Er is geen plugin actief die herhaalde loginpogingen beperkt. Deze controle "
+"ziet alleen plugins, dus een beperking in de webserver of vóór de site "
 "verschijnt hier niet."
 
 #: includes/checks/class-cascr-checks-config.php:724
@@ -2902,8 +2921,8 @@ msgid ""
 " at the server. If a limit is already in place outside WordPress, mute this "
 "check."
 msgstr ""
-"Installeer een inlogbegrenzer, of beperk wp-login.php en het XML-RPC-"
-"endpoint op de server. Is er al een limiet buiten WordPress, demp dan deze "
+"Installeer een login-limiter, of beperk wp-login.php en het XML-RPC-endpoint"
+" op de server. Is er al een beperking buiten WordPress, demp dan deze "
 "controle."
 
 #: includes/checks/class-cascr-checks-config.php:738
@@ -2991,7 +3010,7 @@ msgid ""
 "PHP %1$s only receives security fixes, no more bug fixes. Support ends on "
 "%2$s."
 msgstr ""
-"PHP %1$s krijgt alleen nog beveiligingsupdates, geen bugfixes meer. De "
+"PHP %1$s krijgt alleen nog beveiligingsupdates, geen bug fixes meer. De "
 "ondersteuning eindigt op %2$s."
 
 #. translators: %s: PHP version number.
@@ -3005,15 +3024,15 @@ msgid ""
 "The automatic updater cannot run, so security releases are not installed on "
 "their own."
 msgstr ""
-"De automatische updater kan niet draaien, dus beveiligingsreleases worden "
-"niet vanzelf geïnstalleerd."
+"De automatische updater kan niet worden uitgevoerd, dus beveiligingsreleases"
+" worden niet vanzelf geïnstalleerd."
 
 #: includes/checks/class-cascr-checks-core.php:564
 msgid ""
 "Allow file modifications again, or install core updates another way, for "
 "example over WP-CLI or the hosting platform."
 msgstr ""
-"Sta bestandswijzigingen weer toe, of installeer core-updates op een andere "
+"Bestandswijzigingen weer toestaan, of installeer core-updates op een andere "
 "manier, bijvoorbeeld via WP-CLI of het hostingplatform."
 
 #: includes/checks/class-cascr-checks-core.php:577
@@ -3119,7 +3138,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-core.php:763
 msgid "The core directories could not be read completely."
-msgstr "De core-mappen konden niet volledig worden gelezen."
+msgstr "De core-directory's konden niet volledig worden gelezen."
 
 #. translators: %d: number of executable files that were compared before the
 #. scan stopped.
@@ -3129,8 +3148,8 @@ msgid ""
 "The scan stopped after %d executable files, so the core directories were "
 "only compared in part."
 msgstr ""
-"De scan stopte na %d uitvoerbare bestanden, dus de core-mappen zijn maar "
-"gedeeltelijk vergeleken."
+"De scan stopte na %d uitvoerbare bestanden, dus de core-directory's zijn "
+"maar gedeeltelijk vergeleken."
 
 #: includes/checks/class-cascr-checks-core.php:778
 msgid ""
@@ -3142,7 +3161,8 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-core.php:783
 msgid "The core directories contain no files beyond the official release."
-msgstr "De core-mappen bevatten geen bestanden buiten de officiële release."
+msgstr ""
+"De core-directory's bevatten geen bestanden buiten de officiële release."
 
 #. translators: %d: number of unexpected executable files.
 #: includes/checks/class-cascr-checks-core.php:790
@@ -3150,9 +3170,10 @@ msgstr "De core-mappen bevatten geen bestanden buiten de officiële release."
 msgid "%d executable file in the core directories is not part of WordPress."
 msgid_plural ""
 "%d executable files in the core directories are not part of WordPress."
-msgstr[0] "%d uitvoerbaar bestand in de core-mappen hoort niet bij WordPress."
+msgstr[0] ""
+"%d uitvoerbaar bestand in de core-directory's hoort niet bij WordPress."
 msgstr[1] ""
-"%d uitvoerbare bestanden in de core-mappen horen niet bij WordPress."
+"%d uitvoerbare bestanden in de core-directory's horen niet bij WordPress."
 
 #: includes/checks/class-cascr-checks-core.php:800
 msgid ""
@@ -3182,7 +3203,7 @@ msgstr "Alle actieve plugins zijn up-to-date."
 msgid "%d active plugin has an update waiting."
 msgid_plural "%d active plugins have updates waiting."
 msgstr[0] "%d actieve plugin heeft een update klaarstaan."
-msgstr[1] "%d actieve plugins hebben een update klaarstaan."
+msgstr[1] "%d actieve plugins hebben updates klaarstaan."
 
 #: includes/checks/class-cascr-checks-core.php:857
 #: includes/checks/class-cascr-checks-core.php:911
@@ -3209,7 +3230,7 @@ msgstr "Alle thema's zijn up-to-date."
 msgid "%d theme has an update waiting."
 msgid_plural "%d themes have updates waiting."
 msgstr[0] "%d thema heeft een update klaarstaan."
-msgstr[1] "%d thema's hebben een update klaarstaan."
+msgstr[1] "%d thema's hebben updates klaarstaan."
 
 #: includes/checks/class-cascr-checks-core.php:942
 msgid "No inactive plugins or unused themes are installed."
@@ -3308,7 +3329,7 @@ msgstr[1] ""
 msgid ""
 "Run the report again once api.wordpress.org can be reached from this server."
 msgstr ""
-"Voer het rapport opnieuw uit zodra api.wordpress.org vanaf deze server "
+"Het rapport opnieuw uitvoeren zodra api.wordpress.org vanaf deze server "
 "bereikbaar is."
 
 #: includes/checks/class-cascr-checks-core.php:1124
@@ -3420,12 +3441,12 @@ msgid ""
 "Open each file. This code runs on every request and cannot be switched off "
 "from the dashboard."
 msgstr ""
-"Open elk bestand. Deze code draait bij elk verzoek en kan niet via het "
-"dashboard worden uitgeschakeld."
+"Open elk bestand. Deze code komt bij elke aanvraag tot uitvoering en kan "
+"niet via het dashboard worden uitgeschakeld."
 
 #: includes/checks/class-cascr-checks-core.php:1320
 msgid "The parent directory could not be read."
-msgstr "De bovenliggende map kon niet worden gelezen."
+msgstr "De bovenliggende directory kon niet worden gelezen."
 
 #: includes/checks/class-cascr-checks-core.php:1350
 msgid "The scan for other installations could not be completed."
@@ -3441,16 +3462,16 @@ msgstr "Naast deze installatie is geen andere WordPress installatie gevonden."
 msgid "%d other WordPress installation sits in the directory above this one."
 msgid_plural ""
 "%d other WordPress installations sit in the directory above this one."
-msgstr[0] "%d andere WordPress-installatie staat in de map boven deze."
-msgstr[1] "%d andere WordPress-installaties staan in de map boven deze."
+msgstr[0] "%d andere WordPress-installatie staat in de directory boven deze."
+msgstr[1] "%d andere WordPress-installaties staan in de directory boven deze."
 
 #: includes/checks/class-cascr-checks-core.php:1371
 msgid ""
 "Keep every installation updated. A neglected one next door is an entry point"
 " into this one."
 msgstr ""
-"Houd elke installatie up-to-date. Een verwaarloosde buur is een toegangsweg "
-"tot deze installatie."
+"Zorg dat elke installatie geüpdatet blijft. Een verwaarloosde buur is een "
+"toegangsweg tot deze installatie."
 
 #: includes/checks/class-cascr-checks-core.php:1480
 msgid "The plugin directory returned no usable answer."
@@ -3486,8 +3507,8 @@ msgstr ""
 msgid ""
 "Set the file to 640 or 440 and make sure it is owned by the site account."
 msgstr ""
-"Zet het bestand op 640 of 440 en zorg dat het eigendom is van het "
-"siteaccount."
+"Zet het bestand op 640 of 440 en zorg dat het eigendom is van het account "
+"van de site."
 
 #: includes/checks/class-cascr-checks-files.php:73
 msgid "wp-config.php is readable by every account on the server."
@@ -3504,43 +3525,43 @@ msgstr "De rechten van wp-config.php zijn restrictief."
 #: includes/checks/class-cascr-checks-files.php:92
 #: includes/checks/class-cascr-checks-files.php:567
 msgid "The uploads directory could not be located."
-msgstr "De uploads-map kon niet worden gevonden."
+msgstr "De uploads directory kon niet worden gevonden."
 
 #: includes/checks/class-cascr-checks-files.php:98
 msgid "The permissions of the uploads directory could not be read."
-msgstr "De rechten van de uploads-map konden niet worden gelezen."
+msgstr "De rechten van de uploads directory konden niet worden gelezen."
 
 #: includes/checks/class-cascr-checks-files.php:110
 msgid "The uploads directory is writable by everyone on the server."
-msgstr "De uploads-map is schrijfbaar voor iedereen op de server."
+msgstr "De uploads directory is schrijfbaar voor iedereen op de server."
 
 #: includes/checks/class-cascr-checks-files.php:113
 msgid ""
 "Set the directory to 755 or 750. It only needs to be writable by the account"
 " that runs PHP."
 msgstr ""
-"Zet de map op 755 of 750. Alleen het account dat PHP uitvoert, hoeft erin te"
-" kunnen schrijven."
+"Zet de directory op 755 of 750. Alleen het account dat PHP uitvoert, hoeft "
+"erin te kunnen schrijven."
 
 #: includes/checks/class-cascr-checks-files.php:117
 msgid "The uploads directory is not writable by everyone."
-msgstr "De uploads-map is niet voor iedereen schrijfbaar."
+msgstr "De uploads directory is niet voor iedereen schrijfbaar."
 
 #: includes/checks/class-cascr-checks-files.php:155
 msgid "Core directories are writable by everyone on the server."
-msgstr "Core-mappen zijn schrijfbaar voor iedereen op de server."
+msgstr "Core-directory's zijn schrijfbaar voor iedereen op de server."
 
 #: includes/checks/class-cascr-checks-files.php:158
 msgid "Set the directories to 755 or 750."
-msgstr "Zet de mappen op 755 of 750."
+msgstr "Zet de directory's op 755 of 750."
 
 #: includes/checks/class-cascr-checks-files.php:163
 msgid "The permissions of the core directories could not be read."
-msgstr "De rechten van de core-mappen konden niet worden gelezen."
+msgstr "De rechten van de core-directory's konden niet worden gelezen."
 
 #: includes/checks/class-cascr-checks-files.php:166
 msgid "No core directory is writable by everyone."
-msgstr "Geen enkele core-map is voor iedereen schrijfbaar."
+msgstr "Geen enkele core-directory is voor iedereen schrijfbaar."
 
 #: includes/checks/class-cascr-checks-files.php:222
 msgid ""
@@ -3564,13 +3585,13 @@ msgid ""
 " wp-config.php, the core directories and the uploads folder are not listed "
 "here, they have a check of their own."
 msgstr ""
-"Zet bestanden op 644 en mappen op 755. Niets hoeft voor iedereen schrijfbaar"
-" te zijn. wp-config.php, de core-mappen en de uploads-map staan hier niet "
-"bij, die hebben een eigen controle."
+"Zet bestanden op 644 en directory's op 755. Niets hoeft voor iedereen "
+"schrijfbaar te zijn. wp-config.php, de core-directory's en de uploads-map "
+"staan hier niet bij, die hebben een eigen controle."
 
 #: includes/checks/class-cascr-checks-files.php:286
 msgid "The uploads directory could not be read."
-msgstr "De uploads-map kon niet worden gelezen."
+msgstr "De uploads directory kon niet worden gelezen."
 
 #. translators: 1: file path, 2: file size, already formatted, 3: why the file
 #. was reported, or an empty string.
@@ -3588,15 +3609,15 @@ msgstr ", gemeld omdat %s"
 
 #: includes/checks/class-cascr-checks-files.php:352
 msgid "The uploads directory could not be scanned completely."
-msgstr "De uploads-map kon niet volledig worden gescand."
+msgstr "De uploads directory kon niet volledig worden gescand."
 
 #. translators: %d: number of executable files found in uploads.
 #: includes/checks/class-cascr-checks-files.php:359
 #, php-format
 msgid "%d executable file sits in the uploads directory."
 msgid_plural "%d executable files sit in the uploads directory."
-msgstr[0] "%d uitvoerbaar bestand staat in de uploads-map."
-msgstr[1] "%d uitvoerbare bestanden staan in de uploads-map."
+msgstr[0] "%d uitvoerbaar bestand staat in de uploads directory."
+msgstr[1] "%d uitvoerbare bestanden staan in de uploads directory."
 
 #: includes/checks/class-cascr-checks-files.php:369
 msgid ""
@@ -3615,9 +3636,9 @@ msgid ""
 msgid_plural ""
 "%d files that the web server does not run sit in the uploads directory."
 msgstr[0] ""
-"%d bestand dat de webserver niet uitvoert, staat in de uploads-map."
+"%d bestand dat de webserver niet uitvoert, staat in de uploads directory."
 msgstr[1] ""
-"%d bestanden die de webserver niet uitvoert, staan in de uploads-map."
+"%d bestanden die de webserver niet uitvoert, staan in de uploads directory."
 
 #: includes/checks/class-cascr-checks-files.php:387
 msgid ""
@@ -3630,7 +3651,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-files.php:391
 msgid "The uploads directory holds no executable files."
-msgstr "De uploads-map bevat geen uitvoerbare bestanden."
+msgstr "De uploads directory bevat geen uitvoerbare bestanden."
 
 #: includes/checks/class-cascr-checks-files.php:412
 msgid "the tokeniser is unavailable"
@@ -3650,7 +3671,7 @@ msgstr "het kon niet worden gelezen"
 
 #: includes/checks/class-cascr-checks-files.php:483
 msgid "it runs a shell command"
-msgstr "het voert een shellopdracht uit"
+msgstr "het laat een shellopdracht uitvoeren"
 
 #: includes/checks/class-cascr-checks-files.php:487
 msgid "it builds a variable name at runtime"
@@ -3689,7 +3710,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-files.php:578
 msgid "A test file could not be written to the uploads directory."
-msgstr "Er kon geen testbestand naar de uploads-map worden geschreven."
+msgstr "Er kon geen testbestand naar de uploads directory worden geschreven."
 
 #: includes/checks/class-cascr-checks-files.php:596
 msgid "The test file could not be requested over HTTP."
@@ -3697,40 +3718,40 @@ msgstr "Het testbestand kon niet via HTTP worden opgevraagd."
 
 #: includes/checks/class-cascr-checks-files.php:602
 msgid "PHP files in the uploads directory are not served."
-msgstr "PHP-bestanden in de uploads-map worden niet uitgeleverd."
+msgstr "PHP-bestanden in de uploads directory worden niet uitgeleverd."
 
 #: includes/checks/class-cascr-checks-files.php:613
 msgid ""
 "The server runs PHP files from the uploads directory, which turns any file "
 "upload flaw into code execution."
 msgstr ""
-"De server voert PHP-bestanden uit de uploads-map uit, waardoor elk lek in "
-"bestandsuploads tot code-uitvoering leidt."
+"De server voert PHP-bestanden uit de uploads directory uit, waardoor elk lek"
+" in bestandsuploads tot code-uitvoering leidt."
 
 #: includes/checks/class-cascr-checks-files.php:616
 msgid "Deny .php files in the uploads directory."
-msgstr "Blokkeer .php-bestanden in de uploads-map."
+msgstr "Blokkeer .php-bestanden in de uploads directory."
 
 #: includes/checks/class-cascr-checks-files.php:622
 msgid ""
 "The server does not run PHP files in the uploads directory but hands them "
 "out as text, so anything uploaded there can be read back line by line."
 msgstr ""
-"De server voert PHP-bestanden in de uploads-map niet uit, maar levert ze als"
-" tekst uit, dus alles wat daar wordt geüpload, is regel voor regel terug te "
-"lezen."
+"PHP-bestanden in de uploads directory worden door de server niet uitgevoerd,"
+" maar als tekst uitgeleverd, dus alles wat daar wordt geüpload, is regel "
+"voor regel terug te lezen."
 
 #: includes/checks/class-cascr-checks-files.php:625
 msgid ""
 "Deny access to .php files in the uploads directory instead of only switching"
 " the interpreter off for them."
 msgstr ""
-"Blokkeer de toegang tot .php-bestanden in de uploads-map in plaats van "
-"alleen de interpreter ervoor uit te schakelen."
+"Blokkeer de toegang tot .php-bestanden in de uploads directory in plaats van"
+" alleen de interpreter ervoor uit te schakelen."
 
 #: includes/checks/class-cascr-checks-files.php:629
 msgid "PHP files in the uploads directory are not executed."
-msgstr "PHP-bestanden in de uploads-map worden niet uitgevoerd."
+msgstr "PHP-bestanden in de uploads directory worden niet uitgevoerd."
 
 #. translators: %d: number of publicly readable configuration files.
 #: includes/checks/class-cascr-checks-files.php:669
@@ -3785,15 +3806,16 @@ msgid ""
 "A version control directory is readable from the web, which exposes the full"
 " source history and often credentials along with it."
 msgstr ""
-"Een map voor versiebeheer is via het web leesbaar. Daarmee ligt de volledige"
-" broncodegeschiedenis open, en vaak ook inloggegevens."
+"Een directory voor versiebeheer is via het web leesbaar. Daarmee ligt de "
+"volledige broncodegeschiedenis open, en vaak ook inloggegevens."
 
 #: includes/checks/class-cascr-checks-files.php:736
 msgid ""
 "Block the directory at the server, or deploy without the repository "
 "metadata."
 msgstr ""
-"Blokkeer de map op de server, of rol uit zonder de repository-metadata."
+"De directory op de server blokkeren, of uitrollen zonder de repository-"
+"metadata."
 
 #: includes/checks/class-cascr-checks-files.php:741
 msgid "The version control paths could not be checked."
@@ -3801,7 +3823,7 @@ msgstr "De paden voor versiebeheer konden niet worden gecontroleerd."
 
 #: includes/checks/class-cascr-checks-files.php:744
 msgid "No version control directory is readable from the web."
-msgstr "Er is geen map voor versiebeheer via het web leesbaar."
+msgstr "Er is geen directory voor versiebeheer via het web leesbaar."
 
 #: includes/checks/class-cascr-checks-files.php:773
 msgid "No database dumps or archives were found in the web root."
@@ -3816,8 +3838,8 @@ msgid ""
 "Delete the file immediately and assume its contents are known. Then rotate "
 "the database password and the authentication keys."
 msgstr ""
-"Verwijder het bestand direct en ga ervan uit dat de inhoud bekend is. Wijzig"
-" daarna het databasewachtwoord en vernieuw de authenticatiesleutels."
+"Verwijder het bestand direct en ga ervan uit dat de content bekend is. "
+"Daarna het databasewachtwoord en de authenticatiesleutels roteren."
 
 #. translators: %d: number of dumps or archives found.
 #: includes/checks/class-cascr-checks-files.php:815
@@ -3900,16 +3922,16 @@ msgid ""
 "The server lists directory contents, which hands attackers a map of the "
 "installation."
 msgstr ""
-"De server toont de inhoud van mappen, wat aanvallers een plattegrond van de "
-"installatie geeft."
+"De server toont de content van directory's, wat aanvallers een plattegrond "
+"van de installatie geeft."
 
 #: includes/checks/class-cascr-checks-files.php:974
 msgid "Directory listing could not be checked."
-msgstr "Mapweergave kon niet worden gecontroleerd."
+msgstr "Directory-weergave kon niet worden gecontroleerd."
 
 #: includes/checks/class-cascr-checks-files.php:977
 msgid "The server does not list directory contents."
-msgstr "De server toont de inhoud van mappen niet."
+msgstr "De server toont de content van directory's niet."
 
 #: includes/checks/class-cascr-checks-files.php:994
 msgid ""
@@ -3936,7 +3958,7 @@ msgid ""
 "Save the permalink settings once. WordPress writes a basic .htaccess by "
 "itself."
 msgstr ""
-"Sla de permalinkinstellingen één keer op. WordPress schrijft dan zelf een "
+"De permalinkinstellingen één keer opslaan. WordPress schrijft dan zelf een "
 "eenvoudige .htaccess."
 
 #: includes/checks/class-cascr-checks-files.php:1020
@@ -3945,8 +3967,8 @@ msgid ""
 "AllowOverride allows the rule; on nginx and Caddy it belongs in the server "
 "configuration."
 msgstr ""
-"Op Apache en LiteSpeed doet een .htaccess in die map het werk, zolang "
-"AllowOverride de regel toestaat; op nginx en Caddy hoort het in de "
+"Op Apache en LiteSpeed doet een .htaccess in die directory het werk, zolang "
+"AllowOverride die regel kan toestaan; op nginx en Caddy hoort het in de "
 "serverconfiguratie."
 
 #. translators: %s: comma separated file names, for example ".user.ini,
@@ -3957,15 +3979,15 @@ msgid ""
 "Keep %s: those are running configuration, not leftovers. Deny access to them"
 " at the server instead of deleting them."
 msgstr ""
-"Laat %s staan: dat is actieve configuratie, geen restanten. Blokkeer de "
-"toegang ertoe op de server in plaats van ze te verwijderen."
+"Laat %s staan: dat is configuratie die nu wordt uitgevoerd, geen restanten. "
+"Blokkeer de toegang ertoe op de server in plaats van ze te verwijderen."
 
 #: includes/checks/class-cascr-checks-network.php:52
 msgid ""
 "The site address still uses http, so every login and every form submission "
 "travels in the clear."
 msgstr ""
-"Het siteadres gebruikt nog http, dus elke login en elk verzonden formulier "
+"Het site-adres gebruikt nog http, dus elke login en elk verzonden formulier "
 "gaat onversleuteld over het netwerk."
 
 #: includes/checks/class-cascr-checks-network.php:55
@@ -3973,8 +3995,8 @@ msgid ""
 "Get a certificate, switch the site and home addresses to https and redirect "
 "http to https."
 msgstr ""
-"Regel een certificaat, zet het site- en WordPress-adres op https en stuur "
-"http door naar https."
+"Regel een certificaat, zet het site- en WordPress-adres op https en stel een"
+" omleiding in van http naar https."
 
 #: includes/checks/class-cascr-checks-network.php:62
 msgid "FORCE_SSL_ADMIN is not set"
@@ -3990,27 +4012,29 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:74
 msgid "the http address does not redirect permanently to https"
-msgstr "het http-adres stuurt niet permanent door naar https"
+msgstr "het http-adres heeft geen permanente omleiding naar https"
 
 #: includes/checks/class-cascr-checks-network.php:75
 msgid ""
 "The http address does not redirect permanently to https, so a visitor who "
 "types the bare domain can still be served over http."
 msgstr ""
-"Het http-adres stuurt niet permanent door naar https, dus een bezoeker die "
-"alleen het domein intypt, kan nog via http worden bediend."
+"Het http-adres heeft geen permanente omleiding naar https, dus een bezoeker "
+"die alleen het domein intypt, kan nog via http worden bediend."
 
 #: includes/checks/class-cascr-checks-network.php:80
 msgid "The site is served over HTTPS and http is redirected."
-msgstr "De site wordt via HTTPS geleverd en http wordt doorgestuurd."
+msgstr ""
+"De site wordt via HTTPS geleverd en voor http is een omleiding naar https "
+"ingesteld."
 
 #: includes/checks/class-cascr-checks-network.php:90
 msgid ""
 "Add define( 'FORCE_SSL_ADMIN', true ); to wp-config.php and redirect http to"
 " https with a 301."
 msgstr ""
-"Voeg define( 'FORCE_SSL_ADMIN', true ); toe aan wp-config.php en stuur http "
-"met een 301 door naar https."
+"Toevoegen aan wp-config.php: define( 'FORCE_SSL_ADMIN', true ); en http met "
+"een 301 naar https omleiden."
 
 #: includes/checks/class-cascr-checks-network.php:108
 msgid "The site does not use HTTPS, so there is no certificate to inspect."
@@ -4057,7 +4081,7 @@ msgid ""
 "Renew the certificate now and check that automatic renewal actually runs."
 msgstr ""
 "Vernieuw het certificaat nu en controleer of de automatische verlenging echt"
-" draait."
+" tot uitvoering komt."
 
 #. translators: %s: human readable time until expiry.
 #: includes/checks/class-cascr-checks-network.php:203
@@ -4067,7 +4091,9 @@ msgstr "Het TLS-certificaat verloopt over %s."
 
 #: includes/checks/class-cascr-checks-network.php:208
 msgid "Renew it and check that automatic renewal runs."
-msgstr "Vernieuw het en controleer of de automatische verlenging draait."
+msgstr ""
+"Vernieuw het en controleer of de automatische verlenging tot uitvoering "
+"komt."
 
 #. translators: %s: human readable time until expiry.
 #: includes/checks/class-cascr-checks-network.php:216
@@ -4085,7 +4111,7 @@ msgid ""
 "to 100 days in March 2027 and to 47 days in 2029, so a manual renewal will "
 "get tight."
 msgstr ""
-"Vernieuw het en laat de verlenging automatisch lopen. De looptijd van "
+"Vernieuw het en laat de verlenging automatisch uitvoeren. De looptijd van "
 "certificaten daalt in maart 2027 naar 100 dagen en in 2029 naar 47 dagen, "
 "dus handmatig vernieuwen wordt krap."
 
@@ -4097,7 +4123,7 @@ msgstr "De verbinding is opgezet via %s, dat browsers niet meer ondersteunen."
 
 #: includes/checks/class-cascr-checks-network.php:234
 msgid "Ask the host to allow TLS 1.2 and 1.3 only."
-msgstr "Vraag je hostingprovider om alleen TLS 1.2 en 1.3 toe te staan."
+msgstr "Vraag je hostingprovider of hij alleen TLS 1.2 en 1.3 wil toestaan."
 
 #: includes/checks/class-cascr-checks-network.php:239
 msgid ""
@@ -4110,7 +4136,7 @@ msgstr "Het TLS-certificaat is geldig en verloopt niet binnenkort."
 #: includes/checks/class-cascr-checks-network.php:610
 #: includes/checks/class-cascr-checks-network.php:653
 msgid "The response headers could not be retrieved."
-msgstr "De response-headers konden niet worden opgehaald."
+msgstr "De reactie-headers konden niet worden opgehaald."
 
 #: includes/checks/class-cascr-checks-network.php:297
 msgid "All recommended security headers are present."
@@ -4139,7 +4165,7 @@ msgid ""
 "No HSTS header is sent, so the first request of a visit can still be "
 "downgraded to http."
 msgstr ""
-"Er wordt geen HSTS-header verzonden, dus het eerste verzoek van een bezoek "
+"Er wordt geen HSTS-header verzonden, dus de eerste aanvraag van een bezoek "
 "kan nog naar http worden teruggezet."
 
 #: includes/checks/class-cascr-checks-network.php:351
@@ -4202,16 +4228,16 @@ msgid ""
 "is on HTTPS for good."
 msgstr ""
 "Gebruik max-age=31536000; includeSubDomains, dat is één jaar. Alles korter "
-"dan zes maanden geldt hier als zwak. Voeg preload pas toe als elk subdomein "
-"definitief op HTTPS draait."
+"dan zes maanden geldt hier als zwak. Preload pas toevoegen als elk subdomein"
+" definitief op HTTPS draait."
 
 #: includes/checks/class-cascr-checks-network.php:428
 msgid ""
 "No Content Security Policy is sent, so an injected script runs with no "
 "restriction."
 msgstr ""
-"Er wordt geen Content Security Policy verstuurd, dus een geïnjecteerd script"
-" draait zonder enige beperking."
+"Er wordt geen Content Security Policy verzonden, dus een geïnjecteerd script"
+" komt zonder enige beperking tot uitvoering."
 
 #: includes/checks/class-cascr-checks-network.php:431
 msgid ""
@@ -4226,8 +4252,8 @@ msgid ""
 "The Content Security Policy is only sent in report-only mode, so nothing is "
 "actually blocked."
 msgstr ""
-"De Content Security Policy wordt alleen in report-only-modus verstuurd, dus "
-"er wordt niets echt geblokkeerd."
+"De Content Security Policy wordt alleen in report-only-modus verzonden, dus "
+"in de praktijk is er geen blokkering."
 
 #: includes/checks/class-cascr-checks-network.php:440
 msgid ""
@@ -4238,7 +4264,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:481
 msgid "'unsafe-inline' allows injected inline scripts to run"
-msgstr "'unsafe-inline' laat geïnjecteerde inline scripts draaien"
+msgstr "'unsafe-inline': geïnjecteerde inline scripts toestaan en uitvoeren"
 
 #: includes/checks/class-cascr-checks-network.php:482
 msgid "inline scripts ('unsafe-inline')"
@@ -4246,7 +4272,7 @@ msgstr "inline scripts ('unsafe-inline')"
 
 #: includes/checks/class-cascr-checks-network.php:486
 msgid "'unsafe-eval' allows strings to be executed as code"
-msgstr "'unsafe-eval' laat tekenreeksen als code uitvoeren"
+msgstr "'unsafe-eval': strings als code uitvoeren toestaan"
 
 #: includes/checks/class-cascr-checks-network.php:487
 msgid "eval ('unsafe-eval')"
@@ -4254,7 +4280,7 @@ msgstr "eval ('unsafe-eval')"
 
 #: includes/checks/class-cascr-checks-network.php:491
 msgid "a wildcard source allows scripts from anywhere"
-msgstr "een wildcardbron staat scripts van overal toe"
+msgstr "een wildcardbron: scripts van overal toestaan"
 
 #: includes/checks/class-cascr-checks-network.php:492
 msgid "a wildcard script source"
@@ -4293,11 +4319,11 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:533
 msgid "The login page could not be requested."
-msgstr "De inlogpagina kon niet worden opgevraagd."
+msgstr "De loginpagina kon niet worden opgevraagd."
 
 #: includes/checks/class-cascr-checks-network.php:540
 msgid "The login page set no cookies that could be inspected."
-msgstr "De inlogpagina zette geen cookies die konden worden gecontroleerd."
+msgstr "De loginpagina zette geen cookies die konden worden gecontroleerd."
 
 #. translators: %s: cookie name.
 #: includes/checks/class-cascr-checks-network.php:564
@@ -4322,7 +4348,7 @@ msgid ""
 "The cookies the login page hands out before sign-in carry the right "
 "attributes."
 msgstr ""
-"De cookies die de inlogpagina vóór het inloggen uitdeelt, hebben de juiste "
+"De cookies die de loginpagina vóór het inloggen uitdeelt, hebben de juiste "
 "attributen."
 
 #: includes/checks/class-cascr-checks-network.php:594
@@ -4330,7 +4356,7 @@ msgid ""
 "The login page hands out cookies without the attributes that limit where a "
 "browser will send them back."
 msgstr ""
-"De inlogpagina deelt cookies uit zonder de attributen die beperken waarheen "
+"De loginpagina deelt cookies uit zonder de attributen die beperken waarheen "
 "een browser ze terugstuurt."
 
 #: includes/checks/class-cascr-checks-network.php:597
@@ -4346,13 +4372,15 @@ msgstr ""
 #: includes/checks/class-cascr-checks-network.php:617
 msgid "No cross-origin headers are sent, which is the right default."
 msgstr ""
-"Er worden geen cross-origin-headers verstuurd, en dat is de juiste "
+"Er worden geen cross-origin-headers verzonden, en dat is de juiste "
 "standaard."
 
 #: includes/checks/class-cascr-checks-network.php:622
 msgid ""
 "Every origin is allowed to read responses and to send credentials along."
-msgstr "Elke origin mag antwoorden lezen en inloggegevens meesturen."
+msgstr ""
+"Het is elke origin toegestaan reacties te lezen en inloggegevens mee te "
+"sturen."
 
 #: includes/checks/class-cascr-checks-network.php:625
 msgid "Never combine the two. Name the origins that are actually allowed."
@@ -4360,7 +4388,7 @@ msgstr "Combineer die twee nooit. Noem de origins die echt toegestaan zijn."
 
 #: includes/checks/class-cascr-checks-network.php:631
 msgid "Every origin is allowed to read responses from this site."
-msgstr "Elke origin mag antwoorden van deze site lezen."
+msgstr "Het is elke origin toegestaan reacties van deze site te lezen."
 
 #: includes/checks/class-cascr-checks-network.php:634
 msgid ""
@@ -4375,14 +4403,14 @@ msgstr "Cross-origin-toegang is beperkt tot een benoemde origin."
 
 #: includes/checks/class-cascr-checks-network.php:667
 msgid "The response headers do not name software versions."
-msgstr "De response-headers noemen geen softwareversies."
+msgstr "De reactie-headers noemen geen softwareversies."
 
 #: includes/checks/class-cascr-checks-network.php:671
 msgid ""
 "The response headers name the exact software versions in use, which saves an"
 " attacker the work of finding out."
 msgstr ""
-"De response-headers noemen de exacte softwareversies, en dat bespaart een "
+"De reactie-headers noemen de exacte softwareversies, en dat bespaart een "
 "aanvaller het zoekwerk."
 
 #: includes/checks/class-cascr-checks-network.php:687
@@ -4401,7 +4429,7 @@ msgstr "generator-tag die WordPress noemt"
 
 #: includes/checks/class-cascr-checks-network.php:704
 msgid "Windows Live Writer manifest link"
-msgstr "Windows Live Writer manifestlink"
+msgstr "Windows Live Writer manifest-link"
 
 #: includes/checks/class-cascr-checks-network.php:708
 msgid "Really Simple Discovery link"
@@ -4433,7 +4461,7 @@ msgstr "Het XML-RPC endpoint was niet bereikbaar."
 
 #: includes/checks/class-cascr-checks-network.php:747
 msgid "The XML-RPC endpoint is blocked."
-msgstr "Het XML-RPC endpoint is geblokkeerd."
+msgstr "Het XML-RPC endpoint heeft een blokkering op de server."
 
 #: includes/checks/class-cascr-checks-network.php:751
 msgid "The XML-RPC endpoint does not answer method calls."
@@ -4453,9 +4481,9 @@ msgid ""
 "the first failed login ends the rest, so it no longer multiplies password "
 "guesses, but one request still does the work of many"
 msgstr ""
-"system.multicall bundelt veel aanroepen in één verzoek. Sinds WordPress 4.4 "
-"stopt de eerste mislukte login de rest, dus het vermenigvuldigt geen "
-"wachtwoordpogingen meer, maar één verzoek doet nog steeds het werk van vele"
+"system.multicall bundelt veel aanroepen in één aanvraag. Sinds WordPress 4.4"
+" stopt de eerste mislukte login de rest, dus het vermenigvuldigt geen "
+"wachtwoordpogingen meer, maar één aanvraag doet nog steeds het werk van vele"
 
 #: includes/checks/class-cascr-checks-network.php:772
 msgid ""
@@ -4475,8 +4503,8 @@ msgid ""
 "xmlrpc_enabled filter only turns away the methods that need a login. Jetpack"
 " and the mobile apps are the usual reasons to leave it open."
 msgstr ""
-"Als niets XML-RPC gebruikt, blokkeer dan xmlrpc.php in de webserver. Alleen "
-"daar worden de verzoeken tegengehouden voordat WordPress ze verwerkt. Het "
+"Als niets XML-RPC gebruikt: xmlrpc.php in de webserver blokkeren. Alleen "
+"daar worden de aanvragen tegengehouden voordat WordPress ze verwerkt. Het "
 "xmlrpc_enabled-filter weigert alleen de methodes die een login vereisen. "
 "Jetpack en de mobiele apps zijn de gebruikelijke redenen om het open te "
 "laten."
@@ -4486,8 +4514,8 @@ msgid ""
 "the ?author=N parameter redirects to the author archive and gives the login "
 "name away"
 msgstr ""
-"de parameter ?author=N stuurt door naar het auteursarchief en verraadt de "
-"loginnaam"
+"de parameter ?author=N geeft een omleiding naar het auteursarchief en "
+"verraadt de loginnaam"
 
 #: includes/checks/class-cascr-checks-network.php:834
 msgid ""
@@ -4533,10 +4561,10 @@ msgid ""
 "login name it was generated from, and that is what the redirect and the REST"
 " answer carry."
 msgstr ""
-"Vereis authenticatie op het users-endpoint en stop de ?author-"
-"doorverwijzing. Een andere weergavenaam verandert hier niets: de auteursslug"
-" behoudt de loginnaam waaruit hij is gemaakt, en precies die zit in de "
-"doorverwijzing en het REST-antwoord."
+"Vereis authenticatie op het users-endpoint en stop de ?author-omleiding. Een"
+" andere weergavenaam verandert hier niets: de slug van de auteur behoudt de "
+"loginnaam waaruit hij is gemaakt, en precies die zit in de omleiding en het "
+"REST-antwoord."
 
 #: includes/checks/class-cascr-checks-network.php:889
 msgid "The REST API is not available."
@@ -4579,8 +4607,8 @@ msgid ""
 "plugin until it is fixed."
 msgstr ""
 "Sinds WordPress 5.5 moet elke route er een noemen. De route hoort bij de "
-"plugin die hem heeft geregistreerd, dus meld het bij de auteur en verwijder "
-"de plugin tot het is opgelost."
+"plugin die hem heeft geregistreerd, dus rapporteer het aan de auteur en "
+"verwijder de plugin tot het is opgelost."
 
 #. translators: %d: number of write routes that are open on purpose.
 #: includes/checks/class-cascr-checks-network.php:960
@@ -4598,7 +4626,7 @@ msgid ""
 "the route whether this one is meant to be open, and remove the plugin until "
 "it is fixed if it is not."
 msgstr ""
-"Sommige routes zijn bewust open en controleren het verzoek in de callback, "
+"Sommige routes zijn bewust open en controleren de aanvraag in de callback, "
 "bijvoorbeeld een contactformulier of een winkelwagen. Vraag bij de plugin "
 "die de route heeft geregistreerd na of deze open hoort te zijn, en verwijder"
 " de plugin tot het is opgelost als dat niet zo is."
@@ -4607,8 +4635,8 @@ msgstr ""
 msgid ""
 "This check reads the headers of the current request, and this run has none."
 msgstr ""
-"Deze controle leest de headers van het huidige verzoek, en deze scan heeft "
-"er geen."
+"Deze controle leest de headers van de huidige aanvraag, en deze uitvoering "
+"heeft er geen."
 
 #: includes/checks/class-cascr-checks-network.php:1014
 msgid "Open the report in the browser to have it checked."
@@ -4628,7 +4656,7 @@ msgid ""
 " the expected setup."
 msgstr ""
 "Forwarded-adresheaders komen binnen van een proxy vóór de site, en dat is de"
-" verwachte opzet."
+" verwachte setup."
 
 #. translators: 1: comma separated list of forwarded address headers, 2:
 #. remote IP address of the current request.
@@ -4639,7 +4667,8 @@ msgid ""
 " proxy looks the same from here as one a visitor sent along."
 msgstr ""
 "Forwarded-adresheaders komen binnen (%1$s) van %2$s, en een header van een "
-"proxy ziet er van hieruit hetzelfde uit als een die een bezoeker meestuurde."
+"proxy ziet er van hieruit hetzelfde uit als een die een bezoeker heeft "
+"meeverzonden."
 
 #: includes/checks/class-cascr-checks-network.php:1057
 msgid ""
@@ -4705,11 +4734,12 @@ msgid ""
 "here because it fits, not because you need it."
 msgstr ""
 "Publiceert de site door AI gegenereerde tekst, afbeeldingen of video, of "
-"draait er een chatbot, installeer dan een van de transparantieplugins uit de"
-" directory en zet de labeling aan. EU AI Label en EU AI Act Ready zijn "
-"gratis en dekken medialabels en een melding voor bezoekers. TransparAI, dat "
-"we zelf bouwen, combineert medialabels, tekstmarkering en chatbotmelding op "
-"één plek; het staat hier omdat het past, niet omdat je het nodig hebt."
+"laat ze een chatbot uitvoeren, installeer dan een van de "
+"transparantieplugins uit de directory en zet de labeling aan. EU AI Label en"
+" EU AI Act Ready zijn gratis en dekken medialabels en een melding voor "
+"bezoekers. TransparAI, dat we zelf bouwen, combineert medialabels, "
+"tekstmarkering en chatbotmelding op één plek; het staat hier omdat het past,"
+" niet omdat je het nodig hebt."
 
 #: includes/checks/class-cascr-checks-transparency.php:84
 msgid "TransparAI, our own plugin for AI content disclosure"
@@ -4841,7 +4871,7 @@ msgstr "Controle %1$d van %2$d"
 
 #: includes/class-cascr-admin.php:104
 msgid "This check could not be completed."
-msgstr "Deze controle kon niet worden voltooid."
+msgstr "Deze controle kon niet worden afgerond."
 
 #: includes/class-cascr-admin.php:105 includes/class-cascr-admin.php:387
 #: includes/class-cascr-admin.php:606
@@ -4937,7 +4967,7 @@ msgstr "Waar elke controle naar kijkt"
 
 #: includes/class-cascr-admin.php:187 includes/class-cascr-admin.php:192
 msgid "Search the checks"
-msgstr "Controles doorzoeken"
+msgstr "Zoeken in de controles"
 
 #: includes/class-cascr-admin.php:198
 msgid "No check matches that search."
@@ -4953,7 +4983,7 @@ msgstr "Documentatie"
 
 #: includes/class-cascr-admin.php:210
 msgid "Report a false positive"
-msgstr "Vals positief melden"
+msgstr "Rapporteer een false positive"
 
 #: includes/class-cascr-admin.php:212
 msgid "Support"
@@ -5070,7 +5100,7 @@ msgstr "Rapport kopiëren"
 
 #: includes/class-cascr-admin.php:531
 msgid "Take the report with you"
-msgstr "Neem het rapport mee"
+msgstr "Neem het rapport met je mee"
 
 #: includes/class-cascr-admin.php:589 includes/class-cascr-scoring.php:356
 msgid "Critical"
@@ -5110,7 +5140,7 @@ msgstr "Deze site is nog niet gecontroleerd."
 
 #: includes/class-cascr-nudges.php:207
 msgid "Run the first check"
-msgstr "Voer de eerste controle uit"
+msgstr "De eerste controle uitvoeren"
 
 #. translators: %d: number of findings still open.
 #: includes/class-cascr-nudges.php:227
@@ -5144,7 +5174,7 @@ msgstr "Niet meer herinneren"
 
 #: includes/class-cascr-nudges.php:322
 msgid "You are not allowed to do that."
-msgstr "Je hebt geen toestemming om dat te doen."
+msgstr "Het is je niet toegestaan om dat te doen."
 
 #: includes/class-cascr-registry.php:180
 msgid "Core, plugins and themes"
@@ -5188,7 +5218,7 @@ msgstr "Integriteit van core-bestanden"
 
 #: includes/class-cascr-registry.php:298
 msgid "Unknown files in core directories"
-msgstr "Onbekende bestanden in core-mappen"
+msgstr "Onbekende bestanden in core-directory's"
 
 #: includes/class-cascr-registry.php:304
 msgid "Plugin updates"
@@ -5228,7 +5258,7 @@ msgstr "Debugmodus"
 
 #: includes/class-cascr-registry.php:368
 msgid "Debug log exposure"
-msgstr "Openbaar debuglog"
+msgstr "Openbaar debug-log"
 
 #: includes/class-cascr-registry.php:374
 msgid "Theme and plugin editor"
@@ -5260,7 +5290,7 @@ msgstr "Omvang van autoloaded opties"
 
 #: includes/class-cascr-registry.php:416
 msgid "Injected content in options"
-msgstr "Geïnjecteerde inhoud in opties"
+msgstr "Geïnjecteerde content in opties"
 
 #: includes/class-cascr-registry.php:422
 msgid "Backups"
@@ -5284,11 +5314,11 @@ msgstr "wp-config.php rechten"
 
 #: includes/class-cascr-registry.php:470
 msgid "Uploads directory permissions"
-msgstr "Rechten van de uploads-map"
+msgstr "Rechten van de uploads-directory"
 
 #: includes/class-cascr-registry.php:476
 msgid "Core directory permissions"
-msgstr "Rechten van core-mappen"
+msgstr "Rechten van de core-directory's"
 
 #: includes/class-cascr-registry.php:482
 msgid "World-writable files and folders"
@@ -5308,7 +5338,7 @@ msgstr "Openbaar leesbare configuratiebestanden"
 
 #: includes/class-cascr-registry.php:506
 msgid "Publicly readable repository folders"
-msgstr "Openbaar leesbare repositorymappen"
+msgstr "Openbaar leesbare repository-mappen"
 
 #: includes/class-cascr-registry.php:512
 msgid "Publicly readable database dumps"
@@ -5324,7 +5354,7 @@ msgstr "Restanten van onderbroken updates"
 
 #: includes/class-cascr-registry.php:530
 msgid "Directory listing"
-msgstr "Mapweergave"
+msgstr "Directory listing"
 
 #: includes/class-cascr-registry.php:536
 msgid "Server rule file"
@@ -5388,7 +5418,7 @@ msgstr "CORS-configuratie"
 
 #: includes/class-cascr-registry.php:646
 msgid "PHP version in response headers"
-msgstr "PHP-versie in response-headers"
+msgstr "PHP-versie in reactie-headers"
 
 #: includes/class-cascr-registry.php:652
 msgid "Legacy discovery tags"
@@ -5417,8 +5447,7 @@ msgstr "Transparantie over AI-content"
 #: includes/class-cascr-rest.php:141
 msgid "You are not allowed to run security checks on this site."
 msgstr ""
-"Je hebt geen toestemming om beveiligingscontroles op deze site uit te "
-"voeren."
+"Het uitvoeren van beveiligingscontroles op deze site is je niet toegestaan."
 
 #: includes/class-cascr-rest.php:173 includes/class-cascr-rest.php:198
 msgid "There is no check with that identifier."
@@ -5427,8 +5456,8 @@ msgstr "Er is geen controle met die identifier."
 #: includes/class-cascr-rest.php:208
 msgid "There is no stored report to update. Run all checks once first."
 msgstr ""
-"Er is geen opgeslagen rapport om bij te werken. Voer eerst één keer alle "
-"controles uit."
+"Er is geen opgeslagen rapport om te updaten. Eerst moeten alle controles één"
+" keer worden uitgevoerd."
 
 #: includes/class-cascr-result.php:117
 msgid "The check returned an unexpected result."
@@ -5436,7 +5465,7 @@ msgstr "De controle gaf een onverwacht resultaat."
 
 #: includes/class-cascr-runner.php:37
 msgid "The check could not be completed on this server."
-msgstr "De controle kon op deze server niet worden voltooid."
+msgstr "De controle kon op deze server niet worden afgerond."
 
 #. translators: 1: grade letter, 2: number of findings.
 #: includes/class-cascr-scoring.php:157
@@ -5467,8 +5496,8 @@ msgstr[1] "%d andere zijn het verbeteren waard."
 #, php-format
 msgid "%d check could not be completed and is not counted."
 msgid_plural "%d checks could not be completed and are not counted."
-msgstr[0] "%d controle kon niet worden voltooid en telt niet mee."
-msgstr[1] "%d controles konden niet worden voltooid en tellen niet mee."
+msgstr[0] "%d controle kon niet worden afgerond en telt niet mee."
+msgstr[1] "%d controles konden niet worden afgerond en tellen niet mee."
 
 #: includes/class-cascr-scoring.php:352
 msgid "Excellent"
@@ -5500,7 +5529,7 @@ msgstr "Server-API: %s"
 
 #: includes/class-cascr-admin-dashboard.php:64
 msgid "Result of the latest run"
-msgstr "Resultaat van de laatste controle"
+msgstr "Resultaat van de laatste uitvoering"
 
 #. translators: %d: number of checks that turned into a finding.
 #: includes/class-cascr-admin-dashboard.php:130
@@ -5522,7 +5551,7 @@ msgstr[1] "%d opgelost"
 #: includes/class-cascr-admin-dashboard.php:149
 #, php-format
 msgid "Since the run before: %s."
-msgstr "Sinds de vorige controle: %s."
+msgstr "Sinds de vorige uitvoering: %s."
 
 #. translators: %s: status the muted check had, for example Failed.
 #: includes/class-cascr-admin.php:473
@@ -5555,7 +5584,7 @@ msgstr "Deze site is nog niet gecontroleerd"
 #: includes/class-cascr-nudges.php:94
 msgid "Run the security check once to see where the site stands."
 msgstr ""
-"Voer een eerste beveiligingscontrole uit om te zien hoe de site ervoor "
+"Eén uitvoering van de beveiligingscontrole laat zien hoe de site ervoor "
 "staat."
 
 #. translators: 1: grade letter, 2: grade label such as Good, 3: number of
@@ -5590,8 +5619,8 @@ msgid ""
 "One bar per full run, the latest on the left. The taller the bar, the lower "
 "the risk."
 msgstr ""
-"Eén balk per volledige controle, de nieuwste links. Hoe hoger de balk, hoe "
-"lager het risico."
+"Eén balk per volledige uitvoering, de nieuwste links. Hoe hoger de balk, hoe"
+" lager het risico."
 
 #: includes/class-cascr-abilities.php:53
 msgid "Read the results of the security check."
@@ -5737,9 +5766,9 @@ msgid ""
 "number. The result also lists the PHP settings the November advisories name "
 "as preconditions."
 msgstr ""
-"Of de draaiende PHP de fix voor PHP2Shell bevat, de twee kritieke lekken "
-"CVE-2026-109618 en CVE-2026-109619 van 21 oktober 2026, en daarnaast de "
-"beveiligingsrelease van 19 november 2026 met 18 verdere lekken, waarvan "
+"Of de PHP die wordt uitgevoerd de fix voor PHP2Shell bevat, de twee kritieke"
+" lekken CVE-2026-109618 en CVE-2026-109619 van 21 oktober 2026, en daarnaast"
+" de beveiligingsrelease van 19 november 2026 met 18 verdere lekken, waarvan "
 "zeven kritiek. Alleen de versiestring wordt gelezen: PHP 8.5.13, 8.4.28, "
 "8.3.37 en 8.2.36 of nieuwer slagen, net als de Ubuntu-pakketrevisies die de "
 "backport bevatten. Een versie met de oktober-fix maar zonder die van "
@@ -5758,14 +5787,14 @@ msgid ""
 "login as well. No plugin and no setting inside WordPress closes either gap, "
 "only a PHP update does."
 msgstr ""
-"PHP2Shell maakt code-uitvoering op de server mogelijk met één verzoek en "
-"zonder inloggen, op PHP-FPM, mod_php, php-cgi, FrankenPHP en LiteSpeed "
+"PHP2Shell kan code-uitvoering op de server toestaan met één aanvraag en "
+"zonder login, op PHP-FPM, mod_php, php-cgi, FrankenPHP en LiteSpeed "
 "evenzeer, en aanvallen werden gezien op de dag dat de fixes uitkwamen. De "
-"lekken van november vereisen een specifieke opstelling, het ergste "
+"lekken van november vereisen een specifieke setup, het ergste "
 "(CVE-2026-129289) een webserver die zijn FastCGI-verbindingen hergebruikt, "
-"en maken dan eveneens code-uitvoering zonder inloggen mogelijk. Geen plugin "
-"en geen instelling binnen WordPress sluit een van beide gaten, alleen een "
-"PHP-update doet dat."
+"en kunnen dan eveneens code-uitvoering zonder login toestaan. Geen plugin en"
+" geen instelling binnen WordPress sluit een van beide gaten, alleen een PHP-"
+"update doet dat."
 
 #: config/docs.php:60
 msgid ""
@@ -5778,9 +5807,9 @@ msgid ""
 "all: move to PHP 8.2 or newer."
 msgstr ""
 "Installeer de PHP-update van je distributie of hostingprovider en herstart "
-"PHP-FPM of de webserver, anders blijven de oude processen draaien. Blijft de"
-" waarschuwing staan, vraag de hostingprovider dan om schriftelijk te "
-"bevestigen dat de backport is geïnstalleerd. Tot de update: laat "
+"PHP-FPM of de webserver, anders worden de oude processen verder uitgevoerd. "
+"Blijft de waarschuwing staan, vraag de hostingprovider dan om schriftelijk "
+"te bevestigen dat de backport is geïnstalleerd. Tot de update: laat "
 "session.upload_progress.enabled uit in php.ini of de FPM-pool, hergebruik "
 "geen FastCGI-verbindingen en zet op PHP 8.5 zend.exception_ignore_args op 1."
 " PHP 8.1 en ouder krijgen helemaal geen officiële fix: stap over op PHP 8.2 "
@@ -5814,7 +5843,7 @@ msgid ""
 "inside WordPress can see or stop the attack."
 msgstr ""
 "Het lek met het grootste bereik, CVE-2026-123007, raakt elke nginx met "
-"HTTP/2 ingeschakeld sinds 2015 en kan tot code-uitvoering zonder inloggen "
+"HTTP/2 ingeschakeld sinds 2015 en kan tot code-uitvoering zonder login "
 "leiden. De lekken zitten in de webserver, dus geen WordPress-update, plugin "
 "of firewall binnen WordPress kan de aanval zien of stoppen."
 
@@ -5828,10 +5857,10 @@ msgid ""
 "with the widest reach, but not the other four."
 msgstr ""
 "Installeer nginx 1.31.9 of 1.30.7, of het gerepareerde pakket van je "
-"distributie, en herstart nginx: een reload laat het oude programma "
-"doordraaien. Vergelijk bij een distributiepakket de volledige pakketversie "
-"met het beveiligingsadvies (Debian DSA-6642-1 en DLA-4918-1, Ubuntu "
-"USN-9159-1, AlmaLinux ALSA-2026:A025 en A024) of vraag het je "
+"distributie, en herstart nginx: na een reload wordt nog steeds het oude "
+"programma uitgevoerd. Vergelijk bij een distributiepakket de volledige "
+"pakketversie met het beveiligingsadvies (Debian DSA-6642-1 en DLA-4918-1, "
+"Ubuntu USN-9159-1, AlmaLinux ALSA-2026:A025 en A024) of vraag het je "
 "hostingprovider. Tot die tijd blokkeert het uitschakelen van HTTP/2 het lek "
 "met het grootste bereik, maar niet de andere vier."
 
@@ -5858,10 +5887,11 @@ msgid ""
 "PHP 8.5 set zend.exception_ignore_args to 1."
 msgstr ""
 "Installeer de PHP-update van je distributie of hostingprovider, herstart dan"
-" PHP-FPM of de webserver en voer deze controle opnieuw uit. Tot die tijd: "
-"laat session.upload_progress.enabled uit in php.ini of de FPM-pool, "
-"hergebruik geen FastCGI-verbindingen (nginx fastcgi_keep_conn, Apache "
-"enablereuse) en zet op PHP 8.5 zend.exception_ignore_args op 1."
+" PHP-FPM of de webserver, waarna deze controle opnieuw moet worden "
+"uitgevoerd. Tot die tijd: laat session.upload_progress.enabled uit in "
+"php.ini of de FPM-pool, hergebruik geen FastCGI-verbindingen (nginx "
+"fastcgi_keep_conn, Apache enablereuse) en zet op PHP 8.5 "
+"zend.exception_ignore_args op 1."
 
 #: includes/checks/class-cascr-checks-core.php:323
 msgid ""
@@ -5891,7 +5921,7 @@ msgid ""
 msgstr ""
 "PHP %1$s bevat de PHP2Shell-fix maar niet de PHP-beveiligingsrelease van 19 "
 "november 2026 (18 lekken, zeven kritiek, waaronder CVE-2026-129289 in PHP-"
-"FPM). Werk bij naar %2$s of nieuwer, tenzij je hostingprovider een backport "
+"FPM). Update naar %2$s of nieuwer, tenzij je hostingprovider een backport "
 "bevestigt."
 
 #. translators: %s: PHP version number.
@@ -5925,7 +5955,7 @@ msgid ""
 "backport."
 msgstr ""
 "PHP %1$s toont noch de PHP2Shell-fix noch de PHP-beveiligingsrelease van 19 "
-"november 2026. Werk bij naar %2$s of nieuwer, tenzij je hostingprovider een "
+"november 2026. Update naar %2$s of nieuwer, tenzij je hostingprovider een "
 "backport bevestigt."
 
 #: includes/checks/class-cascr-checks-core.php:370
@@ -5947,9 +5977,9 @@ msgid ""
 "switching HTTP/2 off blocks the flaw with the widest reach."
 msgstr ""
 "Installeer nginx 1.31.9 of 1.30.7, of het gerepareerde pakket van je "
-"distributie, en herstart daarna nginx: een reload laat het oude programma "
-"doordraaien. Tot die tijd blokkeert het uitschakelen van HTTP/2 het lek met "
-"het grootste bereik."
+"distributie, en herstart daarna nginx: na een reload wordt nog steeds het "
+"oude programma uitgevoerd. Tot die tijd blokkeert het uitschakelen van "
+"HTTP/2 het lek met het grootste bereik."
 
 #: includes/checks/class-cascr-checks-core.php:468
 msgid "nginx is in use, but it does not name its version."
@@ -5960,12 +5990,13 @@ msgid ""
 "Run nginx -v on the server, or ask your host whether nginx 1.31.9, 1.30.7 or"
 " the fixed distribution package is installed."
 msgstr ""
-"Voer nginx -v uit op de server, of vraag je hostingprovider of nginx 1.31.9,"
-" 1.30.7 of het gerepareerde distributiepakket is geïnstalleerd."
+"Je kunt op de server nginx -v uitvoeren, of je hostingprovider vragen of "
+"nginx 1.31.9, 1.30.7 of het gerepareerde distributiepakket is geïnstalleerd."
 
 #: includes/checks/class-cascr-checks-core.php:478
 msgid "This request arrived over HTTP/2, which CVE-2026-123007 needs."
-msgstr "Dit verzoek kwam binnen via HTTP/2, wat CVE-2026-123007 nodig heeft."
+msgstr ""
+"Deze aanvraag kwam binnen via HTTP/2, wat CVE-2026-123007 nodig heeft."
 
 #. translators: %s: nginx version number.
 #: includes/checks/class-cascr-checks-core.php:485
@@ -6004,7 +6035,7 @@ msgstr ""
 msgid ""
 "nginx %1$s does not show the NGINX2Root fixes. Update to %2$s or newer."
 msgstr ""
-"nginx %1$s toont de NGINX2Root-fixes niet. Werk bij naar %2$s of nieuwer."
+"nginx %1$s toont de NGINX2Root-fixes niet. Update naar %2$s of nieuwer."
 
 #: includes/class-cascr-registry.php:274
 msgid "PHP2Shell and the PHP security release of 19 November 2026"
@@ -6021,10 +6052,11 @@ msgid ""
 " CMS Commander, Watchful and BlogVault, and the maintenance plugin of CMS "
 "ADMINS. This one is informational and does not affect the grade."
 msgstr ""
-"Of er een onderhouds- of sitebeheerplugin actief is: de clientplugins van "
-"MainWP, ManageWP, InfiniteWP, WP Remote, WP Umbrella, Modular DS, CMS "
-"Commander, Watchful en BlogVault, en de onderhoudsplugin van CMS ADMINS. "
-"Deze controle is alleen informatief en beïnvloedt het cijfer niet."
+"Of er een onderhoudsplugin of een plugin voor site-beheer actief is: de "
+"clientplugins van MainWP, ManageWP, InfiniteWP, WP Remote, WP Umbrella, "
+"Modular DS, CMS Commander, Watchful en BlogVault, en de onderhoudsplugin van"
+" CMS ADMINS. Deze controle is alleen informatief en beïnvloedt het cijfer "
+"niet."
 
 #: config/docs.php:187
 msgid ""
@@ -6036,8 +6068,8 @@ msgid ""
 msgstr ""
 "Het meeste van wat dit rapport vindt wordt niet één keer opgelost maar "
 "opgelost gehouden: updates komen wekelijks, back-ups moeten worden "
-"gecontroleerd en een bevinding die terugkomt heeft iemand nodig die het "
-"opmerkt. Een connectorplugin laat zien dat een dashboard ergens deze site "
+"gecontroleerd en bij een bevinding die terugkomt moet iemand de melding "
+"opmerken. Een connectorplugin laat zien dat een dashboard ergens deze site "
 "ziet. Zonder zo'n plugin hangt dat allemaal af van iemand die eraan denkt "
 "terug te komen."
 
@@ -6068,11 +6100,11 @@ msgid_plural ""
 "%d maintenance plugins are active. Whether someone acts on what they report "
 "is not visible from here."
 msgstr[0] ""
-"%d onderhoudsplugin is actief. Of iemand iets doet met wat die meldt, is van"
-" hieruit niet te zien."
+"%d onderhoudsplugin is actief. Of iemand iets doet met wat die rapporteert, "
+"is van hieruit niet te zien."
 msgstr[1] ""
-"%d onderhoudsplugins zijn actief. Of iemand iets doet met wat die melden, is"
-" van hieruit niet te zien."
+"%d onderhoudsplugins zijn actief. Of iemand iets doet met wat die "
+"rapporteren, is van hieruit niet te zien."
 
 #: includes/checks/class-cascr-checks-config.php:685
 msgid ""
