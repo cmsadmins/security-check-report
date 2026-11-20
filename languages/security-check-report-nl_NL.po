@@ -2511,7 +2511,7 @@ msgid ""
 " and sometimes credentials."
 msgstr ""
 "De debuglog is via het web leesbaar en toont foutdetails, bestandspaden en "
-"soms inloggegevens."
+"soms referenties."
 
 #: includes/checks/class-cascr-checks-config.php:102
 msgid "Delete the file and block access to it in the server configuration."
@@ -5583,7 +5583,7 @@ msgstr "De laatste beveiligingscontrole is meer dan een maand oud"
 #. format.
 #: includes/class-cascr-admin-dashboard.php:472
 msgid "M j"
-msgstr "j M"
+msgstr "M j"
 
 #: includes/class-cascr-admin-dashboard.php:443
 msgid ""
@@ -5650,7 +5650,7 @@ msgstr[1] "Al %d maanden elke maand gecontroleerd."
 #: includes/class-cascr-admin-dashboard.php:231
 #, php-format
 msgid "Reached with this run: %s."
-msgstr "Bereikt met deze controle: %s."
+msgstr "Bereikt met deze uitvoering: %s."
 
 #: includes/class-cascr-admin-dashboard.php:531
 msgid "Raises the grade"

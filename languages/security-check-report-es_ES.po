@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "No hace falta una consola: todos los paneles de alojamiento tienen un gestor"
 " de archivos y todos los clientes FTP tienen un diálogo de permisos. Busca "
-"\"Cambiar permisos\", \"CHMOD\" o \"Atributos de archivo\" e introduce ahí "
-"el número. Las tres cifras corresponden, por este orden, al propietario, al "
+"«Cambiar permisos», «CHMOD» o «Atributos de archivo» e introduce ahí el "
+"número. Las tres cifras corresponden, por este orden, al propietario, al "
 "grupo y a todos los demás."
 
 #: config/docs.php:48
@@ -110,7 +110,8 @@ msgstr ""
 "Si la rama de PHP con la que funciona este sitio sigue recibiendo "
 "correcciones de seguridad, según las fechas de fin de vida publicadas. Los "
 "últimos seis meses antes de esa fecha y la fase en la que una rama solo "
-"recibe correcciones de seguridad y ya no de errores se indican por separado."
+"recibe correcciones de seguridad y ya no correcciones de fallos se indican "
+"por separado."
 
 #: config/docs.php:54
 msgid ""
@@ -130,8 +131,8 @@ msgid ""
 msgstr ""
 "Pide a tu proveedor de alojamiento que pase el sitio a una rama con soporte."
 " Pruébalo antes en una copia de staging: un salto de PHP es la única "
-"actualización que rompe plugins antiguos con toda seguridad. El aviso con "
-"seis meses de antelación está para que el cambio se pueda planificar en "
+"actualización que rompe plugins antiguos con toda seguridad. La advertencia "
+"con seis meses de antelación está para que el cambio se pueda planificar en "
 "lugar de hacerlo con prisas."
 
 #: config/docs.php:68
@@ -164,10 +165,10 @@ msgid ""
 "the deployment has to install core updates instead, because that constant "
 "stops the updater as well."
 msgstr ""
-"Deja el valor predeterminado o define WP_AUTO_UPDATE_CORE como minor. "
-"Ponerlo a true también sirve y abarca más. Donde DISALLOW_FILE_MODS tenga "
-"que quedarse, el despliegue tiene que instalar las actualizaciones del "
-"núcleo, porque esa constante también detiene el actualizador."
+"Deja el valor por defecto o define WP_AUTO_UPDATE_CORE como minor. Ponerlo a"
+" true también sirve y abarca más. Donde DISALLOW_FILE_MODS tenga que "
+"quedarse, el despliegue tiene que instalar las actualizaciones del núcleo, "
+"porque esa constante también detiene el actualizador."
 
 #: config/docs.php:73
 msgid ""
@@ -227,7 +228,7 @@ msgid ""
 msgstr ""
 "Abre cada archivo antes de borrarlo. Ten en cuenta que algunos proveedores "
 "de alojamiento sí dejan sus propios archivos auxiliares en estos "
-"directorios. En instalaciones muy grandes el escaneo se detiene tras un "
+"directorios. En instalaciones muy grandes la exploración se detiene tras un "
 "número fijo de archivos y lo indica; ese resultado no significa que todo "
 "esté bien."
 
@@ -286,9 +287,9 @@ msgid ""
 "too."
 msgstr ""
 "Instala las actualizaciones en Apariencia > Temas y borra los que el sitio "
-"no usa. Conserva un tema predeterminado sin modificar para poder cambiar a "
-"él si un tema falla, y activa sus actualizaciones automáticas. Un tema "
-"comprado fuera del directorio solo se actualiza si se introduce su clave de "
+"no usa. Conserva un tema por defecto sin modificar para poder cambiar a él "
+"si un tema falla, y activa sus actualizaciones automáticas. Un tema comprado"
+" fuera del directorio solo se actualiza si se introduce su clave de "
 "licencia, así que compruébalo también."
 
 #: config/docs.php:93
@@ -314,8 +315,8 @@ msgid ""
 "Delete what the site does not use. Keeping one spare default theme for "
 "troubleshooting is reasonable."
 msgstr ""
-"Borra lo que el sitio no usa. Conservar un tema predeterminado de reserva "
-"para resolver problemas es razonable."
+"Borra lo que el sitio no usa. Conservar un tema por defecto de reserva para "
+"resolver problemas es razonable."
 
 #: config/docs.php:98
 msgid ""
@@ -356,8 +357,8 @@ msgid ""
 msgstr ""
 "Si algún plugin activo tiene su ficha cerrada en el directorio de plugins de"
 " WordPress. Los plugins que nunca estuvieron en él se omiten, y una ficha "
-"que el sitio no pudo obtener se indica como no determinada en lugar de como "
-"correcta."
+"que el sitio no pudo recuperar se indica como no determinada en lugar de "
+"como correcta."
 
 #: config/docs.php:104
 msgid ""
@@ -381,9 +382,9 @@ msgid ""
 " The first run only records the authors, so changes are reported from the "
 "second run on."
 msgstr ""
-"Si la línea de autor de un plugin instalado ha cambiado desde el primer "
-"escaneo. El primer análisis solo registra los autores, así que los cambios "
-"se indican a partir del segundo análisis."
+"Si la línea de autor de un plugin instalado ha cambiado desde la primera "
+"exploración. El primer análisis solo registra los autores, así que los "
+"cambios se indican a partir del segundo análisis."
 
 #: config/docs.php:109
 msgid ""
@@ -391,9 +392,9 @@ msgid ""
 " users has become a common route in. The author line is the earliest thing a"
 " site can notice on its own."
 msgstr ""
-"Comprar un plugin consolidado y enviar una actualización maliciosa a sus "
-"usuarios se ha convertido en una vía de entrada habitual. La línea de autor "
-"es lo primero que un sitio puede detectar por sí mismo."
+"Comprar un plugin consolidado y enviar una actualización malintencionada a "
+"sus usuarios se ha convertido en una vía de entrada habitual. La línea de "
+"autor es lo primero que un sitio puede detectar por sí mismo."
 
 #: config/docs.php:110
 msgid ""
@@ -413,7 +414,8 @@ msgstr ""
 "Los plugins imprescindibles (must-use), que son archivos en wp-content/mu-"
 "plugins que WordPress carga sin que nadie los active, y los drop-ins como "
 "object-cache.php, advanced-cache.php y db.php, que sustituyen una parte del "
-"propio WordPress. Ambos se comparan con lo que había en el primer escaneo."
+"propio WordPress. Ambos se comparan con lo que había en la primera "
+"exploración."
 
 #: config/docs.php:114
 msgid ""
@@ -507,7 +509,7 @@ msgstr ""
 " registro en una ruta elegida por ti, la comprobación averigua dónde está "
 "esa ruta: por encima de la raíz web queda fuera de alcance y la comprobación"
 " se supera; por debajo, se hace la misma prueba de descarga que para la "
-"ubicación predeterminada."
+"ubicación por defecto."
 
 #: config/docs.php:132
 msgid ""
@@ -623,8 +625,8 @@ msgid ""
 "the base prefix is what is looked at, since every subsite adds its own "
 "number to it."
 msgstr ""
-"Si la base de datos sigue usando el prefijo de tablas predeterminado wp_. En"
-" una red se mira el prefijo base, ya que cada subsitio le añade su propio "
+"Si la base de datos sigue usando el prefijo de tablas por defecto wp_. En "
+"una red se mira el prefijo base, ya que cada subsitio le añade su propio "
 "número."
 
 #: config/docs.php:152
@@ -657,8 +659,8 @@ msgid ""
 "reported as undetermined."
 msgstr ""
 "Si la cuenta de base de datos que usa WordPress tiene permisos más allá de "
-"su propia base de datos. Una cuenta que no tiene permiso para consultar sus "
-"propios permisos se indica como no determinada."
+"su propia base de datos. Una cuenta que no tiene permisos para consultar sus"
+" propios permisos se indica como no determinada."
 
 #: config/docs.php:157
 msgid ""
@@ -696,11 +698,11 @@ msgid ""
 "with no code behind them are usually leftovers from a removed plugin, "
 "occasionally something that was planted."
 msgstr ""
-"Las comprobaciones de actualizaciones, las copias de seguridad y los "
-"escaneos dependen del programador de tareas. Un programador atascado no hace"
-" ruido: todo parece en orden y no pasa nada. Las tareas sin código detrás "
-"suelen ser restos de un plugin eliminado, y a veces algo que alguien ha "
-"colocado."
+"Las comprobaciones de actualizaciones, las copias de seguridad y las "
+"exploraciones dependen del programador de tareas. Un programador atascado no"
+" hace ruido: todo parece en orden y no pasa nada. Las tareas sin código "
+"detrás suelen ser restos de un plugin eliminado, y a veces algo que alguien "
+"ha colocado."
 
 #: config/docs.php:163
 msgid ""
@@ -713,9 +715,9 @@ msgstr ""
 "Si DISABLE_WP_CRON está definido, asegúrate de que una tarea cron del "
 "servidor ejecuta wp-cron.php. Si no, elimina la constante. WordPress no "
 "tiene ninguna pantalla que muestre los eventos programados, así que usa wp "
-"cron event list o un plugin de programación para verlos. Un hook que aparece"
-" aquí sin nadie que lo escuche simplemente no se registró durante esta "
-"petición, algo que pasa con plugins que solo se enganchan en la parte "
+"cron event list o un plugin de tareas programadas para verlos. Un gancho que"
+" aparece aquí sin nadie que lo escuche simplemente no se registró durante "
+"esta petición, algo que pasa con plugins que solo se enganchan en la parte "
 "pública."
 
 #: config/docs.php:166
@@ -755,7 +757,7 @@ msgid ""
 "script from another host."
 msgstr ""
 "Valores de opciones que contienen fragmentos de código y valores de opciones"
-" que cargan un script desde otro servidor."
+" que cargan un script desde otro host."
 
 #: config/docs.php:172
 msgid ""
@@ -780,7 +782,7 @@ msgid ""
 msgstr ""
 "Rastrea un fragmento de código hasta el plugin que lo escribió antes de "
 "borrar nada. Para las etiquetas script, repasa la lista una vez y comprueba "
-"que cada servidor es uno que tú elegiste."
+"que cada host es uno que tú elegiste."
 
 #: config/docs.php:176
 msgid ""
@@ -915,9 +917,9 @@ msgid ""
 msgstr ""
 "El archivo contiene las credenciales de la base de datos y las claves de "
 "autenticación. En un alojamiento compartido, legible por todos significa "
-"legible por cualquier otra cuenta de la máquina, y un wp-config.php con "
-"permiso de escritura significa que otra persona puede añadir código que se "
-"ejecuta antes que WordPress."
+"legible por cualquier otra cuenta de la máquina, y un wp-config.php que "
+"tenga permisos de escritura significa que otra persona puede añadir código "
+"que se ejecuta antes que WordPress."
 
 #: config/docs.php:206
 msgid ""
@@ -939,7 +941,7 @@ msgstr ""
 #: config/docs.php:209
 msgid "Whether the uploads directory is writable by everyone on the server."
 msgstr ""
-"Si el directorio uploads tiene permiso de escritura para todos en el "
+"Si el directorio uploads tiene permisos de escritura para todos en el "
 "servidor."
 
 #: config/docs.php:210
@@ -948,9 +950,9 @@ msgid ""
 "every other account on the machine, and on shared hosting those are not the "
 "same thing."
 msgstr ""
-"El directorio tiene que tener permiso de escritura para PHP. No tiene por "
-"qué tenerlo para todas las demás cuentas de la máquina, y en un alojamiento "
-"compartido no es lo mismo."
+"El directorio tiene que tener permisos de escritura para PHP. No tiene por "
+"qué tenerlos para todas las demás cuentas de la máquina, y en un alojamiento"
+" compartido no es lo mismo."
 
 #: config/docs.php:211
 msgid ""
@@ -966,8 +968,8 @@ msgid ""
 "Whether wp-content, wp-includes or wp-admin are writable by everyone on the "
 "server."
 msgstr ""
-"Si wp-content, wp-includes o wp-admin tienen permiso de escritura para todos"
-" en el servidor."
+"Si wp-content, wp-includes o wp-admin tienen permisos de escritura para "
+"todos en el servidor."
 
 #: config/docs.php:215
 msgid ""
@@ -1060,8 +1062,9 @@ msgstr ""
 "registro del servidor. Un .htaccess de refuerzo en este directorio no es un "
 "hallazgo y no se indica aquí. Los archivos index.php pequeños que solo "
 "impiden listar la carpeta se leen y se dan por buenos; cuando aun así se "
-"indica uno, el hallazgo nombra lo que hace y un archivo de relleno no haría,"
-" por ejemplo leer datos de la petición o llamar a otro archivo."
+"indica uno, el hallazgo nombra lo que hace y un archivo de marcador de "
+"posición no haría, por ejemplo leer datos de la petición o llamar a otro "
+"archivo."
 
 #: config/docs.php:229
 msgid ""
@@ -1128,7 +1131,7 @@ msgstr ""
 "se conoce: cambia la contraseña de la base de datos y las claves de "
 "autenticación. Dos de la lista son excepciones: .user.ini es la "
 "configuración de PHP por directorio de las versiones CGI y FastCGI, y "
-".htpasswd contiene las credenciales de una autenticación HTTP en uso. "
+".htpasswd contiene las credenciales de una identificación HTTP en uso. "
 "Bloquea el acceso a ellos en el servidor en lugar de borrarlos."
 
 #: config/docs.php:239
@@ -1394,8 +1397,8 @@ msgid ""
 msgstr ""
 "Si algún perfil por debajo de administrador tiene capacidades como "
 "install_plugins, edit_files o manage_options, y si las definiciones de "
-"perfiles han cambiado desde el primer escaneo. Una capacidad es un permiso "
-"concreto; un perfil es un conjunto de ellas con nombre."
+"perfiles han cambiado desde la primera exploración. Una capacidad es un "
+"permiso concreto; un perfil es un conjunto de ellas con nombre."
 
 #: config/docs.php:288
 msgid ""
@@ -1407,9 +1410,9 @@ msgid ""
 msgstr ""
 "Un suscriptor con install_plugins es un administrador con una etiqueta más "
 "amable. Los plugins comprometidos añaden capacidades así porque sobreviven a"
-" un cambio de contraseña. Un perfil que simplemente ha aparecido desde el "
-"primer escaneo se indica aparte de una escalada, porque instalar un plugin "
-"de tienda o de membresía hace justo eso."
+" un cambio de contraseña. Un perfil que simplemente ha aparecido desde la "
+"primera exploración se indica aparte de una escalada, porque instalar un "
+"plugin de tienda o de membresía hace justo eso."
 
 #: config/docs.php:289
 msgid ""
@@ -1533,7 +1536,7 @@ msgstr ""
 "que una olvidada sea la forma más discreta de conservar el acceso a un "
 "sitio, y una sin usar desde hace dos años merece más atención que el hecho "
 "de que la función esté activada. WordPress registra el último uso como mucho"
-" una vez al día, y detrás de una red de distribución de contenidos la "
+" una vez al día, y detrás de una red de distribución de contenido la "
 "dirección es la del proxy, no la de quien llama."
 
 #: config/docs.php:304
@@ -1583,8 +1586,8 @@ msgid ""
 msgstr ""
 "Cuánto tiempo le queda de validez al certificado y qué versión de protocolo "
 "negocia la conexión. TLS es el cifrado que hay detrás de la s de https. No "
-"se verifican la cadena de confianza ni el nombre del servidor, así que esto "
-"es una fecha, no una garantía de que los navegadores acepten el certificado."
+"se verifican la cadena de confianza ni el nombre de host, así que esto es "
+"una fecha, no una garantía de que los navegadores acepten el certificado."
 
 #: config/docs.php:316
 msgid ""
@@ -1592,10 +1595,10 @@ msgid ""
 "renewal fails quietly more often than anyone expects, and the maximum "
 "certificate lifetime drops to 100 days in March 2027 and to 47 days in 2029."
 msgstr ""
-"Un certificado caducado sustituye el sitio por un aviso del navegador. La "
-"renovación automática falla en silencio más a menudo de lo que nadie espera,"
-" y la duración máxima de los certificados baja a 100 días en marzo de 2027 y"
-" a 47 días en 2029."
+"Un certificado caducado sustituye el sitio por una advertencia del "
+"navegador. La renovación automática falla en silencio más a menudo de lo que"
+" nadie espera, y la duración máxima de los certificados baja a 100 días en "
+"marzo de 2027 y a 47 días en 2029."
 
 #: config/docs.php:317
 msgid ""
@@ -1652,7 +1655,7 @@ msgstr ""
 "primeras coinciden con lo que los navegadores ya hacen y no cambian nada en "
 "un sitio normal. Una Content Security Policy hay que escribirla para cada "
 "sitio y tiene su propia entrada. Las cabeceras de aislamiento entre orígenes"
-" se consideran opcionales aquí porque rompen los contenidos incrustados en "
+" se consideran opcionales aquí porque rompen las incrustaciones en los "
 "sitios normales."
 
 #: config/docs.php:325
@@ -1708,10 +1711,10 @@ msgid ""
 "here."
 msgstr ""
 "Una política que permite scripts en línea sin nada más en la directiva "
-"permite justo lo que una política está para impedir. El modo de solo informe"
-" no bloquea nada. 'unsafe-inline' junto a un nonce o a 'strict-dynamic' es "
-"otra cosa: los navegadores que entienden cualquiera de los dos lo ignoran, "
-"así que la política estricta lo conserva como alternativa para navegadores "
+"permite justo lo que una política está para impedir. El modo report-only no "
+"bloquea nada. 'unsafe-inline' junto a un nonce o a 'strict-dynamic' es otra "
+"cosa: los navegadores que entienden cualquiera de los dos lo ignoran, así "
+"que la política estricta lo conserva como alternativa para navegadores "
 "antiguos y no se indica aquí."
 
 #: config/docs.php:332
@@ -1723,8 +1726,8 @@ msgid ""
 "from the nonce WordPress puts into its forms."
 msgstr ""
 "Empieza con Content-Security-Policy-Report-Only, observa los informes hasta "
-"que dejen de llegar y luego envía la misma política como cabecera "
-"obligatoria. Da a los scripts en línea un nonce por petición en la etiqueta "
+"que dejen de llegar y luego envía la misma política como cabecera que la "
+"aplica. Da a los scripts en línea un nonce por petición en la etiqueta "
 "script, un valor aleatorio que la política nombra, en lugar de permitirlos "
 "todos. Ese nonce no tiene nada que ver con el nonce que WordPress pone en "
 "sus formularios."
@@ -1762,7 +1765,7 @@ msgid ""
 msgstr ""
 "Configura HttpOnly y SameSite=Lax en el servidor web, y Secure en todas las "
 "cookies cuando el sitio funcione con HTTPS. WordPress pone HttpOnly en sus "
-"cookies de autenticación por sí mismo, pero no pone SameSite."
+"cookies de identificación por sí mismo, pero no pone SameSite."
 
 #: config/docs.php:340
 msgid ""
@@ -1780,7 +1783,7 @@ msgid ""
 "responses from this one. It is a rare misconfiguration and a severe one."
 msgstr ""
 "Un origen comodín combinado con credenciales permite que cualquier sitio web"
-" lea las respuestas de este con la sesión iniciada. Es un error de "
+" lea las respuestas de este para quienes han accedido. Es un error de "
 "configuración poco frecuente y grave."
 
 #: config/docs.php:342
@@ -1818,7 +1821,7 @@ msgid ""
 "Discovery tags in the front page markup: the generator tag, the Windows Live"
 " Writer manifest and the Really Simple Discovery link."
 msgstr ""
-"Etiquetas de descubrimiento en el código de la página principal: la etiqueta"
+"Etiquetas de descubrimiento en el código de la página de inicio: la etiqueta"
 " generator, el manifiesto de Windows Live Writer y el enlace Really Simple "
 "Discovery."
 
@@ -1835,7 +1838,7 @@ msgid ""
 "Remove the corresponding hooks from wp_head. This is fingerprinting rather "
 "than a vulnerability, so it is weighted lightly."
 msgstr ""
-"Elimina los hooks correspondientes de wp_head. Esto es identificación del "
+"Elimina los ganchos correspondientes de wp_head. Esto es identificación del "
 "software más que una vulnerabilidad, por eso pesa poco."
 
 #: config/docs.php:355
@@ -1909,7 +1912,7 @@ msgid ""
 "name it was generated from, and that is what the redirect and the REST "
 "answer carry. Change user_nicename itself if the name must not be public."
 msgstr ""
-"Exige autenticación en el endpoint de usuarios y detén la redirección del "
+"Exige identificación en el endpoint de usuarios y detén la redirección del "
 "autor. Un nombre público distinto no cambia nada: el slug del autor conserva"
 " el nombre de acceso a partir del cual se generó, y eso es lo que transmiten"
 " la redirección y la respuesta REST. Cambia el propio user_nicename si el "
@@ -2029,9 +2032,9 @@ msgid ""
 "trusting the folder on disk."
 msgstr ""
 "Si el sitio publica contenido generado por IA o tiene un chatbot, instala "
-"uno de los plugins de divulgación del directorio y activa el etiquetado. EU "
-"AI Label y EU AI Act Ready son gratuitos y cubren etiquetas de medios y un "
-"aviso para los visitantes. TransparAI, que desarrollamos nosotros, reúne "
+"uno de los plugins de transparencia del directorio y activa el etiquetado. "
+"EU AI Label y EU AI Act Ready son gratuitos y cubren etiquetas de medios y "
+"un aviso para los visitantes. TransparAI, que desarrollamos nosotros, reúne "
 "etiquetas de medios, marcado de textos y aviso de chatbot en un solo sitio; "
 "se menciona aquí porque encaja, no porque lo necesites. Un plugin instalado "
 "cuyos ajustes nunca se guardaron cuenta como nada, así que la comprobación "
@@ -2178,13 +2181,14 @@ msgstr "el perfil %s puede publicar HTML sin filtrar"
 #: includes/checks/class-cascr-checks-accounts.php:454
 #, php-format
 msgid "the role %s was added after the first scan"
-msgstr "el perfil %s se añadió después del primer escaneo"
+msgstr "el perfil %s se añadió después de la primera exploración"
 
 #. translators: %s: role slug.
 #: includes/checks/class-cascr-checks-accounts.php:460
 #, php-format
 msgid "the capabilities of the role %s changed after the first scan"
-msgstr "las capacidades del perfil %s cambiaron después del primer escaneo"
+msgstr ""
+"las capacidades del perfil %s cambiaron después de la primera exploración"
 
 #: includes/checks/class-cascr-checks-accounts.php:473
 msgid ""
@@ -2206,8 +2210,8 @@ msgid ""
 "The role definitions changed since the first scan, but no role below "
 "administrator gained administrator-level capabilities."
 msgstr ""
-"Las definiciones de perfiles han cambiado desde el primer escaneo, pero "
-"ningún perfil por debajo de administrador ha obtenido capacidades de nivel "
+"Las definiciones de perfiles han cambiado desde la primera exploración, pero"
+" ningún perfil por debajo de administrador ha obtenido capacidades de nivel "
 "de administrador."
 
 #: includes/checks/class-cascr-checks-accounts.php:485
@@ -2241,7 +2245,7 @@ msgstr ""
 #: includes/checks/class-cascr-checks-accounts.php:525
 #: includes/checks/class-cascr-checks-accounts.php:538
 msgid "Set the default role to Subscriber under Settings, General."
-msgstr "Pon Suscriptor como perfil predeterminado en Ajustes > Generales."
+msgstr "Pon Suscriptor como perfil por defecto en Ajustes > Generales."
 
 #. translators: %s: name of the default role for new accounts.
 #: includes/checks/class-cascr-checks-accounts.php:533
@@ -2282,20 +2286,20 @@ msgid ""
 "email and passkeys in its Full Edition; the copy in the plugin directory is "
 "Hive Light and brings login protection only."
 msgstr ""
-"Instala un plugin de doble factor y hazlo obligatorio al menos para los "
-"administradores. Two Factor es un plugin gratuito muy utilizado, mantenido "
-"por colaboradores de WordPress, y es una buena opción. ReportedIP Hive, que "
-"desarrollamos nosotros, cubre TOTP, correo electrónico y passkeys en su Full"
-" Edition; la versión del directorio de plugins es Hive Light y solo ofrece "
-"protección del acceso."
+"Instala un plugin de identificación en dos pasos y hazlo obligatorio al "
+"menos para los administradores. Two Factor es un plugin gratuito muy "
+"utilizado, mantenido por colaboradores de WordPress, y es una buena opción. "
+"ReportedIP Hive, que desarrollamos nosotros, cubre TOTP, correo electrónico "
+"y passkeys en su Full Edition; la versión del directorio de plugins es Hive "
+"Light y solo ofrece protección del acceso."
 
 #: includes/checks/class-cascr-checks-accounts.php:586
 msgid ""
 "A two-factor plugin is active, but which accounts use it cannot be read from"
 " here."
 msgstr ""
-"Hay un plugin de doble factor activo, pero desde aquí no se puede saber qué "
-"cuentas lo usan."
+"Hay un plugin de identificación en dos pasos activo, pero desde aquí no se "
+"puede saber qué cuentas lo usan."
 
 #: includes/checks/class-cascr-checks-accounts.php:587
 msgid "Check the coverage in the plugin itself."
@@ -2310,8 +2314,8 @@ msgid ""
 "A two-factor plugin is active, but no administrator has set the second "
 "factor up."
 msgstr ""
-"Hay un plugin de doble factor activo, pero ningún administrador ha "
-"configurado el segundo factor."
+"Hay un plugin de identificación en dos pasos activo, pero ningún "
+"administrador ha configurado el segundo factor."
 
 #: includes/checks/class-cascr-checks-accounts.php:622
 msgid ""
@@ -2426,7 +2430,7 @@ msgstr[1] "%d contraseñas de aplicación llevan meses sin usarse."
 msgid ""
 "Revoke what is no longer needed. These credentials skip the second factor."
 msgstr ""
-"Revoca las que ya no hagan falta. Estas credenciales se saltan el segundo "
+"Revoca las que ya no hagan falta. Estas credenciales omiten el segundo "
 "factor."
 
 #: includes/checks/class-cascr-checks-accounts.php:774
@@ -2460,8 +2464,8 @@ msgid ""
 "Under Network Admin, Settings, Registration Settings, choose \"Registration "
 "is disabled\", or lower the default role of this site."
 msgstr ""
-"En Administración de la red > Ajustes > Ajustes de registro, elige \"El "
-"registro está desactivado\" o baja el perfil predeterminado de este sitio."
+"En Administración de la red > Ajustes > Ajustes de registro, elige «El "
+"registro está desactivado» o baja el perfil por defecto de este sitio."
 
 #. translators: %s: name of the default role for new accounts.
 #: includes/checks/class-cascr-checks-accounts.php:807
@@ -2477,8 +2481,8 @@ msgid ""
 "If the network does not need public sign-ups, choose \"Registration is "
 "disabled\" under Network Admin, Settings, Registration Settings."
 msgstr ""
-"Si la red no necesita registros públicos, elige \"El registro está "
-"desactivado\" en Administración de la red > Ajustes > Ajustes de registro."
+"Si la red no necesita registros públicos, elige «El registro está "
+"desactivado» en Administración de la red > Ajustes > Ajustes de registro."
 
 #. translators: %d: number of further findings that are not listed.
 #. translators: %d: number of additional items not listed.
@@ -2703,7 +2707,7 @@ msgstr "Se usa un prefijo de tablas personalizado (%s)."
 #: includes/checks/class-cascr-checks-config.php:293
 msgid "The database account is not allowed to inspect its own privileges."
 msgstr ""
-"La cuenta de la base de datos no tiene permiso para consultar sus propios "
+"La cuenta de la base de datos no tiene permisos para consultar sus propios "
 "privilegios."
 
 #: includes/checks/class-cascr-checks-config.php:308
@@ -2778,15 +2782,15 @@ msgstr ""
 #: includes/checks/class-cascr-checks-config.php:412
 #, php-format
 msgid "scheduled hook with no listener registered in this request: %s"
-msgstr "hook programado sin listener registrado en esta petición: %s"
+msgstr "gancho programado sin listener registrado en esta petición: %s"
 
 #. translators: %d: number of scheduled hooks with no listener.
 #: includes/checks/class-cascr-checks-config.php:419
 #, php-format
 msgid "%d scheduled hook has no listener in this request."
 msgid_plural "%d scheduled hooks have no listener in this request."
-msgstr[0] "%d hook programado no tiene listener en esta petición."
-msgstr[1] "%d hooks programados no tienen listener en esta petición."
+msgstr[0] "%d gancho programado no tiene listener en esta petición."
+msgstr[1] "%d ganchos programados no tienen listener en esta petición."
 
 #: includes/checks/class-cascr-checks-config.php:436
 msgid "WP-Cron is handled by a server cron job and nothing is overdue."
@@ -3036,7 +3040,7 @@ msgid ""
 "PHP %1$s only receives security fixes, no more bug fixes. Support ends on "
 "%2$s."
 msgstr ""
-"PHP %1$s solo recibe correcciones de seguridad, ya no corrige errores. El "
+"PHP %1$s solo recibe correcciones de seguridad, ya no corrige fallos. El "
 "soporte termina el %2$s."
 
 #. translators: %s: PHP version number.
@@ -3177,8 +3181,8 @@ msgid ""
 "The scan stopped after %d executable files, so the core directories were "
 "only compared in part."
 msgstr ""
-"El análisis se detuvo tras %d archivos ejecutables, así que los directorios "
-"del núcleo solo se compararon en parte."
+"La exploración se detuvo tras %d archivos ejecutables, así que los "
+"directorios del núcleo solo se compararon en parte."
 
 #: includes/checks/class-cascr-checks-core.php:778
 msgid ""
@@ -3319,7 +3323,7 @@ msgstr "%1$s: %2$s"
 #: includes/checks/class-cascr-checks-core.php:1033
 #: includes/checks/class-cascr-checks-core.php:1119
 msgid "No plugin information could be retrieved from the directory."
-msgstr "No se ha podido obtener información de plugins del directorio."
+msgstr "No se ha podido recuperar información de plugins del directorio."
 
 #: includes/checks/class-cascr-checks-core.php:1038
 msgid "Every active plugin from the directory is actively maintained."
@@ -3351,11 +3355,11 @@ msgid_plural ""
 "The listings of %d active plugins could not be retrieved, so the directory "
 "status is open."
 msgstr[0] ""
-"No se ha podido obtener la ficha de %d plugin activo, así que su estado en "
-"el directorio queda abierto."
-msgstr[1] ""
-"No se ha podido obtener la ficha de %d plugins activos, así que su estado en"
+"No se ha podido recuperar la ficha de %d plugin activo, así que su estado en"
 " el directorio queda abierto."
+msgstr[1] ""
+"No se ha podido recuperar la ficha de %d plugins activos, así que su estado "
+"en el directorio queda abierto."
 
 #: includes/checks/class-cascr-checks-core.php:1113
 msgid ""
@@ -3366,7 +3370,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-core.php:1124
 msgid "No active plugin has been removed from the directory."
-msgstr "Ningún plugin activo ha sido retirado del directorio."
+msgstr "Ningún plugin activo se ha retirado del directorio."
 
 #. translators: %d: number of plugins that were removed from the directory.
 #: includes/checks/class-cascr-checks-core.php:1130
@@ -3374,8 +3378,8 @@ msgstr "Ningún plugin activo ha sido retirado del directorio."
 msgid "%d active plugin has been removed from the WordPress directory."
 msgid_plural ""
 "%d active plugins have been removed from the WordPress directory."
-msgstr[0] "%d plugin activo ha sido retirado del directorio de WordPress."
-msgstr[1] "%d plugins activos han sido retirados del directorio de WordPress."
+msgstr[0] "%d plugin activo se ha retirado del directorio de WordPress."
+msgstr[1] "%d plugins activos se han retirado del directorio de WordPress."
 
 #: includes/checks/class-cascr-checks-core.php:1140
 msgid ""
@@ -3391,7 +3395,7 @@ msgid ""
 "next scan on."
 msgstr ""
 "Se han registrado los autores de los plugins. Los cambios se notificarán a "
-"partir del próximo análisis."
+"partir de la próxima exploración."
 
 #. translators: 1: plugin file, 2: previous author, 3: current author.
 #: includes/checks/class-cascr-checks-core.php:1177
@@ -3466,10 +3470,11 @@ msgstr[1] "Hay %d plugins imprescindibles o drop-ins conocidos instalados."
 msgid "%d must-use plugin or drop-in appeared since the first scan."
 msgid_plural "%d must-use plugins or drop-ins appeared since the first scan."
 msgstr[0] ""
-"%d plugin imprescindible o drop-in ha aparecido desde el primer análisis."
+"%d plugin imprescindible o drop-in ha aparecido desde la primera "
+"exploración."
 msgstr[1] ""
-"%d plugins imprescindibles o drop-ins han aparecido desde el primer "
-"análisis."
+"%d plugins imprescindibles o drop-ins han aparecido desde la primera "
+"exploración."
 
 #: includes/checks/class-cascr-checks-core.php:1300
 msgid ""
@@ -3485,7 +3490,7 @@ msgstr "No se ha podido leer el directorio superior."
 
 #: includes/checks/class-cascr-checks-core.php:1350
 msgid "The scan for other installations could not be completed."
-msgstr "No se ha podido completar la búsqueda de otras instalaciones."
+msgstr "No se ha podido completar la exploración de otras instalaciones."
 
 #: includes/checks/class-cascr-checks-core.php:1355
 msgid "No other WordPress installation was found next to this one."
@@ -3579,12 +3584,12 @@ msgid ""
 "Set the directory to 755 or 750. It only needs to be writable by the account"
 " that runs PHP."
 msgstr ""
-"Pon el directorio en 755 o 750. Solo necesita permiso de escritura la cuenta"
-" que ejecuta PHP."
+"Pon el directorio en 755 o 750. Solo la cuenta que ejecuta PHP necesita "
+"tener permisos de escritura."
 
 #: includes/checks/class-cascr-checks-files.php:117
 msgid "The uploads directory is not writable by everyone."
-msgstr "El directorio uploads no tiene permiso de escritura para todos."
+msgstr "El directorio uploads no tiene permisos de escritura para todos."
 
 #: includes/checks/class-cascr-checks-files.php:155
 msgid "Core directories are writable by everyone on the server."
@@ -3601,15 +3606,15 @@ msgstr "No se han podido leer los permisos de los directorios del núcleo."
 
 #: includes/checks/class-cascr-checks-files.php:166
 msgid "No core directory is writable by everyone."
-msgstr "Ningún directorio del núcleo tiene permiso de escritura para todos."
+msgstr "Ningún directorio del núcleo tiene permisos de escritura para todos."
 
 #: includes/checks/class-cascr-checks-files.php:222
 msgid ""
 "Nothing below the web root is writable by everyone, leaving aside the paths "
 "that have a check of their own."
 msgstr ""
-"Nada bajo la raíz web tiene permiso de escritura para todos, sin contar las "
-"rutas que tienen su propia comprobación."
+"Nada bajo la raíz web tiene permisos de escritura para todos, sin contar las"
+" rutas que tienen su propia comprobación."
 
 #. translators: %d: number of world-writable paths.
 #: includes/checks/class-cascr-checks-files.php:228
@@ -3625,9 +3630,10 @@ msgid ""
 " wp-config.php, the core directories and the uploads folder are not listed "
 "here, they have a check of their own."
 msgstr ""
-"Pon los archivos en 644 y los directorios en 755. Nada necesita permiso de "
-"escritura para todos. wp-config.php, los directorios del núcleo y el "
-"directorio uploads no aparecen aquí porque tienen su propia comprobación."
+"Pon los archivos en 644 y los directorios en 755. Nada necesita tener "
+"permisos de escritura para todos. wp-config.php, los directorios del núcleo "
+"y el directorio uploads no aparecen aquí porque tienen su propia "
+"comprobación."
 
 #: includes/checks/class-cascr-checks-files.php:286
 msgid "The uploads directory could not be read."
@@ -3649,7 +3655,7 @@ msgstr ", señalado porque %s"
 
 #: includes/checks/class-cascr-checks-files.php:352
 msgid "The uploads directory could not be scanned completely."
-msgstr "No se ha podido analizar por completo el directorio uploads."
+msgstr "No se ha podido explorar por completo el directorio uploads."
 
 #. translators: %d: number of executable files found in uploads.
 #: includes/checks/class-cascr-checks-files.php:359
@@ -4001,7 +4007,7 @@ msgid ""
 "place."
 msgstr ""
 "No se ha encontrado ningún archivo .htaccess, así que no se aplica ninguna "
-"de las reglas de protección habituales."
+"de las reglas de refuerzo habituales."
 
 #: includes/checks/class-cascr-checks-files.php:1006
 msgid ""
@@ -4121,8 +4127,8 @@ msgid ""
 "The TLS certificate has expired. Visitors get a browser warning instead of "
 "the site."
 msgstr ""
-"El certificado TLS ha caducado. Los visitantes ven un aviso del navegador en"
-" lugar del sitio."
+"El certificado TLS ha caducado. Los visitantes ven una advertencia del "
+"navegador en lugar del sitio."
 
 #: includes/checks/class-cascr-checks-network.php:195
 msgid ""
@@ -4184,7 +4190,7 @@ msgstr ""
 #: includes/checks/class-cascr-checks-network.php:610
 #: includes/checks/class-cascr-checks-network.php:653
 msgid "The response headers could not be retrieved."
-msgstr "No se han podido obtener las cabeceras de respuesta."
+msgstr "No se han podido recuperar las cabeceras de respuesta."
 
 #: includes/checks/class-cascr-checks-network.php:297
 msgid "All recommended security headers are present."
@@ -4312,11 +4318,11 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:481
 msgid "'unsafe-inline' allows injected inline scripts to run"
-msgstr "'unsafe-inline' permite que se ejecuten scripts inline inyectados"
+msgstr "'unsafe-inline' permite que se ejecuten scripts en línea inyectados"
 
 #: includes/checks/class-cascr-checks-network.php:482
 msgid "inline scripts ('unsafe-inline')"
-msgstr "scripts inline ('unsafe-inline')"
+msgstr "scripts en línea ('unsafe-inline')"
 
 #: includes/checks/class-cascr-checks-network.php:486
 msgid "'unsafe-eval' allows strings to be executed as code"
@@ -4396,8 +4402,8 @@ msgid ""
 "The cookies the login page hands out before sign-in carry the right "
 "attributes."
 msgstr ""
-"Las cookies que entrega la página de acceso antes de iniciar sesión llevan "
-"los atributos correctos."
+"Las cookies que entrega la página de acceso antes de acceder llevan los "
+"atributos correctos."
 
 #: includes/checks/class-cascr-checks-network.php:594
 msgid ""
@@ -4414,8 +4420,8 @@ msgid ""
 "this measurement."
 msgstr ""
 "Establece HttpOnly, SameSite=Lax y, en un sitio HTTPS, Secure en el "
-"servidor. Las cookies de sesión solo aparecen tras un inicio de sesión "
-"correcto y no forman parte de esta medición."
+"servidor. Las cookies de sesión solo aparecen tras un acceso correcto y no "
+"forman parte de esta medición."
 
 #: includes/checks/class-cascr-checks-network.php:617
 msgid "No cross-origin headers are sent, which is the right default."
@@ -4463,7 +4469,7 @@ msgstr ""
 
 #: includes/checks/class-cascr-checks-network.php:687
 msgid "The front page could not be retrieved."
-msgstr "No se ha podido obtener la página de inicio."
+msgstr "No se ha podido recuperar la página de inicio."
 
 #. translators: %s: WordPress version number.
 #: includes/checks/class-cascr-checks-network.php:697
@@ -4500,7 +4506,7 @@ msgid ""
 "Remove the generator, wlwmanifest and RSD hooks from wp_head. This is "
 "fingerprinting, not a hole in itself."
 msgstr ""
-"Elimina los hooks de generator, wlwmanifest y RSD de wp_head. Sirve para "
+"Elimina los ganchos de generator, wlwmanifest y RSD de wp_head. Sirve para "
 "identificar la instalación (fingerprinting), no es un agujero en sí mismo."
 
 #: includes/checks/class-cascr-checks-network.php:740
@@ -4520,8 +4526,8 @@ msgid ""
 "the xmlrpc_enabled filter refuses every method that needs a login, but the "
 "endpoint keeps answering"
 msgstr ""
-"el filtro xmlrpc_enabled rechaza todos los métodos que requieren iniciar "
-"sesión, pero el endpoint sigue respondiendo"
+"el filtro xmlrpc_enabled rechaza todos los métodos que requieren haber "
+"accedido, pero el endpoint sigue respondiendo"
 
 #: includes/checks/class-cascr-checks-network.php:768
 msgid ""
@@ -4530,9 +4536,9 @@ msgid ""
 "guesses, but one request still does the work of many"
 msgstr ""
 "system.multicall agrupa muchas llamadas en una sola petición. Desde "
-"WordPress 4.4, el primer inicio de sesión fallido detiene el resto, así que "
-"ya no multiplica los intentos de contraseña, pero una sola petición sigue "
-"haciendo el trabajo de muchas"
+"WordPress 4.4, el primer acceso fallido detiene el resto, así que ya no "
+"multiplica los intentos de contraseña, pero una sola petición sigue haciendo"
+" el trabajo de muchas"
 
 #: includes/checks/class-cascr-checks-network.php:772
 msgid ""
@@ -4600,8 +4606,8 @@ msgid ""
 "User names can be read without logging in, which turns password guessing "
 "from two unknowns into one."
 msgstr ""
-"Los nombres de usuario se pueden leer sin iniciar sesión, así que para "
-"adivinar una contraseña ya solo queda una incógnita en lugar de dos."
+"Los nombres de usuario se pueden leer sin acceder, así que para adivinar una"
+" contraseña ya solo queda una incógnita en lugar de dos."
 
 #: includes/checks/class-cascr-checks-network.php:878
 msgid ""
@@ -4610,7 +4616,7 @@ msgid ""
 "login name it was generated from, and that is what the redirect and the REST"
 " answer carry."
 msgstr ""
-"Exige autenticación en el endpoint de usuarios y detén la redirección de "
+"Exige identificación en el endpoint de usuarios y detén la redirección de "
 "?author. Cambiar el nombre visible no sirve de nada aquí: el slug del autor "
 "conserva el nombre de acceso a partir del cual se generó, y eso es lo que "
 "devuelven la redirección y la respuesta REST."
@@ -4762,10 +4768,10 @@ msgid ""
 " label on AI-generated content and for a notice when visitors are talking to"
 " an AI system. No solution for that is active on this installation."
 msgstr ""
-"Desde el 2 de agosto de 2026, el artículo 50 de la Ley de IA de la UE exige "
-"una etiqueta legible por máquina en el contenido generado por IA y un aviso "
-"cuando los visitantes hablan con un sistema de IA. En esta instalación no "
-"hay ninguna solución activa para ello."
+"Desde el 2 de agosto de 2026, el artículo 50 del Reglamento de IA de la UE "
+"exige una etiqueta legible por máquina en el contenido generado por IA y un "
+"aviso cuando los visitantes hablan con un sistema de IA. En esta instalación"
+" no hay ninguna solución activa para ello."
 
 #: includes/checks/class-cascr-checks-transparency.php:68
 msgid ""
@@ -5220,7 +5226,7 @@ msgstr "Dejar de recordármelo"
 
 #: includes/class-cascr-nudges.php:322
 msgid "You are not allowed to do that."
-msgstr "No tienes permiso para hacer eso."
+msgstr "No tienes permisos para hacer eso."
 
 #: includes/class-cascr-registry.php:180
 msgid "Core, plugins and themes"
@@ -5316,7 +5322,7 @@ msgstr "Instalación de código desde el escritorio"
 
 #: includes/class-cascr-registry.php:386
 msgid "Security keys and salts"
-msgstr "Claves y salts de seguridad"
+msgstr "Claves y sales de seguridad"
 
 #: includes/class-cascr-registry.php:392
 msgid "Database table prefix"
@@ -5332,7 +5338,7 @@ msgstr "Estado de WP-Cron"
 
 #: includes/class-cascr-registry.php:410
 msgid "Autoloaded options size"
-msgstr "Tamaño de las opciones autocargadas"
+msgstr "Tamaño de las opciones de carga automática"
 
 #: includes/class-cascr-registry.php:416
 msgid "Injected content in options"
@@ -5420,7 +5426,7 @@ msgstr "Cuentas de administrador"
 
 #: includes/class-cascr-registry.php:570
 msgid "Role and capability changes"
-msgstr "Cambios de roles y capacidades"
+msgstr "Cambios de perfiles y capacidades"
 
 #: includes/class-cascr-registry.php:576
 msgid "Open registration"
@@ -5428,7 +5434,7 @@ msgstr "Registro abierto"
 
 #: includes/class-cascr-registry.php:582
 msgid "Two-factor coverage"
-msgstr "Cobertura del doble factor"
+msgstr "Cobertura de la identificación en dos pasos"
 
 #: includes/class-cascr-registry.php:588
 msgid "Application passwords"
@@ -5480,7 +5486,7 @@ msgstr "Enumeración de usuarios"
 
 #: includes/class-cascr-registry.php:670
 msgid "Unauthenticated REST routes"
-msgstr "Rutas REST sin autenticación"
+msgstr "Rutas REST sin identificación"
 
 #: includes/class-cascr-registry.php:682
 msgid "Client IP detection"
@@ -5493,7 +5499,7 @@ msgstr "Transparencia del contenido de IA"
 #: includes/class-cascr-rest.php:141
 msgid "You are not allowed to run security checks on this site."
 msgstr ""
-"No tienes permiso para ejecutar comprobaciones de seguridad en este sitio."
+"No tienes permisos para ejecutar comprobaciones de seguridad en este sitio."
 
 #: includes/class-cascr-rest.php:173 includes/class-cascr-rest.php:198
 msgid "There is no check with that identifier."

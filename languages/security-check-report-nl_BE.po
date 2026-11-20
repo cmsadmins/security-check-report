@@ -5487,13 +5487,13 @@ msgstr "Slecht"
 #: includes/checks/class-cascr-checks-core.php:283
 #, php-format
 msgid "PHP version: %s"
-msgstr "PHP-versie: %s"
+msgstr "PHP versie: %s"
 
 #. translators: %s: PHP server API, e.g. fpm-fcgi or apache2handler.
 #: includes/checks/class-cascr-checks-core.php:285
 #, php-format
 msgid "Server API: %s"
-msgstr "Server-API: %s"
+msgstr "Server API: %s"
 
 #: includes/class-cascr-admin-dashboard.php:64
 msgid "Result of the latest run"
