@@ -94,6 +94,44 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	);
 
 	/**
+	 * First upstream release per branch from the security release of
+	 * 2026-11-19 (18 CVEs, seven critical, among them CVE-2026-129289).
+	 *
+	 * @var array<string, int>
+	 */
+	private static $php_nov2026_fixed = array(
+		'8.2' => 36,
+		'8.3' => 37,
+		'8.4' => 28,
+		'8.5' => 13,
+	);
+
+	/**
+	 * Ubuntu package revisions that carry the November 2026 backport.
+	 *
+	 * Only the ESM releases had a package when this was written; the LTS
+	 * releases still said "needs evaluation". Add the USN revisions here.
+	 *
+	 * @var string[]
+	 */
+	private static $php_nov2026_ubuntu = array(
+		'7.2.24-0ubuntu0.18.04.17+esm15',
+		'7.0.33-0ubuntu0.16.04.16+esm23',
+	);
+
+	/**
+	 * First nginx release per branch that fixes NGINX2Root (CVE-2026-123007
+	 * and four more), published 2026-11-18. Older branches are only shipped
+	 * by distributions, which backport without changing the number.
+	 *
+	 * @var array<string, int>
+	 */
+	private static $nginx_fixed = array(
+		'1.30' => 7,
+		'1.31' => 9,
+	);
+
+	/**
 	 * Memoised core checksums.
 	 *
 	 * @var array|false|null
@@ -227,18 +265,19 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 	}
 
 	/**
-	 * Does the running PHP carry the PHP2Shell fix?
+	 * Does the running PHP carry the PHP2Shell fix and the November 2026 release?
 	 *
-	 * Only the version string is read. A green result means the fix is proven,
-	 * anything else is a warning and never a failure: Red Hat, Plesk, cPanel and
-	 * self-built backports keep the old number, so an old number is not proof
-	 * of a vulnerable server.
+	 * Only the version string is read. A green result means both fixes are
+	 * proven, anything else is a warning and never a failure: Red Hat, Plesk,
+	 * cPanel and self-built backports keep the old number, so an old number is
+	 * not proof of a vulnerable server.
 	 *
 	 * @return array
 	 */
 	public static function php2shell() {
 		$version = PHP_VERSION;
-		$status  = self::php2shell_status( $version );
+		$october = self::php2shell_status( $version );
+		$status  = self::php_nov2026_status( $version );
 		$items   = array(
 			/* translators: %s: PHP version string as reported by the server. */
 			sprintf( __( 'PHP version: %s', 'security-check-report' ), $version ),
@@ -250,29 +289,71 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 			return CASCR_Result::pass(
 				sprintf(
 					/* translators: %s: PHP version number. */
-					__( 'PHP %s contains the fix for PHP2Shell.', 'security-check-report' ),
+					__( 'PHP %s contains the fixes for PHP2Shell and for the PHP security release of 19 November 2026.', 'security-check-report' ),
 					$version
 				),
 				$items
 			);
 		}
 
-		$fix  = __( 'Install the PHP update from your distribution or host, then restart PHP-FPM or the web server and run this check again. Sites on Apache with mod_php are at the highest risk.', 'security-check-report' );
+		// The settings the November advisories name as preconditions. Read
+		// only, so the admin sees what the fix text talks about.
+		$settings = array(
+			'session.upload_progress.enabled' => true,
+			'session.serialize_handler'       => false,
+			'error_log'                       => false,
+		);
+		if ( version_compare( PHP_VERSION, '8.5', '>=' ) ) {
+			$settings['zend.exception_ignore_args'] = true;
+			$settings['fatal_error_backtraces']     = true;
+		}
+		foreach ( $settings as $key => $flag ) {
+			$value = (string) ini_get( $key );
+			if ( $flag ) {
+				$value = filter_var( $value, FILTER_VALIDATE_BOOLEAN ) ? 'on' : 'off';
+			} elseif ( '' === $value ) {
+				$value = __( 'not set', 'security-check-report' );
+			}
+			$items[] = $key . ': ' . $value;
+		}
+
+		$fix  = __( 'Install the PHP update from your distribution or host, then restart PHP-FPM or the web server and run this check again. Until then: keep session.upload_progress.enabled off in php.ini or the FPM pool, do not reuse FastCGI connections (nginx fastcgi_keep_conn, Apache enablereuse), and on PHP 8.5 set zend.exception_ignore_args to 1.', 'security-check-report' );
 		$link = array(
-			'url'   => 'https://www.cms-admins.de/news/php2shell-kritische-php-sicherheitsluecken-cve-2026-109618/',
-			'label' => __( 'PHP2Shell: fixed versions and status per distribution (German)', 'security-check-report' ),
+			'url'   => 'https://www.cms-admins.de/news/php-sicherheitsupdate-november-2026/',
+			'label' => __( 'PHP security release of 19 November 2026: fixed versions and status per distribution (German)', 'security-check-report' ),
 		);
 
-		if ( 'backport' === $status ) {
+		if ( 'pass' === $october ) {
+			return CASCR_Result::warn(
+				'backport' === $status
+					? sprintf(
+						/* translators: %s: PHP version number. */
+						__( 'PHP %s contains the PHP2Shell fix, but whether it also contains the PHP security release of 19 November 2026 cannot be read from the version number.', 'security-check-report' ),
+						$version
+					)
+					: sprintf(
+						/* translators: 1: PHP version number, 2: first fixed version of that branch. */
+						__( 'PHP %1$s contains the PHP2Shell fix but not the PHP security release of 19 November 2026 (18 flaws, seven critical, among them CVE-2026-129289 in PHP-FPM). Update to %2$s or newer, unless your host confirms a backport.', 'security-check-report' ),
+						$version,
+						$status
+					),
+				5,
+				$items,
+				$fix,
+				$link
+			);
+		}
+
+		if ( 'backport' === $october ) {
 			return CASCR_Result::warn(
 				sprintf(
 					/* translators: %s: PHP version number. */
-					__( 'There is no official PHP2Shell fix for PHP %s, only backports from some distributions and vendors. Whether this server has one cannot be read from the version number.', 'security-check-report' ),
+					__( 'There is no official fix for PHP %s, neither for PHP2Shell nor for the PHP security release of 19 November 2026, only backports from some distributions and vendors. Whether this server has them cannot be read from the version number.', 'security-check-report' ),
 					$version
 				),
 				6,
 				$items,
-				__( 'Ask your host whether the PHP2Shell backport is installed, or move the site to PHP 8.2 or newer.', 'security-check-report' ) . ' ' . $fix,
+				__( 'Ask your host whether the backports are installed, or move the site to PHP 8.2 or newer.', 'security-check-report' ) . ' ' . $fix,
 				$link
 			);
 		}
@@ -280,27 +361,65 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 		return CASCR_Result::warn(
 			sprintf(
 				/* translators: 1: PHP version number, 2: first fixed version of that branch. */
-				__( 'PHP %1$s does not show the PHP2Shell fix. Update to %2$s or newer, unless your host confirms a backport.', 'security-check-report' ),
+				__( 'PHP %1$s shows neither the PHP2Shell fix nor the PHP security release of 19 November 2026. Update to %2$s or newer, unless your host confirms a backport.', 'security-check-report' ),
 				$version,
 				$status
 			),
 			6,
 			$items,
-			$fix,
+			__( 'Sites on Apache with mod_php are at the highest risk from PHP2Shell.', 'security-check-report' ) . ' ' . $fix,
 			$link
 		);
 	}
 
 	/**
-	 * Classifies a PHP version string for PHP2Shell.
+	 * Classifies a PHP version string for PHP2Shell (release of 2026-10-21).
 	 *
 	 * @param string $version Value of PHP_VERSION.
 	 * @return string 'pass', 'backport' for branches without an official fix,
 	 *                or the first fixed version the branch needs.
 	 */
 	public static function php2shell_status( $version ) {
-		foreach ( self::$php2shell_ubuntu as $fixed ) {
-			preg_match( '/^(.*?)(\d+)$/', $fixed, $f );
+		return self::fix_status( $version, self::$php2shell_fixed, self::$php2shell_ubuntu, '8.5' );
+	}
+
+	/**
+	 * Classifies a PHP version string for the security release of 2026-11-19.
+	 *
+	 * @param string $version Value of PHP_VERSION.
+	 * @return string 'pass', 'backport' or the first fixed version.
+	 */
+	public static function php_nov2026_status( $version ) {
+		return self::fix_status( $version, self::$php_nov2026_fixed, self::$php_nov2026_ubuntu, '8.5' );
+	}
+
+	/**
+	 * Classifies an nginx version string for NGINX2Root (release of 2026-11-18).
+	 *
+	 * @param string $version Version as in SERVER_SOFTWARE, e.g. 1.26.3.
+	 * @return string 'pass', 'backport' for distribution branches, or the first
+	 *                fixed version the branch needs.
+	 */
+	public static function nginx2root_status( $version ) {
+		return self::fix_status( $version, self::$nginx_fixed, array(), '1.31' );
+	}
+
+	/**
+	 * Compares a version string against the first fixed release per branch.
+	 *
+	 * A vendor revision that proves a backport counts as the fix, a branch
+	 * newer than the newest known one is assumed fixed, and a branch below
+	 * the known ones has no upstream fix at all.
+	 *
+	 * @param string             $version Version string.
+	 * @param array<string, int> $fixed   First fixed patch level per branch.
+	 * @param string[]           $vendor  Vendor revisions that carry the fix.
+	 * @param string             $newest  Newest branch in $fixed.
+	 * @return string 'pass', 'backport' or the first fixed version.
+	 */
+	private static function fix_status( $version, $fixed, $vendor, $newest ) {
+		foreach ( $vendor as $revision ) {
+			preg_match( '/^(.*?)(\d+)$/', $revision, $f );
 			if ( 0 === strpos( $version, $f[1] ) && preg_match( '/^\d+/', substr( $version, strlen( $f[1] ) ), $n ) && (int) $n[0] >= (int) $f[2] ) {
 				return 'pass';
 			}
@@ -312,11 +431,95 @@ class CASCR_Checks_Core extends CASCR_Checks_Base {
 
 		$branch = $m[1] . '.' . $m[2];
 
-		if ( isset( self::$php2shell_fixed[ $branch ] ) ) {
-			return (int) $m[3] >= self::$php2shell_fixed[ $branch ] ? 'pass' : $branch . '.' . self::$php2shell_fixed[ $branch ];
+		if ( isset( $fixed[ $branch ] ) ) {
+			return (int) $m[3] >= $fixed[ $branch ] ? 'pass' : $branch . '.' . $fixed[ $branch ];
 		}
 
-		return version_compare( $branch, '8.5', '>' ) ? 'pass' : 'backport';
+		return version_compare( $branch, $newest, '>' ) ? 'pass' : 'backport';
+	}
+
+	/**
+	 * Does the nginx in front of this site carry the NGINX2Root fixes?
+	 *
+	 * nginx hands its version to PHP-FPM in SERVER_SOFTWARE regardless of
+	 * server_tokens; as a reverse proxy in front of Apache it only shows in
+	 * the Server header of the site's own front page. Distribution packages
+	 * keep the old number after a backport, so those stay a warning.
+	 *
+	 * @return array
+	 */
+	public static function nginx2root() {
+		$source = 'SERVER_SOFTWARE';
+		$server = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
+
+		if ( false === stripos( $server, 'nginx' ) ) {
+			$source = 'Server';
+			$server = self::header( CASCR_Http::home(), 'Server' );
+		}
+
+		if ( ! preg_match( '/nginx(?:\/(\d+\.\d+\.\d+))?/i', $server, $m ) ) {
+			return CASCR_Result::info( __( 'No nginx was found in front of this site. A proxy or CDN further out cannot be seen from here.', 'security-check-report' ) );
+		}
+
+		$fix = __( 'Install nginx 1.31.9 or 1.30.7, or the fixed package of your distribution, then restart nginx: a reload keeps the old binary running. Until then, switching HTTP/2 off blocks the flaw with the widest reach.', 'security-check-report' );
+
+		if ( empty( $m[1] ) ) {
+			return CASCR_Result::inconclusive(
+				__( 'nginx is in use, but it does not name its version.', 'security-check-report' ),
+				__( 'Run nginx -v on the server, or ask your host whether nginx 1.31.9, 1.30.7 or the fixed distribution package is installed.', 'security-check-report' )
+			);
+		}
+
+		$version = $m[1];
+		$status  = self::nginx2root_status( $version );
+		$items   = array( $source . ': ' . $server );
+
+		if ( isset( $_SERVER['SERVER_PROTOCOL'] ) && 0 === stripos( sanitize_text_field( wp_unslash( $_SERVER['SERVER_PROTOCOL'] ) ), 'HTTP/2' ) ) {
+			$items[] = __( 'This request arrived over HTTP/2, which CVE-2026-123007 needs.', 'security-check-report' );
+		}
+
+		if ( 'pass' === $status ) {
+			return CASCR_Result::pass(
+				sprintf(
+					/* translators: %s: nginx version number. */
+					__( 'nginx %s contains the fixes for NGINX2Root.', 'security-check-report' ),
+					$version
+				),
+				$items
+			);
+		}
+
+		$link = array(
+			'url'   => 'https://www.cms-admins.de/news/nginx2root-nginx-sicherheitsluecke/',
+			'label' => __( 'NGINX2Root: fixed versions and status per distribution (German)', 'security-check-report' ),
+		);
+
+		if ( 'backport' === $status ) {
+			return CASCR_Result::warn(
+				sprintf(
+					/* translators: %s: nginx version number. */
+					__( 'nginx %s is a distribution build. Whether its package contains the NGINX2Root fixes cannot be read from the version number.', 'security-check-report' ),
+					$version
+				),
+				4,
+				$items,
+				__( 'Compare the full package version with the advisory of your distribution (Debian DSA-6642-1 and DLA-4918-1, Ubuntu USN-9159-1, AlmaLinux ALSA-2026:A025 and A024), or ask your host.', 'security-check-report' ) . ' ' . $fix,
+				$link
+			);
+		}
+
+		return CASCR_Result::warn(
+			sprintf(
+				/* translators: 1: nginx version number, 2: first fixed version of that branch. */
+				__( 'nginx %1$s does not show the NGINX2Root fixes. Update to %2$s or newer.', 'security-check-report' ),
+				$version,
+				$status
+			),
+			5,
+			$items,
+			$fix,
+			$link
+		);
 	}
 
 	/**

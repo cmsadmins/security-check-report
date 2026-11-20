@@ -98,10 +98,12 @@ class CASCR_Result {
 	 *
 	 * @param string   $summary One sentence, translated.
 	 * @param string[] $items   Supporting detail, raw and unescaped.
+	 * @param string   $fix     Optional recommendation.
+	 * @param array    $link    Optional {url, label} pointing at further help.
 	 * @return array
 	 */
-	public static function info( $summary, $items = array() ) {
-		return self::build( self::STATUS_PASS, $summary, 0, $items, '', array() );
+	public static function info( $summary, $items = array(), $fix = '', $link = array() ) {
+		return self::build( self::STATUS_PASS, $summary, 0, $items, $fix, $link );
 	}
 
 	/**

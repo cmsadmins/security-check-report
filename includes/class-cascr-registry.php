@@ -271,10 +271,16 @@ class CASCR_Registry {
 				'callback' => array( $c, 'php_version' ),
 			),
 			'php2shell'                => array(
-				'label'    => __( 'PHP2Shell (CVE-2026-109618, CVE-2026-109619)', 'security-check-report' ),
+				'label'    => __( 'PHP2Shell and the PHP security release of 19 November 2026', 'security-check-report' ),
 				'category' => self::CATEGORY_CORE,
 				'severity' => self::SEVERITY_CRITICAL,
 				'callback' => array( $c, 'php2shell' ),
+			),
+			'nginx2root'               => array(
+				'label'    => __( 'NGINX2Root (CVE-2026-123007 and four more nginx flaws)', 'security-check-report' ),
+				'category' => self::CATEGORY_CORE,
+				'severity' => self::SEVERITY_HIGH,
+				'callback' => array( $c, 'nginx2root' ),
 			),
 			'automatic_core_updates'   => array(
 				'label'    => __( 'Automatic core updates', 'security-check-report' ),
@@ -424,6 +430,13 @@ class CASCR_Registry {
 				'severity' => self::SEVERITY_LOW,
 				'weight'   => 0,
 				'callback' => array( $c, 'security_plugins' ),
+			),
+			'maintenance'              => array(
+				'label'    => __( 'WordPress maintenance', 'security-check-report' ),
+				'category' => self::CATEGORY_CONFIG,
+				'severity' => self::SEVERITY_LOW,
+				'weight'   => 0,
+				'callback' => array( $c, 'maintenance' ),
 			),
 			'brute_force'              => array(
 				'label'    => __( 'Login protection', 'security-check-report' ),

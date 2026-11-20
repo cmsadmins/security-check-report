@@ -176,6 +176,114 @@ class Test_CASCR_Checks extends WP_UnitTestCase {
 	}
 
 	/**
+	 * The release of 19 November 2026 moves the bar one patch level up. A
+	 * version with the October fix only is a warning, never green.
+	 */
+	public function test_the_november_release_is_green_only_where_the_fix_is_proven() {
+		$cases = array(
+			'8.2.36'                         => 'pass',
+			'8.3.37'                         => 'pass',
+			'8.4.28'                         => 'pass',
+			'8.5.13'                         => 'pass',
+			'8.6.0'                          => 'pass',
+			'8.2.36-1~deb12u1'               => 'pass',
+			'8.4.28-1~deb13u1'               => 'pass',
+			'7.2.24-0ubuntu0.18.04.17+esm15' => 'pass',
+			'7.0.33-0ubuntu0.16.04.16+esm23' => 'pass',
+			'8.4.27'                         => '8.4.28',
+			'8.5.12'                         => '8.5.13',
+			'8.3.6-0ubuntu0.24.04.13'        => '8.3.37',
+			'7.2.24-0ubuntu0.18.04.17+esm14' => 'backport',
+			'8.1.34'                         => 'backport',
+			'7.4.33'                         => 'backport',
+		);
+
+		foreach ( $cases as $version => $expected ) {
+			$this->assertSame( $expected, CASCR_Checks_Core::php_nov2026_status( $version ), "PHP {$version}" );
+		}
+
+		$result = CASCR_Checks_Core::php2shell();
+		$this->assertNotSame( 'fail', $result['status'] );
+		if ( 'pass' !== $result['status'] ) {
+			$this->assertContains( 'session.upload_progress.enabled: ' . ( filter_var( ini_get( 'session.upload_progress.enabled' ), FILTER_VALIDATE_BOOLEAN ) ? 'on' : 'off' ), $result['items'] );
+		}
+	}
+
+	/**
+	 * The maintenance check never moves the grade. Without a connector it
+	 * carries the recommendation and its link, with one it lists the plugin,
+	 * and with the CMS ADMINS plugin the recommendation is left out.
+	 */
+	public function test_maintenance_is_informational_and_recommends_only_without_a_connector() {
+		$previous = get_option( 'active_plugins', array() );
+
+		update_option( 'active_plugins', array() );
+		$result = CASCR_Checks_Config::maintenance();
+		$this->assertSame( 'pass', $result['status'] );
+		$this->assertSame( 0, $result['score'] );
+		$this->assertStringContainsString( 'cms-admins.de/wordpress-wartung', $result['link']['url'] );
+		$this->assertNotSame( '', $result['fix'] );
+
+		update_option( 'active_plugins', array( 'mainwp-child/mainwp-child.php' ) );
+		$result = CASCR_Checks_Config::maintenance();
+		$this->assertSame( 'pass', $result['status'] );
+		$this->assertSame( array( 'mainwp-child' ), $result['items'] );
+		$this->assertSame( '', $result['fix'] );
+
+		update_option( 'active_plugins', array( 'contexlabs-support/contexlabs-support.php' ) );
+		$result = CASCR_Checks_Config::maintenance();
+		$this->assertStringContainsString( 'CMS ADMINS', $result['summary'] );
+		$this->assertSame( '', $result['fix'] );
+
+		update_option( 'active_plugins', $previous );
+	}
+
+	/**
+	 * nginx.org ships 1.30 and 1.31, so only those two branches can prove the
+	 * fix. Everything older is a distribution build that may carry a backport.
+	 */
+	public function test_nginx2root_is_green_only_where_the_fix_is_proven() {
+		$cases = array(
+			'1.30.7' => 'pass',
+			'1.31.9' => 'pass',
+			'1.32.0' => 'pass',
+			'1.30.6' => '1.30.7',
+			'1.31.8' => '1.31.9',
+			'1.29.3' => 'backport',
+			'1.26.3' => 'backport',
+			'1.24.0' => 'backport',
+			'1.22.1' => 'backport',
+			'1.18.0' => 'backport',
+		);
+
+		foreach ( $cases as $version => $expected ) {
+			$this->assertSame( $expected, CASCR_Checks_Core::nginx2root_status( $version ), "nginx {$version}" );
+		}
+
+		$saved = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : null;
+
+		$_SERVER['SERVER_SOFTWARE'] = 'nginx/1.30.6';
+		$result                     = CASCR_Checks_Core::nginx2root();
+		$this->assertSame( 'warn', $result['status'] );
+		$this->assertSame( 5, $result['score'] );
+		$this->assertContains( 'SERVER_SOFTWARE: nginx/1.30.6', $result['items'] );
+
+		$_SERVER['SERVER_SOFTWARE'] = 'nginx/1.24.0';
+		$result                     = CASCR_Checks_Core::nginx2root();
+		$this->assertSame( 'warn', $result['status'] );
+		$this->assertSame( 4, $result['score'] );
+
+		$_SERVER['SERVER_SOFTWARE'] = 'nginx/1.31.9';
+		$this->assertSame( 'pass', CASCR_Checks_Core::nginx2root()['status'] );
+
+		if ( null === $saved ) {
+			unset( $_SERVER['SERVER_SOFTWARE'] );
+		} else {
+			$_SERVER['SERVER_SOFTWARE'] = $saved;
+		}
+	}
+
+	/**
 	 * The suggestion has to be a real second factor, otherwise the finding
 	 * points somewhere that does not solve it.
 	 */

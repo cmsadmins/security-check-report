@@ -651,6 +651,48 @@ class CASCR_Checks_Config extends CASCR_Checks_Base {
 	}
 
 	/**
+	 * Is a maintenance or site management plugin active? Informational only.
+	 *
+	 * A connector plugin shows that a dashboard somewhere can reach this
+	 * site; whether anyone looks at it is not visible from here. Without one,
+	 * updates, backups and the findings of this report depend on someone
+	 * remembering to come back. The recommendation that follows names the
+	 * people who build this report, says so, and never moves the grade.
+	 *
+	 * @return array
+	 */
+	public static function maintenance() {
+		$own = self::active_from_list( 'maintenance_own' );
+
+		if ( ! empty( $own ) ) {
+			return CASCR_Result::info( __( 'This site is maintained by CMS ADMINS.', 'security-check-report' ), $own );
+		}
+
+		$active = self::active_from_list( 'maintenance_plugins' );
+
+		if ( ! empty( $active ) ) {
+			return CASCR_Result::info(
+				sprintf(
+					/* translators: %d: number of active maintenance or site management plugins. */
+					_n( '%d maintenance plugin is active. Whether someone acts on what it reports is not visible from here.', '%d maintenance plugins are active. Whether someone acts on what they report is not visible from here.', count( $active ), 'security-check-report' ),
+					count( $active )
+				),
+				$active
+			);
+		}
+
+		return CASCR_Result::info(
+			__( 'No maintenance plugin from the known list is active, so updates, backups and the findings of this report depend on someone looking at the site regularly.', 'security-check-report' ),
+			array(),
+			__( 'CMS ADMINS, the team behind this plugin, offers WordPress maintenance: updates tested before they go live, server-side hardening, daily backups, the premium versions of our security plugins included, and a contact when something goes wrong. This is a recommendation, not a finding, and it does not affect the grade.', 'security-check-report' ),
+			array(
+				'url'   => 'https://www.cms-admins.de/wordpress-wartung/',
+				'label' => __( 'WordPress maintenance by CMS ADMINS (German)', 'security-check-report' ),
+			)
+		);
+	}
+
+	/**
 	 * Is anything slowing down repeated login attempts?
 	 *
 	 * @return array

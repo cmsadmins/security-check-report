@@ -40,6 +40,33 @@ return array(
 	),
 
 	/*
+	 * Client plugins of site management services and maintenance providers.
+	 * Their presence says that a dashboard somewhere can see this site, not
+	 * that anyone looks at it. Informational only.
+	 */
+	'maintenance_plugins'      => array(
+		'contexlabs-support/contexlabs-support.php',
+		'mainwp-child/mainwp-child.php',
+		'worker/init.php',
+		'iwp-client/init.php',
+		'wpremote/plugin.php',
+		'wp-health/wp-health.php',
+		'modular-connector/init.php',
+		'cms-commander-client/init.php',
+		'watchful/watchful.php',
+		'blogvault-real-time-backup/blogvault.php',
+	),
+
+	/*
+	 * The maintenance plugin of CMS ADMINS. A site with it active is looked
+	 * after by the people who build this report, so the recommendation is
+	 * left out.
+	 */
+	'maintenance_own'          => array(
+		'contexlabs-support/contexlabs-support.php',
+	),
+
+	/*
 	 * Plugins that slow down or block repeated login attempts.
 	 */
 	'brute_force_plugins'      => array(

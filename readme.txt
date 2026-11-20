@@ -5,34 +5,40 @@ Tags: security, php2shell, audit, hardening, scanner
 Requires at least: 7.0
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.5.1
+Stable tag: 2.5.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Read-only security audit for WordPress: 62 checks including PHP2Shell, an A to F grade, and a checklist that records what you have fixed.
+Read-only security audit for WordPress: 64 checks including PHP2Shell and NGINX2Root, an A to F grade, and a checklist of what you have fixed.
 
 == Description ==
 
-Security Check Report looks at 62 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
+Security Check Report looks at 64 aspects of a WordPress installation and turns the findings into a graded report. It changes no setting, no file and no account. It stores its own results in the database, and it writes one temporary file in the uploads folder that is deleted again in the same request.
 
-The report opens with the five things worth doing first, not with a table of 62 rows. Every finding says what was found, why it matters and what to do about it.
+The report opens with the five things worth doing first, not with a table of 64 rows. Every finding says what was found, why it matters and what to do about it.
 
-There is no Pro version, no licence key, no account and no usage tracking. Apart from api.wordpress.org and your own site the plugin contacts nobody. Before a release the checks run against real sites, and a finding that turns out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms.
+There is no Pro version, no licence key, no account and no usage tracking. Apart from api.wordpress.org and your own site the plugin contacts nobody. One check notes whether a maintenance plugin is active and, if none is, recommends the maintenance service of CMS ADMINS in one line that never affects the grade. Before a release the checks run against real sites, and a finding that turns out to be wrong is fixed as a bug: 2.4.0 alone removed seven false alarms.
 
 From the second run onwards the page no longer opens on the start button but on an overview: the grade, a line saying where the site stood on the first run and where it stands today, one bar per recorded run, five tasks to work through, what is still open, and what has been resolved and when.
 
 Each task has a button that runs that one check again and answers within seconds, so a fix is confirmed while you are still on the screen instead of at the next full pass. A single re-check writes no point into the history, and the page says as much, because a grade pieced together from several passes is not a grade measured in one.
 
-= PHP2Shell check (CVE-2026-109618, CVE-2026-109619) =
+= PHP2Shell and the PHP security release of 19 November 2026 =
 
-PHP2Shell is the name for two critical flaws in the PHP core that let an attacker run code on the server with a single request and no login. The PHP team released the fixes on 21 October 2026, and attacks started the same day. No WordPress plugin can patch PHP itself, but this one tells you within seconds whether your server still needs the update.
+PHP2Shell is the name for two critical flaws in the PHP core that let an attacker run code on the server with a single request and no login. The PHP team released the fixes on 21 October 2026, and attacks started the same day. On 19 November 2026 a second release closed 18 further flaws, seven of them critical, among them CVE-2026-129289 in PHP-FPM. No WordPress plugin can patch PHP itself, but this one tells you within seconds whether your server still needs an update.
 
-The PHP2Shell check reads the PHP version your site actually runs on and answers in plain words:
+The check reads the PHP version your site actually runs on and answers in plain words:
 
-* **Green:** PHP 8.5.12, 8.4.27, 8.3.36, 8.2.35 or newer, or an Ubuntu package that carries the backport. The fix is in place.
-* **Orange:** the fix cannot be read from the version number. Update PHP, or have your host confirm the backport. Red Hat, Plesk and cPanel often keep the old number after patching, so orange is a question to your host, not a verdict.
+* **Green:** PHP 8.5.13, 8.4.28, 8.3.37, 8.2.36 or newer, or an Ubuntu package that carries the backport. Both fixes are in place.
+* **Orange:** the version carries the PHP2Shell fix but not the November release, or neither can be read from the version number. Update PHP, or have your host confirm the backport. Red Hat, Plesk and cPanel often keep the old number after patching, so orange is a question to your host, not a verdict.
 
-Start a run on the Security Check screen or with `wp security-check run`. The check sends nothing anywhere and only looks at the running PHP.
+The result also lists the PHP settings the November advisories name as preconditions, such as session.upload_progress.enabled, so you can set the interim measures while you wait for the package.
+
+= NGINX2Root check (CVE-2026-123007 and four more) =
+
+On 18 November 2026 nginx 1.31.9 and 1.30.7 closed ten flaws, five of them known as NGINX2Root. The one with the widest reach affects every nginx with HTTP/2 since 2015. The check reads the nginx version the web server hands to PHP, or the Server header of your own front page when nginx sits in front of Apache, and says whether it is 1.31.9 or 1.30.7 or newer. Debian, Ubuntu and Red Hat packages keep their old number after a backport, so those are orange with the advisory to compare against, never red. A site without nginx is reported as such and does not move the grade.
+
+Start a run on the Security Check screen or with `wp security-check run`. Both checks send nothing anywhere and only look at the running software.
 
 = What you get =
 
@@ -52,9 +58,9 @@ Start a run on the Security Check screen or with `wp security-check run`. The ch
 
 = What it checks =
 
-**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, whether PHP carries the fix for PHP2Shell (CVE-2026-109618 and CVE-2026-109619), automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other WordPress installations sitting next to this one.
+**Core, plugins and themes.** WordPress version, PHP version against the published end-of-life dates, whether PHP carries the fixes for PHP2Shell (CVE-2026-109618 and CVE-2026-109619) and for the security release of 19 November 2026, whether nginx carries the fixes for NGINX2Root (CVE-2026-123007 and four more), automatic core updates, core file integrity against the official checksums, files in the core directories that are not part of WordPress, pending plugin and theme updates, unused plugins and themes, plugins that look abandoned, plugins whose listing was closed, plugins whose author changed, must-use plugins and drop-ins, other WordPress installations sitting next to this one.
 
-**Configuration.** Debug mode, debug log exposure, the theme and plugin editor, installing code from the dashboard, authentication keys and salts, table prefix, database user privileges, whether the scheduler actually runs, autoloaded options size, injected content in the options table, backups, login protection, password policy.
+**Configuration.** Debug mode, debug log exposure, the theme and plugin editor, installing code from the dashboard, authentication keys and salts, table prefix, database user privileges, whether the scheduler actually runs, autoloaded options size, injected content in the options table, backups, whether a maintenance or site management plugin is active, login protection, password policy.
 
 **Files and permissions.** Permissions on wp-config.php, the uploads folder and the core directories, world-writable paths, executable files among the media, whether the server runs PHP from the uploads folder, configuration and backup files that the server hands out, readable .git, .svn and .hg folders, database dumps in the web root, leftovers from interrupted updates, directory listing.
 
@@ -68,7 +74,7 @@ Start a run on the Security Check screen or with `wp security-check run`. The ch
 
 * Not a firewall. It blocks nothing and intercepts no requests.
 * Not a malware scanner. It compares core files against the official checksums and looks for injected content in the options table, but it does not hunt for signatures in plugin or theme code, and it removes nothing.
-* Not a vulnerability database. It reports that a plugin is outdated, abandoned or delisted; it does not look up individual CVEs. The one exception is PHP2Shell, because it hits every PHP site at once.
+* Not a vulnerability database. It reports that a plugin is outdated, abandoned or delisted; it does not look up individual CVEs. The exceptions are PHP2Shell, the PHP release of 19 November 2026 and NGINX2Root, because they hit the server under every site at once.
 * Not an auto-fixer. Every finding comes with instructions, and you carry them out.
 * Not a monitor. Nothing runs in the background, nothing is scheduled, no mail is sent. A check runs when you start it.
 
@@ -94,16 +100,29 @@ The plugin needs PHP 7.4 or newer and WordPress 7.0 or newer. Running the checks
 
 == Frequently Asked Questions ==
 
-= Is my server affected by PHP2Shell (CVE-2026-109618, CVE-2026-109619)? =
+= Is my server affected by PHP2Shell (CVE-2026-109618, CVE-2026-109619) or the PHP release of 19 November 2026? =
 
-PHP2Shell is the name for two critical flaws in the PHP core, rated CVSS 9.2. A single request without a login can run code on the server, on PHP-FPM, mod_php, php-cgi, FrankenPHP and LiteSpeed alike. The PHP team published the fixes on 21 October 2026: you need PHP 8.5.12, 8.4.27, 8.3.36 or 8.2.35 or newer. PHP 8.1 and older get no official release, only backports from some distributions and vendors.
+PHP2Shell is the name for two critical flaws in the PHP core, rated CVSS 9.2. A single request without a login can run code on the server, on PHP-FPM, mod_php, php-cgi, FrankenPHP and LiteSpeed alike. The PHP team published the fixes on 21 October 2026. On 19 November 2026 it closed 18 further flaws, seven of them critical, the worst of them (CVE-2026-129289) in PHP-FPM behind a web server that reuses FastCGI connections. You need PHP 8.5.13, 8.4.28, 8.3.37 or 8.2.36 or newer. PHP 8.1 and older get no official release, only backports from some distributions and vendors.
 
-The PHP2Shell check reads the PHP version the site actually runs on and says one of two things:
+The check reads the PHP version the site actually runs on and says one of three things:
 
-* **Green:** the fix is proven. That is the case for PHP 8.5.12, 8.4.27, 8.3.36 and 8.2.35 or newer within each branch, for PHP 8.6 or newer, and for the Ubuntu package revisions that carry the backport.
-* **Orange:** the fix cannot be proven from the version number. Red Hat, Plesk, cPanel and self-built packages often keep the old number after a backport, so an orange result means "update, or have your host confirm the backport", not "you have been hacked".
+* **Green:** both fixes are proven. That is the case for PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 or newer within each branch, for PHP 8.6 or newer, and for the Ubuntu package revisions that carry the backport.
+* **Orange, smaller:** the PHP2Shell fix is proven, the November release is not. Update to the next patch level, or have your host confirm the backport.
+* **Orange:** neither fix can be proven from the version number. Red Hat, Plesk, cPanel and self-built packages often keep the old number after a backport, so an orange result means "update, or have your host confirm the backport", not "you have been hacked".
 
-The check never shows red, because a version number alone cannot prove that a server is vulnerable. After an update, restart PHP-FPM or the web server and run the check again. Fixed versions and the status per distribution: [PHP2Shell: critical PHP flaws CVE-2026-109618/109619 (German)](https://www.cms-admins.de/news/php2shell-kritische-php-sicherheitsluecken-cve-2026-109618/).
+The check never shows red, because a version number alone cannot prove that a server is vulnerable. After an update, restart PHP-FPM or the web server and run the check again. Fixed versions and the status per distribution: [PHP security release of 19 November 2026 (German)](https://www.cms-admins.de/news/php-sicherheitsupdate-november-2026/) and [PHP2Shell: critical PHP flaws CVE-2026-109618/109619 (German)](https://www.cms-admins.de/news/php2shell-kritische-php-sicherheitsluecken-cve-2026-109618/).
+
+= Is my server affected by NGINX2Root (CVE-2026-123007)? =
+
+NGINX2Root is the name for five flaws in the nginx web server, closed on 18 November 2026 in nginx 1.31.9 and 1.30.7. The one with the widest reach, CVE-2026-123007, affects every nginx with HTTP/2 enabled since version 1.9.5 and can lead to code execution without a login. Nothing inside WordPress can see or stop it, only an nginx update does.
+
+The check reads the nginx version the web server hands to PHP, or the Server header of your own front page when nginx sits in front of Apache:
+
+* **Green:** nginx 1.31.9, 1.30.7 or newer.
+* **Orange:** an nginx.org build below those versions, or a distribution build such as 1.26.3 or 1.24.0, whose package may or may not carry the backport. Compare the full package version with the advisory of your distribution (Debian DSA-6642-1 and DLA-4918-1, Ubuntu USN-9159-1, AlmaLinux ALSA-2026:A025 and A024) or ask your host.
+* **Neutral:** no nginx in front of this site as far as the site can see, or nginx without a version number. Neither moves the grade.
+
+After an update, restart nginx rather than reloading it, because a reload keeps the old binary running. Status per distribution: [NGINX2Root: nginx flaws, check and patch (German)](https://www.cms-admins.de/news/nginx2root-nginx-sicherheitsluecke/).
 
 = Does the plugin change anything on my site? =
 
@@ -245,6 +264,16 @@ If a check reports something you believe is wrong, a GitHub issue with the findi
 == Changelog ==
 
 Releases before 2.2.0 are listed in changelog.txt.
+
+= 2.5.2 =
+
+**Added**
+* Maintenance check: informational, lists the active site management plugin (MainWP, ManageWP, InfiniteWP, WP Remote, WP Umbrella, Modular DS, CMS Commander, Watchful, BlogVault or the CMS ADMINS plugin). Without one it recommends the WordPress maintenance of CMS ADMINS in one line. Never moves the grade.
+* NGINX2Root check for CVE-2026-123007 and the four further nginx flaws of 18 November 2026: green when the nginx in front of the site is 1.31.9, 1.30.7 or newer, orange when the fix cannot be read from the version number, neutral when no nginx is in play.
+
+**Changed**
+* The PHP2Shell check also covers the PHP security release of 19 November 2026 (18 flaws, seven critical, among them CVE-2026-129289 in PHP-FPM). Green now needs PHP 8.5.13, 8.4.28, 8.3.37 or 8.2.36, or an Ubuntu package with the backport. A version with the October fix only is a smaller warning.
+* The PHP2Shell result lists the settings the November advisories name as preconditions: session.upload_progress.enabled, session.serialize_handler, error_log and, on PHP 8.5, zend.exception_ignore_args and fatal_error_backtraces.
 
 = 2.5.1 =
 
@@ -419,6 +448,9 @@ Every check was read against the sources it cites: php.net, the WordPress handbo
 * Unified the colour scheme and fixed several layout issues
 
 == Upgrade Notice ==
+
+= 2.5.2 =
+Adds the NGINX2Root and maintenance checks and extends the PHP2Shell check to the PHP security release of 19 November 2026.
 
 = 2.5.1 =
 Shows the way to the next grade and the milestones reached, lets AI assistants read the stored report, and stops Site Health from calling an open critical finding harmless.
